@@ -1,0 +1,33 @@
+package pzl.example
+
+import pzl.**
+import pzl.println as println2
+
+fun main() {
+    var n = 0
+    val n1 = ++n / n--
+    val n2 = n++ + 10
+    val n3 = n1 + n2 * 5 + 6**10
+    val n4 = 1 + (2 + 3) * 10
+    val result = (++a * b-- / c % d ** e - f) +
+        (g << h >> i >>> j) +
+        (x + y - z)
+    val bool1 = true || false
+    val bool2 = true ||
+        false
+    val bool3 = true
+        || false
+    val third1 = a ? (a ? b : c) : d
+    val third2 = true ? true ? 1 : 0 : true ? 1 : 1 + 2
+    val value1 = a.b + c.d?.e! - f!.g
+    val pr1 = ::println
+    val pr2 = super::println
+    val a = (1 + 2) + (a.b.c).d.f
+    val c = (d).e
+    val b = (((((a)))))                                 # 语法分析阶段去除无效 '(' 和 ')'
+    val name = getInfos(age = 18, param = "Hello").first()["name"]
+    val a = i++.name()
+    # val b = ++i.name()  # 语法错误
+    val a = b ? c ?: (d + 1) * 10 : e ?: f
+    val a = b.c ~> d && e.f() !> g.h[0]
+}

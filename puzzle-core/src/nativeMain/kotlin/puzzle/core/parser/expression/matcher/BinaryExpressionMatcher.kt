@@ -1,0 +1,50 @@
+package puzzle.core.parser.expression.matcher
+
+import puzzle.core.PzlContext
+import puzzle.core.exception.syntaxError
+import puzzle.core.lexer.PzlTokenType
+import puzzle.core.parser.PzlParserContext
+import puzzle.core.parser.expression.BinaryExpression
+import puzzle.core.parser.expression.Expression
+import puzzle.core.parser.expression.parser.BinaryExpressionParser
+
+object BinaryExpressionMatcher : ExpressionMatcher<BinaryExpression> {
+	
+	private val tokenTypes = listOf(
+		PzlTokenType.PLUS,
+		PzlTokenType.MINUS,
+		PzlTokenType.STAR,
+		PzlTokenType.SLASH,
+		PzlTokenType.PERCENT,
+		PzlTokenType.DOUBLE_STAR,
+		PzlTokenType.EQUALS,
+		PzlTokenType.NOT_EQUALS,
+		PzlTokenType.GT,
+		PzlTokenType.GT_EQUALS,
+		PzlTokenType.LT,
+		PzlTokenType.LT_EQUALS,
+		PzlTokenType.TRIPLE_EQUALS,
+		PzlTokenType.BIT_AND,
+		PzlTokenType.BIT_OR,
+		PzlTokenType.BIT_XOR,
+		PzlTokenType.SHL,
+		PzlTokenType.SHR,
+		PzlTokenType.USHR,
+		PzlTokenType.IN,
+		PzlTokenType.NOT_IN,
+		PzlTokenType.AND,
+		PzlTokenType.OR
+	)
+	
+	override fun match(ctx: PzlParserContext, left: Expression?): Boolean {
+		return tokenTypes.any { ctx.match(it) }
+	}
+	
+	context(_: PzlContext)
+	override fun parse(ctx: PzlParserContext, left: Expression?): BinaryExpression {
+		if (left == null) {
+			syntaxError("二元运算符未解析到左值", ctx.peek(offset = -2)!!)
+		}
+		return BinaryExpressionParser(ctx).parse(left)
+	}
+}

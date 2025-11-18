@@ -1,0 +1,140 @@
+package pzl.example
+
+fun main() {
+    var n = 0
+    val n1 = ++n / n--
+    val n2 = n++ + 10
+    val n3 = n1 + n2 * 5 + 6**10
+    val n4 = 1 + (2 + 3) * 10
+    val result = (++a * b-- / c % d ** e - f) +
+                 (g << h >> i >>> j) +
+                 (x + y - z)
+}
+
+private const fun add(num1: Int, num2: Int?): Int {
+
+}
+
+private fun callback(callback: ((_: Int) -> [String, Int])?) {
+
+}
+
+private fun callback2(): Int, String {
+
+}
+
+private fun returns1(): ((fun1: () -> String[]) -> Unit)? {
+
+}
+
+private fun returns2(): (String = "", age: Int = 10, _: String) -> [Int?, String[]?], String {
+
+}
+
+# ((String)) 与 String 等价
+private fun returns3(): ((String)) {
+
+}
+
+fun lambda1(param1: (() -> Unit) -> Unit, param2: () -> (_: Int) -> [String, () -> Unit[]?]) {
+
+}
+
+fun lambda2(callback: () -> [String, Int]) {
+
+}
+
+private class Hello(
+    private val param1: String?,
+    private var param2: Int[],
+    val param3: () -> Int[],
+    var param4: () -> Int,
+    param5: (((Int)?)?)
+) {
+
+    file fun test(): Int, String?, pzl.example.Hello {
+
+    }
+
+    fun test2(): Double? {
+
+    }
+}
+
+contract Runnable {
+
+    fun run()
+}
+
+class RunnableImpl
+
+class Test2 {
+
+    single {        # Test2.xxx
+
+    }
+
+    single Name {   # Test2.Name.xxx
+
+    }
+}
+
+single Single {
+
+    single InnerSingle {
+
+        single InnerInnerSingle
+    }
+}
+
+abstract class AbstractClass {
+
+    fun test1() {
+
+    }
+
+    abstract fun test2()
+}
+
+enum UserType {
+    ADMIN,
+    USER
+}
+
+fun defaultValue(value: Int = 10) {
+
+}
+
+enum Status(
+   code: Int,
+   msg: String
+) {
+    SUCCESS(code: 0, msg: "Success") {
+
+        override fun isSuccess(): Boolean {
+
+        }
+    },
+    FAILURE(code: -1, msg: "Failure") {
+
+        override fun isSuccess(): Boolean {
+
+        }
+    };
+
+    abstract fun isSuccess(): Boolean
+}
+
+struct Data(
+    ignore val param1: String,
+    ignore var param2: Int?,
+    val param3: Double,
+    val param4: Info
+)
+
+struct Info(
+    val address: String,
+    val number: Int
+)
+
+annotation Target(val name: String)
