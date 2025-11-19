@@ -16,7 +16,7 @@ object TopLevelTraitDeclarationMatcher : TopLevelDeclarationMatcher<TraitDeclara
 	
 	context(_: PzlContext)
 	override fun check(ctx: PzlParserContext, modifiers: Set<Modifier>) {
-		checkSupportedDeclarationModifiers(ctx, modifiers, "顶层接口")
+		checkSupportedDeclarationModifiers(ctx, modifiers, "顶层特征")
 	}
 	
 	context(_: PzlContext)

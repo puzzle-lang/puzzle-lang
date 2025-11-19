@@ -23,7 +23,7 @@ object MemberTraitDeclarationMatcher : MemberDeclarationMatcher<TraitDeclaration
 		modifiers: Set<Modifier>
 	) {
 		checkSupportedDeclarationModifiers(
-			ctx, modifiers, name = "接口",
+			ctx, modifiers, name = "特征",
 		)
 	}
 	

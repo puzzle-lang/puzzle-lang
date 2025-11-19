@@ -18,7 +18,7 @@ class TraitDeclarationParser(
 	
 	context(_: PzlContext)
 	fun parse(modifiers: Set<Modifier>): TraitDeclaration {
-		ctx.expect(PzlTokenType.IDENTIFIER, "接口缺少名称")
+		ctx.expect(PzlTokenType.IDENTIFIER, "特征缺少名称")
 		val name = ctx.previous.value
 		if (!ctx.match(PzlTokenType.LBRACE)) {
 			return TraitDeclaration(
@@ -44,19 +44,20 @@ class TraitDeclarationParser(
 	): Declaration {
 		val memberAccess = when {
 			ctx.match(PzlTokenType.PRIVATE) -> Modifier.PRIVATE
-			ctx.match(PzlTokenType.FILE) -> syntaxError("接口内部不允许使用 'file'", ctx.previous)
+			ctx.match(PzlTokenType.PROTECTED) -> syntaxError("特征内部不允许使用 'protected' 修饰符", ctx.previous)
+			ctx.match(PzlTokenType.FILE) -> syntaxError("特征内部不允许使用 'file' 修饰符", ctx.previous)
 			ctx.match(PzlTokenType.INTERNAL) -> syntaxError(
-				"接口内部不允许使用 'internal'",
+				"特征内部不允许使用 'internal' 修饰符",
 				ctx.previous
 			)
 			
 			ctx.match(PzlTokenType.MODULE) -> syntaxError(
-				"接口内部不允许使用 'module'",
+				"特征内部不允许使用 'module' 修饰符",
 				ctx.previous
 			)
 			
 			ctx.match(PzlTokenType.PUBLIC) -> syntaxError(
-				"接口内部不允许使用 'public'",
+				"特征内部不允许使用 'public' 修饰符",
 				ctx.previous
 			)
 			
@@ -64,7 +65,7 @@ class TraitDeclarationParser(
 		}
 		return parseMemberDeclaration(
 			ctx = ctx,
-			parentTypeKind = TypeKind.CONTRACT,
+			parentTypeKind = TypeKind.TRAIT,
 			parentModifiers = setOf(interfaceAccess),
 			modifiers = setOf(memberAccess)
 		)

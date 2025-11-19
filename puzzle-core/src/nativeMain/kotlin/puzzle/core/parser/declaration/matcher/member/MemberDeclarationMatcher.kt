@@ -62,7 +62,7 @@ private fun TypeKind.getName(): String {
 	return when (this) {
 		CLASS -> "类"
 		SINGLE -> "单例类"
-		CONTRACT -> "接口"
+		TRAIT -> "特征"
 		STRUCT -> "结构体"
 		ENUM -> "枚举"
 		ENUM_ENTRY -> "枚举实例"

@@ -12,9 +12,10 @@ enum class PzlTokenType(
 	TRAIT("trait"),             // trait
 	STRUCT("struct"),           // struct
 	ENUM("enum"),               // enum
-	IMPL("impl"),               // impl
+	EXTENSION("extension"),     // extension
 	ANNOTATION("annotation"),   // annotation
 	PRIVATE("private"),         // private
+	PROTECTED("protected"),     // protected
 	FILE("file"),               // file
 	INTERNAL("internal"),       // internal
 	MODULE("module"),           // module

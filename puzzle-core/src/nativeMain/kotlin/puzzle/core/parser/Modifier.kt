@@ -5,7 +5,7 @@ import puzzle.core.exception.syntaxError
 import puzzle.core.lexer.PzlTokenType
 
 enum class Modifier {
-	PRIVATE, FILE, INTERNAL, MODULE, PUBLIC,
+	PRIVATE, PROTECTED, FILE, INTERNAL, MODULE, PUBLIC,
 	VAR, VAL,
 	OPEN, ABSTRACT, OVERRIDE, FINAL, CONST,
 	IGNORE
@@ -13,6 +13,7 @@ enum class Modifier {
 
 private val accessModifiers = setOf(
 	Modifier.PRIVATE,
+	Modifier.PROTECTED,
 	Modifier.FILE,
 	Modifier.INTERNAL,
 	Modifier.MODULE,
@@ -35,6 +36,7 @@ context(_: PzlContext)
 fun getTopLevelAccessModifier(ctx: PzlParserContext): Modifier {
 	return when {
 		ctx.match(PzlTokenType.PRIVATE) -> Modifier.PRIVATE
+		ctx.match(PzlTokenType.PROTECTED) -> syntaxError("顶层声明不支持 'protected' 修饰符", ctx.previous)
 		ctx.match(PzlTokenType.FILE) -> syntaxError("顶层声明不支持 'file' 修饰符", ctx.previous)
 		ctx.match(PzlTokenType.INTERNAL) -> Modifier.INTERNAL
 		ctx.match(PzlTokenType.MODULE) -> Modifier.MODULE
@@ -47,6 +49,7 @@ context(_: PzlContext)
 fun getMemberAccessModifier(ctx: PzlParserContext, parentAccess: Modifier, errorMessage: () -> String): Modifier {
 	val memberAccess = when {
 		ctx.match(PzlTokenType.PRIVATE) -> Modifier.PRIVATE
+		ctx.match(PzlTokenType.PROTECTED) -> Modifier.PROTECTED
 		ctx.match(PzlTokenType.FILE) -> Modifier.FILE
 		ctx.match(PzlTokenType.INTERNAL) -> Modifier.INTERNAL
 		ctx.match(PzlTokenType.MODULE) -> Modifier.MODULE
@@ -77,6 +80,7 @@ context(_: PzlContext)
 fun getClassParameterAccessModifier(ctx: PzlParserContext, classAccess: Modifier, errorMessage: () -> String): Modifier? {
 	val access = when {
 		ctx.match(PzlTokenType.PRIVATE) -> Modifier.PRIVATE
+		ctx.match(PzlTokenType.PROTECTED) -> Modifier.PROTECTED
 		ctx.match(PzlTokenType.FILE) -> Modifier.FILE
 		ctx.match(PzlTokenType.INTERNAL) -> Modifier.INTERNAL
 		ctx.match(PzlTokenType.MODULE) -> Modifier.MODULE

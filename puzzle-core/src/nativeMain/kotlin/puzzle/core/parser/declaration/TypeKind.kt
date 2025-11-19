@@ -4,7 +4,7 @@ package puzzle.core.parser.declaration
 enum class TypeKind {
 	CLASS,
 	SINGLE,
-	CONTRACT,
+	TRAIT,
 	STRUCT,
 	ENUM,
 	ENUM_ENTRY,
