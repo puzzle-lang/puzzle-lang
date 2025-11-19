@@ -33,7 +33,7 @@ single Fish : Food {
 /**
  * 单例类 - 肉
  */
-object Meat : Food {
+single Meat : Food {
 
 	override fun getName(): String { "肉" }
 }
