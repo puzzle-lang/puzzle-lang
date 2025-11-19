@@ -6,22 +6,22 @@ import puzzle.core.lexer.PzlTokenType
 import puzzle.core.parser.Modifier
 import puzzle.core.parser.PzlParserContext
 import puzzle.core.parser.access
-import puzzle.core.parser.declaration.ContractDeclaration
+import puzzle.core.parser.declaration.TraitDeclaration
 import puzzle.core.parser.declaration.Declaration
 import puzzle.core.parser.declaration.TypeKind
 import puzzle.core.parser.declaration.matcher.member.parseMemberDeclaration
 import puzzle.core.parser.getDefaultMemberAccessModifier
 
-class ContractDeclarationParser(
+class TraitDeclarationParser(
 	private val ctx: PzlParserContext
 ) {
 	
 	context(_: PzlContext)
-	fun parse(modifiers: Set<Modifier>): ContractDeclaration {
+	fun parse(modifiers: Set<Modifier>): TraitDeclaration {
 		ctx.expect(PzlTokenType.IDENTIFIER, "接口缺少名称")
 		val name = ctx.previous.value
 		if (!ctx.match(PzlTokenType.LBRACE)) {
-			return ContractDeclaration(
+			return TraitDeclaration(
 				name = name,
 				modifiers = modifiers
 			)
@@ -31,7 +31,7 @@ class ContractDeclarationParser(
 		while (!ctx.match(PzlTokenType.RBRACE)) {
 			members += parseDeclaration(interfaceAccess)
 		}
-		return ContractDeclaration(
+		return TraitDeclaration(
 			name = name,
 			modifiers = modifiers,
 			members = members

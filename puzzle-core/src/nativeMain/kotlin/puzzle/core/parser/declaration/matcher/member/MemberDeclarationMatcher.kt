@@ -33,7 +33,7 @@ private val matchers = listOf(
 	MemberFunDeclarationMatcher,
 	MemberClassDeclarationMatcher,
 	MemberSingleDeclarationMatcher,
-	MemberContractDeclarationMatcher,
+	MemberTraitDeclarationMatcher,
 	MemberStructDeclarationMatcher,
 	MemberEnumDeclarationMatcher,
 	MemberAnnotationDeclarationMatcher

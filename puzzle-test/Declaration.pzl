@@ -31,7 +31,10 @@ private fun returns2(): (String = "", age: Int = 10, _: String) -> [Int?, String
 
 }
 
-# ((String)) 与 String 等价
+/**
+ * ((String)) 与 String 等价
+ * 多行注释测试
+ */
 private fun returns3(): ((String)) {
 
 }
@@ -61,20 +64,30 @@ private class Hello(
     }
 }
 
-contract Runnable {
+trait Runnable {
 
     fun run()
 }
 
-class RunnableImpl
+trait Runnable2 {
+
+    fun run2()
+}
+
+class RunnableImpl : Runnable2 {
+
+    override fun run2() {
+
+    }
+}
 
 class Test2 {
 
-    single {        # Test2.xxx
+    single {            // Test2.xxx
 
     }
 
-    single Name {   # Test2.Name.xxx
+    single Name {       // Test2.Name.xxx
 
     }
 }

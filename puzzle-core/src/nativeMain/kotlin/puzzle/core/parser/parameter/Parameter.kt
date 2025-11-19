@@ -8,7 +8,7 @@ import puzzle.core.parser.PzlParserContext
 import puzzle.core.parser.expression.Expression
 import puzzle.core.parser.expression.matcher.parseCompleteExpression
 import puzzle.core.parser.node.TypeReference
-import puzzle.core.parser.node.TypeReferenceParser
+import puzzle.core.parser.node.parser.TypeReferenceParser
 
 @Serializable
 data class Parameter(

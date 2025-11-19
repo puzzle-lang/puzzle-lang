@@ -11,7 +11,7 @@ data object KeywordRecognizer : TokenRecognizer {
 		"fun" to PzlTokenType.FUN,
 		"class" to PzlTokenType.CLASS,
 		"single" to PzlTokenType.SINGLE,
-		"contract" to PzlTokenType.CONTRACT,
+		"trait" to PzlTokenType.TRAIT,
 		"struct" to PzlTokenType.STRUCT,
 		"enum" to PzlTokenType.ENUM,
 		"annotation" to PzlTokenType.ANNOTATION,

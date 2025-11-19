@@ -7,7 +7,7 @@ import puzzle.core.parser.Modifier
 import puzzle.core.parser.PzlParserContext
 import puzzle.core.parser.declaration.FunDeclaration
 import puzzle.core.parser.node.TypeReference
-import puzzle.core.parser.node.TypeReferenceParser
+import puzzle.core.parser.node.parser.TypeReferenceParser
 import puzzle.core.parser.parameter.parser.parseFunParameters
 import puzzle.core.parser.statement.Statement
 import puzzle.core.parser.statement.matcher.parseStatement

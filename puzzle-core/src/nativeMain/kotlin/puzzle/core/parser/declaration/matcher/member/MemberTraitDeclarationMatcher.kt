@@ -5,14 +5,14 @@ import puzzle.core.lexer.PzlTokenType
 import puzzle.core.parser.Modifier
 import puzzle.core.parser.PzlParserContext
 import puzzle.core.parser.checkSupportedDeclarationModifiers
-import puzzle.core.parser.declaration.ContractDeclaration
+import puzzle.core.parser.declaration.TraitDeclaration
 import puzzle.core.parser.declaration.TypeKind
-import puzzle.core.parser.declaration.parser.ContractDeclarationParser
+import puzzle.core.parser.declaration.parser.TraitDeclarationParser
 
-object MemberContractDeclarationMatcher : MemberDeclarationMatcher<ContractDeclaration> {
+object MemberTraitDeclarationMatcher : MemberDeclarationMatcher<TraitDeclaration> {
 	
 	override fun match(ctx: PzlParserContext): Boolean {
-		return ctx.match(PzlTokenType.CONTRACT)
+		return ctx.match(PzlTokenType.TRAIT)
 	}
 	
 	context(_: PzlContext)
@@ -32,7 +32,7 @@ object MemberContractDeclarationMatcher : MemberDeclarationMatcher<ContractDecla
 		ctx: PzlParserContext,
 		parentTypeKind: TypeKind,
 		modifiers: Set<Modifier>
-	): ContractDeclaration {
-		return ContractDeclarationParser(ctx).parse(modifiers)
+	): TraitDeclaration {
+		return TraitDeclarationParser(ctx).parse(modifiers)
 	}
 }

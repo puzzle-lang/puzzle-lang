@@ -10,7 +10,7 @@ private class SyntaxException(
 	line: Int,
 	column: Int,
 	type: PzlTokenType?
-) : Exception("错误位置: $sourcePath:$line:$column ${if (type != null) "$type " else ""}$message.")
+) : Exception("错误位置: $sourcePath:$line:$column ${if (type != null) ">> $type << " else ""}$message.")
 
 context(context: PzlContext)
 fun syntaxError(message: String, line: Int, column: Int, type: PzlTokenType? = null): Nothing {

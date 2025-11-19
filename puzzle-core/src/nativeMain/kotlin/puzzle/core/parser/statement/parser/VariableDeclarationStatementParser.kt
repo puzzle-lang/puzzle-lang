@@ -4,7 +4,7 @@ import puzzle.core.PzlContext
 import puzzle.core.lexer.PzlTokenType
 import puzzle.core.parser.PzlParserContext
 import puzzle.core.parser.expression.matcher.parseCompleteExpression
-import puzzle.core.parser.node.TypeReferenceParser
+import puzzle.core.parser.node.parser.TypeReferenceParser
 import puzzle.core.parser.statement.VariableDeclarationStatement
 
 class VariableDeclarationStatementParser(

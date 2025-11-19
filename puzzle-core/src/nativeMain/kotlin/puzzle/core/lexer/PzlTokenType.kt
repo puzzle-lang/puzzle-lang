@@ -9,7 +9,7 @@ enum class PzlTokenType(
 	FUN("fun"),                 // fun
 	CLASS("class"),             // class
 	SINGLE("single"),           // single
-	CONTRACT("contract"),       // contract
+	TRAIT("trait"),             // trait
 	STRUCT("struct"),           // struct
 	ENUM("enum"),               // enum
 	IMPL("impl"),               // impl
@@ -147,7 +147,8 @@ enum class PzlTokenType(
 	AT("@"),                    // @
 	ARROW("->"),                // ->
 	DOUBLE_DOT(".."),           // ..
-	COMMENT("#"),               // #
+	SINGLE_COMMENT("//"),       // //
+	MULTI_COMMENT("/**/"),      // /**/
 	NEWLINE("\\n"),             // 换行符
 	WHITE_SPACE("' '"),         // 空格
 	TAB("\\t"),                 // 制表符

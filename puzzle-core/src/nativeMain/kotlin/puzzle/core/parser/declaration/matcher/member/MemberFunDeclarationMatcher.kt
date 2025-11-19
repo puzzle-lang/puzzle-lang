@@ -25,6 +25,7 @@ object MemberFunDeclarationMatcher : MemberDeclarationMatcher<FunDeclaration> {
 				ctx, modifiers, name = "枚举成员函数",
 				isSupportedOpen = true,
 				isSupportedAbstract = true,
+				isSupportedOverride = true
 			)
 			
 			TypeKind.ENUM_ENTRY -> checkSupportedDeclarationModifiers(
@@ -37,7 +38,7 @@ object MemberFunDeclarationMatcher : MemberDeclarationMatcher<FunDeclaration> {
 				isSupportedOpen = parentModifiers.isOpen,
 				isSupportedAbstract = parentModifiers.isAbstract,
 				isSupportedFinalOverride = parentModifiers.isAbstract,
-				isSupportedOverride = parentModifiers.isAbstract,
+				isSupportedOverride = true,
 			)
 		}
 	}

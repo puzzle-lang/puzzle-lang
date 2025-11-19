@@ -21,7 +21,7 @@ private val matchers = listOf(
 	TopLevelFunDeclarationMatcher,
 	TopLevelClassDeclarationMatcher,
 	TopLevelSingleDeclarationMatcher,
-	TopLevelContractDeclarationMatcher,
+	TopLevelTraitDeclarationMatcher,
 	TopLevelStructDeclarationMatcher,
 	TopLevelEnumDeclarationMatcher,
 	TopLevelAnnotationDeclarationMatcher

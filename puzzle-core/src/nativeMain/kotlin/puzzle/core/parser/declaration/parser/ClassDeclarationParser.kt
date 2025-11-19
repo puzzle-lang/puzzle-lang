@@ -23,12 +23,14 @@ class ClassDeclarationParser(
 			"主构造函数访问修饰符与类访问修饰符不兼容"
 		}
 		val parameters = parseClassParameters(ctx, classAccess)
+		val superTypes = parseSuperTypes(ctx)
 		if (!ctx.match(PzlTokenType.LBRACE)) {
 			return ClassDeclaration(
 				name = name,
 				modifiers = modifiers,
 				constructorModifiers = constructorModifiers,
 				parameters = parameters,
+				superTypes = superTypes
 			)
 		}
 		
@@ -42,6 +44,7 @@ class ClassDeclarationParser(
 			modifiers = modifiers,
 			constructorModifiers = constructorModifiers,
 			parameters = parameters,
+			superTypes = superTypes,
 			members = members
 		)
 	}
