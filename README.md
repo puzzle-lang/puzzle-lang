@@ -76,6 +76,43 @@ fun Animal : InfoProvider.getInfo(): String, Int {
     this.name, this.age
 }
 
+/**
+ * 为 Int 实现 toString 函数扩展
+ */
+fun Int.toString(): String {
+    this    // 获取 Int
+}
+
+/**
+ * 多个类型上下文扩展
+ */
+fun (_: Parent1, Parent2, parent3: Parent3).run() {
+    // 如何获取三个 Parent
+    // 第一个无法获取，因为设置了匿名
+    // 第二个为默认参数
+    this.1              // 这里根据上下文参数顺序，即便前者设置了名称
+    // 第三个为指定名称
+    this.parent3        // 也可以直接使用 parent3 只要没有名称冲突
+}
+
+fun test() {
+    // 使用 Int.toString()
+    10.toString()
+    
+    // 使用 (Parent1, Parent2).run()
+    val parent1 = Parent1()
+    val parent2 = Parent2()
+    
+    // 显示调用
+    (parent1, parent2).run()
+    
+    // 隐式调用
+    (parent1, parent2) {
+        run()   // 你可以不需要指定，因为上下文已经被锁定了
+        run()   // 多次调用
+    }
+}
+
 fun <T : Food> apply(
     animal: Animal?,
     food: T, 
