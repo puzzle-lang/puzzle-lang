@@ -151,3 +151,25 @@ struct Info(
 )
 
 annotation Target(val name: String)
+
+trait NameProvider {
+
+    fun name()
+}
+
+class Dog
+
+class Cat
+
+extension Dog : NameProvider {
+
+    fun name() {
+
+    }
+}
+
+/*
+fun Dog : NameProvider.name() {e
+
+}
+*/

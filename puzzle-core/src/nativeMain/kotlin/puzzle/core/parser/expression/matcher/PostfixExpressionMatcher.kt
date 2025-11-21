@@ -2,7 +2,7 @@ package puzzle.core.parser.expression.matcher
 
 import puzzle.core.PzlContext
 import puzzle.core.lexer.PzlTokenType.*
-import puzzle.core.parser.PzlParserContext
+import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.expression.Expression
 import puzzle.core.parser.expression.parser.PostfixExpressionParser
 
@@ -14,12 +14,12 @@ object PostfixExpressionMatcher : ExpressionMatcher<Expression> {
 		DOT, QUESTION_DOT, DOUBLE_COLON
 	)
 	
-	override fun match(ctx: PzlParserContext, left: Expression?): Boolean {
-		return tokenTypes.any { ctx.match(it) }
+	override fun match(cursor: PzlTokenCursor, left: Expression?): Boolean {
+		return tokenTypes.any { cursor.match(it) }
 	}
 	
 	context(_: PzlContext)
-	override fun parse(ctx: PzlParserContext, left: Expression?): Expression {
-		return PostfixExpressionParser(ctx).parse(left)
+	override fun parse(cursor: PzlTokenCursor, left: Expression?): Expression {
+		return PostfixExpressionParser(cursor).parse(left)
 	}
 }

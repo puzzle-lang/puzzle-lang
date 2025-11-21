@@ -3,24 +3,24 @@ package puzzle.core.parser.expression.parser
 import puzzle.core.PzlContext
 import puzzle.core.exception.syntaxError
 import puzzle.core.lexer.PzlTokenType
-import puzzle.core.parser.PzlParserContext
+import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.expression.*
 import puzzle.core.parser.expression.matcher.parseCompleteExpression
 
 class GroupingExpressionParser(
-	private val ctx: PzlParserContext
+	private val cursor: PzlTokenCursor
 ) {
 	
 	context(_: PzlContext)
 	fun parse(): Expression {
-		var expression = parseCompleteExpression(ctx)
-		if (ctx.current.type != PzlTokenType.RPAREN) {
-			syntaxError("'(' 必须由 ')' 结束", ctx.current)
+		var expression = parseCompleteExpression(cursor)
+		if (cursor.current.type != PzlTokenType.RPAREN) {
+			syntaxError("'(' 必须由 ')' 结束", cursor.current)
 		}
-		ctx.advance()
+		cursor.advance()
 		expression = if (isOmissible(expression)) expression else GroupingExpression(expression)
-		return if (isAccessOperator(ctx)) {
-			PostfixExpressionParser(ctx).parse(expression)
+		return if (isAccessOperator(cursor)) {
+			PostfixExpressionParser(cursor).parse(expression)
 		} else expression
 	}
 	

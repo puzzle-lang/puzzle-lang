@@ -9,35 +9,35 @@ import puzzle.core.parser.declaration.TypeKind
 import puzzle.core.parser.declaration.matcher.member.parseMemberDeclaration
 
 class SingleDeclarationParser(
-	private val ctx: PzlParserContext
+	private val cursor: PzlTokenCursor
 ) {
 	
 	context(_: PzlContext)
 	fun parse(modifiers: Set<Modifier>, parentTypeKind: TypeKind? = null): SingleDeclaration {
 		val name = when {
 			parentTypeKind == null -> {
-				ctx.expect(PzlTokenType.IDENTIFIER, "单例类缺少名称")
-				ctx.previous.value
+				cursor.expect(PzlTokenType.IDENTIFIER, "单例类缺少名称")
+				cursor.previous.value
 			}
 			
 			parentTypeKind == TypeKind.SINGLE -> {
-				ctx.expect(PzlTokenType.IDENTIFIER, "内部单例类不支持默认名称")
-				ctx.previous.value
+				cursor.expect(PzlTokenType.IDENTIFIER, "内部单例类不支持默认名称")
+				cursor.previous.value
 			}
 			
-			ctx.match(PzlTokenType.IDENTIFIER) -> ctx.previous.value
+			cursor.match(PzlTokenType.IDENTIFIER) -> cursor.previous.value
 			
 			else -> ""
 		}
 		val singleAccess = modifiers.access
-		if (!ctx.match(PzlTokenType.LBRACE)) {
+		if (!cursor.match(PzlTokenType.LBRACE)) {
 			return SingleDeclaration(
 				name = name,
 				modifiers = modifiers
 			)
 		}
 		val members = mutableListOf<Declaration>()
-		while (!ctx.match(PzlTokenType.RBRACE)) {
+		while (!cursor.match(PzlTokenType.RBRACE)) {
 			members += parseDeclaration(singleAccess, modifiers)
 		}
 		
@@ -54,12 +54,12 @@ class SingleDeclarationParser(
 		singleModifiers: Set<Modifier>,
 	): Declaration {
 		val memberModifiers = mutableSetOf<Modifier>()
-		memberModifiers += getMemberAccessModifier(ctx, singleAccess) {
+		memberModifiers += getMemberAccessModifier(cursor, singleAccess) {
 			"访问修饰符与类访问修饰符不兼容"
 		}
-		memberModifiers += getDeclarationModifiers(ctx)
+		memberModifiers += getDeclarationModifiers(cursor)
 		return parseMemberDeclaration(
-			ctx = ctx,
+			cursor = cursor,
 			parentTypeKind = TypeKind.SINGLE,
 			parentModifiers = singleModifiers,
 			modifiers = memberModifiers

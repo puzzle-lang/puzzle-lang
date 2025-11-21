@@ -12,18 +12,18 @@ import puzzle.core.parser.declaration.matcher.member.parseMemberDeclaration
 import puzzle.core.parser.parameter.parser.parseClassParameters
 
 class EnumDeclarationParser(
-	private val ctx: PzlParserContext
+	private val cursor: PzlTokenCursor
 ) {
 	
 	context(_: PzlContext)
 	fun parse(modifiers: Set<Modifier>): EnumDeclaration {
-		ctx.expect(PzlTokenType.IDENTIFIER, "枚举缺少名称")
-		val name = ctx.previous.value
+		cursor.expect(PzlTokenType.IDENTIFIER, "枚举缺少名称")
+		val name = cursor.previous.value
 		val enumAccess = modifiers.access
-		val parameters = parseClassParameters(ctx, enumAccess)
-		ctx.expect(PzlTokenType.LBRACE, "枚举缺少 '{'")
+		val parameters = parseClassParameters(cursor, enumAccess)
+		cursor.expect(PzlTokenType.LBRACE, "枚举缺少 '{'")
 		val entries = parseEnumEntries(enumAccess)
-		if (ctx.previous.type == PzlTokenType.RBRACE) {
+		if (cursor.previous.type == PzlTokenType.RBRACE) {
 			return EnumDeclaration(
 				name = name,
 				modifiers = modifiers,
@@ -33,7 +33,7 @@ class EnumDeclarationParser(
 		}
 		
 		val members = mutableListOf<Declaration>()
-		while (!ctx.match(PzlTokenType.RBRACE)) {
+		while (!cursor.match(PzlTokenType.RBRACE)) {
 			members += parseDeclaration(enumAccess, modifiers)
 		}
 		
@@ -49,14 +49,14 @@ class EnumDeclarationParser(
 	context(_: PzlContext)
 	private fun parseEnumEntries(enumAccess: Modifier): List<EnumEntry> {
 		val entries = mutableListOf<EnumEntry>()
-		while (!ctx.match(PzlTokenType.SEMICOLON) && !ctx.match(PzlTokenType.RBRACE)) {
-			entries += EnumEntryParser(ctx).parse(enumAccess)
-			if (!ctx.check(PzlTokenType.SEMICOLON) && !ctx.check(PzlTokenType.RBRACE)) {
-				ctx.match(PzlTokenType.COMMA)
+		while (!cursor.match(PzlTokenType.SEMICOLON) && !cursor.match(PzlTokenType.RBRACE)) {
+			entries += EnumEntryParser(cursor).parse(enumAccess)
+			if (!cursor.check(PzlTokenType.SEMICOLON) && !cursor.check(PzlTokenType.RBRACE)) {
+				cursor.match(PzlTokenType.COMMA)
 			}
 		}
 		if (entries.isEmpty()) {
-			syntaxError("请至少为枚举设置一个常量", ctx.previous)
+			syntaxError("请至少为枚举设置一个常量", cursor.previous)
 		}
 		return entries
 	}
@@ -64,12 +64,12 @@ class EnumDeclarationParser(
 	context(_: PzlContext)
 	private fun parseDeclaration(enumAccess: Modifier, enumModifiers: Set<Modifier>): Declaration {
 		val memberModifiers = mutableSetOf<Modifier>()
-		memberModifiers += getMemberAccessModifier(ctx, enumAccess) {
+		memberModifiers += getMemberAccessModifier(cursor, enumAccess) {
 			"访问修饰符与枚举访问修饰符不兼容"
 		}
-		memberModifiers += getDeclarationModifiers(ctx)
+		memberModifiers += getDeclarationModifiers(cursor)
 		return parseMemberDeclaration(
-			ctx = ctx,
+			cursor = cursor,
 			parentTypeKind = TypeKind.ENUM,
 			parentModifiers = enumModifiers,
 			modifiers = memberModifiers
@@ -78,21 +78,21 @@ class EnumDeclarationParser(
 }
 
 private class EnumEntryParser(
-	private val ctx: PzlParserContext
+	private val cursor: PzlTokenCursor
 ) {
 	
 	context(_: PzlContext)
 	fun parse(enumAccess: Modifier): EnumEntry {
-		ctx.expect(PzlTokenType.IDENTIFIER, "枚举常量缺少名称")
-		val name = ctx.previous.value
-		if (ctx.match(PzlTokenType.LPAREN)) {
-			while (!ctx.match(PzlTokenType.RPAREN)) {
-				ctx.advance()
+		cursor.expect(PzlTokenType.IDENTIFIER, "枚举常量缺少名称")
+		val name = cursor.previous.value
+		if (cursor.match(PzlTokenType.LPAREN)) {
+			while (!cursor.match(PzlTokenType.RPAREN)) {
+				cursor.advance()
 			}
 		}
 		val members = mutableListOf<Declaration>()
-		if (ctx.match(PzlTokenType.LBRACE)) {
-			while (!ctx.match(PzlTokenType.RBRACE)) {
+		if (cursor.match(PzlTokenType.LBRACE)) {
+			while (!cursor.match(PzlTokenType.RBRACE)) {
 				members += parseDeclaration(enumAccess)
 			}
 		}
@@ -105,12 +105,12 @@ private class EnumEntryParser(
 	context(_: PzlContext)
 	private fun parseDeclaration(enumAccess: Modifier): Declaration {
 		val memberModifiers = mutableSetOf<Modifier>()
-		memberModifiers += getMemberAccessModifier(ctx, enumAccess) {
+		memberModifiers += getMemberAccessModifier(cursor, enumAccess) {
 			"访问修饰符与枚举访问修饰符不兼容"
 		}
-		memberModifiers += getDeclarationModifiers(ctx)
+		memberModifiers += getDeclarationModifiers(cursor)
 		return parseMemberDeclaration(
-			ctx = ctx,
+			cursor = cursor,
 			parentTypeKind = TypeKind.ENUM_ENTRY,
 			parentModifiers = emptySet(),
 			modifiers = memberModifiers

@@ -121,7 +121,7 @@ fun main() {
 	    println("$name 今年 $age 岁了，吃完了生日餐")
 	}
 	apply(cat, Fish, 3) { catName, _ ->             // 当然你也可以手动指定，不需要的时候，也可以使用匿名
-	    println("$name 的饭吃好了")
+	    println("catName 的饭吃好了")
 	}
 }
 ```

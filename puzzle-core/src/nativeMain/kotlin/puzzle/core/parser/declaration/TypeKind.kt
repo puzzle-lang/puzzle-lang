@@ -8,5 +8,6 @@ enum class TypeKind {
 	STRUCT,
 	ENUM,
 	ENUM_ENTRY,
-	ANNOTATION
+	ANNOTATION,
+	EXTENSION
 }

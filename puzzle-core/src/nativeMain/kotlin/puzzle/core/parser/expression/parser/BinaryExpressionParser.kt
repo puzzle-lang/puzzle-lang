@@ -4,21 +4,21 @@ import puzzle.core.PzlContext
 import puzzle.core.exception.syntaxError
 import puzzle.core.parser.Associativity
 import puzzle.core.parser.Operator
-import puzzle.core.parser.PzlParserContext
+import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.expression.BinaryExpression
 import puzzle.core.parser.expression.Expression
 import puzzle.core.parser.expression.matcher.parseExpression
 import puzzle.core.parser.toOperator
 
 class BinaryExpressionParser(
-	private val ctx: PzlParserContext
+	private val cursor: PzlTokenCursor
 ) {
 	
 	context(_: PzlContext)
 	fun parse(left: Expression): BinaryExpression {
-		val previous = ctx.previous
+		val previous = cursor.previous
 		val operator = previous.type.toOperator()
-		val right = parseExpression(ctx)
+		val right = parseExpression(cursor)
 		if (left !is BinaryExpression) {
 			return BinaryExpression(left, operator, right)
 		}

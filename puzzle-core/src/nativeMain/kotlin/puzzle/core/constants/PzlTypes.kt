@@ -4,5 +4,5 @@ import puzzle.core.parser.node.NamedType
 
 object PzlTypes {
 	
-	val Unit = NamedType("puzzle.Unit")
+	val Unit = NamedType.parse("puzzle.Unit")
 }

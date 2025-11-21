@@ -10,21 +10,21 @@ import puzzle.core.parser.declaration.matcher.member.parseMemberDeclaration
 import puzzle.core.parser.parameter.parser.parseClassParameters
 
 class ClassDeclarationParser(
-	private val ctx: PzlParserContext,
+	private val cursor: PzlTokenCursor,
 ) {
 	
 	context(_: PzlContext)
 	fun parse(modifiers: Set<Modifier>): ClassDeclaration {
-		ctx.expect(PzlTokenType.IDENTIFIER, "类缺少名称")
-		val name = ctx.previous.value
+		cursor.expect(PzlTokenType.IDENTIFIER, "类缺少名称")
+		val name = cursor.previous.value
 		val classAccess = modifiers.access
 		val constructorModifiers = mutableSetOf<Modifier>()
-		constructorModifiers += getMemberAccessModifier(ctx, classAccess) {
+		constructorModifiers += getMemberAccessModifier(cursor, classAccess) {
 			"主构造函数访问修饰符与类访问修饰符不兼容"
 		}
-		val parameters = parseClassParameters(ctx, classAccess)
-		val superTypes = parseSuperTypes(ctx)
-		if (!ctx.match(PzlTokenType.LBRACE)) {
+		val parameters = parseClassParameters(cursor, classAccess)
+		val superTypes = parseSuperTypes(cursor)
+		if (!cursor.match(PzlTokenType.LBRACE)) {
 			return ClassDeclaration(
 				name = name,
 				modifiers = modifiers,
@@ -35,7 +35,7 @@ class ClassDeclarationParser(
 		}
 		
 		val members = mutableListOf<Declaration>()
-		while (!ctx.match(PzlTokenType.RBRACE)) {
+		while (!cursor.match(PzlTokenType.RBRACE)) {
 			members += parseDeclaration(classAccess, modifiers)
 		}
 		
@@ -55,12 +55,12 @@ class ClassDeclarationParser(
 		classModifiers: Set<Modifier>,
 	): Declaration {
 		val memberModifiers = mutableSetOf<Modifier>()
-		memberModifiers += getMemberAccessModifier(ctx, classAccess) {
+		memberModifiers += getMemberAccessModifier(cursor, classAccess) {
 			"访问修饰符与类访问修饰符不兼容"
 		}
-		memberModifiers += getDeclarationModifiers(ctx)
+		memberModifiers += getDeclarationModifiers(cursor)
 		return parseMemberDeclaration(
-			ctx = ctx,
+			cursor = cursor,
 			parentTypeKind = TypeKind.CLASS,
 			parentModifiers = classModifiers,
 			modifiers = memberModifiers

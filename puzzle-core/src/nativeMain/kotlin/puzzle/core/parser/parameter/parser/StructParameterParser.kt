@@ -4,40 +4,40 @@ import puzzle.core.PzlContext
 import puzzle.core.exception.syntaxError
 import puzzle.core.lexer.PzlTokenType
 import puzzle.core.parser.Modifier
-import puzzle.core.parser.PzlParserContext
+import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.getDefaultMemberAccessModifier
 import puzzle.core.parser.parameter.Parameter
 import puzzle.core.parser.parameter.parseParameter
 
 context(_: PzlContext)
-fun parseStructParameters(ctx: PzlParserContext, structAccess: Modifier): List<Parameter> {
-	ctx.expect(PzlTokenType.LPAREN, "结构体缺少 '('")
+fun parseStructParameters(cursor: PzlTokenCursor, structAccess: Modifier): List<Parameter> {
+	cursor.expect(PzlTokenType.LPAREN, "结构体缺少 '('")
 	val parameters = mutableListOf<Parameter>()
-	while (!ctx.match(PzlTokenType.RPAREN)) {
-		parameters += StructParameterParser(ctx).parse(structAccess)
-		if (!ctx.check(PzlTokenType.RPAREN)) {
-			ctx.expect(PzlTokenType.COMMA, "参数缺少 ','")
+	while (!cursor.match(PzlTokenType.RPAREN)) {
+		parameters += StructParameterParser(cursor).parse(structAccess)
+		if (!cursor.check(PzlTokenType.RPAREN)) {
+			cursor.expect(PzlTokenType.COMMA, "参数缺少 ','")
 		}
 	}
 	return parameters
 }
 
 private class StructParameterParser(
-	private val ctx: PzlParserContext
+	private val cursor: PzlTokenCursor
 ) {
 	
 	context(_: PzlContext)
 	fun parse(structAccess: Modifier): Parameter {
 		val modifiers = mutableSetOf<Modifier>()
 		modifiers += getDefaultMemberAccessModifier(structAccess)
-		if (ctx.match(PzlTokenType.IGNORE)) {
+		if (cursor.match(PzlTokenType.IGNORE)) {
 			modifiers += Modifier.IGNORE
 		}
 		modifiers += when {
-			ctx.match(PzlTokenType.VAR) -> Modifier.VAR
-			ctx.match(PzlTokenType.VAL) -> Modifier.VAL
-			else -> syntaxError("结构体参数必须添加 'var' 或 'val' 修饰符", ctx.current)
+			cursor.match(PzlTokenType.VAR) -> Modifier.VAR
+			cursor.match(PzlTokenType.VAL) -> Modifier.VAL
+			else -> syntaxError("结构体参数必须添加 'var' 或 'val' 修饰符", cursor.current)
 		}
-		return parseParameter(ctx, modifiers, isSupportedLambdaType = false)
+		return parseParameter(cursor, modifiers, isSupportedLambdaType = false)
 	}
 }

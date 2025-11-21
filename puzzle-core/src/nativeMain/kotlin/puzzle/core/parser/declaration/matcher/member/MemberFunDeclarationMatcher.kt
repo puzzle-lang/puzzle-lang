@@ -9,32 +9,32 @@ import puzzle.core.parser.declaration.parser.FunDeclarationParser
 
 object MemberFunDeclarationMatcher : MemberDeclarationMatcher<FunDeclaration> {
 	
-	override fun match(ctx: PzlParserContext): Boolean {
-		return ctx.match(PzlTokenType.FUN)
+	override fun match(cursor: PzlTokenCursor): Boolean {
+		return cursor.match(PzlTokenType.FUN)
 	}
 	
 	context(_: PzlContext)
 	override fun check(
-		ctx: PzlParserContext,
+		cursor: PzlTokenCursor,
 		parentTypeKind: TypeKind,
 		parentModifiers: Set<Modifier>,
 		modifiers: Set<Modifier>
 	) {
 		when (parentTypeKind) {
 			TypeKind.ENUM -> checkSupportedDeclarationModifiers(
-				ctx, modifiers, name = "枚举成员函数",
+				cursor, modifiers, name = "枚举成员函数",
 				isSupportedOpen = true,
 				isSupportedAbstract = true,
 				isSupportedOverride = true
 			)
 			
 			TypeKind.ENUM_ENTRY -> checkSupportedDeclarationModifiers(
-				ctx, modifiers, name = "枚举常量成员函数",
+				cursor, modifiers, name = "枚举常量成员函数",
 				isSupportedOverride = true
 			)
 			
 			else -> checkSupportedDeclarationModifiers(
-				ctx, modifiers, name = "成员函数",
+				cursor, modifiers, name = "成员函数",
 				isSupportedOpen = parentModifiers.isOpen,
 				isSupportedAbstract = parentModifiers.isAbstract,
 				isSupportedFinalOverride = parentModifiers.isAbstract,
@@ -45,10 +45,10 @@ object MemberFunDeclarationMatcher : MemberDeclarationMatcher<FunDeclaration> {
 	
 	context(_: PzlContext)
 	override fun parse(
-		ctx: PzlParserContext,
+		cursor: PzlTokenCursor,
 		parentTypeKind: TypeKind,
 		modifiers: Set<Modifier>
 	): FunDeclaration {
-		return FunDeclarationParser(ctx).parse(modifiers)
+		return FunDeclarationParser(cursor).parse(modifiers)
 	}
 }

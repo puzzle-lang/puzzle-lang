@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 import puzzle.core.PzlContext
 import puzzle.core.lexer.PzlTokenType
 import puzzle.core.parser.Modifier
-import puzzle.core.parser.PzlParserContext
+import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.expression.Expression
 import puzzle.core.parser.expression.matcher.parseCompleteExpression
 import puzzle.core.parser.node.TypeReference
@@ -20,22 +20,22 @@ data class Parameter(
 
 context(_: PzlContext)
 fun parseParameter(
-	ctx: PzlParserContext,
+	cursor: PzlTokenCursor,
 	modifiers: Set<Modifier> = emptySet(),
 	isSupportedAnonymous: Boolean = false,
 	isSupportedLambdaType: Boolean = true
 ): Parameter {
-	val name = if (isSupportedAnonymous && ctx.peek(offset = 1)?.type != PzlTokenType.COLON) null else {
-		ctx.expect(PzlTokenType.IDENTIFIER, "参数缺少名称")
-		ctx.previous.value.also {
-			ctx.expect(PzlTokenType.COLON, "参数缺少 ':'")
+	val name = if (isSupportedAnonymous && cursor.offsetOrNull(offset = 1)?.type != PzlTokenType.COLON) null else {
+		cursor.expect(PzlTokenType.IDENTIFIER, "参数缺少名称")
+		cursor.previous.value.also {
+			cursor.expect(PzlTokenType.COLON, "参数缺少 ':'")
 		}
 	}
-	val typeReference = TypeReferenceParser(ctx).parse(
+	val typeReference = TypeReferenceParser(cursor).parse(
 		isSupportedLambdaType = isSupportedLambdaType
 	)
-	val defaultExpression = if (ctx.match(PzlTokenType.ASSIGN)) {
-		parseCompleteExpression(ctx)
+	val defaultExpression = if (cursor.match(PzlTokenType.ASSIGN)) {
+		parseCompleteExpression(cursor)
 	} else null
 	return Parameter(
 		name = name,

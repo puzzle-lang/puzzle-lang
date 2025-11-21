@@ -33,32 +33,32 @@ val Set<Modifier>.isAbstract: Boolean
 	get() = Modifier.ABSTRACT in this
 
 context(_: PzlContext)
-fun getTopLevelAccessModifier(ctx: PzlParserContext): Modifier {
+fun getTopLevelAccessModifier(cursor: PzlTokenCursor): Modifier {
 	return when {
-		ctx.match(PzlTokenType.PRIVATE) -> Modifier.PRIVATE
-		ctx.match(PzlTokenType.PROTECTED) -> syntaxError("顶层声明不支持 'protected' 修饰符", ctx.previous)
-		ctx.match(PzlTokenType.FILE) -> syntaxError("顶层声明不支持 'file' 修饰符", ctx.previous)
-		ctx.match(PzlTokenType.INTERNAL) -> Modifier.INTERNAL
-		ctx.match(PzlTokenType.MODULE) -> Modifier.MODULE
-		ctx.match(PzlTokenType.PUBLIC) -> Modifier.PUBLIC
+		cursor.match(PzlTokenType.PRIVATE) -> Modifier.PRIVATE
+		cursor.match(PzlTokenType.PROTECTED) -> syntaxError("顶层声明不支持 'protected' 修饰符", cursor.previous)
+		cursor.match(PzlTokenType.FILE) -> syntaxError("顶层声明不支持 'file' 修饰符", cursor.previous)
+		cursor.match(PzlTokenType.INTERNAL) -> Modifier.INTERNAL
+		cursor.match(PzlTokenType.MODULE) -> Modifier.MODULE
+		cursor.match(PzlTokenType.PUBLIC) -> Modifier.PUBLIC
 		else -> Modifier.PUBLIC
 	}
 }
 
 context(_: PzlContext)
-fun getMemberAccessModifier(ctx: PzlParserContext, parentAccess: Modifier, errorMessage: () -> String): Modifier {
+fun getMemberAccessModifier(cursor: PzlTokenCursor, parentAccess: Modifier, errorMessage: () -> String): Modifier {
 	val memberAccess = when {
-		ctx.match(PzlTokenType.PRIVATE) -> Modifier.PRIVATE
-		ctx.match(PzlTokenType.PROTECTED) -> Modifier.PROTECTED
-		ctx.match(PzlTokenType.FILE) -> Modifier.FILE
-		ctx.match(PzlTokenType.INTERNAL) -> Modifier.INTERNAL
-		ctx.match(PzlTokenType.MODULE) -> Modifier.MODULE
-		ctx.match(PzlTokenType.PUBLIC) -> Modifier.PUBLIC
+		cursor.match(PzlTokenType.PRIVATE) -> Modifier.PRIVATE
+		cursor.match(PzlTokenType.PROTECTED) -> Modifier.PROTECTED
+		cursor.match(PzlTokenType.FILE) -> Modifier.FILE
+		cursor.match(PzlTokenType.INTERNAL) -> Modifier.INTERNAL
+		cursor.match(PzlTokenType.MODULE) -> Modifier.MODULE
+		cursor.match(PzlTokenType.PUBLIC) -> Modifier.PUBLIC
 		else -> null
 	}
 	return if (memberAccess != null) {
 		if (!((parentAccess == Modifier.PRIVATE && memberAccess <= Modifier.FILE) || (memberAccess <= parentAccess))) {
-			syntaxError(errorMessage(), ctx.previous)
+			syntaxError(errorMessage(), cursor.previous)
 		}
 		memberAccess
 	} else {
@@ -77,30 +77,30 @@ fun getDefaultMemberAccessModifier(parentAccess: Modifier): Modifier {
 }
 
 context(_: PzlContext)
-fun getClassParameterAccessModifier(ctx: PzlParserContext, classAccess: Modifier, errorMessage: () -> String): Modifier? {
+fun getClassParameterAccessModifier(cursor: PzlTokenCursor, classAccess: Modifier, errorMessage: () -> String): Modifier? {
 	val access = when {
-		ctx.match(PzlTokenType.PRIVATE) -> Modifier.PRIVATE
-		ctx.match(PzlTokenType.PROTECTED) -> Modifier.PROTECTED
-		ctx.match(PzlTokenType.FILE) -> Modifier.FILE
-		ctx.match(PzlTokenType.INTERNAL) -> Modifier.INTERNAL
-		ctx.match(PzlTokenType.MODULE) -> Modifier.MODULE
-		ctx.match(PzlTokenType.PUBLIC) -> Modifier.PUBLIC
+		cursor.match(PzlTokenType.PRIVATE) -> Modifier.PRIVATE
+		cursor.match(PzlTokenType.PROTECTED) -> Modifier.PROTECTED
+		cursor.match(PzlTokenType.FILE) -> Modifier.FILE
+		cursor.match(PzlTokenType.INTERNAL) -> Modifier.INTERNAL
+		cursor.match(PzlTokenType.MODULE) -> Modifier.MODULE
+		cursor.match(PzlTokenType.PUBLIC) -> Modifier.PUBLIC
 		else -> return null
 	}
 	if (!((classAccess == Modifier.PRIVATE && access <= Modifier.FILE) || (access <= classAccess))) {
-		syntaxError(errorMessage(), ctx.previous)
+		syntaxError(errorMessage(), cursor.previous)
 	}
 	return access
 }
 
-fun getDeclarationModifiers(ctx: PzlParserContext): Set<Modifier> {
+fun getDeclarationModifiers(cursor: PzlTokenCursor): Set<Modifier> {
 	val modifiers = mutableSetOf<Modifier>()
 	when {
-		ctx.match(PzlTokenType.CONST) -> modifiers += Modifier.CONST
-		ctx.match(PzlTokenType.OPEN) -> modifiers += Modifier.OPEN
-		ctx.match(PzlTokenType.ABSTRACT) -> modifiers += Modifier.ABSTRACT
-		ctx.match(PzlTokenType.OVERRIDE) -> modifiers += Modifier.OVERRIDE
-		ctx.match(PzlTokenType.FINAL, PzlTokenType.OVERRIDE) -> {
+		cursor.match(PzlTokenType.CONST) -> modifiers += Modifier.CONST
+		cursor.match(PzlTokenType.OPEN) -> modifiers += Modifier.OPEN
+		cursor.match(PzlTokenType.ABSTRACT) -> modifiers += Modifier.ABSTRACT
+		cursor.match(PzlTokenType.OVERRIDE) -> modifiers += Modifier.OVERRIDE
+		cursor.match(PzlTokenType.FINAL, PzlTokenType.OVERRIDE) -> {
 			modifiers += Modifier.FINAL
 			modifiers += Modifier.OVERRIDE
 		}
@@ -110,7 +110,7 @@ fun getDeclarationModifiers(ctx: PzlParserContext): Set<Modifier> {
 
 context(_: PzlContext)
 fun checkSupportedDeclarationModifiers(
-	ctx: PzlParserContext,
+	cursor: PzlTokenCursor,
 	modifiers: Set<Modifier>,
 	name: String,
 	isSupportedConst: Boolean = false,
@@ -122,27 +122,27 @@ fun checkSupportedDeclarationModifiers(
 	when {
 		Modifier.CONST in modifiers && !isSupportedConst -> syntaxError(
 			"${name}不支持 'const' 修饰符",
-			ctx.previous
+			cursor.previous
 		)
 		
 		Modifier.OPEN in modifiers && !isSupportedOpen -> syntaxError(
 			"${name}不支持 'open' 修饰符",
-			ctx.previous
+			cursor.previous
 		)
 		
 		Modifier.ABSTRACT in modifiers && !isSupportedAbstract -> syntaxError(
 			"${name}不支持 'abstract' 修饰符",
-			ctx.previous
+			cursor.previous
 		)
 		
 		Modifier.FINAL in modifiers && Modifier.OVERRIDE in modifiers && !isSupportedFinalOverride -> syntaxError(
 			"${name}不支持 \"final override\" 修饰符",
-			ctx.previous
+			cursor.previous
 		)
 		
 		Modifier.OVERRIDE in modifiers && !isSupportedOverride -> syntaxError(
 			"${name}不支持 'override' 修饰符",
-			ctx.previous
+			cursor.previous
 		)
 	}
 }

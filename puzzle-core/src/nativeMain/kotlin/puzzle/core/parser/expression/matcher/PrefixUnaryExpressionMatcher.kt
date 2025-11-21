@@ -2,7 +2,7 @@ package puzzle.core.parser.expression.matcher
 
 import puzzle.core.PzlContext
 import puzzle.core.lexer.PzlTokenType
-import puzzle.core.parser.PzlParserContext
+import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.expression.Expression
 import puzzle.core.parser.expression.PrefixUnaryExpression
 import puzzle.core.parser.expression.parser.PrefixUnaryExpressionParser
@@ -18,17 +18,17 @@ object PrefixUnaryExpressionMatcher : ExpressionMatcher<PrefixUnaryExpression> {
 		PzlTokenType.DOUBLE_MINUS
 	)
 	
-	override fun match(ctx: PzlParserContext, left: Expression?): Boolean {
-		val type = ctx.current.type
+	override fun match(cursor: PzlTokenCursor, left: Expression?): Boolean {
+		val type = cursor.current.type
 		if (type !in tokenTypes) return false
 		return if (left == null || type != PzlTokenType.PLUS && type != PzlTokenType.MINUS) {
-			ctx.advance()
+			cursor.advance()
 			true
 		} else false
 	}
 	
 	context(_: PzlContext)
-	override fun parse(ctx: PzlParserContext, left: Expression?): PrefixUnaryExpression {
-		return PrefixUnaryExpressionParser(ctx).parse()
+	override fun parse(cursor: PzlTokenCursor, left: Expression?): PrefixUnaryExpression {
+		return PrefixUnaryExpressionParser(cursor).parse()
 	}
 }

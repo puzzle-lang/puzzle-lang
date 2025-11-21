@@ -5,26 +5,24 @@ import puzzle.core.lexer.PzlTokenType
 import puzzle.core.parser.Modifier
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.checkSupportedDeclarationModifiers
-import puzzle.core.parser.declaration.ClassDeclaration
-import puzzle.core.parser.declaration.parser.ClassDeclarationParser
+import puzzle.core.parser.declaration.ExtensionDeclaration
+import puzzle.core.parser.declaration.parser.ExtensionDeclarationParser
 
-object TopLevelClassDeclarationMatcher : TopLevelDeclarationMatcher<ClassDeclaration> {
+object TopLevelExtensionDeclarationMatcher : TopLevelDeclarationMatcher<ExtensionDeclaration> {
 	
 	override fun match(cursor: PzlTokenCursor): Boolean {
-		return cursor.match(PzlTokenType.CLASS)
+		return cursor.match(PzlTokenType.EXTENSION)
 	}
 	
 	context(_: PzlContext)
 	override fun check(cursor: PzlTokenCursor, modifiers: Set<Modifier>) {
 		checkSupportedDeclarationModifiers(
-			cursor, modifiers, "顶层类",
-			isSupportedOpen = true,
-			isSupportedAbstract = true
+			cursor, modifiers, "扩展"
 		)
 	}
 	
 	context(_: PzlContext)
-	override fun parse(cursor: PzlTokenCursor, modifiers: Set<Modifier>): ClassDeclaration {
-		return ClassDeclarationParser(cursor).parse(modifiers)
+	override fun parse(cursor: PzlTokenCursor, modifiers: Set<Modifier>): ExtensionDeclaration {
+		return ExtensionDeclarationParser(cursor).parse(modifiers)
 	}
 }

@@ -4,18 +4,18 @@ import puzzle.core.PzlContext
 import puzzle.core.exception.syntaxError
 import puzzle.core.lexer.PzlTokenType
 import puzzle.core.parser.Modifier
-import puzzle.core.parser.PzlParserContext
+import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.declaration.Declaration
 import puzzle.core.parser.declaration.TypeKind
 import puzzle.core.parser.declaration.TypeKind.*
 
 sealed interface MemberDeclarationMatcher<out D : Declaration> {
 	
-	fun match(ctx: PzlParserContext): Boolean
+	fun match(cursor: PzlTokenCursor): Boolean
 	
 	context(_: PzlContext)
 	fun check(
-		ctx: PzlParserContext,
+		cursor: PzlTokenCursor,
 		parentTypeKind: TypeKind,
 		parentModifiers: Set<Modifier>,
 		modifiers: Set<Modifier>
@@ -23,7 +23,7 @@ sealed interface MemberDeclarationMatcher<out D : Declaration> {
 	
 	context(_: PzlContext)
 	fun parse(
-		ctx: PzlParserContext,
+		cursor: PzlTokenCursor,
 		parentTypeKind: TypeKind,
 		modifiers: Set<Modifier>
 	): D
@@ -41,21 +41,21 @@ private val matchers = listOf(
 
 context(_: PzlContext)
 fun parseMemberDeclaration(
-	ctx: PzlParserContext,
+	cursor: PzlTokenCursor,
 	parentTypeKind: TypeKind,
 	parentModifiers: Set<Modifier>,
 	modifiers: Set<Modifier>
 ): Declaration {
-	val matcher = matchers.find { it.match(ctx) }
+	val matcher = matchers.find { it.match(cursor) }
 		?: run {
-			if (ctx.current.type == PzlTokenType.EOF) {
-				syntaxError("${parentTypeKind.getName()}缺少 '}'", ctx.current)
+			if (cursor.current.type == PzlTokenType.EOF) {
+				syntaxError("${parentTypeKind.getName()}缺少 '}'", cursor.current)
 			} else {
-				syntaxError("未知的成员声明", ctx.current)
+				syntaxError("未知的成员声明", cursor.current)
 			}
 		}
-	matcher.check(ctx, parentTypeKind, parentModifiers, modifiers)
-	return matcher.parse(ctx, parentTypeKind, modifiers)
+	matcher.check(cursor, parentTypeKind, parentModifiers, modifiers)
+	return matcher.parse(cursor, parentTypeKind, modifiers)
 }
 
 private fun TypeKind.getName(): String {
@@ -67,5 +67,6 @@ private fun TypeKind.getName(): String {
 		ENUM -> "枚举"
 		ENUM_ENTRY -> "枚举实例"
 		ANNOTATION -> "注解"
+		EXTENSION -> "扩展"
 	}
 }

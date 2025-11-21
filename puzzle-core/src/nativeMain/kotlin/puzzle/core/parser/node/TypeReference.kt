@@ -1,12 +1,7 @@
 package puzzle.core.parser.node
 
 import kotlinx.serialization.Serializable
-import puzzle.core.PzlContext
-import puzzle.core.exception.syntaxError
-import puzzle.core.lexer.PzlTokenType
-import puzzle.core.parser.PzlParserContext
 import puzzle.core.parser.parameter.Parameter
-import puzzle.core.parser.parameter.parser.parseLambdaParameters
 
 @Serializable
 data class TypeReference(
@@ -20,8 +15,16 @@ sealed interface Type
 
 @Serializable
 data class NamedType(
-	val value: String
-) : Type
+	val segments: List<String>
+) : Type {
+	
+	companion object {
+		
+		fun parse(qualifiedName: String): NamedType {
+			return NamedType(qualifiedName.split("."))
+		}
+	}
+}
 
 @Serializable
 data class LambdaType(

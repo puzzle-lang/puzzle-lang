@@ -6,7 +6,7 @@ import puzzle.core.lexer.PzlToken
 import puzzle.core.lexer.PzlTokenType
 import puzzle.core.lexer.removeComments
 
-class PzlParserContext(
+class PzlTokenCursor(
 	rawTokens: List<PzlToken>
 ) {
 	
@@ -23,7 +23,11 @@ class PzlParserContext(
 	val next: PzlToken
 		get() = this.tokens[position + 1]
 	
-	fun peek(offset: Int): PzlToken? {
+	fun offset(offset: Int): PzlToken {
+		return tokens[position + offset]
+	}
+	
+	fun offsetOrNull(offset: Int): PzlToken? {
 		return tokens.getOrNull(position + offset)
 	}
 	
@@ -46,7 +50,7 @@ class PzlParserContext(
 			return false
 		}
 		types.forEachIndexed { index, type ->
-			if (peek(offset = index + 1)?.type != type) {
+			if (offsetOrNull(offset = index + 1)?.type != type) {
 				return false
 			}
 		}

@@ -3,7 +3,7 @@ package puzzle.core.parser.expression.matcher
 import puzzle.core.PzlContext
 import puzzle.core.exception.syntaxError
 import puzzle.core.lexer.PzlTokenType
-import puzzle.core.parser.PzlParserContext
+import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.expression.BinaryExpression
 import puzzle.core.parser.expression.Expression
 import puzzle.core.parser.expression.parser.BinaryExpressionParser
@@ -36,15 +36,15 @@ object BinaryExpressionMatcher : ExpressionMatcher<BinaryExpression> {
 		PzlTokenType.OR
 	)
 	
-	override fun match(ctx: PzlParserContext, left: Expression?): Boolean {
-		return tokenTypes.any { ctx.match(it) }
+	override fun match(cursor: PzlTokenCursor, left: Expression?): Boolean {
+		return tokenTypes.any { cursor.match(it) }
 	}
 	
 	context(_: PzlContext)
-	override fun parse(ctx: PzlParserContext, left: Expression?): BinaryExpression {
+	override fun parse(cursor: PzlTokenCursor, left: Expression?): BinaryExpression {
 		if (left == null) {
-			syntaxError("二元运算符未解析到左值", ctx.peek(offset = -2)!!)
+			syntaxError("二元运算符未解析到左值", cursor.offset(offset = -2))
 		}
-		return BinaryExpressionParser(ctx).parse(left)
+		return BinaryExpressionParser(cursor).parse(left)
 	}
 }

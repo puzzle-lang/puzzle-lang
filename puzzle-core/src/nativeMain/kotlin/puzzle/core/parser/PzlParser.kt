@@ -14,17 +14,17 @@ class PzlParser(
 	rawTokens: List<PzlToken>
 ) {
 	
-	private val ctx = PzlParserContext(rawTokens)
+	private val cursor = PzlTokenCursor(rawTokens)
 	
 	context(context: PzlContext)
 	fun parse(): SourceFileNode {
-		val packageDeclaration = PackageDeclarationParser(ctx).parse()
+		val packageDeclaration = PackageDeclarationParser(cursor).parse()
 		val importDeclarations = mutableListOf<ImportDeclaration>()
-		while (ctx.match(PzlTokenType.IMPORT)) {
-			importDeclarations += ImportDeclarationParser(ctx).parse()
+		while (cursor.match(PzlTokenType.IMPORT)) {
+			importDeclarations += ImportDeclarationParser(cursor).parse()
 		}
 		val declarations = mutableListOf<Declaration>()
-		while (!ctx.isAtEnd()) {
+		while (!cursor.isAtEnd()) {
 			declarations += parseDeclaration()
 		}
 		return SourceFileNode(
@@ -38,8 +38,8 @@ class PzlParser(
 	context(_: PzlContext)
 	private fun parseDeclaration(): Declaration {
 		val modifiers = mutableSetOf<Modifier>()
-		modifiers += getTopLevelAccessModifier(ctx)
-		modifiers += getDeclarationModifiers(ctx)
-		return parseTopLevelDeclaration(ctx, modifiers)
+		modifiers += getTopLevelAccessModifier(cursor)
+		modifiers += getDeclarationModifiers(cursor)
+		return parseTopLevelDeclaration(cursor, modifiers)
 	}
 }

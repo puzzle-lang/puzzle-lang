@@ -3,15 +3,15 @@ package puzzle.core.parser.statement.matcher
 import puzzle.core.PzlContext
 import puzzle.core.exception.syntaxError
 import puzzle.core.lexer.PzlTokenType
-import puzzle.core.parser.PzlParserContext
+import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.statement.Statement
 
 sealed interface StatementMatcher<S : Statement> {
 	
-	fun match(ctx: PzlParserContext): Boolean
+	fun match(cursor: PzlTokenCursor): Boolean
 	
 	context(_: PzlContext)
-	fun parse(ctx: PzlParserContext): S
+	fun parse(cursor: PzlTokenCursor): S
 }
 
 private val matchers = listOf(
@@ -19,14 +19,14 @@ private val matchers = listOf(
 )
 
 context(_: PzlContext)
-fun parseStatement(ctx: PzlParserContext): Statement {
-	val matcher = matchers.find { it.match(ctx) }
+fun parseStatement(cursor: PzlTokenCursor): Statement {
+	val matcher = matchers.find { it.match(cursor) }
 		?: run {
-			if (ctx.current.type == PzlTokenType.EOF) {
-				syntaxError("函数缺少 '}'", ctx.current)
+			if (cursor.current.type == PzlTokenType.EOF) {
+				syntaxError("函数缺少 '}'", cursor.current)
 			} else {
-				syntaxError("不支持的语句", ctx.current)
+				syntaxError("不支持的语句", cursor.current)
 			}
 		}
-	return matcher.parse(ctx)
+	return matcher.parse(cursor)
 }

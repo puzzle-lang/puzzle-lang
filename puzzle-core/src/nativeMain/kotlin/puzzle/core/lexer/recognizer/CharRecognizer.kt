@@ -13,14 +13,8 @@ data object CharRecognizer : TokenRecognizer {
 	override fun tryParse(input: CharArray, start: Int, line: Int, column: Int): PzlToken? {
 		if (input[start] != '\'') return null
 		if (start + 2 < input.size && input[start + 2] == '\'' && input[start + 1] != '\\') {
-			return PzlToken(
-				PzlTokenType.CHAR,
-				input[start + 1].toString(),
-				start,
-				start + 3,
-				line,
-				column
-			)
+			val value = input[start + 1].toString()
+			return PzlToken(PzlTokenType.CHAR, value, start, start + 3, line, column)
 		}
 		if (start + 3 < input.size && input[start + 3] == '\'' && input[start + 1] == '\\') {
 			val escape = input.concatToString(start + 1, start + 3)
