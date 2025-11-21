@@ -2,6 +2,7 @@ package puzzle.core.parser.declaration.matcher.toplevel
 
 import puzzle.core.PzlContext
 import puzzle.core.lexer.PzlTokenType
+import puzzle.core.parser.DeclarationModifierType
 import puzzle.core.parser.Modifier
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.checkSupportedDeclarationModifiers
@@ -17,9 +18,8 @@ object TopLevelClassDeclarationMatcher : TopLevelDeclarationMatcher<ClassDeclara
 	context(_: PzlContext)
 	override fun check(cursor: PzlTokenCursor, modifiers: Set<Modifier>) {
 		checkSupportedDeclarationModifiers(
-			cursor, modifiers, "顶层类",
-			isSupportedOpen = true,
-			isSupportedAbstract = true
+			cursor, "顶层类", modifiers,
+			supportedTypes = DeclarationModifierType.topClassTypes
 		)
 	}
 	

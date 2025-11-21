@@ -5,14 +5,14 @@ import puzzle.core.lexer.PzlTokenType
 import puzzle.core.parser.Modifier
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.checkSupportedDeclarationModifiers
-import puzzle.core.parser.declaration.SingleDeclaration
+import puzzle.core.parser.declaration.ExtensionDeclaration
 import puzzle.core.parser.declaration.TypeKind
-import puzzle.core.parser.declaration.parser.SingleDeclarationParser
+import puzzle.core.parser.declaration.parser.ExtensionDeclarationParser
 
-object MemberSingleDeclarationMatcher : MemberDeclarationMatcher<SingleDeclaration> {
+object MemberExtensionDeclarationMatcher : MemberDeclarationMatcher<ExtensionDeclaration> {
 	
 	override fun match(cursor: PzlTokenCursor): Boolean {
-		return cursor.match(PzlTokenType.SINGLE)
+		return cursor.match(PzlTokenType.EXTENSION)
 	}
 	
 	context(_: PzlContext)
@@ -22,7 +22,7 @@ object MemberSingleDeclarationMatcher : MemberDeclarationMatcher<SingleDeclarati
 		parentModifiers: Set<Modifier>,
 		modifiers: Set<Modifier>
 	) {
-		checkSupportedDeclarationModifiers(cursor, "单例类", modifiers)
+		checkSupportedDeclarationModifiers(cursor, "内部扩展", modifiers)
 	}
 	
 	context(_: PzlContext)
@@ -30,7 +30,7 @@ object MemberSingleDeclarationMatcher : MemberDeclarationMatcher<SingleDeclarati
 		cursor: PzlTokenCursor,
 		parentTypeKind: TypeKind,
 		modifiers: Set<Modifier>
-	): SingleDeclaration {
-		return SingleDeclarationParser(cursor).parse(modifiers, parentTypeKind)
+	): ExtensionDeclaration {
+		return ExtensionDeclarationParser(cursor).parse(modifiers)
 	}
 }

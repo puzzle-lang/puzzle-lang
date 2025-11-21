@@ -22,9 +22,7 @@ object MemberTraitDeclarationMatcher : MemberDeclarationMatcher<TraitDeclaration
 		parentModifiers: Set<Modifier>,
 		modifiers: Set<Modifier>
 	) {
-		checkSupportedDeclarationModifiers(
-			cursor, modifiers, name = "特征",
-		)
+		checkSupportedDeclarationModifiers(cursor, "特征", modifiers)
 	}
 	
 	context(_: PzlContext)

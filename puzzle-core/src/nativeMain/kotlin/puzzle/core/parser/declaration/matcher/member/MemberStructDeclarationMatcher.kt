@@ -22,9 +22,7 @@ object MemberStructDeclarationMatcher : MemberDeclarationMatcher<StructDeclarati
 		parentModifiers: Set<Modifier>,
 		modifiers: Set<Modifier>
 	) {
-		checkSupportedDeclarationModifiers(
-			cursor, modifiers, name = "结构体",
-		)
+		checkSupportedDeclarationModifiers(cursor, "结构体", modifiers)
 	}
 	
 	context(_: PzlContext)

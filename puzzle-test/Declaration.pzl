@@ -166,6 +166,11 @@ extension Dog : NameProvider {
     fun name() {
 
     }
+
+    owner class Hello {
+
+        class World
+    }
 }
 
 /*

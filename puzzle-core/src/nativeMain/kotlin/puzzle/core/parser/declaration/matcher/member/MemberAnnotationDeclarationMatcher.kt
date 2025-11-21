@@ -2,8 +2,8 @@ package puzzle.core.parser.declaration.matcher.member
 
 import puzzle.core.PzlContext
 import puzzle.core.lexer.PzlTokenType
-import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.Modifier
+import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.checkSupportedDeclarationModifiers
 import puzzle.core.parser.declaration.AnnotationDeclaration
 import puzzle.core.parser.declaration.TypeKind
@@ -22,9 +22,7 @@ object MemberAnnotationDeclarationMatcher : MemberDeclarationMatcher<AnnotationD
 		parentModifiers: Set<Modifier>,
 		modifiers: Set<Modifier>
 	) {
-		checkSupportedDeclarationModifiers(
-			cursor, modifiers, name = "注解",
-		)
+		checkSupportedDeclarationModifiers(cursor, "注解", modifiers)
 	}
 	
 	context(_: PzlContext)
@@ -35,4 +33,9 @@ object MemberAnnotationDeclarationMatcher : MemberDeclarationMatcher<AnnotationD
 	): AnnotationDeclaration {
 		return AnnotationDeclarationParser(cursor).parse(modifiers)
 	}
+}
+
+annotation class A {
+	
+	annotation class B
 }

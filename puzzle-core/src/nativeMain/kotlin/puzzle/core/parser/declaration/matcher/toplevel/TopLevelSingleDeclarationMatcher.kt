@@ -16,7 +16,7 @@ object TopLevelSingleDeclarationMatcher : TopLevelDeclarationMatcher<SingleDecla
 	
 	context(_: PzlContext)
 	override fun check(cursor: PzlTokenCursor, modifiers: Set<Modifier>) {
-		checkSupportedDeclarationModifiers(cursor, modifiers, "顶层单例类")
+		checkSupportedDeclarationModifiers(cursor, "顶层单例类", modifiers)
 	}
 	
 	context(_: PzlContext)

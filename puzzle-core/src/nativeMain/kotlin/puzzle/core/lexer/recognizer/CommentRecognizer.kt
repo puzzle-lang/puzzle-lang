@@ -30,7 +30,7 @@ data object CommentRecognizer : TokenRecognizer {
 	private fun parseMultiComment(input: CharArray, start: Int, line: Int, column: Int): PzlToken {
 		var position = start + 2
 		var column = column + 2
-		var line = line
+		var endLine = line
 		var isEnd = false
 		while (position + 1 < input.size) {
 			when (input[position]) {
@@ -40,7 +40,7 @@ data object CommentRecognizer : TokenRecognizer {
 				}
 				
 				'\n' -> {
-					line++
+					endLine++
 					position++
 					column = 0
 				}
@@ -59,6 +59,6 @@ data object CommentRecognizer : TokenRecognizer {
 			.joinToString("\n") {
 				it.trim().trimStart('*').trimStart()
 			}.trim('\n')
-		return PzlToken(PzlTokenType.MULTI_COMMENT, comment, start, position + 2, line, column)
+		return PzlToken(PzlTokenType.MULTI_COMMENT, comment, start, position + 2, line, column, endLine)
 	}
 }

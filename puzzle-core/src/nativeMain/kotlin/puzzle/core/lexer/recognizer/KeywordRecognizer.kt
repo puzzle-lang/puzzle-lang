@@ -25,6 +25,7 @@ data object KeywordRecognizer : TokenRecognizer {
 		"const" to PzlTokenType.CONST,
 		"open" to PzlTokenType.OPEN,
 		"abstract" to PzlTokenType.ABSTRACT,
+		"owner" to PzlTokenType.OWNER,
 		"final" to PzlTokenType.FINAL,
 		"override" to PzlTokenType.OVERRIDE,
 		"ignore" to PzlTokenType.IGNORE,

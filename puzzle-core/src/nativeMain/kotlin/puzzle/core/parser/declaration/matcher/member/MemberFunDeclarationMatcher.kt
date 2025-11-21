@@ -2,7 +2,10 @@ package puzzle.core.parser.declaration.matcher.member
 
 import puzzle.core.PzlContext
 import puzzle.core.lexer.PzlTokenType
-import puzzle.core.parser.*
+import puzzle.core.parser.DeclarationModifierType
+import puzzle.core.parser.Modifier
+import puzzle.core.parser.PzlTokenCursor
+import puzzle.core.parser.checkSupportedDeclarationModifiers
 import puzzle.core.parser.declaration.FunDeclaration
 import puzzle.core.parser.declaration.TypeKind
 import puzzle.core.parser.declaration.parser.FunDeclarationParser
@@ -22,23 +25,18 @@ object MemberFunDeclarationMatcher : MemberDeclarationMatcher<FunDeclaration> {
 	) {
 		when (parentTypeKind) {
 			TypeKind.ENUM -> checkSupportedDeclarationModifiers(
-				cursor, modifiers, name = "枚举成员函数",
-				isSupportedOpen = true,
-				isSupportedAbstract = true,
-				isSupportedOverride = true
+				cursor, "枚举成员函数", modifiers,
+				supportedTypes = DeclarationModifierType.memberFunTypes
 			)
 			
 			TypeKind.ENUM_ENTRY -> checkSupportedDeclarationModifiers(
-				cursor, modifiers, name = "枚举常量成员函数",
-				isSupportedOverride = true
+				cursor, "枚举常量成员函数", modifiers,
+				supportedTypes = DeclarationModifierType.enumEntryFunTypes,
 			)
 			
 			else -> checkSupportedDeclarationModifiers(
-				cursor, modifiers, name = "成员函数",
-				isSupportedOpen = parentModifiers.isOpen,
-				isSupportedAbstract = parentModifiers.isAbstract,
-				isSupportedFinalOverride = parentModifiers.isAbstract,
-				isSupportedOverride = true,
+				cursor, "成员函数", modifiers,
+				supportedTypes = DeclarationModifierType.memberFunTypes
 			)
 		}
 	}

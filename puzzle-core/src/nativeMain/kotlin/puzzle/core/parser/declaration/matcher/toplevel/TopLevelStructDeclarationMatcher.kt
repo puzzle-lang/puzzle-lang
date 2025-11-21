@@ -16,7 +16,7 @@ object TopLevelStructDeclarationMatcher : TopLevelDeclarationMatcher<StructDecla
 	
 	context(_: PzlContext)
 	override fun check(cursor: PzlTokenCursor, modifiers: Set<Modifier>) {
-		checkSupportedDeclarationModifiers(cursor, modifiers, "顶层结构体")
+		checkSupportedDeclarationModifiers(cursor, "顶层结构体", modifiers)
 	}
 	
 	context(_: PzlContext)

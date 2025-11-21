@@ -3,61 +3,63 @@ package puzzle.core.parser
 import puzzle.core.PzlContext
 import puzzle.core.exception.syntaxError
 import puzzle.core.lexer.PzlTokenType
+import puzzle.core.parser.Modifier.*
 
 enum class Modifier {
 	PRIVATE, PROTECTED, FILE, INTERNAL, MODULE, PUBLIC,
 	VAR, VAL,
-	OPEN, ABSTRACT, OVERRIDE, FINAL, CONST,
+	OPEN, ABSTRACT, OVERRIDE, FINAL, CONST, OWNER,
 	IGNORE
 }
 
 private val accessModifiers = setOf(
-	Modifier.PRIVATE,
-	Modifier.PROTECTED,
-	Modifier.FILE,
-	Modifier.INTERNAL,
-	Modifier.MODULE,
-	Modifier.PUBLIC
+	PRIVATE,
+	PROTECTED,
+	FILE,
+	INTERNAL,
+	MODULE,
+	PUBLIC
 )
 
 val Set<Modifier>.access: Modifier
-	get() {
-		return accessModifiers.find { it in this }
-			?: error("未知的修饰符")
-	}
+	get() = accessModifiers.find { it in this }
+		?: error("未知的修饰符")
 
 val Set<Modifier>.isOpen: Boolean
-	get() = Modifier.OPEN in this
+	get() = OPEN in this
 
 val Set<Modifier>.isAbstract: Boolean
-	get() = Modifier.ABSTRACT in this
+	get() = ABSTRACT in this
+
+val Set<Modifier>.isOwner: Boolean
+	get() = OWNER in this
 
 context(_: PzlContext)
 fun getTopLevelAccessModifier(cursor: PzlTokenCursor): Modifier {
 	return when {
-		cursor.match(PzlTokenType.PRIVATE) -> Modifier.PRIVATE
+		cursor.match(PzlTokenType.PRIVATE) -> PRIVATE
 		cursor.match(PzlTokenType.PROTECTED) -> syntaxError("顶层声明不支持 'protected' 修饰符", cursor.previous)
 		cursor.match(PzlTokenType.FILE) -> syntaxError("顶层声明不支持 'file' 修饰符", cursor.previous)
-		cursor.match(PzlTokenType.INTERNAL) -> Modifier.INTERNAL
-		cursor.match(PzlTokenType.MODULE) -> Modifier.MODULE
-		cursor.match(PzlTokenType.PUBLIC) -> Modifier.PUBLIC
-		else -> Modifier.PUBLIC
+		cursor.match(PzlTokenType.INTERNAL) -> INTERNAL
+		cursor.match(PzlTokenType.MODULE) -> MODULE
+		cursor.match(PzlTokenType.PUBLIC) -> PUBLIC
+		else -> PUBLIC
 	}
 }
 
 context(_: PzlContext)
 fun getMemberAccessModifier(cursor: PzlTokenCursor, parentAccess: Modifier, errorMessage: () -> String): Modifier {
 	val memberAccess = when {
-		cursor.match(PzlTokenType.PRIVATE) -> Modifier.PRIVATE
-		cursor.match(PzlTokenType.PROTECTED) -> Modifier.PROTECTED
-		cursor.match(PzlTokenType.FILE) -> Modifier.FILE
-		cursor.match(PzlTokenType.INTERNAL) -> Modifier.INTERNAL
-		cursor.match(PzlTokenType.MODULE) -> Modifier.MODULE
-		cursor.match(PzlTokenType.PUBLIC) -> Modifier.PUBLIC
+		cursor.match(PzlTokenType.PRIVATE) -> PRIVATE
+		cursor.match(PzlTokenType.PROTECTED) -> PROTECTED
+		cursor.match(PzlTokenType.FILE) -> FILE
+		cursor.match(PzlTokenType.INTERNAL) -> INTERNAL
+		cursor.match(PzlTokenType.MODULE) -> MODULE
+		cursor.match(PzlTokenType.PUBLIC) -> PUBLIC
 		else -> null
 	}
 	return if (memberAccess != null) {
-		if (!((parentAccess == Modifier.PRIVATE && memberAccess <= Modifier.FILE) || (memberAccess <= parentAccess))) {
+		if (!((parentAccess == PRIVATE && memberAccess <= FILE) || (memberAccess <= parentAccess))) {
 			syntaxError(errorMessage(), cursor.previous)
 		}
 		memberAccess
@@ -68,10 +70,10 @@ fun getMemberAccessModifier(cursor: PzlTokenCursor, parentAccess: Modifier, erro
 
 fun getDefaultMemberAccessModifier(parentAccess: Modifier): Modifier {
 	return when (parentAccess) {
-		Modifier.PRIVATE, Modifier.FILE -> Modifier.FILE
-		Modifier.INTERNAL -> Modifier.INTERNAL
-		Modifier.MODULE -> Modifier.MODULE
-		Modifier.PUBLIC -> Modifier.PUBLIC
+		PRIVATE, FILE -> FILE
+		INTERNAL -> INTERNAL
+		MODULE -> MODULE
+		PUBLIC -> PUBLIC
 		else -> error("不支持的访问修饰符")
 	}
 }
@@ -79,70 +81,85 @@ fun getDefaultMemberAccessModifier(parentAccess: Modifier): Modifier {
 context(_: PzlContext)
 fun getClassParameterAccessModifier(cursor: PzlTokenCursor, classAccess: Modifier, errorMessage: () -> String): Modifier? {
 	val access = when {
-		cursor.match(PzlTokenType.PRIVATE) -> Modifier.PRIVATE
-		cursor.match(PzlTokenType.PROTECTED) -> Modifier.PROTECTED
-		cursor.match(PzlTokenType.FILE) -> Modifier.FILE
-		cursor.match(PzlTokenType.INTERNAL) -> Modifier.INTERNAL
-		cursor.match(PzlTokenType.MODULE) -> Modifier.MODULE
-		cursor.match(PzlTokenType.PUBLIC) -> Modifier.PUBLIC
+		cursor.match(PzlTokenType.PRIVATE) -> PRIVATE
+		cursor.match(PzlTokenType.PROTECTED) -> PROTECTED
+		cursor.match(PzlTokenType.FILE) -> FILE
+		cursor.match(PzlTokenType.INTERNAL) -> INTERNAL
+		cursor.match(PzlTokenType.MODULE) -> MODULE
+		cursor.match(PzlTokenType.PUBLIC) -> PUBLIC
 		else -> return null
 	}
-	if (!((classAccess == Modifier.PRIVATE && access <= Modifier.FILE) || (access <= classAccess))) {
+	if (!((classAccess == PRIVATE && access <= FILE) || (access <= classAccess))) {
 		syntaxError(errorMessage(), cursor.previous)
 	}
 	return access
 }
 
-fun getDeclarationModifiers(cursor: PzlTokenCursor): Set<Modifier> {
-	val modifiers = mutableSetOf<Modifier>()
-	when {
-		cursor.match(PzlTokenType.CONST) -> modifiers += Modifier.CONST
-		cursor.match(PzlTokenType.OPEN) -> modifiers += Modifier.OPEN
-		cursor.match(PzlTokenType.ABSTRACT) -> modifiers += Modifier.ABSTRACT
-		cursor.match(PzlTokenType.OVERRIDE) -> modifiers += Modifier.OVERRIDE
-		cursor.match(PzlTokenType.FINAL, PzlTokenType.OVERRIDE) -> {
-			modifiers += Modifier.FINAL
-			modifiers += Modifier.OVERRIDE
-		}
+fun getDeclarationModifiers(
+	cursor: PzlTokenCursor
+): Set<Modifier> = when {
+	cursor.match(PzlTokenType.CONST) -> setOf(CONST)
+	cursor.match(PzlTokenType.OWNER) -> setOf(OWNER)
+	cursor.match(PzlTokenType.OPEN) -> setOf(OPEN)
+	cursor.match(PzlTokenType.ABSTRACT) -> setOf(ABSTRACT)
+	cursor.match(PzlTokenType.OVERRIDE) -> setOf(OVERRIDE)
+	cursor.match(PzlTokenType.FINAL, PzlTokenType.OVERRIDE) -> setOf(FINAL, OVERRIDE)
+	else -> emptySet()
+}
+
+enum class DeclarationModifierType {
+	CONST,
+	OWNER,
+	OPEN,
+	ABSTRACT,
+	OVERRIDE,
+	FINAL_OVERRIDE;
+	
+	companion object {
+		
+		val topFunTypes = setOf(CONST)
+		
+		val topClassTypes = setOf(OPEN, ABSTRACT)
+		
+		
+		val memberFunTypes = setOf(ABSTRACT, OVERRIDE, FINAL_OVERRIDE, OPEN)
+		
+		val enumEntryFunTypes = setOf(OVERRIDE, FINAL_OVERRIDE)
+		
+		val memberClassTypes = topClassTypes + setOf(OWNER)
 	}
-	return modifiers
 }
 
 context(_: PzlContext)
 fun checkSupportedDeclarationModifiers(
 	cursor: PzlTokenCursor,
-	modifiers: Set<Modifier>,
 	name: String,
-	isSupportedConst: Boolean = false,
-	isSupportedOpen: Boolean = false,
-	isSupportedAbstract: Boolean = false,
-	isSupportedFinalOverride: Boolean = false,
-	isSupportedOverride: Boolean = false
+	modifiers: Set<Modifier>,
+	supportedTypes: Set<DeclarationModifierType> = emptySet()
 ) {
 	when {
-		Modifier.CONST in modifiers && !isSupportedConst -> syntaxError(
-			"${name}不支持 'const' 修饰符",
-			cursor.previous
-		)
+		CONST in modifiers && DeclarationModifierType.CONST !in supportedTypes -> {
+			syntaxError("${name}不支持 'const' 修饰符", cursor.offset(offset = -2))
+		}
 		
-		Modifier.OPEN in modifiers && !isSupportedOpen -> syntaxError(
-			"${name}不支持 'open' 修饰符",
-			cursor.previous
-		)
+		OWNER in modifiers && DeclarationModifierType.OWNER !in supportedTypes -> {
+			syntaxError("${name}不支持 'owner' 修饰符", cursor.offset(offset = -2))
+		}
 		
-		Modifier.ABSTRACT in modifiers && !isSupportedAbstract -> syntaxError(
-			"${name}不支持 'abstract' 修饰符",
-			cursor.previous
-		)
+		OPEN in modifiers && DeclarationModifierType.OPEN !in supportedTypes -> {
+			syntaxError("${name}不支持 'open' 修饰符", cursor.offset(offset = -2))
+		}
 		
-		Modifier.FINAL in modifiers && Modifier.OVERRIDE in modifiers && !isSupportedFinalOverride -> syntaxError(
-			"${name}不支持 \"final override\" 修饰符",
-			cursor.previous
-		)
+		ABSTRACT in modifiers && DeclarationModifierType.ABSTRACT !in supportedTypes -> {
+			syntaxError("${name}不支持 'abstract' 修饰符", cursor.offset(offset = -2))
+		}
 		
-		Modifier.OVERRIDE in modifiers && !isSupportedOverride -> syntaxError(
-			"${name}不支持 'override' 修饰符",
-			cursor.previous
-		)
+		FINAL in modifiers && OVERRIDE in modifiers && DeclarationModifierType.FINAL_OVERRIDE !in supportedTypes -> {
+			syntaxError("${name}不支持 \"final override\" 修饰符", cursor.offset(offset = -3))
+		}
+		
+		OVERRIDE in modifiers && DeclarationModifierType.OVERRIDE !in supportedTypes -> {
+			syntaxError("${name}不支持 'override' 修饰符", cursor.offset(offset = -2))
+		}
 	}
 }

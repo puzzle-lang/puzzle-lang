@@ -16,7 +16,7 @@ object TopLevelEnumDeclarationMatcher : TopLevelDeclarationMatcher<EnumDeclarati
 	
 	context(_: PzlContext)
 	override fun check(cursor: PzlTokenCursor, modifiers: Set<Modifier>) {
-		checkSupportedDeclarationModifiers(cursor, modifiers, "顶层枚举")
+		checkSupportedDeclarationModifiers(cursor, "顶层枚举", modifiers)
 	}
 	
 	context(_: PzlContext)

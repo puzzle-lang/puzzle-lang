@@ -44,20 +44,22 @@ class PzlLexer(
 			val token = it.tryParse(input, position, line, column) ?: return@forEach
 			position = token.end
 			column += if (token.type != PzlTokenType.TAB) token.length else token.length * TAB_LENGTH
-			when (token.type) {
-				PzlTokenType.NEWLINE -> {
-					column = 1
-					line++
-					return nextToken()
-				}
-				
-				PzlTokenType.WHITE_SPACE, PzlTokenType.TAB -> {
-					return nextToken()
-				}
-				
-				else -> return token
+			if (token.line != token.endLine) {
+				line = token.endLine
+			}
+			return when (token.type) {
+				PzlTokenType.NEWLINE -> doNewline()
+				PzlTokenType.WHITE_SPACE, PzlTokenType.TAB -> nextToken()
+				else -> token
 			}
 		}
 		syntaxError("${input[position]} 无法被识别", line, column)
+	}
+	
+	context(_: PzlContext)
+	private fun doNewline(): PzlToken {
+		column = 1
+		line++
+		return nextToken()
 	}
 }

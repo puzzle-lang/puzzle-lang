@@ -2,8 +2,9 @@ package puzzle.core.parser.declaration.matcher.member
 
 import puzzle.core.PzlContext
 import puzzle.core.lexer.PzlTokenType
-import puzzle.core.parser.PzlTokenCursor
+import puzzle.core.parser.DeclarationModifierType
 import puzzle.core.parser.Modifier
+import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.checkSupportedDeclarationModifiers
 import puzzle.core.parser.declaration.ClassDeclaration
 import puzzle.core.parser.declaration.TypeKind
@@ -23,9 +24,8 @@ object MemberClassDeclarationMatcher : MemberDeclarationMatcher<ClassDeclaration
 		modifiers: Set<Modifier>
 	) {
 		checkSupportedDeclarationModifiers(
-			cursor, modifiers, name = "内部类",
-			isSupportedOpen = true,
-			isSupportedAbstract = true
+			cursor, "内部类", modifiers,
+			supportedTypes = DeclarationModifierType.memberClassTypes
 		)
 	}
 	

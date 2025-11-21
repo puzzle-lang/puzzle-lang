@@ -22,6 +22,7 @@ enum class PzlTokenType(
 	PUBLIC("public"),           // public
 	OPEN("open"),               // open
 	ABSTRACT("abstract"),       // abstract
+	OWNER("owner"),             // owner
 	FINAL("final"),             // final
 	OVERRIDE("override"),       // override
 	CONST("const"),             // const

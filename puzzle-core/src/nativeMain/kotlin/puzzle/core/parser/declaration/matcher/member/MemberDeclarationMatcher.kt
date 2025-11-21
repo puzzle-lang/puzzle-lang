@@ -7,7 +7,7 @@ import puzzle.core.parser.Modifier
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.declaration.Declaration
 import puzzle.core.parser.declaration.TypeKind
-import puzzle.core.parser.declaration.TypeKind.*
+import puzzle.core.parser.declaration.getDisplayName
 
 sealed interface MemberDeclarationMatcher<out D : Declaration> {
 	
@@ -36,7 +36,8 @@ private val matchers = listOf(
 	MemberTraitDeclarationMatcher,
 	MemberStructDeclarationMatcher,
 	MemberEnumDeclarationMatcher,
-	MemberAnnotationDeclarationMatcher
+	MemberAnnotationDeclarationMatcher,
+	MemberExtensionDeclarationMatcher
 )
 
 context(_: PzlContext)
@@ -47,26 +48,11 @@ fun parseMemberDeclaration(
 	modifiers: Set<Modifier>
 ): Declaration {
 	val matcher = matchers.find { it.match(cursor) }
-		?: run {
-			if (cursor.current.type == PzlTokenType.EOF) {
-				syntaxError("${parentTypeKind.getName()}缺少 '}'", cursor.current)
-			} else {
-				syntaxError("未知的成员声明", cursor.current)
-			}
+		?: if (cursor.current.type == PzlTokenType.EOF) {
+			syntaxError("${parentTypeKind.getDisplayName()}缺少 '}'", cursor.current)
+		} else {
+			syntaxError("未知的成员声明", cursor.current)
 		}
 	matcher.check(cursor, parentTypeKind, parentModifiers, modifiers)
 	return matcher.parse(cursor, parentTypeKind, modifiers)
-}
-
-private fun TypeKind.getName(): String {
-	return when (this) {
-		CLASS -> "类"
-		SINGLE -> "单例类"
-		TRAIT -> "特征"
-		STRUCT -> "结构体"
-		ENUM -> "枚举"
-		ENUM_ENTRY -> "枚举实例"
-		ANNOTATION -> "注解"
-		EXTENSION -> "扩展"
-	}
 }

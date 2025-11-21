@@ -11,6 +11,7 @@ data class PzlToken(
 	val end: Int,
 	val line: Int,
 	val column: Int,
+	val endLine: Int = line
 ) {
 	
 	val length: Int

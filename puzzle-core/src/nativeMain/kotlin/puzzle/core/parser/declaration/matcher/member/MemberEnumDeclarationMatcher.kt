@@ -22,9 +22,7 @@ object MemberEnumDeclarationMatcher : MemberDeclarationMatcher<EnumDeclaration> 
 		parentModifiers: Set<Modifier>,
 		modifiers: Set<Modifier>
 	) {
-		checkSupportedDeclarationModifiers(
-			cursor, modifiers, name = "枚举",
-		)
+		checkSupportedDeclarationModifiers(cursor, "枚举", modifiers)
 	}
 	
 	context(_: PzlContext)

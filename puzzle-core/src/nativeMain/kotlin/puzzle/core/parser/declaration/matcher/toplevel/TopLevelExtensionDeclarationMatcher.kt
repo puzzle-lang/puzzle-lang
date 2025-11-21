@@ -16,9 +16,7 @@ object TopLevelExtensionDeclarationMatcher : TopLevelDeclarationMatcher<Extensio
 	
 	context(_: PzlContext)
 	override fun check(cursor: PzlTokenCursor, modifiers: Set<Modifier>) {
-		checkSupportedDeclarationModifiers(
-			cursor, modifiers, "扩展"
-		)
+		checkSupportedDeclarationModifiers(cursor, "扩展", modifiers)
 	}
 	
 	context(_: PzlContext)

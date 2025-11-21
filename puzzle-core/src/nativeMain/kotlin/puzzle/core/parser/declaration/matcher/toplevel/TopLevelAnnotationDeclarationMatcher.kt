@@ -16,7 +16,7 @@ object TopLevelAnnotationDeclarationMatcher : TopLevelDeclarationMatcher<Annotat
 	
 	context(_: PzlContext)
 	override fun check(cursor: PzlTokenCursor, modifiers: Set<Modifier>) {
-		checkSupportedDeclarationModifiers(cursor, modifiers, "顶层注解")
+		checkSupportedDeclarationModifiers(cursor, "顶层注解", modifiers)
 	}
 	
 	context(_: PzlContext)
