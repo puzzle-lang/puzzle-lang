@@ -4,8 +4,9 @@ import puzzle.core.PzlContext
 import puzzle.core.lexer.PzlTokenType
 import puzzle.core.parser.Modifier
 import puzzle.core.parser.PzlTokenCursor
-import puzzle.core.parser.checkSupportedDeclarationModifiers
+import puzzle.core.parser.checkModifiers
 import puzzle.core.parser.declaration.AnnotationDeclaration
+import puzzle.core.parser.declaration.NodeKind
 import puzzle.core.parser.declaration.parser.AnnotationDeclarationParser
 
 object TopLevelAnnotationDeclarationMatcher : TopLevelDeclarationMatcher<AnnotationDeclaration> {
@@ -15,12 +16,12 @@ object TopLevelAnnotationDeclarationMatcher : TopLevelDeclarationMatcher<Annotat
 	}
 	
 	context(_: PzlContext)
-	override fun check(cursor: PzlTokenCursor, modifiers: Set<Modifier>) {
-		checkSupportedDeclarationModifiers(cursor, "顶层注解", modifiers)
+	override fun check(cursor: PzlTokenCursor, modifiers: List<Modifier>) {
+		checkModifiers(cursor, modifiers, NodeKind.ANNOTATION)
 	}
 	
 	context(_: PzlContext)
-	override fun parse(cursor: PzlTokenCursor, modifiers: Set<Modifier>): AnnotationDeclaration {
+	override fun parse(cursor: PzlTokenCursor, modifiers: List<Modifier>): AnnotationDeclaration {
 		return AnnotationDeclarationParser(cursor).parse(modifiers)
 	}
 }

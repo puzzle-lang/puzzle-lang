@@ -3,26 +3,25 @@ package puzzle.core.parser.declaration.parser
 import puzzle.core.PzlContext
 import puzzle.core.exception.syntaxError
 import puzzle.core.lexer.PzlTokenType
-import puzzle.core.parser.*
+import puzzle.core.parser.Modifier
+import puzzle.core.parser.PzlTokenCursor
+import puzzle.core.parser.binding.parser.parseEnumParameters
 import puzzle.core.parser.declaration.Declaration
 import puzzle.core.parser.declaration.EnumDeclaration
 import puzzle.core.parser.declaration.EnumEntry
-import puzzle.core.parser.declaration.TypeKind
 import puzzle.core.parser.declaration.matcher.member.parseMemberDeclaration
-import puzzle.core.parser.parameter.parser.parseClassParameters
 
 class EnumDeclarationParser(
 	private val cursor: PzlTokenCursor
 ) {
 	
 	context(_: PzlContext)
-	fun parse(modifiers: Set<Modifier>): EnumDeclaration {
+	fun parse(modifiers: List<Modifier>): EnumDeclaration {
 		cursor.expect(PzlTokenType.IDENTIFIER, "枚举缺少名称")
 		val name = cursor.previous.value
-		val enumAccess = modifiers.access
-		val parameters = parseClassParameters(cursor, enumAccess)
+		val parameters = parseEnumParameters(cursor)
 		cursor.expect(PzlTokenType.LBRACE, "枚举缺少 '{'")
-		val entries = parseEnumEntries(enumAccess)
+		val entries = parseEnumEntries()
 		if (cursor.previous.type == PzlTokenType.RBRACE) {
 			return EnumDeclaration(
 				name = name,
@@ -34,7 +33,7 @@ class EnumDeclarationParser(
 		
 		val members = mutableListOf<Declaration>()
 		while (!cursor.match(PzlTokenType.RBRACE)) {
-			members += parseDeclaration(enumAccess, modifiers)
+			members += parseMemberDeclaration(cursor)
 		}
 		
 		return EnumDeclaration(
@@ -47,10 +46,10 @@ class EnumDeclarationParser(
 	}
 	
 	context(_: PzlContext)
-	private fun parseEnumEntries(enumAccess: Modifier): List<EnumEntry> {
+	private fun parseEnumEntries(): List<EnumEntry> {
 		val entries = mutableListOf<EnumEntry>()
 		while (!cursor.match(PzlTokenType.SEMICOLON) && !cursor.match(PzlTokenType.RBRACE)) {
-			entries += EnumEntryParser(cursor).parse(enumAccess)
+			entries += EnumEntryParser(cursor).parse()
 			if (!cursor.check(PzlTokenType.SEMICOLON) && !cursor.check(PzlTokenType.RBRACE)) {
 				cursor.match(PzlTokenType.COMMA)
 			}
@@ -60,21 +59,6 @@ class EnumDeclarationParser(
 		}
 		return entries
 	}
-	
-	context(_: PzlContext)
-	private fun parseDeclaration(enumAccess: Modifier, enumModifiers: Set<Modifier>): Declaration {
-		val memberModifiers = mutableSetOf<Modifier>()
-		memberModifiers += getMemberAccessModifier(cursor, enumAccess) {
-			"访问修饰符与枚举访问修饰符不兼容"
-		}
-		memberModifiers += getDeclarationModifiers(cursor)
-		return parseMemberDeclaration(
-			cursor = cursor,
-			parentTypeKind = TypeKind.ENUM,
-			parentModifiers = enumModifiers,
-			modifiers = memberModifiers
-		)
-	}
 }
 
 private class EnumEntryParser(
@@ -82,7 +66,7 @@ private class EnumEntryParser(
 ) {
 	
 	context(_: PzlContext)
-	fun parse(enumAccess: Modifier): EnumEntry {
+	fun parse(): EnumEntry {
 		cursor.expect(PzlTokenType.IDENTIFIER, "枚举常量缺少名称")
 		val name = cursor.previous.value
 		if (cursor.match(PzlTokenType.LPAREN)) {
@@ -93,27 +77,12 @@ private class EnumEntryParser(
 		val members = mutableListOf<Declaration>()
 		if (cursor.match(PzlTokenType.LBRACE)) {
 			while (!cursor.match(PzlTokenType.RBRACE)) {
-				members += parseDeclaration(enumAccess)
+				members += parseMemberDeclaration(cursor)
 			}
 		}
 		return EnumEntry(
 			name = name,
 			members = members
-		)
-	}
-	
-	context(_: PzlContext)
-	private fun parseDeclaration(enumAccess: Modifier): Declaration {
-		val memberModifiers = mutableSetOf<Modifier>()
-		memberModifiers += getMemberAccessModifier(cursor, enumAccess) {
-			"访问修饰符与枚举访问修饰符不兼容"
-		}
-		memberModifiers += getDeclarationModifiers(cursor)
-		return parseMemberDeclaration(
-			cursor = cursor,
-			parentTypeKind = TypeKind.ENUM_ENTRY,
-			parentModifiers = emptySet(),
-			modifiers = memberModifiers
 		)
 	}
 }

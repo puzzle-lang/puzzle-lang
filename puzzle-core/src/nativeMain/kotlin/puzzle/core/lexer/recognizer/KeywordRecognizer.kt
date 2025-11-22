@@ -35,6 +35,7 @@ data object KeywordRecognizer : TokenRecognizer {
 		"delete" to PzlTokenType.DELETE,
 		"var" to PzlTokenType.VAR,
 		"val" to PzlTokenType.VAL,
+		"args" to PzlTokenType.ARGS,
 		"if" to PzlTokenType.IF,
 		"else" to PzlTokenType.ELSE,
 		"match" to PzlTokenType.MATCH,

@@ -7,7 +7,7 @@ import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.node.LambdaType
 import puzzle.core.parser.node.NamedType
 import puzzle.core.parser.node.TypeReference
-import puzzle.core.parser.parameter.parser.parseLambdaParameters
+import puzzle.core.parser.binding.parser.parseLambdaParameters
 
 class TypeReferenceParser(
 	private val cursor: PzlTokenCursor

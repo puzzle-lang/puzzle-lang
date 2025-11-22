@@ -5,10 +5,10 @@ import puzzle.core.constants.PzlTypes
 import puzzle.core.lexer.PzlTokenType
 import puzzle.core.parser.Modifier
 import puzzle.core.parser.PzlTokenCursor
+import puzzle.core.parser.binding.parser.parseFunParameters
 import puzzle.core.parser.declaration.FunDeclaration
 import puzzle.core.parser.node.TypeReference
 import puzzle.core.parser.node.parser.TypeReferenceParser
-import puzzle.core.parser.parameter.parser.parseFunParameters
 import puzzle.core.parser.statement.Statement
 import puzzle.core.parser.statement.matcher.parseStatement
 
@@ -17,7 +17,7 @@ class FunDeclarationParser(
 ) {
 	
 	context(_: PzlContext)
-	fun parse(modifiers: Set<Modifier>): FunDeclaration {
+	fun parse(modifiers: List<Modifier>): FunDeclaration {
 		cursor.expect(PzlTokenType.IDENTIFIER, "函数缺少名称")
 		val funName = cursor.previous.value
 		val parameters = parseFunParameters(cursor)
@@ -35,7 +35,7 @@ class FunDeclarationParser(
 			return FunDeclaration(
 				name = funName,
 				parameters = parameters,
-				modifiers = modifiers.toSet(),
+				modifiers = modifiers,
 				returnTypes = returnTypes
 			)
 		}
@@ -46,7 +46,7 @@ class FunDeclarationParser(
 		return FunDeclaration(
 			name = funName,
 			parameters = parameters,
-			modifiers = modifiers.toSet(),
+			modifiers = modifiers,
 			returnTypes = returnTypes,
 			statements = statements
 		)

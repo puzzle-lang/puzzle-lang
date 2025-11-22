@@ -6,6 +6,6 @@ import puzzle.core.parser.Modifier
 @Serializable
 data class TraitDeclaration(
 	val name: String,
-	val modifiers: Set<Modifier>,
+	val modifiers: List<Modifier>,
 	val members: List<Declaration> = emptyList(),
 ) : Declaration

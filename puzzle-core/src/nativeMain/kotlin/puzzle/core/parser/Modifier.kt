@@ -4,162 +4,90 @@ import puzzle.core.PzlContext
 import puzzle.core.exception.syntaxError
 import puzzle.core.lexer.PzlTokenType
 import puzzle.core.parser.Modifier.*
+import puzzle.core.parser.declaration.NodeKind
 
 enum class Modifier {
 	PRIVATE, PROTECTED, FILE, INTERNAL, MODULE, PUBLIC,
-	VAR, VAL,
-	OPEN, ABSTRACT, OVERRIDE, FINAL, CONST, OWNER,
-	IGNORE
+	FINAL,
+	IGNORE, OPEN, ABSTRACT, OVERRIDE, CONST, OWNER,
+	ARGS,
+	VAR, VAL
 }
 
-private val accessModifiers = setOf(
-	PRIVATE,
-	PROTECTED,
-	FILE,
-	INTERNAL,
-	MODULE,
-	PUBLIC
+context(_: PzlContext)
+fun parseModifiers(cursor: PzlTokenCursor): List<Modifier> {
+	val modifiers = mutableListOf<Modifier>()
+	while (true) {
+		modifiers += when {
+			cursor.match(PzlTokenType.PRIVATE) -> PRIVATE
+			cursor.match(PzlTokenType.PROTECTED) -> PROTECTED
+			cursor.match(PzlTokenType.FILE) -> FILE
+			cursor.match(PzlTokenType.INTERNAL) -> INTERNAL
+			cursor.match(PzlTokenType.MODULE) -> MODULE
+			cursor.match(PzlTokenType.PUBLIC) -> PUBLIC
+			cursor.match(PzlTokenType.FINAL) -> FINAL
+			cursor.match(PzlTokenType.IGNORE) -> IGNORE
+			cursor.match(PzlTokenType.OPEN) -> OPEN
+			cursor.match(PzlTokenType.ABSTRACT) -> ABSTRACT
+			cursor.match(PzlTokenType.OVERRIDE) -> OVERRIDE
+			cursor.match(PzlTokenType.CONST) -> CONST
+			cursor.match(PzlTokenType.OWNER) -> OWNER
+			cursor.match(PzlTokenType.VAR) -> VAR
+			cursor.match(PzlTokenType.VAL) -> VAL
+			cursor.match(PzlTokenType.ARGS) -> ARGS
+			else -> break
+		}
+	}
+	checkModifierOrder(cursor, modifiers)
+	return modifiers
+}
+
+private val modifierOrders = mapOf(
+	PRIVATE to 0, PROTECTED to 0, FILE to 0, INTERNAL to 0, MODULE to 0, PUBLIC to 0,
+	FINAL to 1,
+	IGNORE to 2, OPEN to 2, ABSTRACT to 2, OVERRIDE to 2, CONST to 2, OWNER to 2,
+	ARGS to 3,
+	VAR to 4, VAL to 4
 )
 
-val Set<Modifier>.access: Modifier
-	get() = accessModifiers.find { it in this }
-		?: error("未知的修饰符")
-
-val Set<Modifier>.isOpen: Boolean
-	get() = OPEN in this
-
-val Set<Modifier>.isAbstract: Boolean
-	get() = ABSTRACT in this
-
-val Set<Modifier>.isOwner: Boolean
-	get() = OWNER in this
-
 context(_: PzlContext)
-fun getTopLevelAccessModifier(cursor: PzlTokenCursor): Modifier {
-	return when {
-		cursor.match(PzlTokenType.PRIVATE) -> PRIVATE
-		cursor.match(PzlTokenType.PROTECTED) -> syntaxError("顶层声明不支持 'protected' 修饰符", cursor.previous)
-		cursor.match(PzlTokenType.FILE) -> syntaxError("顶层声明不支持 'file' 修饰符", cursor.previous)
-		cursor.match(PzlTokenType.INTERNAL) -> INTERNAL
-		cursor.match(PzlTokenType.MODULE) -> MODULE
-		cursor.match(PzlTokenType.PUBLIC) -> PUBLIC
-		else -> PUBLIC
-	}
-}
-
-context(_: PzlContext)
-fun getMemberAccessModifier(cursor: PzlTokenCursor, parentAccess: Modifier, errorMessage: () -> String): Modifier {
-	val memberAccess = when {
-		cursor.match(PzlTokenType.PRIVATE) -> PRIVATE
-		cursor.match(PzlTokenType.PROTECTED) -> PROTECTED
-		cursor.match(PzlTokenType.FILE) -> FILE
-		cursor.match(PzlTokenType.INTERNAL) -> INTERNAL
-		cursor.match(PzlTokenType.MODULE) -> MODULE
-		cursor.match(PzlTokenType.PUBLIC) -> PUBLIC
-		else -> null
-	}
-	return if (memberAccess != null) {
-		if (!((parentAccess == PRIVATE && memberAccess <= FILE) || (memberAccess <= parentAccess))) {
-			syntaxError(errorMessage(), cursor.previous)
+private fun checkModifierOrder(cursor: PzlTokenCursor, modifiers: List<Modifier>) {
+	if (modifiers.isEmpty()) return
+	var last: Modifier? = null
+	var lastOrder = -1
+	modifiers.forEachIndexed { index, current ->
+		val currentOrder = modifierOrders[current]!!
+		when {
+			currentOrder > lastOrder -> {
+				lastOrder = currentOrder
+				last = current
+			}
+			
+			currentOrder < lastOrder -> syntaxError(
+				message = "修饰符顺序错误，'${current.name.lowercase()}' 需要在 '${last!!.name.lowercase()}' 前面",
+				token = cursor.offset(offset = -modifiers.size + index)
+			)
+			
+			else -> syntaxError(
+				message = "'${last!!.name.lowercase()}' 和 '${current.name.lowercase()}' 修饰符不允许同时使用",
+				token = cursor.offset(offset = -modifiers.size + index)
+			)
 		}
-		memberAccess
-	} else {
-		getDefaultMemberAccessModifier(parentAccess)
-	}
-}
-
-fun getDefaultMemberAccessModifier(parentAccess: Modifier): Modifier {
-	return when (parentAccess) {
-		PRIVATE, FILE -> FILE
-		INTERNAL -> INTERNAL
-		MODULE -> MODULE
-		PUBLIC -> PUBLIC
-		else -> error("不支持的访问修饰符")
 	}
 }
 
 context(_: PzlContext)
-fun getClassParameterAccessModifier(cursor: PzlTokenCursor, classAccess: Modifier, errorMessage: () -> String): Modifier? {
-	val access = when {
-		cursor.match(PzlTokenType.PRIVATE) -> PRIVATE
-		cursor.match(PzlTokenType.PROTECTED) -> PROTECTED
-		cursor.match(PzlTokenType.FILE) -> FILE
-		cursor.match(PzlTokenType.INTERNAL) -> INTERNAL
-		cursor.match(PzlTokenType.MODULE) -> MODULE
-		cursor.match(PzlTokenType.PUBLIC) -> PUBLIC
-		else -> return null
-	}
-	if (!((classAccess == PRIVATE && access <= FILE) || (access <= classAccess))) {
-		syntaxError(errorMessage(), cursor.previous)
-	}
-	return access
-}
-
-fun getDeclarationModifiers(
-	cursor: PzlTokenCursor
-): Set<Modifier> = when {
-	cursor.match(PzlTokenType.CONST) -> setOf(CONST)
-	cursor.match(PzlTokenType.OWNER) -> setOf(OWNER)
-	cursor.match(PzlTokenType.OPEN) -> setOf(OPEN)
-	cursor.match(PzlTokenType.ABSTRACT) -> setOf(ABSTRACT)
-	cursor.match(PzlTokenType.OVERRIDE) -> setOf(OVERRIDE)
-	cursor.match(PzlTokenType.FINAL, PzlTokenType.OVERRIDE) -> setOf(FINAL, OVERRIDE)
-	else -> emptySet()
-}
-
-enum class DeclarationModifierType {
-	CONST,
-	OWNER,
-	OPEN,
-	ABSTRACT,
-	OVERRIDE,
-	FINAL_OVERRIDE;
-	
-	companion object {
-		
-		val topFunTypes = setOf(CONST)
-		
-		val topClassTypes = setOf(OPEN, ABSTRACT)
-		
-		
-		val memberFunTypes = setOf(ABSTRACT, OVERRIDE, FINAL_OVERRIDE, OPEN)
-		
-		val enumEntryFunTypes = setOf(OVERRIDE, FINAL_OVERRIDE)
-		
-		val memberClassTypes = topClassTypes + setOf(OWNER)
-	}
-}
-
-context(_: PzlContext)
-fun checkSupportedDeclarationModifiers(
+fun checkModifiers(
 	cursor: PzlTokenCursor,
-	name: String,
-	modifiers: Set<Modifier>,
-	supportedTypes: Set<DeclarationModifierType> = emptySet()
+	modifiers: List<Modifier>,
+	nodeKind: NodeKind
 ) {
-	when {
-		CONST in modifiers && DeclarationModifierType.CONST !in supportedTypes -> {
-			syntaxError("${name}不支持 'const' 修饰符", cursor.offset(offset = -2))
-		}
-		
-		OWNER in modifiers && DeclarationModifierType.OWNER !in supportedTypes -> {
-			syntaxError("${name}不支持 'owner' 修饰符", cursor.offset(offset = -2))
-		}
-		
-		OPEN in modifiers && DeclarationModifierType.OPEN !in supportedTypes -> {
-			syntaxError("${name}不支持 'open' 修饰符", cursor.offset(offset = -2))
-		}
-		
-		ABSTRACT in modifiers && DeclarationModifierType.ABSTRACT !in supportedTypes -> {
-			syntaxError("${name}不支持 'abstract' 修饰符", cursor.offset(offset = -2))
-		}
-		
-		FINAL in modifiers && OVERRIDE in modifiers && DeclarationModifierType.FINAL_OVERRIDE !in supportedTypes -> {
-			syntaxError("${name}不支持 \"final override\" 修饰符", cursor.offset(offset = -3))
-		}
-		
-		OVERRIDE in modifiers && DeclarationModifierType.OVERRIDE !in supportedTypes -> {
-			syntaxError("${name}不支持 'override' 修饰符", cursor.offset(offset = -2))
+	modifiers.forEachIndexed { index, modifier ->
+		if (modifier !in nodeKind.supportedModifiers) {
+			syntaxError(
+				message = "${nodeKind.displayName}不支持 '${modifier.name.lowercase()}' 修饰符",
+				token = cursor.offset(offset = -modifiers.size + index)
+			)
 		}
 	}
 }

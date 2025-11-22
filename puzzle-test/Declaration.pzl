@@ -142,7 +142,8 @@ struct Data(
     ignore val param1: String,
     ignore var param2: Int?,
     val param3: Double,
-    val param4: Info
+    val param4: Info,
+    val name: String
 )
 
 struct Info(
@@ -172,6 +173,14 @@ extension Dog : NameProvider {
         class World
     }
 }
+
+// val Int.toString() = this.toString()
+
+/*
+Class   -> [Access Modifier] [var | val] [name]: [Type]
+Fun     -> [val | args | <default>] [name]: [Type]
+Struct  -> []
+*/
 
 /*
 fun Dog : NameProvider.name() {e

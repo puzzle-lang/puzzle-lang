@@ -4,8 +4,9 @@ import puzzle.core.PzlContext
 import puzzle.core.lexer.PzlTokenType
 import puzzle.core.parser.Modifier
 import puzzle.core.parser.PzlTokenCursor
-import puzzle.core.parser.checkSupportedDeclarationModifiers
+import puzzle.core.parser.checkModifiers
 import puzzle.core.parser.declaration.ExtensionDeclaration
+import puzzle.core.parser.declaration.NodeKind
 import puzzle.core.parser.declaration.parser.ExtensionDeclarationParser
 
 object TopLevelExtensionDeclarationMatcher : TopLevelDeclarationMatcher<ExtensionDeclaration> {
@@ -15,12 +16,12 @@ object TopLevelExtensionDeclarationMatcher : TopLevelDeclarationMatcher<Extensio
 	}
 	
 	context(_: PzlContext)
-	override fun check(cursor: PzlTokenCursor, modifiers: Set<Modifier>) {
-		checkSupportedDeclarationModifiers(cursor, "扩展", modifiers)
+	override fun check(cursor: PzlTokenCursor, modifiers: List<Modifier>) {
+		checkModifiers(cursor, modifiers, NodeKind.EXTENSION)
 	}
 	
 	context(_: PzlContext)
-	override fun parse(cursor: PzlTokenCursor, modifiers: Set<Modifier>): ExtensionDeclaration {
+	override fun parse(cursor: PzlTokenCursor, modifiers: List<Modifier>): ExtensionDeclaration {
 		return ExtensionDeclarationParser(cursor).parse(modifiers)
 	}
 }

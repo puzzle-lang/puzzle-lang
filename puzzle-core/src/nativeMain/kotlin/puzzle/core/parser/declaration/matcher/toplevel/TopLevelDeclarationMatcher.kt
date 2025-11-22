@@ -5,16 +5,17 @@ import puzzle.core.exception.syntaxError
 import puzzle.core.parser.Modifier
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.declaration.Declaration
+import puzzle.core.parser.parseModifiers
 
 sealed interface TopLevelDeclarationMatcher<out D : Declaration> {
 	
 	fun match(cursor: PzlTokenCursor): Boolean
 	
 	context(_: PzlContext)
-	fun check(cursor: PzlTokenCursor, modifiers: Set<Modifier>)
+	fun check(cursor: PzlTokenCursor, modifiers: List<Modifier>)
 	
 	context(_: PzlContext)
-	fun parse(cursor: PzlTokenCursor, modifiers: Set<Modifier>): D
+	fun parse(cursor: PzlTokenCursor, modifiers: List<Modifier>): D
 }
 
 private val matchers = listOf(
@@ -29,7 +30,8 @@ private val matchers = listOf(
 )
 
 context(_: PzlContext)
-fun parseTopLevelDeclaration(cursor: PzlTokenCursor, modifiers: Set<Modifier>): Declaration {
+fun parseTopLevelDeclaration(cursor: PzlTokenCursor): Declaration {
+	val modifiers = parseModifiers(cursor)
 	val matcher = matchers.find { it.match(cursor) }
 		?: syntaxError("未知的顶层声明", cursor.current)
 	matcher.check(cursor, modifiers)

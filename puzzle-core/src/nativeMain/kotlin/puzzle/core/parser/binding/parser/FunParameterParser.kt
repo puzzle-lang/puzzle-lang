@@ -1,11 +1,13 @@
-package puzzle.core.parser.parameter.parser
+package puzzle.core.parser.binding.parser
 
 import puzzle.core.PzlContext
 import puzzle.core.lexer.PzlTokenType
-import puzzle.core.parser.Modifier
 import puzzle.core.parser.PzlTokenCursor
-import puzzle.core.parser.parameter.Parameter
-import puzzle.core.parser.parameter.parseParameter
+import puzzle.core.parser.binding.Parameter
+import puzzle.core.parser.binding.parseParameter
+import puzzle.core.parser.checkModifiers
+import puzzle.core.parser.declaration.NodeKind
+import puzzle.core.parser.parseModifiers
 
 context(_: PzlContext)
 fun parseFunParameters(cursor: PzlTokenCursor): List<Parameter> {
@@ -29,8 +31,8 @@ private class FunParameterParser(
 	
 	context(_: PzlContext)
 	fun parse(): Parameter {
-		val modifiers = mutableSetOf<Modifier>()
-		modifiers += if (cursor.match(PzlTokenType.VAR)) Modifier.VAR else Modifier.VAL
+		val modifiers = parseModifiers(cursor)
+		checkModifiers(cursor, modifiers, NodeKind.FUN_PARAMETER)
 		return parseParameter(cursor, modifiers)
 	}
 }

@@ -1,4 +1,4 @@
-package puzzle.core.parser.parameter
+package puzzle.core.parser.binding
 
 import kotlinx.serialization.Serializable
 import puzzle.core.PzlContext
@@ -13,7 +13,7 @@ import puzzle.core.parser.node.parser.TypeReferenceParser
 @Serializable
 data class Parameter(
 	val name: String?,
-	val modifiers: Set<Modifier>,
+	val modifiers: List<Modifier>,
 	val typeReference: TypeReference,
 	val defaultExpression: Expression? = null
 )
@@ -21,7 +21,7 @@ data class Parameter(
 context(_: PzlContext)
 fun parseParameter(
 	cursor: PzlTokenCursor,
-	modifiers: Set<Modifier> = emptySet(),
+	modifiers: List<Modifier> = emptyList(),
 	isSupportedAnonymous: Boolean = false,
 	isSupportedLambdaType: Boolean = true
 ): Parameter {

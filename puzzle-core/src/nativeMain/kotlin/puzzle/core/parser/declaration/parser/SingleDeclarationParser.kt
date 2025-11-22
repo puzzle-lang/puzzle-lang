@@ -1,11 +1,12 @@
 package puzzle.core.parser.declaration.parser
 
 import puzzle.core.PzlContext
+import puzzle.core.exception.syntaxError
 import puzzle.core.lexer.PzlTokenType
-import puzzle.core.parser.*
+import puzzle.core.parser.Modifier
+import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.declaration.Declaration
 import puzzle.core.parser.declaration.SingleDeclaration
-import puzzle.core.parser.declaration.TypeKind
 import puzzle.core.parser.declaration.matcher.member.parseMemberDeclaration
 
 class SingleDeclarationParser(
@@ -13,23 +14,12 @@ class SingleDeclarationParser(
 ) {
 	
 	context(_: PzlContext)
-	fun parse(modifiers: Set<Modifier>, parentTypeKind: TypeKind? = null): SingleDeclaration {
+	fun parse(modifiers: List<Modifier>, isMember: Boolean = false): SingleDeclaration {
 		val name = when {
-			parentTypeKind == null -> {
-				cursor.expect(PzlTokenType.IDENTIFIER, "单例类缺少名称")
-				cursor.previous.value
-			}
-			
-			parentTypeKind == TypeKind.SINGLE -> {
-				cursor.expect(PzlTokenType.IDENTIFIER, "内部单例类不支持默认名称")
-				cursor.previous.value
-			}
-			
 			cursor.match(PzlTokenType.IDENTIFIER) -> cursor.previous.value
-			
-			else -> ""
+			isMember -> ""
+			else -> syntaxError("单例类缺少名称", cursor.current)
 		}
-		val singleAccess = modifiers.access
 		if (!cursor.match(PzlTokenType.LBRACE)) {
 			return SingleDeclaration(
 				name = name,
@@ -38,31 +28,13 @@ class SingleDeclarationParser(
 		}
 		val members = mutableListOf<Declaration>()
 		while (!cursor.match(PzlTokenType.RBRACE)) {
-			members += parseDeclaration(singleAccess, modifiers)
+			members += parseMemberDeclaration(cursor)
 		}
 		
 		return SingleDeclaration(
 			name = name,
 			modifiers = modifiers,
 			members = members
-		)
-	}
-	
-	context(_: PzlContext)
-	private fun parseDeclaration(
-		singleAccess: Modifier,
-		singleModifiers: Set<Modifier>,
-	): Declaration {
-		val memberModifiers = mutableSetOf<Modifier>()
-		memberModifiers += getMemberAccessModifier(cursor, singleAccess) {
-			"访问修饰符与类访问修饰符不兼容"
-		}
-		memberModifiers += getDeclarationModifiers(cursor)
-		return parseMemberDeclaration(
-			cursor = cursor,
-			parentTypeKind = TypeKind.SINGLE,
-			parentModifiers = singleModifiers,
-			modifiers = memberModifiers
 		)
 	}
 }

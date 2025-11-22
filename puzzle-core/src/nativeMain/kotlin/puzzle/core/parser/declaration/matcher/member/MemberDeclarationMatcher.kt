@@ -6,27 +6,17 @@ import puzzle.core.lexer.PzlTokenType
 import puzzle.core.parser.Modifier
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.declaration.Declaration
-import puzzle.core.parser.declaration.TypeKind
-import puzzle.core.parser.declaration.getDisplayName
+import puzzle.core.parser.parseModifiers
 
 sealed interface MemberDeclarationMatcher<out D : Declaration> {
 	
 	fun match(cursor: PzlTokenCursor): Boolean
 	
 	context(_: PzlContext)
-	fun check(
-		cursor: PzlTokenCursor,
-		parentTypeKind: TypeKind,
-		parentModifiers: Set<Modifier>,
-		modifiers: Set<Modifier>
-	)
+	fun check(cursor: PzlTokenCursor, modifiers: List<Modifier>)
 	
 	context(_: PzlContext)
-	fun parse(
-		cursor: PzlTokenCursor,
-		parentTypeKind: TypeKind,
-		modifiers: Set<Modifier>
-	): D
+	fun parse(cursor: PzlTokenCursor, modifiers: List<Modifier>): D
 }
 
 private val matchers = listOf(
@@ -41,18 +31,14 @@ private val matchers = listOf(
 )
 
 context(_: PzlContext)
-fun parseMemberDeclaration(
-	cursor: PzlTokenCursor,
-	parentTypeKind: TypeKind,
-	parentModifiers: Set<Modifier>,
-	modifiers: Set<Modifier>
-): Declaration {
+fun parseMemberDeclaration(cursor: PzlTokenCursor): Declaration {
+	val modifiers = parseModifiers(cursor)
 	val matcher = matchers.find { it.match(cursor) }
 		?: if (cursor.current.type == PzlTokenType.EOF) {
-			syntaxError("${parentTypeKind.getDisplayName()}缺少 '}'", cursor.current)
+			syntaxError("结尾缺少 '}'", cursor.current)
 		} else {
 			syntaxError("未知的成员声明", cursor.current)
 		}
-	matcher.check(cursor, parentTypeKind, parentModifiers, modifiers)
-	return matcher.parse(cursor, parentTypeKind, modifiers)
+	matcher.check(cursor, modifiers)
+	return matcher.parse(cursor, modifiers)
 }

@@ -4,8 +4,9 @@ import puzzle.core.PzlContext
 import puzzle.core.lexer.PzlTokenType
 import puzzle.core.parser.Modifier
 import puzzle.core.parser.PzlTokenCursor
-import puzzle.core.parser.checkSupportedDeclarationModifiers
+import puzzle.core.parser.checkModifiers
 import puzzle.core.parser.declaration.EnumDeclaration
+import puzzle.core.parser.declaration.NodeKind
 import puzzle.core.parser.declaration.parser.EnumDeclarationParser
 
 object TopLevelEnumDeclarationMatcher : TopLevelDeclarationMatcher<EnumDeclaration> {
@@ -15,12 +16,12 @@ object TopLevelEnumDeclarationMatcher : TopLevelDeclarationMatcher<EnumDeclarati
 	}
 	
 	context(_: PzlContext)
-	override fun check(cursor: PzlTokenCursor, modifiers: Set<Modifier>) {
-		checkSupportedDeclarationModifiers(cursor, "顶层枚举", modifiers)
+	override fun check(cursor: PzlTokenCursor, modifiers: List<Modifier>) {
+		checkModifiers(cursor, modifiers, NodeKind.ENUM)
 	}
 	
 	context(_: PzlContext)
-	override fun parse(cursor: PzlTokenCursor, modifiers: Set<Modifier>): EnumDeclaration {
+	override fun parse(cursor: PzlTokenCursor, modifiers: List<Modifier>): EnumDeclaration {
 		return EnumDeclarationParser(cursor).parse(modifiers)
 	}
 }

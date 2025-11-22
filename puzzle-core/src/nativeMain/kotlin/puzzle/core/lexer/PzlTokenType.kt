@@ -33,6 +33,7 @@ enum class PzlTokenType(
 	DELETE("delete"),           // delete
 	VAR("var"),                 // var
 	VAL("val"),                 // val
+	ARGS("args"),               // args
 	IF("if"),                   // if
 	ELSE("else"),               // else
 	MATCH("match"),             // match
@@ -61,9 +62,9 @@ enum class PzlTokenType(
 	// ==================================================
 	// 字面量
 	// ==================================================
-	STRING("String"),           // 字符串
-	CHAR("Char"),               // 字符
-	NUMBER("Number"),           // 数字
+	STRING(""),           // 字符串
+	CHAR(""),               // 字符
+	NUMBER(""),           // 数字
 	
 	// ==================================================
 	// 一元运算符
@@ -155,8 +156,4 @@ enum class PzlTokenType(
 	WHITE_SPACE("' '"),         // 空格
 	TAB("\\t"),                 // 制表符
 	EOF("EOF");                 // 结束符
-	
-	override fun toString(): String {
-		return this.value
-	}
 }

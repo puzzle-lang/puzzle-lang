@@ -25,7 +25,7 @@ class PzlParser(
 		}
 		val declarations = mutableListOf<Declaration>()
 		while (!cursor.isAtEnd()) {
-			declarations += parseDeclaration()
+			declarations += parseTopLevelDeclaration(cursor)
 		}
 		return SourceFileNode(
 			path = context.sourcePath,
@@ -33,13 +33,5 @@ class PzlParser(
 			importDeclarations = importDeclarations,
 			declarations = declarations,
 		)
-	}
-	
-	context(_: PzlContext)
-	private fun parseDeclaration(): Declaration {
-		val modifiers = mutableSetOf<Modifier>()
-		modifiers += getTopLevelAccessModifier(cursor)
-		modifiers += getDeclarationModifiers(cursor)
-		return parseTopLevelDeclaration(cursor, modifiers)
 	}
 }

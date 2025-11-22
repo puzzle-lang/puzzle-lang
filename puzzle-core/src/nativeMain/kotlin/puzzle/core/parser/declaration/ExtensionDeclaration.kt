@@ -7,7 +7,7 @@ import puzzle.core.parser.node.TypeReference
 @Serializable
 data class ExtensionDeclaration(
 	val extendedType: TypeReference,
-	val modifiers: Set<Modifier>,
+	val modifiers: List<Modifier>,
 	val superTraits: List<SuperTrait>,
 	val members: List<Declaration> = emptyList(),
 ) : Declaration

@@ -1,7 +1,8 @@
 package puzzle.core.parser.node
 
 import kotlinx.serialization.Serializable
-import puzzle.core.parser.parameter.Parameter
+import puzzle.core.parser.binding.Parameter
+import puzzle.core.util.DotSeparatedListSerializer
 
 @Serializable
 data class TypeReference(
@@ -15,6 +16,7 @@ sealed interface Type
 
 @Serializable
 data class NamedType(
+	@Serializable(with = DotSeparatedListSerializer::class)
 	val segments: List<String>
 ) : Type {
 	

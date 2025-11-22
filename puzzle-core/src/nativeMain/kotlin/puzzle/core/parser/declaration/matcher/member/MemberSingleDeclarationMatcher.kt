@@ -4,9 +4,9 @@ import puzzle.core.PzlContext
 import puzzle.core.lexer.PzlTokenType
 import puzzle.core.parser.Modifier
 import puzzle.core.parser.PzlTokenCursor
-import puzzle.core.parser.checkSupportedDeclarationModifiers
+import puzzle.core.parser.checkModifiers
+import puzzle.core.parser.declaration.NodeKind
 import puzzle.core.parser.declaration.SingleDeclaration
-import puzzle.core.parser.declaration.TypeKind
 import puzzle.core.parser.declaration.parser.SingleDeclarationParser
 
 object MemberSingleDeclarationMatcher : MemberDeclarationMatcher<SingleDeclaration> {
@@ -16,21 +16,12 @@ object MemberSingleDeclarationMatcher : MemberDeclarationMatcher<SingleDeclarati
 	}
 	
 	context(_: PzlContext)
-	override fun check(
-		cursor: PzlTokenCursor,
-		parentTypeKind: TypeKind,
-		parentModifiers: Set<Modifier>,
-		modifiers: Set<Modifier>
-	) {
-		checkSupportedDeclarationModifiers(cursor, "单例类", modifiers)
+	override fun check(cursor: PzlTokenCursor, modifiers: List<Modifier>) {
+		checkModifiers(cursor, modifiers, NodeKind.MEMBER_SINGLE)
 	}
 	
 	context(_: PzlContext)
-	override fun parse(
-		cursor: PzlTokenCursor,
-		parentTypeKind: TypeKind,
-		modifiers: Set<Modifier>
-	): SingleDeclaration {
-		return SingleDeclarationParser(cursor).parse(modifiers, parentTypeKind)
+	override fun parse(cursor: PzlTokenCursor, modifiers: List<Modifier>): SingleDeclaration {
+		return SingleDeclarationParser(cursor).parse(modifiers, isMember = true)
 	}
 }
