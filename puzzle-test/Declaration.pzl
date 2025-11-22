@@ -76,27 +76,27 @@ trait Runnable2 {
 
 class RunnableImpl : Runnable2 {
 
-    override fun run2() {
+    final override fun run2() {
 
     }
 }
 
 class Test2 {
 
-    single {            // Test2.xxx
+    unique {            // Test2.xxx
 
     }
 
-    single Name {       // Test2.Name.xxx
+    unique Name {       // Test2.Name.xxx
 
     }
 }
 
-single Single {
+unique Unique1 {
 
-    single InnerSingle {
+    unique Unique2 {
 
-        single InnerInnerSingle
+        unique Unique3
     }
 }
 

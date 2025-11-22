@@ -6,22 +6,22 @@ import puzzle.core.lexer.PzlTokenType
 import puzzle.core.parser.Modifier
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.declaration.Declaration
-import puzzle.core.parser.declaration.SingleDeclaration
+import puzzle.core.parser.declaration.UniqueDeclaration
 import puzzle.core.parser.declaration.matcher.member.parseMemberDeclaration
 
-class SingleDeclarationParser(
+class UniqueDeclarationParser(
 	private val cursor: PzlTokenCursor
 ) {
 	
 	context(_: PzlContext)
-	fun parse(modifiers: List<Modifier>, isMember: Boolean = false): SingleDeclaration {
+	fun parse(modifiers: List<Modifier>, isMember: Boolean = false): UniqueDeclaration {
 		val name = when {
 			cursor.match(PzlTokenType.IDENTIFIER) -> cursor.previous.value
 			isMember -> ""
 			else -> syntaxError("单例类缺少名称", cursor.current)
 		}
 		if (!cursor.match(PzlTokenType.LBRACE)) {
-			return SingleDeclaration(
+			return UniqueDeclaration(
 				name = name,
 				modifiers = modifiers
 			)
@@ -31,7 +31,7 @@ class SingleDeclarationParser(
 			members += parseMemberDeclaration(cursor)
 		}
 		
-		return SingleDeclaration(
+		return UniqueDeclaration(
 			name = name,
 			modifiers = modifiers,
 			members = members

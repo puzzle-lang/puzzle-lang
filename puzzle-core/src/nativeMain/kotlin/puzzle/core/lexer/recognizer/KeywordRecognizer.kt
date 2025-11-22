@@ -10,7 +10,7 @@ data object KeywordRecognizer : TokenRecognizer {
 	private val keywordTokenTypeMap = mapOf(
 		"fun" to PzlTokenType.FUN,
 		"class" to PzlTokenType.CLASS,
-		"single" to PzlTokenType.SINGLE,
+		"unique" to PzlTokenType.UNIQUE,
 		"trait" to PzlTokenType.TRAIT,
 		"struct" to PzlTokenType.STRUCT,
 		"enum" to PzlTokenType.ENUM,

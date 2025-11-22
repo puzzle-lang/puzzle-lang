@@ -6,22 +6,22 @@ import puzzle.core.parser.Modifier
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.checkModifiers
 import puzzle.core.parser.declaration.NodeKind
-import puzzle.core.parser.declaration.SingleDeclaration
-import puzzle.core.parser.declaration.parser.SingleDeclarationParser
+import puzzle.core.parser.declaration.UniqueDeclaration
+import puzzle.core.parser.declaration.parser.UniqueDeclarationParser
 
-object TopLevelSingleDeclarationMatcher : TopLevelDeclarationMatcher<SingleDeclaration> {
+object TopLevelUniqueDeclarationMatcher : TopLevelDeclarationMatcher<UniqueDeclaration> {
 	
 	override fun match(cursor: PzlTokenCursor): Boolean {
-		return cursor.match(PzlTokenType.SINGLE)
+		return cursor.match(PzlTokenType.UNIQUE)
 	}
 	
 	context(_: PzlContext)
 	override fun check(cursor: PzlTokenCursor, modifiers: List<Modifier>) {
-		checkModifiers(cursor, modifiers, NodeKind.SINGLE)
+		checkModifiers(cursor, modifiers, NodeKind.UNIQUE)
 	}
 	
 	context(_: PzlContext)
-	override fun parse(cursor: PzlTokenCursor, modifiers: List<Modifier>): SingleDeclaration {
-		return SingleDeclarationParser(cursor).parse(modifiers)
+	override fun parse(cursor: PzlTokenCursor, modifiers: List<Modifier>): UniqueDeclaration {
+		return UniqueDeclarationParser(cursor).parse(modifiers)
 	}
 }

@@ -16,7 +16,7 @@ enum class NodeKind(
 		displayName = "类",
 		supportedModifiers = TopLevelAccessModifiers + setOf(OPEN, ABSTRACT)
 	),
-	SINGLE(
+	UNIQUE(
 		displayName = "单例类",
 		supportedModifiers = TopLevelAccessModifiers
 	),

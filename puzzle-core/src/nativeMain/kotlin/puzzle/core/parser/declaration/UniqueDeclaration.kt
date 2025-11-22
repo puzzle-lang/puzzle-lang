@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 import puzzle.core.parser.Modifier
 
 @Serializable
-data class SingleDeclaration(
+data class UniqueDeclaration(
 	val name: String,
 	val modifiers: List<Modifier>,
 	val members: List<Declaration> = emptyList(),

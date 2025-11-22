@@ -23,7 +23,7 @@ data object CommentRecognizer : TokenRecognizer {
 			position++
 		}
 		val comment = input.concatToString(start + 1, position).trim()
-		return PzlToken(PzlTokenType.SINGLE_COMMENT, comment, start, position, line, column)
+		return PzlToken(PzlTokenType.SINGLE_LINE_COMMENT, comment, start, position, line, column)
 	}
 	
 	context(_: PzlContext)
@@ -59,6 +59,6 @@ data object CommentRecognizer : TokenRecognizer {
 			.joinToString("\n") {
 				it.trim().trimStart('*').trimStart()
 			}.trim('\n')
-		return PzlToken(PzlTokenType.MULTI_COMMENT, comment, start, position + 2, line, column, endLine)
+		return PzlToken(PzlTokenType.MULTI_LINE_COMMENT, comment, start, position + 2, line, column, endLine)
 	}
 }

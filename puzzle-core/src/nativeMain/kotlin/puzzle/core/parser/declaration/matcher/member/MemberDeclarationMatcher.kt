@@ -22,7 +22,7 @@ sealed interface MemberDeclarationMatcher<out D : Declaration> {
 private val matchers = listOf(
 	MemberFunDeclarationMatcher,
 	MemberClassDeclarationMatcher,
-	MemberSingleDeclarationMatcher,
+	MemberUniqueDeclarationMatcher,
 	MemberTraitDeclarationMatcher,
 	MemberStructDeclarationMatcher,
 	MemberEnumDeclarationMatcher,

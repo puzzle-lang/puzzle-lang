@@ -38,5 +38,5 @@ fun List<PzlToken>.formatToString(): String {
 }
 
 fun List<PzlToken>.removeComments(): List<PzlToken> {
-	return this.filter { it.type != PzlTokenType.SINGLE_COMMENT && it.type != PzlTokenType.MULTI_COMMENT }
+	return this.filter { it.type != PzlTokenType.SINGLE_LINE_COMMENT && it.type != PzlTokenType.MULTI_LINE_COMMENT }
 }
