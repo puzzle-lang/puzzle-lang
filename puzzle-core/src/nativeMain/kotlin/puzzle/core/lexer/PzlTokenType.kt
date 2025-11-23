@@ -28,8 +28,8 @@ enum class PzlTokenType(
 	OVERRIDE("override"),       // override
 	CONST("const"),             // const
 	IGNORE("ignore"),           // ignore
-	TYPE("type"),               // type
-	SPEC("spec"),               // spec
+	GENERIC("generic"),         // generic
+	REIFIED("reified"),         // reified
 	IN("in"),                   // in
 	OUT("out"),                 // out
 	INIT("init"),               // init

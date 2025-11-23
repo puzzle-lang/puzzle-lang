@@ -7,8 +7,9 @@
  * 特征 - 消费者
  */
 trait Consumable {
-	
-	fun <T : Food> eat(food: T)
+
+    type<T : Food>
+	fun eat(food: T)
 	
 	fun drink(milliliter: Int)
 }
@@ -59,7 +60,8 @@ class Animal(
  */
 extension Animal : Consumable {
 
-    override fun <T : Food> eat(food: T) {
+    type<T : Food>
+    override fun eat(food: T) {
         println("$name 吃了 ${food.getName()}")
     }
     
@@ -73,26 +75,14 @@ extension Animal : Consumable {
  */
 fun Animal : InfoProvider.getInfo(): String, Int {
     // 函数的最后一行默认返回，不需要写 return
-    this.name, this.age
+    [this.name, this.age]
 }
 
 /**
- * 为 Int 实现 toString 函数扩展
+ * 扩展函数
  */
 fun Int.toString(): String {
     this    // 获取 Int
-}
-
-/**
- * 多个类型上下文扩展
- */
-fun (_: Parent1, Parent2, parent3: Parent3).run() {
-    // 如何获取三个 Parent
-    // 第一个无法获取，因为设置了匿名
-    // 第二个为默认参数
-    this.1              // 这里根据上下文参数顺序，即便前者设置了名称
-    // 第三个为指定名称
-    this.parent3        // 也可以直接使用 parent3 只要没有名称冲突
 }
 
 fun test() {
@@ -113,7 +103,8 @@ fun test() {
     }
 }
 
-fun <T : Food> apply(
+type<T : Food>
+fun apply(
     animal: Animal?,
     food: T, 
     milliliter: Int, 
@@ -160,5 +151,39 @@ fun main() {
 	apply(cat, Fish, 3) { catName, _ ->             // 当然你也可以手动指定，不需要的时候，也可以使用匿名
 	    println("catName 的饭吃好了")
 	}
+}
+
+reified type<T>                  // reified 关键字表示泛型具体化，运行时支持获取泛型类型
+class Generic1(
+    private val type: T
+) {
+    
+    init {
+        println(T is String) // 支持运行时获取泛型
+    }
+}
+
+type<T>
+class Generic2(
+    private val type: T
+) {
+
+    init {
+        // println(T is String)  // 泛型为具体化，不支持判断类型
+    }
+}
+
+reified type<T>
+fun generic3(type: T) {
+    println(type is Int)
+}
+
+fun useGeneric() {
+    val generic1 = Generic1(1)  // 对已经泛型具体化的类，直接调用即可，会对所有调用者生成具体化的类
+    
+    val generic2 = reified Generic2(2)  // 对于未泛型具体化的类，需要泛型信息时，可以使用 reified 关键字定义，会为调用类型生成具体化类
+    println(generic2 is Generic2<Int>)  // 这里可以为运行时提供泛型判断功能，但是未具体化的类不行
+    
+    generic3("Hello")                   // 对泛型具体化的函数正常调用即可，编译器会自动生成所有调用点类型的具体化类实现
 }
 ```
