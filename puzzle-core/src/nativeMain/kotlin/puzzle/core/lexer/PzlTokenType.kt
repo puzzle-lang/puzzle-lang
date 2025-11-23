@@ -28,6 +28,10 @@ enum class PzlTokenType(
 	OVERRIDE("override"),       // override
 	CONST("const"),             // const
 	IGNORE("ignore"),           // ignore
+	TYPE("type"),               // type
+	SPEC("spec"),               // spec
+	IN("in"),                   // in
+	OUT("out"),                 // out
 	INIT("init"),               // init
 	DELETE("delete"),           // delete
 	VAR("var"),                 // var
@@ -90,8 +94,8 @@ enum class PzlTokenType(
 	LT_EQUALS("<="),            // <=
 	TRIPLE_EQUALS("==="),       // ===
 	TRIPLE_NOT_EQUALS("!=="),   // !==
-	IN("~>"),                   // ~>
-	NOT_IN("!>"),               // !>
+	CONTAINS("~>"),             // ~>
+	NOT_CONTAINS("!>"),         // !>
 	BIT_AND("&"),               // &
 	BIT_OR("|"),                // |
 	BIT_XOR("^"),               // ^

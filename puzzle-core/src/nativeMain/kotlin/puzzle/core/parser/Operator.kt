@@ -206,8 +206,8 @@ fun PzlTokenType.toOperator(): Operator = when (this) {
 	PzlTokenType.GT_EQUALS -> Operator.GT_EQUALS
 	PzlTokenType.LT -> Operator.LT
 	PzlTokenType.LT_EQUALS -> Operator.LT_EQUALS
-	PzlTokenType.IN -> Operator.IN
-	PzlTokenType.NOT_IN -> Operator.NOT_IN
+	PzlTokenType.CONTAINS -> Operator.IN
+	PzlTokenType.NOT_CONTAINS -> Operator.NOT_IN
 	PzlTokenType.BIT_AND -> Operator.BIT_AND
 	PzlTokenType.BIT_XOR -> Operator.BIT_XOR
 	PzlTokenType.BIT_OR -> Operator.BIT_OR

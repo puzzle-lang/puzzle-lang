@@ -30,8 +30,8 @@ object BinaryExpressionMatcher : ExpressionMatcher<BinaryExpression> {
 		PzlTokenType.SHL,
 		PzlTokenType.SHR,
 		PzlTokenType.USHR,
-		PzlTokenType.IN,
-		PzlTokenType.NOT_IN,
+		PzlTokenType.CONTAINS,
+		PzlTokenType.NOT_CONTAINS,
 		PzlTokenType.AND,
 		PzlTokenType.OR
 	)
