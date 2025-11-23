@@ -40,6 +40,6 @@ class AnnotationParameterParser(
 			println(cursor.current.type)
 			syntaxError("注解参数必须添加 'val' 修饰符", cursor.current)
 		}
-		return parseParameter(cursor, isSupportedLambdaType = false)
+		return parseParameter(cursor)
 	}
 }

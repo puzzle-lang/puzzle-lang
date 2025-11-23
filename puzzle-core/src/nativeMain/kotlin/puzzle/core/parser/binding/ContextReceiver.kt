@@ -5,6 +5,6 @@ import puzzle.core.parser.node.TypeReference
 
 @Serializable
 data class ContextReceiver(
-	val name: String?,
+	val name: String,
 	val type: TypeReference
 )

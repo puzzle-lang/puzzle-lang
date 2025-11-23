@@ -4,27 +4,31 @@ import puzzle.core.PzlContext
 import puzzle.core.exception.syntaxError
 import puzzle.core.lexer.PzlTokenType
 import puzzle.core.parser.PzlTokenCursor
+import puzzle.core.parser.binding.parser.parseLambdaParameters
 import puzzle.core.parser.node.LambdaType
 import puzzle.core.parser.node.NamedType
 import puzzle.core.parser.node.TypeReference
-import puzzle.core.parser.binding.parser.parseLambdaParameters
 
 class TypeReferenceParser(
 	private val cursor: PzlTokenCursor
 ) {
 	
 	context(_: PzlContext)
-	fun parse(isSupportedLambdaType: Boolean = true): TypeReference {
+	fun parse(
+		isSupportedLambdaType: Boolean = false,
+		isSupportedNullable: Boolean = true
+	): TypeReference {
 		return if (cursor.match(PzlTokenType.LPAREN)) {
-			parseLambdaType(isSupportedLambdaType)
+			parseLambdaType(isSupportedLambdaType, isSupportedNullable)
 		} else {
-			parseNamedType()
+			parseNamedType(isSupportedNullable)
 		}
 	}
 	
 	context(_: PzlContext)
 	private fun parseLambdaType(
-		isSupportedLambdaType: Boolean
+		isSupportedLambdaType: Boolean,
+		isSupportedNullable: Boolean
 	): TypeReference {
 		val parameters = parseLambdaParameters(cursor)
 		if (cursor.match(PzlTokenType.ARROW)) {
@@ -34,7 +38,7 @@ class TypeReferenceParser(
 			val returnTypes = mutableListOf<TypeReference>()
 			if (cursor.match(PzlTokenType.LBRACKET)) {
 				while (!cursor.match(PzlTokenType.RBRACKET)) {
-					returnTypes += this.parse()
+					returnTypes += this.parse(isSupportedLambdaType = true)
 					if (!cursor.check(PzlTokenType.RBRACKET)) {
 						cursor.expect(PzlTokenType.COMMA, "Lambda 缺少 ','")
 					}
@@ -46,18 +50,13 @@ class TypeReferenceParser(
 					syntaxError("Lambda 多返回值类型至少需要2个", cursor.previous)
 				}
 			} else {
-				returnTypes += this.parse()
-			}
-			val isArray = cursor.match(PzlTokenType.LBRACKET)
-			if (isArray) {
-				val type = cursor.offsetOrNull(offset = -2)?.type
-				if (type != PzlTokenType.IDENTIFIER && type != PzlTokenType.RPAREN) {
-					syntaxError("语法错误", cursor.previous)
-				}
-				cursor.expect(PzlTokenType.RBRACKET, "数组类型缺少 ']'")
+				returnTypes += this.parse(isSupportedLambdaType = true)
 			}
 			val isNullable = cursor.match(PzlTokenType.QUESTION)
 			if (isNullable) {
+				if (!isSupportedNullable) {
+					syntaxError("不支持可空类型", cursor.previous)
+				}
 				val type = cursor.offsetOrNull(offset = -2)?.type
 				if (
 					type != PzlTokenType.RPAREN &&
@@ -72,47 +71,46 @@ class TypeReferenceParser(
 					parameters = parameters,
 					returnTypes = returnTypes
 				),
-				isNullable = isNullable,
-				isArray = isArray
+				isNullable = isNullable
 			)
 		} else {
 			if (parameters.size != 1) {
-				syntaxError("Lambda 缺少 '->'", cursor.current)
+				if (isSupportedLambdaType) {
+					syntaxError("Lambda 缺少 '->'", cursor.current)
+				} else {
+					syntaxError("不支持 Lambda 类型", cursor.offset(offset = -2))
+				}
 			}
 			val parameter = parameters.single()
 			if (parameter.name != null) {
 				syntaxError("语法错误", cursor.offset(offset = -4))
 			}
-			val isArray = cursor.match(PzlTokenType.LBRACKET)
-			if (isArray) {
-				cursor.expect(PzlTokenType.RBRACKET, "数组类型缺少 ']'")
-			}
 			val isNullable = cursor.match(PzlTokenType.QUESTION)
+			if (isNullable && !isSupportedNullable) {
+				syntaxError("不支持可空类型", cursor.previous)
+			}
 			val type = parameter.typeReference.type
 			return TypeReference(
 				type = type,
-				isNullable = isNullable,
-				isArray = isArray
+				isNullable = isNullable
 			)
 		}
 	}
 	
 	context(_: PzlContext)
-	private fun parseNamedType(): TypeReference {
+	private fun parseNamedType(isSupportedNullable: Boolean): TypeReference {
 		val type = mutableListOf<String>()
 		do {
 			cursor.expect(PzlTokenType.IDENTIFIER, "无法识别标识符")
 			type += cursor.previous.value
 		} while (cursor.match(PzlTokenType.DOT))
-		val isArray = cursor.match(PzlTokenType.LBRACKET)
-		if (isArray) {
-			cursor.expect(PzlTokenType.RBRACKET, "数组类型缺少 ']'")
-		}
 		val isNullable = cursor.match(PzlTokenType.QUESTION)
+		if (isNullable && !isSupportedNullable) {
+			syntaxError("不支持可空类型", cursor.previous)
+		}
 		return TypeReference(
 			type = NamedType(type),
 			isNullable = isNullable,
-			isArray = isArray
 		)
 	}
 }

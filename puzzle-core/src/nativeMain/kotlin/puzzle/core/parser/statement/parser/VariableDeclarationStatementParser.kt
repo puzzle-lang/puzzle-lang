@@ -16,7 +16,9 @@ class VariableDeclarationStatementParser(
 		val isVariable = cursor.previous.type == PzlTokenType.VAR
 		cursor.expect(PzlTokenType.IDENTIFIER, "变量缺少名称")
 		val name = cursor.previous.value
-		val type = if (cursor.match(PzlTokenType.COLON)) TypeReferenceParser(cursor).parse() else null
+		val type = if (cursor.match(PzlTokenType.COLON)) {
+			TypeReferenceParser(cursor).parse(isSupportedLambdaType = true)
+		} else null
 		val initializer = if (cursor.match(PzlTokenType.ASSIGN)) {
 			parseCompleteExpression(cursor)
 		} else null

@@ -16,7 +16,7 @@ class ExtensionDeclarationParser(
 	
 	context(_: PzlContext)
 	fun parse(modifiers: List<Modifier>): ExtensionDeclaration {
-		val extendedType = TypeReferenceParser(cursor).parse(isSupportedLambdaType = false)
+		val extendedType = TypeReferenceParser(cursor).parse()
 		val superTraits = parseSuperTypes(cursor, isSupportedClass = false)
 			.filterIsInstance<SuperTrait>()
 		

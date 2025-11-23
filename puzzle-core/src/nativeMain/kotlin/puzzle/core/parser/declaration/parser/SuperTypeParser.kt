@@ -39,7 +39,7 @@ private class SuperTypeParser(
 		isSupportedClass: Boolean,
 		hasSuperClass: Boolean
 	): SuperType {
-		val type = TypeReferenceParser(cursor).parse(isSupportedLambdaType = false)
+		val type = TypeReferenceParser(cursor).parse(isSupportedNullable = false)
 		if (!cursor.match(PzlTokenType.LPAREN)) {
 			return SuperTrait(type)
 		}

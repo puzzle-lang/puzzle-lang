@@ -33,6 +33,6 @@ private class FunParameterParser(
 	fun parse(): Parameter {
 		val modifiers = parseModifiers(cursor)
 		checkModifiers(cursor, modifiers, NodeKind.FUN_PARAMETER)
-		return parseParameter(cursor, modifiers)
+		return parseParameter(cursor, modifiers, isSupportedLambdaType = true)
 	}
 }

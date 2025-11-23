@@ -30,6 +30,6 @@ private class StructParameterParser(
 	fun parse(): Parameter {
 		val modifiers = parseModifiers(cursor)
 		checkModifiers(cursor, modifiers, NodeKind.STRUCT_PARAMETER)
-		return parseParameter(cursor, modifiers, isSupportedLambdaType = false)
+		return parseParameter(cursor, modifiers)
 	}
 }

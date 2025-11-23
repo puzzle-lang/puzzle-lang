@@ -7,8 +7,7 @@ import puzzle.core.util.DotSeparatedListSerializer
 @Serializable
 data class TypeReference(
 	val type: Type,
-	val isNullable: Boolean = false,
-	val isArray: Boolean = false
+	val isNullable: Boolean = false
 )
 
 @Serializable

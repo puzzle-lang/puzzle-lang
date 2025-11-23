@@ -29,6 +29,10 @@ private class LambdaParameterParser(
 	fun parse(): Parameter {
 		val modifiers = parseModifiers(cursor)
 		checkModifiers(cursor, modifiers, NodeKind.LAMBDA_PARAMETER)
-		return parseParameter(cursor, isSupportedAnonymous = true)
+		return parseParameter(
+			cursor = cursor,
+			isSupportedTypeOnly = true,
+			isSupportedLambdaType = true
+		)
 	}
 }

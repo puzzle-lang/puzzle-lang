@@ -24,7 +24,7 @@ trait Food {
 /**
  * 单例类 - 鱼
  */
-single Fish : Food {
+unique Fish : Food {
 
 	override fun getName(): String { "鱼" }
 	
@@ -33,7 +33,7 @@ single Fish : Food {
 /**
  * 单例类 - 肉
  */
-single Meat : Food {
+unique Meat : Food {
 
 	override fun getName(): String { "肉" }
 }

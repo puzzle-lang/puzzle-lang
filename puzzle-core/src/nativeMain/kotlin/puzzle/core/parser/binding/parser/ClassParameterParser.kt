@@ -32,6 +32,6 @@ private class ClassParameterParser(
 	fun parse(): Parameter {
 		val modifiers = parseModifiers(cursor)
 		checkModifiers(cursor, modifiers, NodeKind.CLASS_PARAMETER)
-		return parseParameter(cursor, modifiers)
+		return parseParameter(cursor, modifiers, isSupportedLambdaType = true)
 	}
 }

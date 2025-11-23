@@ -32,6 +32,6 @@ private class EnumParameterParser(
 	fun parse(): Parameter {
 		val modifiers = parseModifiers(cursor)
 		checkModifiers(cursor, modifiers, NodeKind.ENUM_PARAMETER)
-		return parseParameter(cursor, modifiers)
+		return parseParameter(cursor, modifiers, isSupportedLambdaType = true)
 	}
 }
