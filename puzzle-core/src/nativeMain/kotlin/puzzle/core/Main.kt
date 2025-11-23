@@ -69,3 +69,5 @@ private fun help() {
 	""".trimIndent()
 	println(help)
 }
+
+sealed interface A

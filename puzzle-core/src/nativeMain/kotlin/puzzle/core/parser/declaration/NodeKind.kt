@@ -14,7 +14,7 @@ enum class NodeKind(
 	),
 	CLASS(
 		displayName = "类",
-		supportedModifiers = TopLevelAccessModifiers + setOf(OPEN, ABSTRACT)
+		supportedModifiers = TopLevelAccessModifiers + setOf(OPEN, ABSTRACT, SEALED)
 	),
 	UNIQUE(
 		displayName = "单例类",
@@ -22,7 +22,7 @@ enum class NodeKind(
 	),
 	TRAIT(
 		displayName = "特征",
-		supportedModifiers = TopLevelAccessModifiers
+		supportedModifiers = TopLevelAccessModifiers + setOf(SEALED)
 	),
 	STRUCT(
 		displayName = "结构体",

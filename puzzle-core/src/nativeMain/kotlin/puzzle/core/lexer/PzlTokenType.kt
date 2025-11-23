@@ -22,13 +22,12 @@ enum class PzlTokenType(
 	PUBLIC("public"),           // public
 	OPEN("open"),               // open
 	ABSTRACT("abstract"),       // abstract
+	SEALED("sealed"),           // sealed
 	OWNER("owner"),             // owner
 	FINAL("final"),             // final
 	OVERRIDE("override"),       // override
 	CONST("const"),             // const
 	IGNORE("ignore"),           // ignore
-	ONLY("only"),               // only
-	WITH("with"),               // with
 	INIT("init"),               // init
 	DELETE("delete"),           // delete
 	VAR("var"),                 // var
@@ -62,9 +61,9 @@ enum class PzlTokenType(
 	// ==================================================
 	// 字面量
 	// ==================================================
-	STRING(""),           // 字符串
-	CHAR(""),               // 字符
-	NUMBER(""),           // 数字
+	STRING(""),                 // 字符串
+	CHAR(""),                   // 字符
+	NUMBER(""),                 // 数字
 	
 	// ==================================================
 	// 一元运算符

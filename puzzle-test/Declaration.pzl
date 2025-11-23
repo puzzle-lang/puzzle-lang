@@ -157,9 +157,11 @@ trait NameProvider {
     fun name()
 }
 
-class Dog
+sealed trait Animation
 
-class Cat
+class Dog : Animation
+
+class Cat : Animation
 
 extension Dog : NameProvider {
 

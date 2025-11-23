@@ -8,7 +8,7 @@ import puzzle.core.parser.declaration.NodeKind
 
 enum class Modifier {
 	PRIVATE, PROTECTED, FILE, INTERNAL, MODULE, PUBLIC,
-	FINAL, OPEN, ABSTRACT,
+	FINAL, OPEN, ABSTRACT, SEALED,
 	OVERRIDE, CONST, OWNER, IGNORE,
 	ARGS,
 	VAR, VAL
@@ -29,6 +29,7 @@ fun parseModifiers(cursor: PzlTokenCursor): List<Modifier> {
 			cursor.match(PzlTokenType.IGNORE) -> IGNORE
 			cursor.match(PzlTokenType.OPEN) -> OPEN
 			cursor.match(PzlTokenType.ABSTRACT) -> ABSTRACT
+			cursor.match(PzlTokenType.SEALED) -> SEALED
 			cursor.match(PzlTokenType.OVERRIDE) -> OVERRIDE
 			cursor.match(PzlTokenType.CONST) -> CONST
 			cursor.match(PzlTokenType.OWNER) -> OWNER
@@ -44,7 +45,7 @@ fun parseModifiers(cursor: PzlTokenCursor): List<Modifier> {
 
 private val modifierOrders = mapOf(
 	PRIVATE to 0, PROTECTED to 0, FILE to 0, INTERNAL to 0, MODULE to 0, PUBLIC to 0,
-	FINAL to 1, OPEN to 1, ABSTRACT to 1,
+	FINAL to 1, OPEN to 1, ABSTRACT to 1, SEALED to 1,
 	OVERRIDE to 2, CONST to 2, OWNER to 2, IGNORE to 2,
 	ARGS to 3,
 	VAR to 4, VAL to 4
