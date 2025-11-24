@@ -1,10 +1,11 @@
-package puzzle.core.parser.parser
+package puzzle.core.parser.parser.modifier
 
 import puzzle.core.PzlContext
 import puzzle.core.exception.syntaxError
 import puzzle.core.lexer.PzlTokenType
 import puzzle.core.parser.PzlTokenCursor
-import puzzle.core.parser.ast.declaration.NodeKind
+import puzzle.core.parser.parser.PzlParser
+import puzzle.core.parser.parser.PzlParserProvider
 import puzzle.core.symbol.Modifier
 import puzzle.core.symbol.Modifier.*
 
@@ -84,21 +85,17 @@ private fun checkModifierOrder(cursor: PzlTokenCursor, modifiers: List<Modifier>
 }
 
 context(_: PzlContext)
-fun checkModifiers(
-	cursor: PzlTokenCursor,
-	modifiers: List<Modifier>,
-	nodeKind: NodeKind
-) {
-	modifiers.forEachIndexed { index, modifier ->
-		if (modifier !in nodeKind.supportedModifiers) {
+fun List<Modifier>.check(cursor: PzlTokenCursor, target: ModifierTarget) {
+	this.forEachIndexed { index, modifier ->
+		if (modifier !in target.supportedModifiers) {
 			syntaxError(
-				message = "${nodeKind.displayName}不支持 '${modifier.name.lowercase()}' 修饰符",
-				token = cursor.offset(offset = -modifiers.size + index - 1)
+				message = "${target.displayName}不支持 '${modifier.name.lowercase()}' 修饰符",
+				token = cursor.offset(offset = -this.size + index - 1)
 			)
 		}
 	}
-	if (FINAL !in modifiers) return
-	if (OVERRIDE !in modifiers) {
-		syntaxError("‘final’ 修饰符必须配合 'override' 修饰符使用", cursor.offset(offset = -modifiers.size + modifiers.indexOf(FINAL) - 1))
+	if (FINAL !in this) return
+	if (OVERRIDE !in this) {
+		syntaxError("‘final’ 修饰符必须配合 'override' 修饰符使用", cursor.offset(offset = -this.size + this.indexOf(FINAL) - 1))
 	}
 }

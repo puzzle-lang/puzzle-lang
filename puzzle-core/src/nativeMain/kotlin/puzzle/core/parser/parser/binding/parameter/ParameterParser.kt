@@ -1,4 +1,4 @@
-package puzzle.core.parser.parser.binding
+package puzzle.core.parser.parser.binding.parameter
 
 import puzzle.core.PzlContext
 import puzzle.core.exception.syntaxError

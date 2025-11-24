@@ -7,7 +7,7 @@ import puzzle.core.parser.parser.PzlParser
 import puzzle.core.parser.parser.PzlParserProvider
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.declaration.StructDeclaration
-import puzzle.core.parser.parser.binding.parseStructParameters
+import puzzle.core.parser.parser.binding.parameter.parseStructParameters
 import puzzle.core.symbol.Modifier
 
 class StructDeclarationParser private constructor(

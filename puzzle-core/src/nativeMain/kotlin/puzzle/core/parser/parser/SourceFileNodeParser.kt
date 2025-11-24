@@ -17,10 +17,10 @@ class SourceFileNodeParser private constructor(
 	
 	context(context: PzlContext)
 	fun parse(): SourceFileNode {
-		val packageDeclaration = PackageDeclarationParser.Companion.of(cursor).parse()
+		val packageDeclaration = PackageDeclarationParser.of(cursor).parse()
 		val importDeclarations = mutableListOf<ImportDeclaration>()
 		while (cursor.match(PzlTokenType.IMPORT)) {
-			importDeclarations += ImportDeclarationParser.Companion.of(cursor).parse()
+			importDeclarations += ImportDeclarationParser.of(cursor).parse()
 		}
 		val declarations = mutableListOf<Declaration>()
 		while (!cursor.isAtEnd()) {

@@ -7,7 +7,7 @@ import puzzle.core.parser.parser.PzlParser
 import puzzle.core.parser.parser.PzlParserProvider
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.declaration.AnnotationDeclaration
-import puzzle.core.parser.parser.binding.parseAnnotationParameters
+import puzzle.core.parser.parser.binding.parameter.parseAnnotationParameters
 import puzzle.core.symbol.Modifier
 
 class AnnotationDeclarationParser private constructor(

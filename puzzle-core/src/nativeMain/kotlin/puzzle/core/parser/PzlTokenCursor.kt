@@ -12,7 +12,8 @@ class PzlTokenCursor(
 	
 	private val tokens = rawTokens.removeComments()
 	
-	private var position = 0
+	var position = 0
+		private set
 	
 	val current: PzlToken
 		get() = this.tokens[position]
@@ -73,5 +74,13 @@ class PzlTokenCursor(
 	
 	fun isAtEnd(): Boolean {
 		return position >= tokens.size || current.type == PzlTokenType.EOF
+	}
+	
+	operator fun get(index: Int): PzlToken {
+		return tokens[index]
+	}
+	
+	fun getOrNull(index: Int): PzlToken? {
+		return tokens.getOrNull(index)
 	}
 }

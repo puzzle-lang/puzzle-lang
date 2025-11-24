@@ -1,15 +1,16 @@
-package puzzle.core.parser.parser.binding
+package puzzle.core.parser.parser.binding.generic
 
 import puzzle.core.PzlContext
 import puzzle.core.exception.syntaxError
 import puzzle.core.lexer.PzlTokenType
-import puzzle.core.parser.parser.PzlParser
-import puzzle.core.parser.parser.PzlParserProvider
 import puzzle.core.parser.PzlTokenCursor
+import puzzle.core.parser.ast.TokenRange
 import puzzle.core.parser.ast.binding.GenericParameter
 import puzzle.core.parser.ast.binding.Variance
 import puzzle.core.parser.ast.node.NamedType
 import puzzle.core.parser.ast.node.TypeReference
+import puzzle.core.parser.parser.PzlParser
+import puzzle.core.parser.parser.PzlParserProvider
 import puzzle.core.parser.parser.node.TypeReferenceParser
 
 context(_: PzlContext)
@@ -28,10 +29,11 @@ class GenericParameterParser private constructor(
 	private val cursor: PzlTokenCursor
 ) : PzlParser {
 	
-	companion object Companion : PzlParserProvider<GenericParameterParser>(::GenericParameterParser)
+	companion object : PzlParserProvider<GenericParameterParser>(::GenericParameterParser)
 	
 	context(_: PzlContext)
 	fun parse(): GenericParameter {
+		val start = cursor.position
 		val variance = parseVariance()
 		cursor.expect(PzlTokenType.IDENTIFIER, "缺少泛型名称")
 		val name = cursor.previous.value
@@ -58,11 +60,13 @@ class GenericParameterParser private constructor(
 		val defaultType = if (cursor.match(PzlTokenType.ASSIGN)) {
 			TypeReferenceParser.of(cursor).parse(isSupportedNullable = bounds.isEmpty() || bounds.first().isNullable)
 		} else null
+		val end = cursor.position
 		return GenericParameter(
 			name = name,
 			variance = variance,
 			bounds = bounds,
-			defaultType = defaultType
+			defaultType = defaultType,
+			location = TokenRange(start, end)
 		)
 	}
 	

@@ -1,42 +1,41 @@
-package puzzle.core.parser.ast.declaration
+package puzzle.core.parser.parser.modifier
 
 import puzzle.core.symbol.Modifier
 import puzzle.core.symbol.Modifier.*
 
-
-enum class NodeKind(
+enum class ModifierTarget(
 	val displayName: String,
 	val supportedModifiers: Set<Modifier>
 ) {
-	FUN(
+	TOP_LEVEL_FUN(
 		displayName = "函数",
 		supportedModifiers = TopLevelAccessModifiers + setOf(CONST)
 	),
-	CLASS(
+	TOP_LEVEL_CLASS(
 		displayName = "类",
 		supportedModifiers = TopLevelAccessModifiers + setOf(OPEN, ABSTRACT, SEALED)
 	),
-	UNIQUE(
+	TOP_LEVEL_UNIQUE(
 		displayName = "单例类",
 		supportedModifiers = TopLevelAccessModifiers
 	),
-	TRAIT(
+	TOP_LEVEL_TRAIT(
 		displayName = "特征",
 		supportedModifiers = TopLevelAccessModifiers + setOf(SEALED)
 	),
-	STRUCT(
+	TOP_LEVEL_STRUCT(
 		displayName = "结构体",
 		supportedModifiers = TopLevelAccessModifiers
 	),
-	ENUM(
+	TOP_LEVEL_ENUM(
 		displayName = "枚举",
 		supportedModifiers = TopLevelAccessModifiers
 	),
-	ANNOTATION(
+	TOP_LEVEL_ANNOTATION(
 		displayName = "注解",
 		supportedModifiers = TopLevelAccessModifiers
 	),
-	EXTENSION(
+	TOP_LEVEL_EXTENSION(
 		displayName = "扩展",
 		supportedModifiers = TopLevelAccessModifiers
 	),
@@ -52,7 +51,7 @@ enum class NodeKind(
 		displayName = "成员类",
 		supportedModifiers = MemberAccessModifiers + setOf(OWNER, OPEN, ABSTRACT)
 	),
-	MEMBER_SINGLE(
+	MEMBER_UNIQUE(
 		displayName = "成员单例类",
 		supportedModifiers = MemberAccessModifiers
 	),

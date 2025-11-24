@@ -1,15 +1,15 @@
-package puzzle.core.parser.parser.binding
+package puzzle.core.parser.parser.binding.parameter
 
 import puzzle.core.PzlContext
 import puzzle.core.exception.syntaxError
 import puzzle.core.lexer.PzlTokenType
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.binding.Parameter
-import puzzle.core.parser.ast.declaration.NodeKind
+import puzzle.core.parser.parser.modifier.ModifierTarget
 import puzzle.core.parser.parser.PzlParser
 import puzzle.core.parser.parser.PzlParserProvider
-import puzzle.core.parser.parser.checkModifiers
-import puzzle.core.parser.parser.parseModifiers
+import puzzle.core.parser.parser.modifier.check
+import puzzle.core.parser.parser.modifier.parseModifiers
 import puzzle.core.symbol.Modifier
 
 context(_: PzlContext)
@@ -38,7 +38,7 @@ class AnnotationParameterParser private constructor(
 	context(_: PzlContext)
 	fun parse(): Parameter {
 		val modifiers = parseModifiers(cursor)
-		checkModifiers(cursor, modifiers, NodeKind.ANNOTATION_PARAMETER)
+		modifiers.check(cursor, ModifierTarget.ANNOTATION_PARAMETER)
 		if (Modifier.VAL !in modifiers) {
 			println(cursor.current.type)
 			syntaxError("注解参数必须添加 'val' 修饰符", cursor.current)

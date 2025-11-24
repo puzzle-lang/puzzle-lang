@@ -9,7 +9,7 @@ import puzzle.core.parser.parser.PzlParserProvider
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.declaration.ExtensionReceiver
 import puzzle.core.parser.ast.declaration.FunDeclaration
-import puzzle.core.parser.parser.binding.parseFunParameters
+import puzzle.core.parser.parser.binding.parameter.parseFunParameters
 import puzzle.core.parser.ast.node.NamedType
 import puzzle.core.parser.ast.node.TypeReference
 import puzzle.core.parser.parser.node.TypeReferenceParser

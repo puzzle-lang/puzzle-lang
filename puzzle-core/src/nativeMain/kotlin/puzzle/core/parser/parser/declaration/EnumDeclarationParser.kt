@@ -9,7 +9,7 @@ import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.declaration.Declaration
 import puzzle.core.parser.ast.declaration.EnumDeclaration
 import puzzle.core.parser.ast.declaration.EnumEntry
-import puzzle.core.parser.parser.binding.parseEnumParameters
+import puzzle.core.parser.parser.binding.parameter.parseEnumParameters
 import puzzle.core.parser.matcher.declaration.member.parseMemberDeclaration
 import puzzle.core.symbol.Modifier
 

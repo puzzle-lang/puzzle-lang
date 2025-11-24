@@ -3,10 +3,13 @@ package puzzle.core.parser.matcher.declaration.member
 import puzzle.core.PzlContext
 import puzzle.core.lexer.PzlTokenType
 import puzzle.core.parser.PzlTokenCursor
-import puzzle.core.parser.ast.declaration.NodeKind
+import puzzle.core.parser.ast.binding.GenericSpec
 import puzzle.core.parser.ast.declaration.UniqueDeclaration
-import puzzle.core.parser.parser.checkModifiers
+import puzzle.core.parser.parser.binding.generic.GenericTarget
+import puzzle.core.parser.parser.binding.generic.check
 import puzzle.core.parser.parser.declaration.UniqueDeclarationParser
+import puzzle.core.parser.parser.modifier.ModifierTarget
+import puzzle.core.parser.parser.modifier.check
 import puzzle.core.symbol.Modifier
 
 object MemberUniqueDeclarationMatcher : MemberDeclarationMatcher<UniqueDeclaration> {
@@ -16,12 +19,13 @@ object MemberUniqueDeclarationMatcher : MemberDeclarationMatcher<UniqueDeclarati
 	}
 	
 	context(_: PzlContext)
-	override fun check(cursor: PzlTokenCursor, modifiers: List<Modifier>) {
-		checkModifiers(cursor, modifiers, NodeKind.MEMBER_SINGLE)
-	}
-	
-	context(_: PzlContext)
-	override fun parse(cursor: PzlTokenCursor, modifiers: List<Modifier>): UniqueDeclaration {
+	override fun parse(
+		cursor: PzlTokenCursor,
+		genericSpec: GenericSpec?,
+		modifiers: List<Modifier>
+	): UniqueDeclaration {
+		genericSpec?.check(cursor, GenericTarget.UNIQUE)
+		modifiers.check(cursor, ModifierTarget.MEMBER_UNIQUE)
 		return UniqueDeclarationParser.of(cursor).parse(modifiers, isMember = true)
 	}
 }

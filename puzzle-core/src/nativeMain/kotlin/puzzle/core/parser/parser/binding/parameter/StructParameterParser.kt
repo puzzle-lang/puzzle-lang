@@ -1,14 +1,14 @@
-package puzzle.core.parser.parser.binding
+package puzzle.core.parser.parser.binding.parameter
 
 import puzzle.core.PzlContext
 import puzzle.core.lexer.PzlTokenType
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.binding.Parameter
-import puzzle.core.parser.ast.declaration.NodeKind
+import puzzle.core.parser.parser.modifier.ModifierTarget
 import puzzle.core.parser.parser.PzlParser
 import puzzle.core.parser.parser.PzlParserProvider
-import puzzle.core.parser.parser.checkModifiers
-import puzzle.core.parser.parser.parseModifiers
+import puzzle.core.parser.parser.modifier.check
+import puzzle.core.parser.parser.modifier.parseModifiers
 
 context(_: PzlContext)
 fun parseStructParameters(cursor: PzlTokenCursor): List<Parameter> {
@@ -32,7 +32,7 @@ private class StructParameterParser private constructor(
 	context(_: PzlContext)
 	fun parse(): Parameter {
 		val modifiers = parseModifiers(cursor)
-		checkModifiers(cursor, modifiers, NodeKind.STRUCT_PARAMETER)
+		modifiers.check(cursor, ModifierTarget.STRUCT_PARAMETER)
 		return ParameterParser.of(cursor).parse(modifiers)
 	}
 }

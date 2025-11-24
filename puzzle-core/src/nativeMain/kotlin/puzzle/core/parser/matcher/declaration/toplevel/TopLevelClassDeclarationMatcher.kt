@@ -5,9 +5,11 @@ import puzzle.core.lexer.PzlTokenType
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.binding.GenericSpec
 import puzzle.core.parser.ast.declaration.ClassDeclaration
-import puzzle.core.parser.ast.declaration.NodeKind
-import puzzle.core.parser.parser.checkModifiers
+import puzzle.core.parser.parser.binding.generic.GenericTarget
+import puzzle.core.parser.parser.binding.generic.check
 import puzzle.core.parser.parser.declaration.ClassDeclarationParser
+import puzzle.core.parser.parser.modifier.ModifierTarget
+import puzzle.core.parser.parser.modifier.check
 import puzzle.core.symbol.Modifier
 
 object TopLevelClassDeclarationMatcher : TopLevelDeclarationMatcher<ClassDeclaration> {
@@ -17,20 +19,13 @@ object TopLevelClassDeclarationMatcher : TopLevelDeclarationMatcher<ClassDeclara
 	}
 	
 	context(_: PzlContext)
-	override fun check(
-		cursor: PzlTokenCursor,
-		genericSpec: GenericSpec?,
-		modifiers: List<Modifier>
-	) {
-		checkModifiers(cursor, modifiers, NodeKind.CLASS)
-	}
-	
-	context(_: PzlContext)
 	override fun parse(
 		cursor: PzlTokenCursor,
 		genericSpec: GenericSpec?,
 		modifiers: List<Modifier>
 	): ClassDeclaration {
+		genericSpec?.check(cursor, GenericTarget.CLASS)
+		modifiers.check(cursor, ModifierTarget.TOP_LEVEL_CLASS)
 		return ClassDeclarationParser.of(cursor).parse(modifiers)
 	}
 }

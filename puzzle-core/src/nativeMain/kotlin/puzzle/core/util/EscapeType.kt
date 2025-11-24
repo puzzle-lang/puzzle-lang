@@ -13,7 +13,7 @@ enum class EscapeType(
 	FORM_FEED("\\f"),
 	UNICODE("\\u");
 	
-	companion object Companion {
+	companion object {
 		
 		val standardEscapes = entries.filter { it != UNICODE }.map { it.escape }
 	}

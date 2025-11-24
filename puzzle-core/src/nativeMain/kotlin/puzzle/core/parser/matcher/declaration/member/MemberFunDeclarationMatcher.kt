@@ -3,10 +3,13 @@ package puzzle.core.parser.matcher.declaration.member
 import puzzle.core.PzlContext
 import puzzle.core.lexer.PzlTokenType
 import puzzle.core.parser.PzlTokenCursor
+import puzzle.core.parser.ast.binding.GenericSpec
 import puzzle.core.parser.ast.declaration.FunDeclaration
-import puzzle.core.parser.ast.declaration.NodeKind
-import puzzle.core.parser.parser.checkModifiers
+import puzzle.core.parser.parser.binding.generic.GenericTarget
+import puzzle.core.parser.parser.binding.generic.check
 import puzzle.core.parser.parser.declaration.FunDeclarationParser
+import puzzle.core.parser.parser.modifier.ModifierTarget
+import puzzle.core.parser.parser.modifier.check
 import puzzle.core.symbol.Modifier
 
 object MemberFunDeclarationMatcher : MemberDeclarationMatcher<FunDeclaration> {
@@ -16,12 +19,13 @@ object MemberFunDeclarationMatcher : MemberDeclarationMatcher<FunDeclaration> {
 	}
 	
 	context(_: PzlContext)
-	override fun check(cursor: PzlTokenCursor, modifiers: List<Modifier>) {
-		checkModifiers(cursor, modifiers, NodeKind.MEMBER_FUN)
-	}
-	
-	context(_: PzlContext)
-	override fun parse(cursor: PzlTokenCursor, modifiers: List<Modifier>): FunDeclaration {
+	override fun parse(
+		cursor: PzlTokenCursor,
+		genericSpec: GenericSpec?,
+		modifiers: List<Modifier>
+	): FunDeclaration {
+		genericSpec?.check(cursor, GenericTarget.FUN)
+		modifiers.check(cursor, ModifierTarget.MEMBER_FUN)
 		return FunDeclarationParser.of(cursor).parse(modifiers)
 	}
 }
