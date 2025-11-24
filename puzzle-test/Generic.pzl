@@ -9,10 +9,10 @@ fun test1() {
 
 }
 
-reified type<T : Any, V : Any? = String>
+reified type<T : Type1, V : Any? = String>
 fun test2() {
 
 }
 
-type<in K : Any, out V <: Any>
+type<in K : Any, out V : A.B.C & D.E.F = G>
 class Test3

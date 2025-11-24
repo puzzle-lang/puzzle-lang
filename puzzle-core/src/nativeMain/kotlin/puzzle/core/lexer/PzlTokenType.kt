@@ -28,7 +28,7 @@ enum class PzlTokenType(
 	OVERRIDE("override"),       // override
 	CONST("const"),             // const
 	IGNORE("ignore"),           // ignore
-	TYPE("type"),            // type
+	TYPE("type"),               // type
 	REIFIED("reified"),         // reified
 	IN("in"),                   // in
 	OUT("out"),                 // out
@@ -153,7 +153,6 @@ enum class PzlTokenType(
 	AT("@"),                    // @
 	ARROW("->"),                // ->
 	DOUBLE_DOT(".."),           // ..
-	STRICT_BOUND("<:"),        // <:
 	SINGLE_LINE_COMMENT(""),    // //
 	MULTI_LINE_COMMENT(""),     // /**/
 	NEWLINE("\\n"),             // 换行符

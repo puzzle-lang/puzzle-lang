@@ -7,9 +7,8 @@ import puzzle.core.parser.node.TypeReference
 data class GenericParameter(
 	val name: String,
 	val variance: Variance?,
-	val strictBound: Boolean = false,
-	val bound: TypeReference? = null,
-	val defaultType: TypeReference? = null,
+	val bounds: List<TypeReference>,
+	val defaultType: TypeReference?,
 )
 
 @Serializable

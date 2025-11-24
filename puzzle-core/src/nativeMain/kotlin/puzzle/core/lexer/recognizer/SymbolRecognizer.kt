@@ -34,7 +34,6 @@ data object SymbolRecognizer : TokenRecognizer {
 			"?:" to PzlTokenType.ELVIS,
 			"->" to PzlTokenType.ARROW,
 			".." to PzlTokenType.DOUBLE_DOT,
-			"<:" to PzlTokenType.STRICT_BOUND,
 			"?=" to PzlTokenType.QUESTION_ASSIGN,
 			"?." to PzlTokenType.QUESTION_DOT,
 			"::" to PzlTokenType.DOUBLE_COLON
