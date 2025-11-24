@@ -5,8 +5,10 @@ import puzzle.core.constants.PzlTypes
 import puzzle.core.exception.syntaxError
 import puzzle.core.lexer.PzlTokenType
 import puzzle.core.parser.Modifier
+import puzzle.core.parser.PzlParser
+import puzzle.core.parser.PzlParserProvider
 import puzzle.core.parser.PzlTokenCursor
-import puzzle.core.parser.binding.parser.parseFunParameters
+import puzzle.core.parser.binding.parameter.parser.parseFunParameters
 import puzzle.core.parser.declaration.ExtensionReceiver
 import puzzle.core.parser.declaration.FunDeclaration
 import puzzle.core.parser.node.NamedType
@@ -15,9 +17,11 @@ import puzzle.core.parser.node.parser.TypeReferenceParser
 import puzzle.core.parser.statement.Statement
 import puzzle.core.parser.statement.matcher.parseStatement
 
-class FunDeclarationParser(
+class FunDeclarationParser private constructor(
 	private val cursor: PzlTokenCursor
-) {
+) : PzlParser {
+	
+	companion object : PzlParserProvider<FunDeclarationParser>(::FunDeclarationParser)
 	
 	context(_: PzlContext)
 	fun parse(modifiers: List<Modifier>): FunDeclaration {
@@ -28,7 +32,7 @@ class FunDeclarationParser(
 		val returnTypes = mutableListOf<TypeReference>()
 		if (cursor.match(PzlTokenType.COLON)) {
 			do {
-				returnTypes += TypeReferenceParser(cursor).parse(isSupportedLambdaType = true)
+				returnTypes += TypeReferenceParser.of(cursor).parse(isSupportedLambdaType = true)
 			} while (cursor.match(PzlTokenType.COMMA))
 		} else {
 			returnTypes += TypeReference(PzlTypes.Unit)

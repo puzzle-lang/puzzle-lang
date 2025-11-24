@@ -22,6 +22,6 @@ object MemberStructDeclarationMatcher : MemberDeclarationMatcher<StructDeclarati
 	
 	context(_: PzlContext)
 	override fun parse(cursor: PzlTokenCursor, modifiers: List<Modifier>): StructDeclaration {
-		return StructDeclarationParser(cursor).parse(modifiers)
+		return StructDeclarationParser.of(cursor).parse(modifiers)
 	}
 }

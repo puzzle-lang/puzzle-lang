@@ -4,13 +4,17 @@ import puzzle.core.PzlContext
 import puzzle.core.exception.syntaxError
 import puzzle.core.lexer.PzlTokenType
 import puzzle.core.parser.Modifier
+import puzzle.core.parser.PzlParser
+import puzzle.core.parser.PzlParserProvider
 import puzzle.core.parser.PzlTokenCursor
-import puzzle.core.parser.binding.parser.parseStructParameters
+import puzzle.core.parser.binding.parameter.parser.parseStructParameters
 import puzzle.core.parser.declaration.StructDeclaration
 
-class StructDeclarationParser(
+class StructDeclarationParser private constructor(
 	private val cursor: PzlTokenCursor
-) {
+) : PzlParser {
+	
+	companion object : PzlParserProvider<StructDeclarationParser>(::StructDeclarationParser)
 	
 	context(_: PzlContext)
 	fun parse(modifiers: List<Modifier>): StructDeclaration {

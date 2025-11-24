@@ -22,6 +22,6 @@ object TopLevelAnnotationDeclarationMatcher : TopLevelDeclarationMatcher<Annotat
 	
 	context(_: PzlContext)
 	override fun parse(cursor: PzlTokenCursor, modifiers: List<Modifier>): AnnotationDeclaration {
-		return AnnotationDeclarationParser(cursor).parse(modifiers)
+		return AnnotationDeclarationParser.of(cursor).parse(modifiers)
 	}
 }

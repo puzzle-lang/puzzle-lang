@@ -2,19 +2,18 @@ package puzzle.core.parser.declaration.parser
 
 import puzzle.core.PzlContext
 import puzzle.core.lexer.PzlTokenType
-import puzzle.core.parser.Modifier
-import puzzle.core.parser.PzlTokenCursor
-import puzzle.core.parser.binding.parser.parseClassParameters
-import puzzle.core.parser.checkModifiers
+import puzzle.core.parser.*
+import puzzle.core.parser.binding.parameter.parser.parseClassParameters
 import puzzle.core.parser.declaration.ClassDeclaration
 import puzzle.core.parser.declaration.Declaration
 import puzzle.core.parser.declaration.NodeKind
 import puzzle.core.parser.declaration.matcher.member.parseMemberDeclaration
-import puzzle.core.parser.parseModifiers
 
-class ClassDeclarationParser(
+class ClassDeclarationParser private constructor(
 	private val cursor: PzlTokenCursor,
-) {
+) : PzlParser {
+	
+	companion object : PzlParserProvider<ClassDeclarationParser>(::ClassDeclarationParser)
 	
 	context(_: PzlContext)
 	fun parse(modifiers: List<Modifier>): ClassDeclaration {

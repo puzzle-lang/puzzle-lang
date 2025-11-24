@@ -22,6 +22,6 @@ object TopLevelUniqueDeclarationMatcher : TopLevelDeclarationMatcher<UniqueDecla
 	
 	context(_: PzlContext)
 	override fun parse(cursor: PzlTokenCursor, modifiers: List<Modifier>): UniqueDeclaration {
-		return UniqueDeclarationParser(cursor).parse(modifiers)
+		return UniqueDeclarationParser.of(cursor).parse(modifiers)
 	}
 }

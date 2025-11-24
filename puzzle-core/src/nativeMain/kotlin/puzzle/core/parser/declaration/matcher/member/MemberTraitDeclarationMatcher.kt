@@ -22,6 +22,6 @@ object MemberTraitDeclarationMatcher : MemberDeclarationMatcher<TraitDeclaration
 	
 	context(_: PzlContext)
 	override fun parse(cursor: PzlTokenCursor, modifiers: List<Modifier>): TraitDeclaration {
-		return TraitDeclarationParser(cursor).parse(modifiers)
+		return TraitDeclarationParser.of(cursor).parse(modifiers)
 	}
 }

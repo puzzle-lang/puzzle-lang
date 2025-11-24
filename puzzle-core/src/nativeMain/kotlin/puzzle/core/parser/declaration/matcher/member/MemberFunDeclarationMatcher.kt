@@ -22,6 +22,6 @@ object MemberFunDeclarationMatcher : MemberDeclarationMatcher<FunDeclaration> {
 	
 	context(_: PzlContext)
 	override fun parse(cursor: PzlTokenCursor, modifiers: List<Modifier>): FunDeclaration {
-		return FunDeclarationParser(cursor).parse(modifiers)
+		return FunDeclarationParser.of(cursor).parse(modifiers)
 	}
 }

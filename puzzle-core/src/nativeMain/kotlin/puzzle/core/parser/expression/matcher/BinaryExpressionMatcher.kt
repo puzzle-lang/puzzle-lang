@@ -45,6 +45,6 @@ object BinaryExpressionMatcher : ExpressionMatcher<BinaryExpression> {
 		if (left == null) {
 			syntaxError("二元运算符未解析到左值", cursor.offset(offset = -2))
 		}
-		return BinaryExpressionParser(cursor).parse(left)
+		return BinaryExpressionParser.of(cursor).parse(left)
 	}
 }

@@ -3,15 +3,19 @@ package puzzle.core.parser.node.parser
 import puzzle.core.PzlContext
 import puzzle.core.exception.syntaxError
 import puzzle.core.lexer.PzlTokenType
+import puzzle.core.parser.PzlParser
+import puzzle.core.parser.PzlParserProvider
 import puzzle.core.parser.PzlTokenCursor
-import puzzle.core.parser.binding.parser.parseLambdaParameters
+import puzzle.core.parser.binding.parameter.parser.parseLambdaParameters
 import puzzle.core.parser.node.LambdaType
 import puzzle.core.parser.node.NamedType
 import puzzle.core.parser.node.TypeReference
 
-class TypeReferenceParser(
+class TypeReferenceParser private constructor(
 	private val cursor: PzlTokenCursor
-) {
+) : PzlParser {
+	
+	companion object : PzlParserProvider<TypeReferenceParser>(::TypeReferenceParser)
 	
 	context(_: PzlContext)
 	fun parse(

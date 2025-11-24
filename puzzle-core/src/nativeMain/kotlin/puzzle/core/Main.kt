@@ -1,5 +1,6 @@
 package puzzle.core
 
+import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -7,10 +8,14 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 import puzzle.core.io.File
 import puzzle.core.lexer.PzlLexer
-import puzzle.core.parser.PzlParser
+import puzzle.core.parser.PzlTokenCursor
+import puzzle.core.parser.SourceFileNodeParser
 import puzzle.core.parser.node.PzlProgram
+import puzzle.core.util.currentMemoryUsage
+import kotlin.native.runtime.NativeRuntimeApi
 import kotlin.time.measureTime
 
+@OptIn(ExperimentalForeignApi::class, NativeRuntimeApi::class)
 fun main(vararg args: String) {
 	val duration = measureTime {
 		val command = args.firstOrNull() ?: run {
@@ -31,6 +36,7 @@ fun main(vararg args: String) {
 		}
 	}
 	println("执行耗时: $duration")
+	println("内存使用：${currentMemoryUsage()}")
 }
 
 private fun run(paths: List<String>) = runBlocking {
@@ -39,16 +45,16 @@ private fun run(paths: List<String>) = runBlocking {
 		async(Dispatchers.Default) {
 			val context = PzlContext(file.absolutePath)
 			context(context) {
-				val input = file.readFileChars()
+				val input = file.readText().toCharArray()
 				val rawTokens = PzlLexer(input).lex()
-//				println(rawTokens.formatToString())
-				PzlParser(rawTokens).parse()
+				val cursor = PzlTokenCursor(rawTokens)
+				SourceFileNodeParser.of(cursor).parse()
 			}
 		}
 	}
 	val sourceFileNodes = jobs.awaitAll()
 	val program = PzlProgram(sourceFileNodes)
-	println(json.encodeToString(program))
+//	println(json.encodeToString(program))
 }
 
 class PzlContext(
@@ -69,5 +75,3 @@ private fun help() {
 	""".trimIndent()
 	println(help)
 }
-
-sealed interface A

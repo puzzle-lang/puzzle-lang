@@ -2,13 +2,17 @@ package puzzle.core.parser.declaration.parser
 
 import puzzle.core.PzlContext
 import puzzle.core.lexer.PzlTokenType
+import puzzle.core.parser.PzlParser
+import puzzle.core.parser.PzlParserProvider
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.declaration.ImportDeclaration
 import puzzle.core.parser.declaration.ImportScope
 
-class ImportDeclarationParser(
+class ImportDeclarationParser private constructor(
 	private val cursor: PzlTokenCursor
-) {
+) : PzlParser {
+	
+	companion object : PzlParserProvider<ImportDeclarationParser>(::ImportDeclarationParser)
 	
 	context(_: PzlContext)
 	fun parse(): ImportDeclaration {

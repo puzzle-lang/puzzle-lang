@@ -22,6 +22,6 @@ object TopLevelEnumDeclarationMatcher : TopLevelDeclarationMatcher<EnumDeclarati
 	
 	context(_: PzlContext)
 	override fun parse(cursor: PzlTokenCursor, modifiers: List<Modifier>): EnumDeclaration {
-		return EnumDeclarationParser(cursor).parse(modifiers)
+		return EnumDeclarationParser.of(cursor).parse(modifiers)
 	}
 }

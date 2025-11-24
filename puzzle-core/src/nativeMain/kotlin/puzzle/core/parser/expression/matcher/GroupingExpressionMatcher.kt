@@ -14,6 +14,6 @@ object GroupingExpressionMatcher : ExpressionMatcher<Expression> {
 	
 	context(_: PzlContext)
 	override fun parse(cursor: PzlTokenCursor, left: Expression?): Expression {
-		return GroupingExpressionParser(cursor).parse()
+		return GroupingExpressionParser.of(cursor).parse()
 	}
 }

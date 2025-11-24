@@ -1,4 +1,4 @@
-package puzzle.core.parser.binding
+package puzzle.core.parser.binding.generic
 
 import kotlinx.serialization.Serializable
 import puzzle.core.parser.node.TypeReference
@@ -6,10 +6,10 @@ import puzzle.core.parser.node.TypeReference
 @Serializable
 data class GenericParameter(
 	val name: String,
+	val variance: Variance?,
+	val strictBound: Boolean = false,
 	val bound: TypeReference? = null,
 	val defaultType: TypeReference? = null,
-	val strictBound: Boolean = false,
-	val variance: Variance? = null
 )
 
 @Serializable

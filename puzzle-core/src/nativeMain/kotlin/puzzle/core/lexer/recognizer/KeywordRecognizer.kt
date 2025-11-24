@@ -29,7 +29,7 @@ data object KeywordRecognizer : TokenRecognizer {
 		"final" to PzlTokenType.FINAL,
 		"override" to PzlTokenType.OVERRIDE,
 		"ignore" to PzlTokenType.IGNORE,
-		"generic" to PzlTokenType.GENERIC,
+		"type" to PzlTokenType.TYPE,
 		"reified" to PzlTokenType.REIFIED,
 		"in" to PzlTokenType.IN,
 		"out" to PzlTokenType.OUT,

@@ -3,12 +3,17 @@ package puzzle.core.parser.expression.parser
 import puzzle.core.PzlContext
 import puzzle.core.exception.syntaxError
 import puzzle.core.lexer.PzlTokenType
+import puzzle.core.parser.PzlParser
+import puzzle.core.parser.PzlParserProvider
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.expression.*
 
-class PostfixExpressionParser(
+class PostfixExpressionParser private constructor(
 	private val cursor: PzlTokenCursor
-) {
+) : PzlParser {
+	
+	companion object : PzlParserProvider<PostfixExpressionParser>(::PostfixExpressionParser)
+	
 	context(_: PzlContext)
 	fun parse(left: Expression?): Expression {
 		var receiver = parseInitialExpression(left)

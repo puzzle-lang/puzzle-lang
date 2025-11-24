@@ -3,6 +3,8 @@ package puzzle.core.parser.expression.parser
 import puzzle.core.PzlContext
 import puzzle.core.exception.syntaxError
 import puzzle.core.lexer.PzlTokenType
+import puzzle.core.parser.PzlParser
+import puzzle.core.parser.PzlParserProvider
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.expression.Argument
 import puzzle.core.parser.expression.InvokeType
@@ -15,7 +17,7 @@ fun parseArguments(cursor: PzlTokenCursor, type: InvokeType): List<Argument> {
 	if (cursor.match(type.endTokenType)) return emptyList()
 	val arguments = mutableListOf<Argument>()
 	do {
-		arguments += CallArgumentParser(cursor).parse(type)
+		arguments += CallArgumentParser.of(cursor).parse(type)
 		if (!cursor.check(type.endTokenType)) {
 			cursor.expect(PzlTokenType.COMMA, "参数缺少 ','")
 		}
@@ -23,9 +25,12 @@ fun parseArguments(cursor: PzlTokenCursor, type: InvokeType): List<Argument> {
 	return arguments
 }
 
-private class CallArgumentParser(
+private class CallArgumentParser private constructor(
 	private val cursor: PzlTokenCursor
-) {
+) : PzlParser {
+	
+	companion object : PzlParserProvider<CallArgumentParser>(::CallArgumentParser)
+	
 	context(_: PzlContext)
 	fun parse(type: InvokeType): Argument {
 		val name = if (cursor.offsetOrNull(offset = 1)?.type == PzlTokenType.ASSIGN) {

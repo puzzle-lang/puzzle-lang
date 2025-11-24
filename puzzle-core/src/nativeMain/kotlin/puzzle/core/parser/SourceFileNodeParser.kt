@@ -1,7 +1,6 @@
 package puzzle.core.parser
 
 import puzzle.core.PzlContext
-import puzzle.core.lexer.PzlToken
 import puzzle.core.lexer.PzlTokenType
 import puzzle.core.parser.declaration.Declaration
 import puzzle.core.parser.declaration.ImportDeclaration
@@ -10,18 +9,17 @@ import puzzle.core.parser.declaration.parser.ImportDeclarationParser
 import puzzle.core.parser.declaration.parser.PackageDeclarationParser
 import puzzle.core.parser.node.SourceFileNode
 
-class PzlParser(
-	rawTokens: List<PzlToken>
-) {
-	
-	private val cursor = PzlTokenCursor(rawTokens)
+class SourceFileNodeParser private constructor(
+	private val cursor: PzlTokenCursor
+) : PzlParser {
+	companion object : PzlParserProvider<SourceFileNodeParser>(::SourceFileNodeParser)
 	
 	context(context: PzlContext)
 	fun parse(): SourceFileNode {
-		val packageDeclaration = PackageDeclarationParser(cursor).parse()
+		val packageDeclaration = PackageDeclarationParser.of(cursor).parse()
 		val importDeclarations = mutableListOf<ImportDeclaration>()
 		while (cursor.match(PzlTokenType.IMPORT)) {
-			importDeclarations += ImportDeclarationParser(cursor).parse()
+			importDeclarations += ImportDeclarationParser.of(cursor).parse()
 		}
 		val declarations = mutableListOf<Declaration>()
 		while (!cursor.isAtEnd()) {

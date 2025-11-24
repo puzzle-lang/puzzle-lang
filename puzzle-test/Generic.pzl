@@ -1,0 +1,18 @@
+package puzzle.core
+
+fun main() {
+
+}
+
+type<T>
+fun test1() {
+
+}
+
+reified type<T : Any, V : Any? = String>
+fun test2() {
+
+}
+
+type<in K : Any, out V <: Any>
+class Test3

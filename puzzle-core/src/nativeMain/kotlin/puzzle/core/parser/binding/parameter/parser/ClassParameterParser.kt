@@ -1,13 +1,10 @@
-package puzzle.core.parser.binding.parser
+package puzzle.core.parser.binding.parameter.parser
 
 import puzzle.core.PzlContext
 import puzzle.core.lexer.PzlTokenType
-import puzzle.core.parser.PzlTokenCursor
-import puzzle.core.parser.binding.Parameter
-import puzzle.core.parser.binding.parseParameter
-import puzzle.core.parser.checkModifiers
+import puzzle.core.parser.*
+import puzzle.core.parser.binding.parameter.Parameter
 import puzzle.core.parser.declaration.NodeKind
-import puzzle.core.parser.parseModifiers
 
 context(_: PzlContext)
 fun parseClassParameters(cursor: PzlTokenCursor): List<Parameter> {
@@ -16,7 +13,7 @@ fun parseClassParameters(cursor: PzlTokenCursor): List<Parameter> {
 	}
 	val parameters = mutableListOf<Parameter>()
 	while (!cursor.match(PzlTokenType.RPAREN)) {
-		parameters += ClassParameterParser(cursor).parse()
+		parameters += ClassParameterParser.of(cursor).parse()
 		if (!cursor.check(PzlTokenType.RPAREN)) {
 			cursor.expect(PzlTokenType.COMMA, "参数缺少 ','")
 		}
@@ -24,14 +21,16 @@ fun parseClassParameters(cursor: PzlTokenCursor): List<Parameter> {
 	return parameters
 }
 
-private class ClassParameterParser(
+private class ClassParameterParser private constructor(
 	private val cursor: PzlTokenCursor
-) {
+) : PzlParser {
+	
+	companion object : PzlParserProvider<ClassParameterParser>(::ClassParameterParser)
 	
 	context(_: PzlContext)
 	fun parse(): Parameter {
 		val modifiers = parseModifiers(cursor)
 		checkModifiers(cursor, modifiers, NodeKind.CLASS_PARAMETER)
-		return parseParameter(cursor, modifiers, isSupportedLambdaType = true)
+		return ParameterParser.of(cursor).parse(modifiers, isSupportedLambdaType = true)
 	}
 }

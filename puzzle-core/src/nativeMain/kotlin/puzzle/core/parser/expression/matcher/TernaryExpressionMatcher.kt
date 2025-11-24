@@ -19,6 +19,6 @@ object TernaryExpressionMatcher : ExpressionMatcher<TernaryExpression> {
 		if (left == null) {
 			syntaxError("三元运算符 '?' 前未解析到表达式", cursor.offset(offset = -2))
 		}
-		return TernaryExpressionParser(cursor).parse(left)
+		return TernaryExpressionParser.of(cursor).parse(left)
 	}
 }

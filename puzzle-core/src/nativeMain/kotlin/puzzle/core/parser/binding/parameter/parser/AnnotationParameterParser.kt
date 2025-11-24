@@ -1,15 +1,11 @@
-package puzzle.core.parser.binding.parser
+package puzzle.core.parser.binding.parameter.parser
 
 import puzzle.core.PzlContext
 import puzzle.core.exception.syntaxError
 import puzzle.core.lexer.PzlTokenType
-import puzzle.core.parser.Modifier
-import puzzle.core.parser.PzlTokenCursor
-import puzzle.core.parser.binding.Parameter
-import puzzle.core.parser.binding.parseParameter
-import puzzle.core.parser.checkModifiers
+import puzzle.core.parser.*
+import puzzle.core.parser.binding.parameter.Parameter
 import puzzle.core.parser.declaration.NodeKind
-import puzzle.core.parser.parseModifiers
 
 context(_: PzlContext)
 fun parseAnnotationParameters(
@@ -20,7 +16,7 @@ fun parseAnnotationParameters(
 	}
 	val parameters = mutableListOf<Parameter>()
 	while (!cursor.match(PzlTokenType.RPAREN)) {
-		parameters += AnnotationParameterParser(cursor).parse()
+		parameters += AnnotationParameterParser.of(cursor).parse()
 		if (!cursor.check(PzlTokenType.RPAREN)) {
 			cursor.expect(PzlTokenType.COMMA, "参数缺少 ','")
 		}
@@ -28,9 +24,11 @@ fun parseAnnotationParameters(
 	return parameters
 }
 
-class AnnotationParameterParser(
+class AnnotationParameterParser private constructor(
 	private val cursor: PzlTokenCursor
-) {
+) : PzlParser {
+	
+	companion object : PzlParserProvider<AnnotationParameterParser>(::AnnotationParameterParser)
 	
 	context(_: PzlContext)
 	fun parse(): Parameter {
@@ -40,6 +38,6 @@ class AnnotationParameterParser(
 			println(cursor.current.type)
 			syntaxError("注解参数必须添加 'val' 修饰符", cursor.current)
 		}
-		return parseParameter(cursor)
+		return ParameterParser.of(cursor).parse()
 	}
 }

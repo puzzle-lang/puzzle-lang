@@ -3,13 +3,17 @@ package puzzle.core.parser.expression.parser
 import puzzle.core.PzlContext
 import puzzle.core.exception.syntaxError
 import puzzle.core.lexer.PzlTokenType
+import puzzle.core.parser.PzlParser
+import puzzle.core.parser.PzlParserProvider
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.expression.*
 import puzzle.core.parser.expression.matcher.parseCompleteExpression
 
-class GroupingExpressionParser(
+class GroupingExpressionParser private constructor(
 	private val cursor: PzlTokenCursor
-) {
+) : PzlParser {
+	
+	companion object : PzlParserProvider<GroupingExpressionParser>(::GroupingExpressionParser)
 	
 	context(_: PzlContext)
 	fun parse(): Expression {
@@ -20,7 +24,7 @@ class GroupingExpressionParser(
 		cursor.advance()
 		expression = if (isOmissible(expression)) expression else GroupingExpression(expression)
 		return if (isAccessOperator(cursor)) {
-			PostfixExpressionParser(cursor).parse(expression)
+			PostfixExpressionParser.of(cursor).parse(expression)
 		} else expression
 	}
 	

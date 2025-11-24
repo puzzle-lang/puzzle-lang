@@ -20,6 +20,6 @@ object PostfixExpressionMatcher : ExpressionMatcher<Expression> {
 	
 	context(_: PzlContext)
 	override fun parse(cursor: PzlTokenCursor, left: Expression?): Expression {
-		return PostfixExpressionParser(cursor).parse(left)
+		return PostfixExpressionParser.of(cursor).parse(left)
 	}
 }

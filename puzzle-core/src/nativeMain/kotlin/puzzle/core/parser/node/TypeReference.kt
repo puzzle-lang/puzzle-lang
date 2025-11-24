@@ -1,7 +1,7 @@
 package puzzle.core.parser.node
 
 import kotlinx.serialization.Serializable
-import puzzle.core.parser.binding.Parameter
+import puzzle.core.parser.binding.parameter.Parameter
 import puzzle.core.util.DotSeparatedListSerializer
 
 @Serializable

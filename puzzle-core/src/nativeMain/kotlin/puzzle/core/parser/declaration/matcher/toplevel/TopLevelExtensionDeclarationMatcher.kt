@@ -22,6 +22,6 @@ object TopLevelExtensionDeclarationMatcher : TopLevelDeclarationMatcher<Extensio
 	
 	context(_: PzlContext)
 	override fun parse(cursor: PzlTokenCursor, modifiers: List<Modifier>): ExtensionDeclaration {
-		return ExtensionDeclarationParser(cursor).parse(modifiers)
+		return ExtensionDeclarationParser.of(cursor).parse(modifiers)
 	}
 }

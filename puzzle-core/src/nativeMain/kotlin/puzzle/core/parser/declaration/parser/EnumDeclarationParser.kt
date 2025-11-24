@@ -4,16 +4,20 @@ import puzzle.core.PzlContext
 import puzzle.core.exception.syntaxError
 import puzzle.core.lexer.PzlTokenType
 import puzzle.core.parser.Modifier
+import puzzle.core.parser.PzlParser
+import puzzle.core.parser.PzlParserProvider
 import puzzle.core.parser.PzlTokenCursor
-import puzzle.core.parser.binding.parser.parseEnumParameters
+import puzzle.core.parser.binding.parameter.parser.parseEnumParameters
 import puzzle.core.parser.declaration.Declaration
 import puzzle.core.parser.declaration.EnumDeclaration
 import puzzle.core.parser.declaration.EnumEntry
 import puzzle.core.parser.declaration.matcher.member.parseMemberDeclaration
 
-class EnumDeclarationParser(
+class EnumDeclarationParser private constructor(
 	private val cursor: PzlTokenCursor
-) {
+) : PzlParser {
+	
+	companion object : PzlParserProvider<EnumDeclarationParser>(::EnumDeclarationParser)
 	
 	context(_: PzlContext)
 	fun parse(modifiers: List<Modifier>): EnumDeclaration {
@@ -49,7 +53,7 @@ class EnumDeclarationParser(
 	private fun parseEnumEntries(): List<EnumEntry> {
 		val entries = mutableListOf<EnumEntry>()
 		while (!cursor.match(PzlTokenType.SEMICOLON) && !cursor.match(PzlTokenType.RBRACE)) {
-			entries += EnumEntryParser(cursor).parse()
+			entries += EnumEntryParser.of(cursor).parse()
 			if (!cursor.check(PzlTokenType.SEMICOLON) && !cursor.check(PzlTokenType.RBRACE)) {
 				cursor.match(PzlTokenType.COMMA)
 			}
@@ -61,9 +65,11 @@ class EnumDeclarationParser(
 	}
 }
 
-private class EnumEntryParser(
+private class EnumEntryParser private constructor(
 	private val cursor: PzlTokenCursor
-) {
+) : PzlParser {
+	
+	companion object : PzlParserProvider<EnumEntryParser>(::EnumEntryParser)
 	
 	context(_: PzlContext)
 	fun parse(): EnumEntry {

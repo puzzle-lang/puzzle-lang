@@ -2,17 +2,16 @@ package puzzle.core.parser.expression.parser
 
 import puzzle.core.PzlContext
 import puzzle.core.exception.syntaxError
-import puzzle.core.parser.Associativity
-import puzzle.core.parser.Operator
-import puzzle.core.parser.PzlTokenCursor
+import puzzle.core.parser.*
 import puzzle.core.parser.expression.BinaryExpression
 import puzzle.core.parser.expression.Expression
 import puzzle.core.parser.expression.matcher.parseExpression
-import puzzle.core.parser.toOperator
 
-class BinaryExpressionParser(
+class BinaryExpressionParser private constructor(
 	private val cursor: PzlTokenCursor
-) {
+) : PzlParser {
+	
+	companion object : PzlParserProvider<BinaryExpressionParser>(::BinaryExpressionParser)
 	
 	context(_: PzlContext)
 	fun parse(left: Expression): BinaryExpression {

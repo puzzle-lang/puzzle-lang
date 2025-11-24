@@ -3,12 +3,16 @@ package puzzle.core.parser.declaration.parser
 import puzzle.core.PzlContext
 import puzzle.core.exception.syntaxError
 import puzzle.core.lexer.PzlTokenType
+import puzzle.core.parser.PzlParser
+import puzzle.core.parser.PzlParserProvider
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.declaration.PackageDeclaration
 
-class PackageDeclarationParser(
+class PackageDeclarationParser private constructor(
 	private val cursor: PzlTokenCursor,
-) {
+) : PzlParser {
+	
+	companion object : PzlParserProvider<PackageDeclarationParser>(::PackageDeclarationParser)
 	
 	context(_: PzlContext)
 	fun parse(): PackageDeclaration {

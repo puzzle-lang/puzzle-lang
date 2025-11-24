@@ -3,14 +3,18 @@ package puzzle.core.parser.declaration.parser
 import puzzle.core.PzlContext
 import puzzle.core.lexer.PzlTokenType
 import puzzle.core.parser.Modifier
+import puzzle.core.parser.PzlParser
+import puzzle.core.parser.PzlParserProvider
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.declaration.Declaration
 import puzzle.core.parser.declaration.TraitDeclaration
 import puzzle.core.parser.declaration.matcher.member.parseMemberDeclaration
 
-class TraitDeclarationParser(
+class TraitDeclarationParser private constructor(
 	private val cursor: PzlTokenCursor
-) {
+) : PzlParser {
+	
+	companion object : PzlParserProvider<TraitDeclarationParser>(::TraitDeclarationParser)
 	
 	context(_: PzlContext)
 	fun parse(modifiers: List<Modifier>): TraitDeclaration {

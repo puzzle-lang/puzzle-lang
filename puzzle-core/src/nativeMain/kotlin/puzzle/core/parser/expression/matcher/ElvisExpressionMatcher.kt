@@ -19,7 +19,7 @@ object ElvisExpressionMatcher : ExpressionMatcher<ElvisExpression> {
 		if (left == null) {
 			syntaxError("'?:' 操作符前必须跟表达式", cursor.previous)
 		}
-		return ElvisExpressionParser(cursor).parse(left)
+		return ElvisExpressionParser.of(cursor).parse(left)
 	}
 	
 }

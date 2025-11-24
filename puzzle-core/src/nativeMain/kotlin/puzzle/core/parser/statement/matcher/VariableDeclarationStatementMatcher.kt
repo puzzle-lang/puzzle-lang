@@ -14,6 +14,6 @@ object VariableDeclarationStatementMatcher : StatementMatcher<VariableDeclaratio
 	
 	context(_: PzlContext)
 	override fun parse(cursor: PzlTokenCursor): VariableDeclarationStatement {
-		return VariableDeclarationStatementParser(cursor).parse()
+		return VariableDeclarationStatementParser.of(cursor).parse()
 	}
 }

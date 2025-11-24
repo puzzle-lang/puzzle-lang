@@ -3,6 +3,8 @@ package puzzle.core.parser.declaration.parser
 import puzzle.core.PzlContext
 import puzzle.core.exception.syntaxError
 import puzzle.core.lexer.PzlTokenType
+import puzzle.core.parser.PzlParser
+import puzzle.core.parser.PzlParserProvider
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.declaration.SuperClass
 import puzzle.core.parser.declaration.SuperTrait
@@ -22,7 +24,7 @@ fun parseSuperTypes(
 	}
 	val superTypes = mutableListOf<SuperType>()
 	do {
-		superTypes += SuperTypeParser(cursor).parse(
+		superTypes += SuperTypeParser.of(cursor).parse(
 			isSupportedClass = isSupportedClass,
 			hasSuperClass = superTypes.any { it is SuperClass }
 		)
@@ -30,16 +32,18 @@ fun parseSuperTypes(
 	return superTypes
 }
 
-private class SuperTypeParser(
+private class SuperTypeParser private constructor(
 	private val cursor: PzlTokenCursor
-) {
+) : PzlParser {
+	
+	companion object : PzlParserProvider<SuperTypeParser>(::SuperTypeParser)
 	
 	context(_: PzlContext)
 	fun parse(
 		isSupportedClass: Boolean,
 		hasSuperClass: Boolean
 	): SuperType {
-		val type = TypeReferenceParser(cursor).parse(isSupportedNullable = false)
+		val type = TypeReferenceParser.of(cursor).parse(isSupportedNullable = false)
 		if (!cursor.match(PzlTokenType.LPAREN)) {
 			return SuperTrait(type)
 		}

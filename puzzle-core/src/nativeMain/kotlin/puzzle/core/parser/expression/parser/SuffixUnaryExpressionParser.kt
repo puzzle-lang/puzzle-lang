@@ -2,14 +2,18 @@ package puzzle.core.parser.expression.parser
 
 import puzzle.core.PzlContext
 import puzzle.core.lexer.PzlTokenType
+import puzzle.core.parser.PzlParser
+import puzzle.core.parser.PzlParserProvider
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.expression.IdentifierExpression
 import puzzle.core.parser.expression.SuffixUnaryExpression
 import puzzle.core.parser.toOperator
 
-class SuffixUnaryExpressionParser(
+class SuffixUnaryExpressionParser private constructor(
 	private val cursor: PzlTokenCursor
-) {
+) : PzlParser {
+	
+	companion object : PzlParserProvider<SuffixUnaryExpressionParser>(::SuffixUnaryExpressionParser)
 	
 	context(_: PzlContext)
 	fun parse(): SuffixUnaryExpression {

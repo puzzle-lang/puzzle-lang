@@ -10,6 +10,7 @@ class File(
 ) {
 	
 	private var _absolutePath: String? = null
+	
 	val absolutePath: String
 		get() {
 			if (_absolutePath != null) return _absolutePath!!
@@ -36,7 +37,7 @@ class File(
 			}.also { _absolutePath = it }
 		}
 	
-	fun readFileChars(): CharArray {
+	fun readText(): String {
 		val file = fopen(path, "rb") ?: error("无法打开文件: $path")
 		try {
 			val buffers = StringBuilder()
@@ -49,7 +50,7 @@ class File(
 					buffers.append(chunk)
 				}
 			}
-			return buffers.toString().toCharArray()
+			return buffers.toString()
 		} finally {
 			fclose(file)
 		}

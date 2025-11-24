@@ -4,14 +4,18 @@ import puzzle.core.PzlContext
 import puzzle.core.exception.syntaxError
 import puzzle.core.lexer.PzlTokenType
 import puzzle.core.parser.Modifier
+import puzzle.core.parser.PzlParser
+import puzzle.core.parser.PzlParserProvider
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.declaration.Declaration
 import puzzle.core.parser.declaration.UniqueDeclaration
 import puzzle.core.parser.declaration.matcher.member.parseMemberDeclaration
 
-class UniqueDeclarationParser(
+class UniqueDeclarationParser private constructor(
 	private val cursor: PzlTokenCursor
-) {
+) : PzlParser {
+	
+	companion object : PzlParserProvider<UniqueDeclarationParser>(::UniqueDeclarationParser)
 	
 	context(_: PzlContext)
 	fun parse(modifiers: List<Modifier>, isMember: Boolean = false): UniqueDeclaration {

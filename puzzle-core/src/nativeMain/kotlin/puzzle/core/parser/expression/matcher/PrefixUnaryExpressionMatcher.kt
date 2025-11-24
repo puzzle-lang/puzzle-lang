@@ -29,6 +29,6 @@ object PrefixUnaryExpressionMatcher : ExpressionMatcher<PrefixUnaryExpression> {
 	
 	context(_: PzlContext)
 	override fun parse(cursor: PzlTokenCursor, left: Expression?): PrefixUnaryExpression {
-		return PrefixUnaryExpressionParser(cursor).parse()
+		return PrefixUnaryExpressionParser.of(cursor).parse()
 	}
 }

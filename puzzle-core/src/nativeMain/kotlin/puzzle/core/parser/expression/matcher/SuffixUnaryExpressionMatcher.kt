@@ -17,6 +17,6 @@ object SuffixUnaryExpressionMatcher : ExpressionMatcher<SuffixUnaryExpression> {
 	
 	context(_: PzlContext)
 	override fun parse(cursor: PzlTokenCursor, left: Expression?): SuffixUnaryExpression {
-		return SuffixUnaryExpressionParser(cursor).parse()
+		return SuffixUnaryExpressionParser.of(cursor).parse()
 	}
 }
