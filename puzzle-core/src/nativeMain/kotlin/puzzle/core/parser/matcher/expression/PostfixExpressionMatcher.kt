@@ -1,0 +1,25 @@
+package puzzle.core.parser.matcher.expression
+
+import puzzle.core.PzlContext
+import puzzle.core.lexer.PzlTokenType.*
+import puzzle.core.parser.PzlTokenCursor
+import puzzle.core.parser.ast.expression.Expression
+import puzzle.core.parser.parser.expression.PostfixExpressionParser
+
+object PostfixExpressionMatcher : ExpressionMatcher<Expression> {
+	
+	private val tokenTypes = listOf(
+		NUMBER, STRING, CHAR, TRUE, FALSE, IDENTIFIER,
+		THIS, SUPER, NULL,
+		DOT, QUESTION_DOT, DOUBLE_COLON
+	)
+	
+	override fun match(cursor: PzlTokenCursor, left: Expression?): Boolean {
+		return tokenTypes.any { cursor.match(it) }
+	}
+	
+	context(_: PzlContext)
+	override fun parse(cursor: PzlTokenCursor, left: Expression?): Expression {
+		return PostfixExpressionParser.of(cursor).parse(left)
+	}
+}

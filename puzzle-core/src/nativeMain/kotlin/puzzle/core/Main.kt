@@ -9,8 +9,8 @@ import kotlinx.serialization.json.Json
 import puzzle.core.io.File
 import puzzle.core.lexer.PzlLexer
 import puzzle.core.parser.PzlTokenCursor
-import puzzle.core.parser.SourceFileNodeParser
-import puzzle.core.parser.node.PzlProgram
+import puzzle.core.parser.parser.SourceFileNodeParser
+import puzzle.core.parser.ast.PzlProgram
 import puzzle.core.util.currentMemoryUsage
 import kotlin.native.runtime.NativeRuntimeApi
 import kotlin.time.measureTime

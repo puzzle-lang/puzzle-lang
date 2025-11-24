@@ -1,6 +1,6 @@
 package puzzle.core.constants
 
-import puzzle.core.parser.node.NamedType
+import puzzle.core.parser.ast.node.NamedType
 
 object PzlTypes {
 	

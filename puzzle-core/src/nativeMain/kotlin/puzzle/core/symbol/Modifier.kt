@@ -1,0 +1,9 @@
+package puzzle.core.symbol
+
+enum class Modifier {
+	PRIVATE, PROTECTED, FILE, INTERNAL, MODULE, PUBLIC,
+	FINAL, OPEN, ABSTRACT, SEALED,
+	OVERRIDE, CONST, OWNER, IGNORE,
+	ARGS,
+	VAR, VAL
+}

@@ -1,0 +1,21 @@
+package puzzle.core.parser.ast.declaration
+
+import kotlinx.serialization.Serializable
+import puzzle.core.parser.ast.expression.Argument
+import puzzle.core.parser.ast.node.TypeReference
+
+@Serializable
+sealed interface SuperType {
+	val type: TypeReference
+}
+
+@Serializable
+data class SuperClass(
+	override val type: TypeReference,
+	val arguments: List<Argument> = emptyList(),
+) : SuperType
+
+@Serializable
+data class SuperTrait(
+	override val type: TypeReference,
+) : SuperType
