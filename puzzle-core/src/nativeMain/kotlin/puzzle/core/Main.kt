@@ -1,6 +1,5 @@
 package puzzle.core
 
-import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -12,10 +11,8 @@ import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.PzlProgram
 import puzzle.core.parser.parser.SourceFileNodeParser
 import puzzle.core.util.currentMemoryUsage
-import kotlin.native.runtime.NativeRuntimeApi
 import kotlin.time.measureTime
 
-@OptIn(ExperimentalForeignApi::class, NativeRuntimeApi::class)
 fun main(vararg args: String) {
 	val duration = measureTime {
 		val command = args.firstOrNull() ?: run {

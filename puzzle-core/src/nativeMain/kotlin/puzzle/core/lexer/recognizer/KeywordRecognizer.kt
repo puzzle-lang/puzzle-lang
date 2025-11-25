@@ -33,6 +33,7 @@ data object KeywordRecognizer : TokenRecognizer {
 		"reified" to PzlTokenType.REIFIED,
 		"in" to PzlTokenType.IN,
 		"out" to PzlTokenType.OUT,
+		"context" to PzlTokenType.CONTEXT,
 		"sealed" to PzlTokenType.SEALED,
 		"init" to PzlTokenType.INIT,
 		"delete" to PzlTokenType.DELETE,

@@ -32,6 +32,7 @@ enum class PzlTokenType(
 	REIFIED("reified"),         // reified
 	IN("in"),                   // in
 	OUT("out"),                 // out
+	CONTEXT("context"),         // context
 	INIT("init"),               // init
 	DELETE("delete"),           // delete
 	VAR("var"),                 // var
