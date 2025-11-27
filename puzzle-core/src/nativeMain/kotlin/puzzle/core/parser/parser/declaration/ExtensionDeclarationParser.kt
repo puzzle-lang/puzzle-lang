@@ -3,6 +3,7 @@ package puzzle.core.parser.parser.declaration
 import puzzle.core.PzlContext
 import puzzle.core.lexer.PzlTokenType
 import puzzle.core.parser.PzlTokenCursor
+import puzzle.core.parser.ast.binding.ContextSpec
 import puzzle.core.parser.ast.binding.GenericSpec
 import puzzle.core.parser.ast.declaration.ExtensionDeclaration
 import puzzle.core.parser.ast.declaration.SuperTrait
@@ -13,33 +14,34 @@ import puzzle.core.parser.parser.node.TypeReferenceParser
 import puzzle.core.symbol.Modifier
 
 class ExtensionDeclarationParser private constructor(
-	private val cursor: PzlTokenCursor
+    private val cursor: PzlTokenCursor
 ) : PzlParser {
-	
-	companion object : PzlParserProvider<ExtensionDeclarationParser>(::ExtensionDeclarationParser)
-	
-	context(_: PzlContext)
-	fun parse(
-		genericSpec: GenericSpec?,
-		modifiers: List<Modifier>
-	): ExtensionDeclaration {
-		val extendedType = TypeReferenceParser.of(cursor).parse()
-		val superTraits = parseSuperTypes(cursor, isSupportedClass = false)
-			.filterIsInstance<SuperTrait>()
-		val members = if (cursor.match(PzlTokenType.LBRACE)) {
-			buildList {
-				while (!cursor.match(PzlTokenType.RBRACE)) {
-					this += parseMemberDeclaration(cursor)
-				}
-			}
-		} else emptyList()
-		return ExtensionDeclaration(
-			extendedType = extendedType,
-			modifiers = modifiers,
-			superTraits = superTraits,
-			genericSpec = genericSpec,
-			contextSpec = null,
-			members = members,
-		)
-	}
+
+    companion object : PzlParserProvider<ExtensionDeclarationParser>(::ExtensionDeclarationParser)
+
+    context(_: PzlContext)
+    fun parse(
+        genericSpec: GenericSpec?,
+        contextSpec: ContextSpec?,
+        modifiers: List<Modifier>
+    ): ExtensionDeclaration {
+        val extendedType = TypeReferenceParser.of(cursor).parse()
+        val superTraits = parseSuperTypes(cursor, isSupportedClass = false)
+            .filterIsInstance<SuperTrait>()
+        val members = if (cursor.match(PzlTokenType.LBRACE)) {
+            buildList {
+                while (!cursor.match(PzlTokenType.RBRACE)) {
+                    this += parseMemberDeclaration(cursor)
+                }
+            }
+        } else emptyList()
+        return ExtensionDeclaration(
+            extendedType = extendedType,
+            modifiers = modifiers,
+            superTraits = superTraits,
+            genericSpec = genericSpec,
+            contextSpec = contextSpec,
+            members = members,
+        )
+    }
 }

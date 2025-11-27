@@ -4,6 +4,7 @@ import puzzle.core.PzlContext
 import puzzle.core.exception.syntaxError
 import puzzle.core.lexer.PzlTokenType
 import puzzle.core.parser.PzlTokenCursor
+import puzzle.core.parser.ast.binding.ContextSpec
 import puzzle.core.parser.ast.binding.GenericSpec
 import puzzle.core.parser.ast.declaration.AnnotationDeclaration
 import puzzle.core.parser.parser.PzlParser

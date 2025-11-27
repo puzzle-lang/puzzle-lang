@@ -3,6 +3,7 @@ package puzzle.core.parser.matcher.declaration.toplevel
 import puzzle.core.PzlContext
 import puzzle.core.lexer.PzlTokenType
 import puzzle.core.parser.PzlTokenCursor
+import puzzle.core.parser.ast.binding.ContextSpec
 import puzzle.core.parser.ast.binding.GenericSpec
 import puzzle.core.parser.ast.declaration.AnnotationDeclaration
 import puzzle.core.parser.parser.binding.generic.GenericTarget
@@ -20,9 +21,10 @@ object TopLevelAnnotationDeclarationMatcher : TopLevelDeclarationMatcher<Annotat
 	
 	context(_: PzlContext)
 	override fun parse(
-		cursor: PzlTokenCursor,
-		genericSpec: GenericSpec?,
-		modifiers: List<Modifier>
+        cursor: PzlTokenCursor,
+        genericSpec: GenericSpec?,
+        contextSpec: ContextSpec?,
+        modifiers: List<Modifier>
 	): AnnotationDeclaration {
 		genericSpec?.check(cursor, GenericTarget.ANNOTATION)
 		modifiers.check(cursor, ModifierTarget.TOP_LEVEL_ANNOTATION)
