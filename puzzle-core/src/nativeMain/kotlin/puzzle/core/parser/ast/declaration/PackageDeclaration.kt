@@ -2,8 +2,10 @@ package puzzle.core.parser.ast.declaration
 
 import kotlinx.serialization.Serializable
 import puzzle.core.parser.ast.AstNode
+import puzzle.core.util.DotSeparatedListSerializer
 
 @Serializable
 data class PackageDeclaration(
-	val paths: List<String>,
+	@Serializable(with = DotSeparatedListSerializer::class)
+	val segments: List<String>,
 ) : AstNode

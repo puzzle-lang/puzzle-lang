@@ -3,14 +3,15 @@ package puzzle.core.parser.parser.expression
 import puzzle.core.PzlContext
 import puzzle.core.exception.syntaxError
 import puzzle.core.lexer.PzlTokenType
-import puzzle.core.parser.parser.PzlParser
-import puzzle.core.parser.parser.PzlParserProvider
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.expression.Argument
 import puzzle.core.parser.ast.expression.InvokeType
 import puzzle.core.parser.ast.expression.InvokeType.CALL
 import puzzle.core.parser.ast.expression.InvokeType.INDEX_ACCESS
 import puzzle.core.parser.matcher.expression.parseCompleteExpression
+import puzzle.core.parser.parser.PzlParser
+import puzzle.core.parser.parser.PzlParserProvider
+import puzzle.core.parser.parser.identifier.IdentifierNameParser
 
 context(_: PzlContext)
 fun parseArguments(cursor: PzlTokenCursor, type: InvokeType): List<Argument> {
@@ -34,9 +35,12 @@ private class CallArgumentParser private constructor(
 	context(_: PzlContext)
 	fun parse(type: InvokeType): Argument {
 		val name = if (cursor.offsetOrNull(offset = 1)?.type == PzlTokenType.ASSIGN) {
-			cursor.expect(PzlTokenType.IDENTIFIER, "型参名称必须为标识符")
+			val parser = IdentifierNameParser.of(cursor)
+			if (!parser.match()) {
+				syntaxError("参数名称必须为标识符", cursor.previous)
+			}
 			val name = cursor.previous.value
-			cursor.expect(PzlTokenType.ASSIGN, "型参名称后必须为 '='")
+			cursor.advance()
 			name
 		} else null
 		val expression = parseCompleteExpression(cursor)

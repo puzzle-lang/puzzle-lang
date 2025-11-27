@@ -3,13 +3,15 @@ package puzzle.core.parser.parser.node
 import puzzle.core.PzlContext
 import puzzle.core.exception.syntaxError
 import puzzle.core.lexer.PzlTokenType
-import puzzle.core.parser.parser.PzlParser
-import puzzle.core.parser.parser.PzlParserProvider
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.node.LambdaType
 import puzzle.core.parser.ast.node.NamedType
 import puzzle.core.parser.ast.node.TypeReference
+import puzzle.core.parser.parser.PzlParser
+import puzzle.core.parser.parser.PzlParserProvider
 import puzzle.core.parser.parser.binding.parameter.parseLambdaParameters
+import puzzle.core.parser.parser.identifier.IdentifierNameParser
+import puzzle.core.parser.parser.identifier.IdentifierNameTarget
 
 class TypeReferenceParser private constructor(
 	private val cursor: PzlTokenCursor
@@ -56,18 +58,17 @@ class TypeReferenceParser private constructor(
 			} else {
 				returnTypes += this.parse(isSupportedLambdaType = true)
 			}
-			val isNullable = cursor.match(PzlTokenType.QUESTION)
+			var isNullable = false
+			while (cursor.match(PzlTokenType.QUESTION)) {
+				isNullable = true
+			}
 			if (isNullable) {
 				if (!isSupportedNullable) {
 					syntaxError("不支持可空类型", cursor.previous)
 				}
-				val type = cursor.offsetOrNull(offset = -2)?.type
-				if (
-					type != PzlTokenType.RPAREN &&
-					type != PzlTokenType.IDENTIFIER &&
-					(type != PzlTokenType.RBRACKET || cursor.offsetOrNull(offset = -3)?.type != PzlTokenType.LBRACKET)
-				) {
-					syntaxError("语法错误", cursor.previous)
+				val token = cursor.offset(offset = -2)
+				if (token.type != PzlTokenType.RPAREN) {
+					syntaxError("Lambda 表示可空前必须加 ')'", token)
 				}
 			}
 			return TypeReference(
@@ -89,7 +90,10 @@ class TypeReferenceParser private constructor(
 			if (parameter.name != null) {
 				syntaxError("语法错误", cursor.offset(offset = -4))
 			}
-			val isNullable = cursor.match(PzlTokenType.QUESTION)
+			var isNullable = false
+			while (cursor.match(PzlTokenType.QUESTION)) {
+				isNullable = true
+			}
 			if (isNullable && !isSupportedNullable) {
 				syntaxError("不支持可空类型", cursor.previous)
 			}
@@ -105,10 +109,12 @@ class TypeReferenceParser private constructor(
 	private fun parseNamedType(isSupportedNullable: Boolean): TypeReference {
 		val type = mutableListOf<String>()
 		do {
-			cursor.expect(PzlTokenType.IDENTIFIER, "无法识别标识符")
-			type += cursor.previous.value
+			type += IdentifierNameParser.of(cursor).parse(IdentifierNameTarget.TYPE_REFERENCE)
 		} while (cursor.match(PzlTokenType.DOT))
-		val isNullable = cursor.match(PzlTokenType.QUESTION)
+		var isNullable = false
+		while (cursor.match(PzlTokenType.QUESTION)) {
+			isNullable = true
+		}
 		if (isNullable && !isSupportedNullable) {
 			syntaxError("不支持可空类型", cursor.previous)
 		}

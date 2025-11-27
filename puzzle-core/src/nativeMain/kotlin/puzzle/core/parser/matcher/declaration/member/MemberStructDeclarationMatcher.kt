@@ -26,6 +26,6 @@ object MemberStructDeclarationMatcher : MemberDeclarationMatcher<StructDeclarati
 	): StructDeclaration {
 		genericSpec?.check(cursor, GenericTarget.STRUCT)
 		modifiers.check(cursor, ModifierTarget.MEMBER_STRUCT)
-		return StructDeclarationParser.of(cursor).parse(modifiers)
+		return StructDeclarationParser.of(cursor).parse(genericSpec, modifiers)
 	}
 }

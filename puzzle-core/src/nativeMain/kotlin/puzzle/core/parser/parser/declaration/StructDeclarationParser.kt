@@ -1,13 +1,16 @@
 package puzzle.core.parser.parser.declaration
 
 import puzzle.core.PzlContext
-import puzzle.core.exception.syntaxError
 import puzzle.core.lexer.PzlTokenType
+import puzzle.core.parser.PzlTokenCursor
+import puzzle.core.parser.ast.binding.GenericSpec
+import puzzle.core.parser.ast.declaration.StructDeclaration
+import puzzle.core.parser.matcher.declaration.member.parseMemberDeclaration
 import puzzle.core.parser.parser.PzlParser
 import puzzle.core.parser.parser.PzlParserProvider
-import puzzle.core.parser.PzlTokenCursor
-import puzzle.core.parser.ast.declaration.StructDeclaration
 import puzzle.core.parser.parser.binding.parameter.parseStructParameters
+import puzzle.core.parser.parser.identifier.IdentifierNameParser
+import puzzle.core.parser.parser.identifier.IdentifierNameTarget
 import puzzle.core.symbol.Modifier
 
 class StructDeclarationParser private constructor(
@@ -17,17 +20,26 @@ class StructDeclarationParser private constructor(
 	companion object : PzlParserProvider<StructDeclarationParser>(::StructDeclarationParser)
 	
 	context(_: PzlContext)
-	fun parse(modifiers: List<Modifier>): StructDeclaration {
-		cursor.expect(PzlTokenType.IDENTIFIER, "结构体缺少名称")
-		val name = cursor.previous.value
+	fun parse(
+		genericSpec: GenericSpec?,
+		modifiers: List<Modifier>
+	): StructDeclaration {
+		val name = IdentifierNameParser.of(cursor).parse(IdentifierNameTarget.STRUCT)
 		val parameters = parseStructParameters(cursor)
-		if (cursor.match(PzlTokenType.LBRACE)) {
-			syntaxError("结构体不支持 '{'", cursor.previous)
-		}
+		val members = if (cursor.match(PzlTokenType.LBRACE)) {
+			buildList {
+				while (!cursor.match(PzlTokenType.RBRACE)) {
+					this += parseMemberDeclaration(cursor)
+				}
+			}
+		} else emptyList()
 		return StructDeclaration(
 			name = name,
 			modifiers = modifiers,
-			parameters = parameters
+			parameters = parameters,
+			genericSpec = genericSpec,
+			contextSpec = null,
+			members = members
 		)
 	}
 }

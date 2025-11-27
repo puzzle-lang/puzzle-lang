@@ -26,6 +26,6 @@ object TopLevelUniqueDeclarationMatcher : TopLevelDeclarationMatcher<UniqueDecla
 	): UniqueDeclaration {
 		genericSpec?.check(cursor, GenericTarget.UNIQUE)
 		modifiers.check(cursor, ModifierTarget.TOP_LEVEL_UNIQUE)
-		return UniqueDeclarationParser.of(cursor).parse(modifiers)
+		return UniqueDeclarationParser.of(cursor).parse(genericSpec, modifiers)
 	}
 }

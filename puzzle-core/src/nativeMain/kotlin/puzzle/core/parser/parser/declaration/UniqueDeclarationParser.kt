@@ -1,14 +1,15 @@
 package puzzle.core.parser.parser.declaration
 
 import puzzle.core.PzlContext
-import puzzle.core.exception.syntaxError
 import puzzle.core.lexer.PzlTokenType
-import puzzle.core.parser.parser.PzlParser
-import puzzle.core.parser.parser.PzlParserProvider
 import puzzle.core.parser.PzlTokenCursor
-import puzzle.core.parser.ast.declaration.Declaration
+import puzzle.core.parser.ast.binding.GenericSpec
 import puzzle.core.parser.ast.declaration.UniqueDeclaration
 import puzzle.core.parser.matcher.declaration.member.parseMemberDeclaration
+import puzzle.core.parser.parser.PzlParser
+import puzzle.core.parser.parser.PzlParserProvider
+import puzzle.core.parser.parser.identifier.IdentifierNameParser
+import puzzle.core.parser.parser.identifier.IdentifierNameTarget
 import puzzle.core.symbol.Modifier
 
 class UniqueDeclarationParser private constructor(
@@ -18,26 +19,25 @@ class UniqueDeclarationParser private constructor(
 	companion object : PzlParserProvider<UniqueDeclarationParser>(::UniqueDeclarationParser)
 	
 	context(_: PzlContext)
-	fun parse(modifiers: List<Modifier>, isMember: Boolean = false): UniqueDeclaration {
-		val name = when {
-			cursor.match(PzlTokenType.IDENTIFIER) -> cursor.previous.value
-			isMember -> ""
-			else -> syntaxError("单例类缺少名称", cursor.current)
-		}
-		if (!cursor.match(PzlTokenType.LBRACE)) {
-			return UniqueDeclaration(
-				name = name,
-				modifiers = modifiers
-			)
-		}
-		val members = mutableListOf<Declaration>()
-		while (!cursor.match(PzlTokenType.RBRACE)) {
-			members += parseMemberDeclaration(cursor)
-		}
-		
+	fun parse(
+		genericSpec: GenericSpec?,
+		modifiers: List<Modifier>,
+		isMember: Boolean = false
+	): UniqueDeclaration {
+		val name = IdentifierNameParser.of(cursor).parse(
+			target = if (isMember) IdentifierNameTarget.MEMBER_UNIQUE else IdentifierNameTarget.UNIQUE
+		)
+		val members = if (cursor.match(PzlTokenType.LBRACE)) {
+			buildList {
+				while (!cursor.match(PzlTokenType.RBRACE)) {
+					this += parseMemberDeclaration(cursor)
+				}
+			}
+		} else emptyList()
 		return UniqueDeclaration(
 			name = name,
 			modifiers = modifiers,
+			genericSpec = genericSpec,
 			members = members
 		)
 	}

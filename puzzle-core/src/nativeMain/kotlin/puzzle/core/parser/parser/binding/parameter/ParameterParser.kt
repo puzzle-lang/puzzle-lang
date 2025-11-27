@@ -7,7 +7,8 @@ import puzzle.core.parser.ast.binding.Parameter
 import puzzle.core.parser.matcher.expression.parseCompleteExpression
 import puzzle.core.parser.parser.PzlParser
 import puzzle.core.parser.parser.PzlParserProvider
-import puzzle.core.parser.parser.VariableNameParser
+import puzzle.core.parser.parser.identifier.IdentifierNameParser
+import puzzle.core.parser.parser.identifier.IdentifierNameTarget
 import puzzle.core.parser.parser.node.TypeReferenceParser
 import puzzle.core.symbol.Modifier
 
@@ -26,7 +27,7 @@ class ParameterParser private constructor(
 		val name = when {
 			isSupportedTypeOnly && cursor.offsetOrNull(offset = 1)?.type != PzlTokenType.COLON -> null
 			else -> {
-				val name = VariableNameParser.of(cursor).parse("参数")
+				val name = IdentifierNameParser.of(cursor).parse(IdentifierNameTarget.PARAMETER)
 				cursor.expect(PzlTokenType.COLON, "参数缺少 ':'")
 				name
 			}

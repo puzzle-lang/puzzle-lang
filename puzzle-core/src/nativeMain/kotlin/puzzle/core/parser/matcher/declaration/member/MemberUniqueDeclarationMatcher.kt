@@ -26,6 +26,6 @@ object MemberUniqueDeclarationMatcher : MemberDeclarationMatcher<UniqueDeclarati
 	): UniqueDeclaration {
 		genericSpec?.check(cursor, GenericTarget.UNIQUE)
 		modifiers.check(cursor, ModifierTarget.MEMBER_UNIQUE)
-		return UniqueDeclarationParser.of(cursor).parse(modifiers, isMember = true)
+		return UniqueDeclarationParser.of(cursor).parse(genericSpec, modifiers, isMember = true)
 	}
 }

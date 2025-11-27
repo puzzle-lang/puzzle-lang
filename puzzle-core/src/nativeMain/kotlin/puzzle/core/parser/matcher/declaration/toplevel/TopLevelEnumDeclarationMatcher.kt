@@ -26,6 +26,6 @@ object TopLevelEnumDeclarationMatcher : TopLevelDeclarationMatcher<EnumDeclarati
 	): EnumDeclaration {
 		genericSpec?.check(cursor, GenericTarget.ENUM)
 		modifiers.check(cursor, ModifierTarget.TOP_LEVEL_ENUM)
-		return EnumDeclarationParser.of(cursor).parse(modifiers)
+		return EnumDeclarationParser.of(cursor).parse(genericSpec, modifiers)
 	}
 }

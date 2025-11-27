@@ -3,26 +3,12 @@ package puzzle.core.parser.parser.expression
 import puzzle.core.PzlContext
 import puzzle.core.exception.syntaxError
 import puzzle.core.lexer.PzlTokenType
+import puzzle.core.parser.PzlTokenCursor
+import puzzle.core.parser.ast.expression.*
 import puzzle.core.parser.parser.PzlParser
 import puzzle.core.parser.parser.PzlParserProvider
-import puzzle.core.parser.PzlTokenCursor
-import puzzle.core.parser.ast.expression.BooleanLiteral
-import puzzle.core.parser.ast.expression.CallExpression
-import puzzle.core.parser.ast.expression.CharLiteral
-import puzzle.core.parser.ast.expression.Expression
-import puzzle.core.parser.ast.expression.IdentifierExpression
-import puzzle.core.parser.ast.expression.IndexAccessExpression
-import puzzle.core.parser.ast.expression.InvokeExpression
-import puzzle.core.parser.ast.expression.InvokeType
-import puzzle.core.parser.ast.expression.NonNullAssertionExpression
-import puzzle.core.parser.ast.expression.NullLiteral
-import puzzle.core.parser.ast.expression.NumberLiteral
-import puzzle.core.parser.ast.expression.PrefixUnaryExpression
-import puzzle.core.parser.ast.expression.PropertyAccessExpression
-import puzzle.core.parser.ast.expression.StringLiteral
-import puzzle.core.parser.ast.expression.SuperLiteral
-import puzzle.core.parser.ast.expression.ThisLiteral
-import puzzle.core.parser.ast.expression.toAccessOperator
+import puzzle.core.parser.parser.identifier.IdentifierNameParser
+import puzzle.core.parser.parser.identifier.IdentifierNameTarget
 
 class PostfixExpressionParser private constructor(
 	private val cursor: PzlTokenCursor
@@ -74,8 +60,8 @@ class PostfixExpressionParser private constructor(
 	
 	context(_: PzlContext)
 	private fun parseIdentifierExpression(): Expression {
-		cursor.expect(PzlTokenType.IDENTIFIER, "访问操作符后必须跟标识符")
-		return IdentifierExpression(cursor.previous.value)
+		val name = IdentifierNameParser.of(cursor).parse(IdentifierNameTarget.ACCESS_OPERATOR)
+		return IdentifierExpression(name)
 	}
 	
 	context(_: PzlContext)
@@ -90,7 +76,6 @@ class PostfixExpressionParser private constructor(
 			PzlTokenType.THIS -> ThisLiteral
 			PzlTokenType.SUPER -> SuperLiteral
 			PzlTokenType.NULL -> NullLiteral
-			PzlTokenType.IDENTIFIER -> IdentifierExpression(token.value)
 			in accessTokenTypes -> {
 				cursor.retreat()
 				when {
@@ -105,7 +90,11 @@ class PostfixExpressionParser private constructor(
 				}
 			}
 			
-			else -> syntaxError("不支持的基础表达式", token)
+			else -> if (IdentifierNameParser.check(token)) {
+				IdentifierExpression(token.value)
+			} else {
+				syntaxError("不支持的基础表达式", token)
+			}
 		}
 	}
 	

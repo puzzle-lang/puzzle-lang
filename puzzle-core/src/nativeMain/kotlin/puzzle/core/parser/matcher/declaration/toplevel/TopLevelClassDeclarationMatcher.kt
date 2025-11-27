@@ -26,6 +26,6 @@ object TopLevelClassDeclarationMatcher : TopLevelDeclarationMatcher<ClassDeclara
 	): ClassDeclaration {
 		genericSpec?.check(cursor, GenericTarget.CLASS)
 		modifiers.check(cursor, ModifierTarget.TOP_LEVEL_CLASS)
-		return ClassDeclarationParser.of(cursor).parse(modifiers)
+		return ClassDeclarationParser.of(cursor).parse(genericSpec, modifiers)
 	}
 }

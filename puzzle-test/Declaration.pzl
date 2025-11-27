@@ -7,8 +7,26 @@ fun main() {
     val n3 = n1 + n2 * 5 + 6**10
     val n4 = 1 + (2 + 3) * 10
     val result = (++a * b-- / c % d ** e - f) +
-                 (g << h >> i >>> j) +
-                 (x + y - z)
+        (g << h >> i >>> j) +
+        (x + y - z)
+    val bool1 = true || false
+    val bool2 = true ||
+        false
+    val bool3 = true
+        || false
+    val third1 = a ? (a ? b : c) : d
+    val third2 = true ? true ? 1 : 0 : true ? 1 : 1 + 2
+    val value1 = a.b + c.d?.e! - f!.g
+    val pr1 = ::println
+    val pr2 = super::println
+    val a = (1 + 2) + (a.b.c).d.f
+    val c = (d).e
+    val b = (((((a)))))                                             // 语法分析阶段去除无效 '(' 和 ')'
+    val name = getInfos(age = 18, param = "Hello").first()["name"]
+    val a = i++.name()
+    // val b = ++i.name()    // 语法错误
+    val a = b ? c ?: (d + 1) * 10 : e ?: f
+    val a = b.c ~> d && e.f() !> g.h[0]
 }
 
 private const fun add(num1: Int, num2: Int?): Int {
@@ -43,7 +61,7 @@ fun lambda1(param1: (() -> Unit) -> Unit, param2: () -> (Int) -> [String, () -> 
 
 }
 
-fun lambda2(callback: () -> [String, Int]) {
+fun lambda2(callback: () -> String???) {
 
 }
 
@@ -82,7 +100,7 @@ class RunnableImpl : Runnable2 {
 
 class Test2 {
 
-    unique {            // Test2.xxx
+    unique _ {            // Test2.xxx
 
     }
 
@@ -177,10 +195,425 @@ extension Dog : NameProvider {
 
 fun Int.times(other: Int): Int {  }
 
-fun Dog : NameProvider.name() {
+class sealed
+
+trait sealed
+
+fun init(import: ((type.import) -> final?)?) {}
+
+type<type>
+fun type(type: type) {
 
 }
 
-fun a.B? : c.D?.e(): f.G {
+fun main() {
+    var n = 0
+    val n1 = ++n / n--
+    val n2 = n++ + 10
+    val n3 = n1 + n2 * 5 + 6**10
+    val n4 = 1 + (2 + 3) * 10
+    val result = (++a * b-- / c % d ** e - f) +
+        (g << h >> i >>> j) +
+        (x + y - z)
+    val bool1 = true || false
+    val bool2 = true ||
+        false
+    val bool3 = true
+        || false
+    val third1 = a ? (a ? b : c) : d
+    val third2 = true ? true ? 1 : 0 : true ? 1 : 1 + 2
+    val value1 = a.b + c.d?.e! - f!.g
+    val pr1 = ::println
+    val pr2 = super::println
+    val a = (1 + 2) + (a.b.c).d.f
+    val c = (d).e
+    val b = (((((a)))))                                             // 语法分析阶段去除无效 '(' 和 ')'
+    val name = getInfos(age = 18, param = "Hello").first()["name"]
+    val a = i++.name()
+    // val b = ++i.name()    // 语法错误
+    val a = b ? c ?: (d + 1) * 10 : e ?: f
+    val a = b.c ~> d && e.f() !> g.h[0]
+}
+
+private const fun add(num1: Int, num2: Int?): Int {
+
+}
+
+private fun callback(callback: ((Int) -> [String, Int])?) {
+
+}
+
+private fun callback2(): Int, String {
+
+}
+
+private fun returns1(): ((fun1: () -> String) -> Unit)? {
+
+}
+
+private fun returns2(): (String = "", age: Int = 10, String) -> [Int?, String?], String {
+
+}
+
+/**
+ * ((String)) 与 String 等价
+ * 多行注释测试
+ */
+private fun returns3(): ((String)) {
+
+}
+
+fun lambda1(param1: (() -> Unit) -> Unit, param2: () -> (Int) -> [String, () -> Unit?]) {
+
+}
+
+fun lambda2(callback: () -> String???) {
+
+}
+
+private class Hello(
+    private val param1: String?,
+    private var param2: Int,
+    val param3: () -> Int,
+    param5: (((Int)?)?)
+) {
+
+    file fun test(): Int, String?, pzl.example.Hello {
+
+    }
+
+    fun test2(): Double? {
+
+    }
+}
+
+trait Runnable {
+
+    fun run()
+}
+
+trait Runnable2 {
+
+    fun run2()
+}
+
+class RunnableImpl : Runnable2 {
+
+    final override fun run2() {
+
+    }
+}
+
+class Test2 {
+
+    unique _ {            // Test2.xxx
+
+    }
+
+    unique Name {       // Test2.Name.xxx
+
+    }
+}
+
+unique Unique1 {
+
+    unique Unique2 {
+
+        unique Unique3
+    }
+}
+
+abstract class AbstractClass {
+
+    fun test1() {
+
+    }
+
+    abstract fun test2()
+}
+
+enum UserType {
+    ADMIN,
+    USER
+}
+
+fun defaultValue(value: Int = 10) {
+
+}
+
+enum Status(
+   code: Int,
+   msg: String
+) {
+    SUCCESS(code: 0, msg: "Success") {
+
+        override fun isSuccess(): Boolean {
+
+        }
+    },
+    FAILURE(code: -1, msg: "Failure") {
+
+        override fun isSuccess(): Boolean {
+
+        }
+    };
+
+    abstract fun isSuccess(): Boolean
+}
+
+struct Data(
+    ignore val param1: String,
+    ignore var param2: Int?,
+    val param3: Double,
+    val param4: Info,
+    val name: String
+)
+
+struct Info(
+    val address: String,
+    val number: Int
+)
+
+annotation Target(val name: String)
+
+trait NameProvider {
+
+    fun name()
+}
+
+sealed trait Animation
+
+class Dog : Animation
+
+class Cat : Animation
+
+extension Dog : NameProvider {
+
+    fun name() {
+
+    }
+
+    owner class Hello {
+
+        class World
+    }
+}
+
+fun Int.times(other: Int): Int {  }
+
+class sealed
+
+trait sealed
+
+fun init(import: ((type.import) -> final?)?) {}
+
+type<type>
+fun type(type: type) {
+
+}
+
+fun main() {
+    var n = 0
+    val n1 = ++n / n--
+    val n2 = n++ + 10
+    val n3 = n1 + n2 * 5 + 6**10
+    val n4 = 1 + (2 + 3) * 10
+    val result = (++a * b-- / c % d ** e - f) +
+        (g << h >> i >>> j) +
+        (x + y - z)
+    val bool1 = true || false
+    val bool2 = true ||
+        false
+    val bool3 = true
+        || false
+    val third1 = a ? (a ? b : c) : d
+    val third2 = true ? true ? 1 : 0 : true ? 1 : 1 + 2
+    val value1 = a.b + c.d?.e! - f!.g
+    val pr1 = ::println
+    val pr2 = super::println
+    val a = (1 + 2) + (a.b.c).d.f
+    val c = (d).e
+    val b = (((((a)))))                                             // 语法分析阶段去除无效 '(' 和 ')'
+    val name = getInfos(age = 18, param = "Hello").first()["name"]
+    val a = i++.name()
+    // val b = ++i.name()    // 语法错误
+    val a = b ? c ?: (d + 1) * 10 : e ?: f
+    val a = b.c ~> d && e.f() !> g.h[0]
+}
+
+private const fun add(num1: Int, num2: Int?): Int {
+
+}
+
+private fun callback(callback: ((Int) -> [String, Int])?) {
+
+}
+
+private fun callback2(): Int, String {
+
+}
+
+private fun returns1(): ((fun1: () -> String) -> Unit)? {
+
+}
+
+private fun returns2(): (String = "", age: Int = 10, String) -> [Int?, String?], String {
+
+}
+
+/**
+ * ((String)) 与 String 等价
+ * 多行注释测试
+ */
+private fun returns3(): ((String)) {
+
+}
+
+fun lambda1(param1: (() -> Unit) -> Unit, param2: () -> (Int) -> [String, () -> Unit?]) {
+
+}
+
+fun lambda2(callback: () -> String???) {
+
+}
+
+private class Hello(
+    private val param1: String?,
+    private var param2: Int,
+    val param3: () -> Int,
+    param5: (((Int)?)?)
+) {
+
+    file fun test(): Int, String?, pzl.example.Hello {
+
+    }
+
+    fun test2(): Double? {
+
+    }
+}
+
+trait Runnable {
+
+    fun run()
+}
+
+trait Runnable2 {
+
+    fun run2()
+}
+
+class RunnableImpl : Runnable2 {
+
+    final override fun run2() {
+
+    }
+}
+
+class Test2 {
+
+    unique _ {            // Test2.xxx
+
+    }
+
+    unique Name {       // Test2.Name.xxx
+
+    }
+}
+
+unique Unique1 {
+
+    unique Unique2 {
+
+        unique Unique3
+    }
+}
+
+abstract class AbstractClass {
+
+    fun test1() {
+
+    }
+
+    abstract fun test2()
+}
+
+enum UserType {
+    ADMIN,
+    USER
+}
+
+fun defaultValue(value: Int = 10) {
+
+}
+
+enum Status(
+   code: Int,
+   msg: String
+) {
+    SUCCESS(code: 0, msg: "Success") {
+
+        override fun isSuccess(): Boolean {
+
+        }
+    },
+    FAILURE(code: -1, msg: "Failure") {
+
+        override fun isSuccess(): Boolean {
+
+        }
+    };
+
+    abstract fun isSuccess(): Boolean
+}
+
+struct Data(
+    ignore val param1: String,
+    ignore var param2: Int?,
+    val param3: Double,
+    val param4: Info,
+    val name: String
+)
+
+struct Info(
+    val address: String,
+    val number: Int
+)
+
+annotation Target(val name: String)
+
+trait NameProvider {
+
+    fun name()
+}
+
+sealed trait Animation
+
+class Dog : Animation
+
+class Cat : Animation
+
+extension Dog : NameProvider {
+
+    fun name() {
+
+    }
+
+    owner class Hello {
+
+        class World
+    }
+}
+
+fun Int.times(other: Int): Int {  }
+
+class sealed
+
+trait sealed
+
+fun init(import: ((type.import) -> final?)?) {}
+
+type<type>
+fun type(type: type) {
 
 }

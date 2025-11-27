@@ -2,11 +2,13 @@ package puzzle.core.parser.parser.declaration
 
 import puzzle.core.PzlContext
 import puzzle.core.lexer.PzlTokenType
-import puzzle.core.parser.parser.PzlParser
-import puzzle.core.parser.parser.PzlParserProvider
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.declaration.ImportDeclaration
 import puzzle.core.parser.ast.declaration.ImportScope
+import puzzle.core.parser.parser.PzlParser
+import puzzle.core.parser.parser.PzlParserProvider
+import puzzle.core.parser.parser.identifier.IdentifierNameParser
+import puzzle.core.parser.parser.identifier.IdentifierNameTarget
 
 class ImportDeclarationParser private constructor(
 	private val cursor: PzlTokenCursor
@@ -16,17 +18,17 @@ class ImportDeclarationParser private constructor(
 	
 	context(_: PzlContext)
 	fun parse(): ImportDeclaration {
-		cursor.expect(PzlTokenType.IDENTIFIER, "import 缺少包名")
-		val paths = mutableListOf(cursor.previous.value)
+		val parser = IdentifierNameParser.of(cursor)
+		val name = parser.parse(IdentifierNameTarget.IMPORT)
+		val paths = mutableListOf(name)
 		var scope = ImportScope.SINGLE
 		var alias: String? = null
 		while (cursor.match(PzlTokenType.DOT)) {
 			when {
-				cursor.match(PzlTokenType.IDENTIFIER) -> {
+				parser.match() -> {
 					paths += cursor.previous.value
 					if (cursor.match(PzlTokenType.AS)) {
-						cursor.expect(PzlTokenType.IDENTIFIER, "as 后缺少别名")
-						alias = cursor.previous.value
+						alias = parser.parse(IdentifierNameTarget.IMPORT_AS)
 						break
 					}
 				}
@@ -43,7 +45,7 @@ class ImportDeclarationParser private constructor(
 			}
 		}
 		return ImportDeclaration(
-			paths = paths,
+			segments = paths,
 			alias = alias,
 			scope = scope
 		)

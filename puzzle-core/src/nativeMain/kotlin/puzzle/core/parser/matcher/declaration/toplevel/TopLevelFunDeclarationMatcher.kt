@@ -7,9 +7,9 @@ import puzzle.core.parser.ast.binding.GenericSpec
 import puzzle.core.parser.ast.declaration.FunDeclaration
 import puzzle.core.parser.parser.binding.generic.GenericTarget
 import puzzle.core.parser.parser.binding.generic.check
+import puzzle.core.parser.parser.declaration.FunDeclarationParser
 import puzzle.core.parser.parser.modifier.ModifierTarget
 import puzzle.core.parser.parser.modifier.check
-import puzzle.core.parser.parser.declaration.FunDeclarationParser
 import puzzle.core.symbol.Modifier
 
 object TopLevelFunDeclarationMatcher : TopLevelDeclarationMatcher<FunDeclaration> {
@@ -26,6 +26,6 @@ object TopLevelFunDeclarationMatcher : TopLevelDeclarationMatcher<FunDeclaration
 	): FunDeclaration {
 		genericSpec?.check(cursor, GenericTarget.FUN)
 		modifiers.check(cursor, ModifierTarget.TOP_LEVEL_FUN)
-		return FunDeclarationParser.of(cursor).parse(modifiers)
+		return FunDeclarationParser.of(cursor).parse(genericSpec, modifiers)
 	}
 }

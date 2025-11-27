@@ -7,7 +7,7 @@ import puzzle.core.util.startsWith
 
 data object KeywordRecognizer : TokenRecognizer {
 	
-	private val keywordTokenTypeMap = mapOf(
+	private val keywordTypeMap = mapOf(
 		"fun" to PzlTokenType.FUN,
 		"class" to PzlTokenType.CLASS,
 		"unique" to PzlTokenType.UNIQUE,
@@ -61,11 +61,9 @@ data object KeywordRecognizer : TokenRecognizer {
 		"null" to PzlTokenType.NULL,
 	)
 	
-	private val keywords = keywordTokenTypeMap.keys
-	
 	context(_: PzlContext)
 	override fun tryParse(input: CharArray, start: Int, line: Int, column: Int): PzlToken? {
-		for (keyword in keywords) {
+		for ((keyword, type) in keywordTypeMap) {
 			if (!input.startsWith(keyword, start)) {
 				continue
 			}
@@ -74,8 +72,7 @@ data object KeywordRecognizer : TokenRecognizer {
 			if (nextChar != null && (nextChar.isLetterOrDigit() || nextChar == '_')) {
 				continue
 			}
-			val tokenType = keywordTokenTypeMap[keyword]!!
-			return PzlToken(tokenType, "", start, end, line, column)
+			return PzlToken(type, keyword, start, end, line, column)
 		}
 		return null
 	}

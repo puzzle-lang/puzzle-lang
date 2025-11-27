@@ -26,6 +26,6 @@ object MemberClassDeclarationMatcher : MemberDeclarationMatcher<ClassDeclaration
 	): ClassDeclaration {
 		genericSpec?.check(cursor, GenericTarget.CLASS)
 		modifiers.check(cursor, ModifierTarget.MEMBER_CLASS)
-		return ClassDeclarationParser.of(cursor).parse(modifiers)
+		return ClassDeclarationParser.of(cursor).parse(genericSpec, modifiers)
 	}
 }

@@ -26,6 +26,6 @@ object MemberAnnotationDeclarationMatcher : MemberDeclarationMatcher<AnnotationD
 	): AnnotationDeclaration {
 		genericSpec?.check(cursor, GenericTarget.ANNOTATION)
 		modifiers.check(cursor, ModifierTarget.MEMBER_ANNOTATION)
-		return AnnotationDeclarationParser.of(cursor).parse(modifiers)
+		return AnnotationDeclarationParser.of(cursor).parse(genericSpec, modifiers)
 	}
 }

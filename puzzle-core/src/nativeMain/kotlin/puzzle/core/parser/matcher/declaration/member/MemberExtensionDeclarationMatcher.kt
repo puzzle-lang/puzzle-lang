@@ -26,6 +26,6 @@ object MemberExtensionDeclarationMatcher : MemberDeclarationMatcher<ExtensionDec
 	): ExtensionDeclaration {
 		genericSpec?.check(cursor, GenericTarget.EXTENSION)
 		modifiers.check(cursor, ModifierTarget.MEMBER_EXTENSION)
-		return ExtensionDeclarationParser.of(cursor).parse(modifiers)
+		return ExtensionDeclarationParser.of(cursor).parse(genericSpec, modifiers)
 	}
 }

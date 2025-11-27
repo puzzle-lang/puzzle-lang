@@ -1,5 +1,7 @@
 package puzzle.core
 
+import aaa.bbb.type
+
 fun main() {
 
 }

@@ -26,6 +26,6 @@ object TopLevelTraitDeclarationMatcher : TopLevelDeclarationMatcher<TraitDeclara
 	): TraitDeclaration {
 		genericSpec?.check(cursor, GenericTarget.TRAIT)
 		modifiers.check(cursor, ModifierTarget.TOP_LEVEL_TRAIT)
-		return TraitDeclarationParser.of(cursor).parse(modifiers)
+		return TraitDeclarationParser.of(cursor).parse(genericSpec, modifiers)
 	}
 }

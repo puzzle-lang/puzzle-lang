@@ -26,6 +26,6 @@ object TopLevelStructDeclarationMatcher : TopLevelDeclarationMatcher<StructDecla
 	): StructDeclaration {
 		genericSpec?.check(cursor, GenericTarget.STRUCT)
 		modifiers.check(cursor, ModifierTarget.TOP_LEVEL_STRUCT)
-		return StructDeclarationParser.of(cursor).parse(modifiers)
+		return StructDeclarationParser.of(cursor).parse(genericSpec, modifiers)
 	}
 }

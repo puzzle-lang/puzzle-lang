@@ -7,7 +7,8 @@ import puzzle.core.parser.ast.statement.VariableDeclarationStatement
 import puzzle.core.parser.matcher.expression.parseCompleteExpression
 import puzzle.core.parser.parser.PzlParser
 import puzzle.core.parser.parser.PzlParserProvider
-import puzzle.core.parser.parser.VariableNameParser
+import puzzle.core.parser.parser.identifier.IdentifierNameParser
+import puzzle.core.parser.parser.identifier.IdentifierNameTarget
 import puzzle.core.parser.parser.node.TypeReferenceParser
 
 class VariableDeclarationStatementParser private constructor(
@@ -19,7 +20,7 @@ class VariableDeclarationStatementParser private constructor(
 	context(_: PzlContext)
 	fun parse(): VariableDeclarationStatement {
 		val isVariable = cursor.previous.type == PzlTokenType.VAR
-		val name = VariableNameParser.of(cursor).parse("变量")
+		val name = IdentifierNameParser.of(cursor).parse(IdentifierNameTarget.VARIABLE)
 		val type = if (cursor.match(PzlTokenType.COLON)) {
 			TypeReferenceParser.of(cursor).parse(isSupportedLambdaType = true)
 		} else null

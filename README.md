@@ -71,14 +71,6 @@ extension Animal : Consumable {
 }
 
 /**
- * 扩展 - 当特征只有一个函数的时候，可以这么写，更加简洁
- */
-fun Animal : InfoProvider.getInfo(): String, Int {
-    // 函数的最后一行默认返回，不需要写 return
-    [this.name, this.age]
-}
-
-/**
  * 扩展函数
  */
 fun Int.toString(): String {

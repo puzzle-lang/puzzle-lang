@@ -26,6 +26,6 @@ object MemberFunDeclarationMatcher : MemberDeclarationMatcher<FunDeclaration> {
 	): FunDeclaration {
 		genericSpec?.check(cursor, GenericTarget.FUN)
 		modifiers.check(cursor, ModifierTarget.MEMBER_FUN)
-		return FunDeclarationParser.of(cursor).parse(modifiers)
+		return FunDeclarationParser.of(cursor).parse(genericSpec, modifiers)
 	}
 }

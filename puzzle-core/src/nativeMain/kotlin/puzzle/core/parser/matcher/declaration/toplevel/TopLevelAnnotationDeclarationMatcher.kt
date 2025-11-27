@@ -26,6 +26,6 @@ object TopLevelAnnotationDeclarationMatcher : TopLevelDeclarationMatcher<Annotat
 	): AnnotationDeclaration {
 		genericSpec?.check(cursor, GenericTarget.ANNOTATION)
 		modifiers.check(cursor, ModifierTarget.TOP_LEVEL_ANNOTATION)
-		return AnnotationDeclarationParser.of(cursor).parse(modifiers)
+		return AnnotationDeclarationParser.of(cursor).parse(genericSpec, modifiers)
 	}
 }

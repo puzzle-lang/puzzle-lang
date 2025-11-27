@@ -3,14 +3,17 @@ package puzzle.core.parser.parser.declaration
 import puzzle.core.PzlContext
 import puzzle.core.exception.syntaxError
 import puzzle.core.lexer.PzlTokenType
-import puzzle.core.parser.parser.PzlParser
-import puzzle.core.parser.parser.PzlParserProvider
 import puzzle.core.parser.PzlTokenCursor
+import puzzle.core.parser.ast.binding.GenericSpec
 import puzzle.core.parser.ast.declaration.Declaration
 import puzzle.core.parser.ast.declaration.EnumDeclaration
 import puzzle.core.parser.ast.declaration.EnumEntry
-import puzzle.core.parser.parser.binding.parameter.parseEnumParameters
 import puzzle.core.parser.matcher.declaration.member.parseMemberDeclaration
+import puzzle.core.parser.parser.PzlParser
+import puzzle.core.parser.parser.PzlParserProvider
+import puzzle.core.parser.parser.binding.parameter.parseEnumParameters
+import puzzle.core.parser.parser.identifier.IdentifierNameParser
+import puzzle.core.parser.parser.identifier.IdentifierNameTarget
 import puzzle.core.symbol.Modifier
 
 class EnumDeclarationParser private constructor(
@@ -20,32 +23,31 @@ class EnumDeclarationParser private constructor(
 	companion object : PzlParserProvider<EnumDeclarationParser>(::EnumDeclarationParser)
 	
 	context(_: PzlContext)
-	fun parse(modifiers: List<Modifier>): EnumDeclaration {
-		cursor.expect(PzlTokenType.IDENTIFIER, "枚举缺少名称")
-		val name = cursor.previous.value
+	fun parse(
+		genericSpec: GenericSpec?,
+		modifiers: List<Modifier>
+	): EnumDeclaration {
+		val name = IdentifierNameParser.of(cursor).parse(IdentifierNameTarget.ENUM)
 		val parameters = parseEnumParameters(cursor)
 		cursor.expect(PzlTokenType.LBRACE, "枚举缺少 '{'")
 		val entries = parseEnumEntries()
-		if (cursor.previous.type == PzlTokenType.RBRACE) {
-			return EnumDeclaration(
-				name = name,
-				modifiers = modifiers,
-				parameters = parameters,
-				entries = entries
-			)
+		val members = if (cursor.previous.type == PzlTokenType.RBRACE) {
+			emptyList()
+		} else {
+			buildList {
+				while (!cursor.match(PzlTokenType.RBRACE)) {
+					this += parseMemberDeclaration(cursor)
+				}
+			}
 		}
-		
-		val members = mutableListOf<Declaration>()
-		while (!cursor.match(PzlTokenType.RBRACE)) {
-			members += parseMemberDeclaration(cursor)
-		}
-		
 		return EnumDeclaration(
 			name = name,
 			modifiers = modifiers,
 			parameters = parameters,
 			entries = entries,
-			members = members
+			genericSpec = genericSpec,
+			contextSpec = null,
+			members = members,
 		)
 	}
 	
@@ -73,8 +75,7 @@ private class EnumEntryParser private constructor(
 	
 	context(_: PzlContext)
 	fun parse(): EnumEntry {
-		cursor.expect(PzlTokenType.IDENTIFIER, "枚举常量缺少名称")
-		val name = cursor.previous.value
+		val name = IdentifierNameParser.of(cursor).parse(IdentifierNameTarget.ENUM_ENTRY)
 		if (cursor.match(PzlTokenType.LPAREN)) {
 			while (!cursor.match(PzlTokenType.RPAREN)) {
 				cursor.advance()

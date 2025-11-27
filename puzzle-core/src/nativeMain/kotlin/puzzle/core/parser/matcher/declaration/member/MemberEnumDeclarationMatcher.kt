@@ -26,6 +26,6 @@ object MemberEnumDeclarationMatcher : MemberDeclarationMatcher<EnumDeclaration> 
 	): EnumDeclaration {
 		genericSpec?.check(cursor, GenericTarget.ENUM)
 		modifiers.check(cursor, ModifierTarget.MEMBER_ENUM)
-		return EnumDeclarationParser.of(cursor).parse(modifiers)
+		return EnumDeclarationParser.of(cursor).parse(genericSpec, modifiers)
 	}
 }

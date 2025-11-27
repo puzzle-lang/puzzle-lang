@@ -39,9 +39,9 @@ class PzlTokenCursor(
 		return current
 	}
 	
-	fun retreat(): PzlToken {
-		if (position > 0) {
-			position--
+	fun retreat(count: Int = 1): PzlToken {
+		if (position >= count) {
+			position -= count
 		}
 		return current
 	}

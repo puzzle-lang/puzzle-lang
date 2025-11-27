@@ -26,6 +26,6 @@ object MemberTraitDeclarationMatcher : MemberDeclarationMatcher<TraitDeclaration
 	): TraitDeclaration {
 		genericSpec?.check(cursor, GenericTarget.TRAIT)
 		modifiers.check(cursor, ModifierTarget.MEMBER_TRAIT)
-		return TraitDeclarationParser.of(cursor).parse(modifiers)
+		return TraitDeclarationParser.of(cursor).parse(genericSpec, modifiers)
 	}
 }

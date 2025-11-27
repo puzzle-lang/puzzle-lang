@@ -8,3 +8,9 @@ data class ContextReceiver(
 	val name: String,
 	val type: TypeReference
 )
+
+@Serializable
+data class ContextSpec(
+	val receivers: List<ContextReceiver>,
+	val isInherited: Boolean
+)

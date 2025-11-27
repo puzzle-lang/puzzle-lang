@@ -26,6 +26,6 @@ object TopLevelExtensionDeclarationMatcher : TopLevelDeclarationMatcher<Extensio
 	): ExtensionDeclaration {
 		genericSpec?.check(cursor, GenericTarget.EXTENSION)
 		modifiers.check(cursor, ModifierTarget.TOP_LEVEL_EXTENSION)
-		return ExtensionDeclarationParser.of(cursor).parse(modifiers)
+		return ExtensionDeclarationParser.of(cursor).parse(genericSpec, modifiers)
 	}
 }

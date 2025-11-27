@@ -11,6 +11,8 @@ import puzzle.core.parser.ast.node.NamedType
 import puzzle.core.parser.ast.node.TypeReference
 import puzzle.core.parser.parser.PzlParser
 import puzzle.core.parser.parser.PzlParserProvider
+import puzzle.core.parser.parser.identifier.IdentifierNameParser
+import puzzle.core.parser.parser.identifier.IdentifierNameTarget
 import puzzle.core.parser.parser.node.TypeReferenceParser
 
 context(_: PzlContext)
@@ -35,8 +37,7 @@ class GenericParameterParser private constructor(
 	fun parse(): GenericParameter {
 		val start = cursor.position
 		val variance = parseVariance()
-		cursor.expect(PzlTokenType.IDENTIFIER, "缺少泛型名称")
-		val name = cursor.previous.value
+		val name = IdentifierNameParser.of(cursor).parse(IdentifierNameTarget.GENERIC_PARAMETER)
 		val bounds = if (cursor.match(PzlTokenType.COLON)) {
 			buildList<TypeReference> {
 				do {
