@@ -33,7 +33,7 @@ fun main(vararg args: String) {
 		}
 	}
 	println("执行耗时: $duration")
-	println("内存使用：${currentMemoryUsage()}")
+	println("内存使用: ${currentMemoryUsage()}")
 }
 
 private fun run(paths: List<String>) = runBlocking {

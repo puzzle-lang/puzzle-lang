@@ -1,14 +1,14 @@
-package puzzle.core.parser.parser.binding.generic
+package puzzle.core.parser.parser.binding.type
 
 import puzzle.core.PzlContext
 import puzzle.core.exception.syntaxError
 import puzzle.core.lexer.PzlTokenType
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.TokenRange
-import puzzle.core.parser.ast.binding.GenericParameter
+import puzzle.core.parser.ast.binding.TypeParameter
 import puzzle.core.parser.ast.binding.Variance
-import puzzle.core.parser.ast.node.NamedType
-import puzzle.core.parser.ast.node.TypeReference
+import puzzle.core.parser.ast.NamedType
+import puzzle.core.parser.ast.TypeReference
 import puzzle.core.parser.parser.PzlParser
 import puzzle.core.parser.parser.PzlParserProvider
 import puzzle.core.parser.parser.identifier.IdentifierNameParser
@@ -16,10 +16,10 @@ import puzzle.core.parser.parser.identifier.IdentifierNameTarget
 import puzzle.core.parser.parser.node.TypeReferenceParser
 
 context(_: PzlContext)
-fun parseGenericParameters(cursor: PzlTokenCursor): List<GenericParameter> {
-	val parameters = mutableListOf<GenericParameter>()
+fun parseTypeParameters(cursor: PzlTokenCursor): List<TypeParameter> {
+	val parameters = mutableListOf<TypeParameter>()
 	do {
-		parameters += GenericParameterParser.of(cursor).parse()
+		parameters += TypeParameterParser.of(cursor).parse()
 		if (!cursor.check(PzlTokenType.GT)) {
 			cursor.expect(PzlTokenType.COMMA, "缺少 ','")
 		}
@@ -27,17 +27,17 @@ fun parseGenericParameters(cursor: PzlTokenCursor): List<GenericParameter> {
 	return parameters
 }
 
-class GenericParameterParser private constructor(
+class TypeParameterParser private constructor(
 	private val cursor: PzlTokenCursor
 ) : PzlParser {
 	
-	companion object : PzlParserProvider<GenericParameterParser>(::GenericParameterParser)
+	companion object : PzlParserProvider<TypeParameterParser>(::TypeParameterParser)
 	
 	context(_: PzlContext)
-	fun parse(): GenericParameter {
+	fun parse(): TypeParameter {
 		val start = cursor.position
 		val variance = parseVariance()
-		val name = IdentifierNameParser.of(cursor).parse(IdentifierNameTarget.GENERIC_PARAMETER)
+		val name = IdentifierNameParser.of(cursor).parse(IdentifierNameTarget.TYPE_PARAMETER)
 		val bounds = if (cursor.match(PzlTokenType.COLON)) {
 			buildList<TypeReference> {
 				do {
@@ -62,7 +62,7 @@ class GenericParameterParser private constructor(
 			TypeReferenceParser.of(cursor).parse(isSupportedNullable = bounds.isEmpty() || bounds.first().isNullable)
 		} else null
 		val end = cursor.position
-		return GenericParameter(
+		return TypeParameter(
 			name = name,
 			variance = variance,
 			bounds = bounds,

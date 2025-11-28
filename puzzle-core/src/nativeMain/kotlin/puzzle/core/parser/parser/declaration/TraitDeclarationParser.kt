@@ -4,7 +4,7 @@ import puzzle.core.PzlContext
 import puzzle.core.lexer.PzlTokenType
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.binding.ContextSpec
-import puzzle.core.parser.ast.binding.GenericSpec
+import puzzle.core.parser.ast.binding.TypeSpec
 import puzzle.core.parser.ast.declaration.TraitDeclaration
 import puzzle.core.parser.matcher.declaration.member.parseMemberDeclaration
 import puzzle.core.parser.parser.PzlParser
@@ -21,9 +21,9 @@ class TraitDeclarationParser private constructor(
 
     context(_: PzlContext)
     fun parse(
-        genericSpec: GenericSpec?,
-        contextSpec: ContextSpec?,
-        modifiers: List<Modifier>
+	    typeSpec: TypeSpec?,
+	    contextSpec: ContextSpec?,
+	    modifiers: List<Modifier>
     ): TraitDeclaration {
         val name = IdentifierNameParser.of(cursor).parse(IdentifierNameTarget.TRAIT)
         val members = if (cursor.match(PzlTokenType.LBRACE)) {
@@ -36,7 +36,7 @@ class TraitDeclarationParser private constructor(
         return TraitDeclaration(
             name = name,
             modifiers = modifiers,
-            genericSpec = genericSpec,
+            typeSpec = typeSpec,
             contextSpec = contextSpec,
             members = members
         )

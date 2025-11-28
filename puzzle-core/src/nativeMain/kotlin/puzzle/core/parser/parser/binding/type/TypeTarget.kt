@@ -1,48 +1,48 @@
-package puzzle.core.parser.parser.binding.generic
+package puzzle.core.parser.parser.binding.type
 
-enum class GenericTarget(
+enum class TypeTarget(
 	val displayName: String,
-	val isSupportedGeneric: Boolean,
+	val isSupportedType: Boolean,
 	val isSupportedVariance: Boolean
 ) {
 	FUN(
 		displayName = "函数",
-		isSupportedGeneric = true,
+		isSupportedType = true,
 		isSupportedVariance = false
 	),
 	CLASS(
 		displayName = "类",
-		isSupportedGeneric = true,
+		isSupportedType = true,
 		isSupportedVariance = true
 	),
 	UNIQUE(
 		displayName = "单例类",
-		isSupportedGeneric = false,
+		isSupportedType = false,
 		isSupportedVariance = false
 	),
 	TRAIT(
 		displayName = "特征",
-		isSupportedGeneric = true,
+		isSupportedType = true,
 		isSupportedVariance = true
 	),
 	STRUCT(
 		displayName = "结构体",
-		isSupportedGeneric = true,
+		isSupportedType = true,
 		isSupportedVariance = true
 	),
 	ENUM(
 		displayName = "枚举",
-		isSupportedGeneric = true,
+		isSupportedType = true,
 		isSupportedVariance = true
 	),
 	ANNOTATION(
 		displayName = "注解",
-		isSupportedGeneric = false,
+		isSupportedType = true,
 		isSupportedVariance = false
 	),
 	EXTENSION(
 		displayName = "扩展",
-		isSupportedGeneric = true,
+		isSupportedType = true,
 		isSupportedVariance = true
 	)
 }

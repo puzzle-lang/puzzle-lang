@@ -4,9 +4,9 @@ import puzzle.core.PzlContext
 import puzzle.core.exception.syntaxError
 import puzzle.core.lexer.PzlTokenType
 import puzzle.core.parser.PzlTokenCursor
-import puzzle.core.parser.ast.node.LambdaType
-import puzzle.core.parser.ast.node.NamedType
-import puzzle.core.parser.ast.node.TypeReference
+import puzzle.core.parser.ast.LambdaType
+import puzzle.core.parser.ast.NamedType
+import puzzle.core.parser.ast.TypeReference
 import puzzle.core.parser.parser.PzlParser
 import puzzle.core.parser.parser.PzlParserProvider
 import puzzle.core.parser.parser.binding.parameter.parseLambdaParameters

@@ -4,7 +4,6 @@ import puzzle.core.PzlContext
 import puzzle.core.lexer.PzlTokenType
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.binding.ContextSpec
-import puzzle.core.parser.ast.binding.GenericSpec
 import puzzle.core.parser.ast.declaration.UniqueDeclaration
 import puzzle.core.parser.matcher.declaration.member.parseMemberDeclaration
 import puzzle.core.parser.parser.PzlParser

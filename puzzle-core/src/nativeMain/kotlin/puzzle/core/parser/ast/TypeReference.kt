@@ -1,4 +1,4 @@
-package puzzle.core.parser.ast.node
+package puzzle.core.parser.ast
 
 import kotlinx.serialization.Serializable
 import puzzle.core.parser.ast.binding.Parameter

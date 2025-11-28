@@ -2,9 +2,9 @@ package puzzle.core.parser.ast.declaration
 
 import kotlinx.serialization.Serializable
 import puzzle.core.parser.ast.binding.ContextSpec
-import puzzle.core.parser.ast.binding.GenericSpec
+import puzzle.core.parser.ast.binding.TypeSpec
 import puzzle.core.parser.ast.binding.Parameter
-import puzzle.core.parser.ast.node.TypeReference
+import puzzle.core.parser.ast.TypeReference
 import puzzle.core.parser.ast.statement.Statement
 import puzzle.core.symbol.Modifier
 
@@ -15,7 +15,7 @@ data class FunDeclaration(
 	val modifiers: List<Modifier>,
 	val returnTypes: List<TypeReference>,
 	val extension: TypeReference?,
-	val genericSpec: GenericSpec?,
+	val typeSpec: TypeSpec?,
 	val contextSpec: ContextSpec?,
 	val statements: List<Statement> = emptyList(),
 ) : Declaration

@@ -2,7 +2,6 @@ package puzzle.core.parser.ast.declaration
 
 import kotlinx.serialization.Serializable
 import puzzle.core.parser.ast.binding.ContextSpec
-import puzzle.core.parser.ast.binding.GenericSpec
 import puzzle.core.symbol.Modifier
 
 @Serializable

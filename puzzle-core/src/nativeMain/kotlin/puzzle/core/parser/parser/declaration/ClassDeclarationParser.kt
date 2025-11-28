@@ -4,7 +4,7 @@ import puzzle.core.PzlContext
 import puzzle.core.lexer.PzlTokenType
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.binding.ContextSpec
-import puzzle.core.parser.ast.binding.GenericSpec
+import puzzle.core.parser.ast.binding.TypeSpec
 import puzzle.core.parser.ast.declaration.ClassDeclaration
 import puzzle.core.parser.matcher.declaration.member.parseMemberDeclaration
 import puzzle.core.parser.parser.PzlParser
@@ -25,9 +25,9 @@ class ClassDeclarationParser private constructor(
 
     context(_: PzlContext)
     fun parse(
-        genericSpec: GenericSpec?,
-        contextSpec: ContextSpec?,
-        modifiers: List<Modifier>
+	    typeSpec: TypeSpec?,
+	    contextSpec: ContextSpec?,
+	    modifiers: List<Modifier>
     ): ClassDeclaration {
         val name = IdentifierNameParser.of(cursor).parse(IdentifierNameTarget.CLASS)
         val constructorModifiers = parseModifiers(cursor)
@@ -47,7 +47,7 @@ class ClassDeclarationParser private constructor(
             constructorModifiers = constructorModifiers,
             parameters = parameters,
             superTypes = superTypes,
-            genericSpec = genericSpec,
+            typeSpec = typeSpec,
             contextSpec = contextSpec,
             members = members
         )

@@ -2,7 +2,7 @@ package puzzle.core.parser.ast.declaration
 
 import kotlinx.serialization.Serializable
 import puzzle.core.parser.ast.expression.Argument
-import puzzle.core.parser.ast.node.TypeReference
+import puzzle.core.parser.ast.TypeReference
 
 @Serializable
 sealed interface SuperType {

@@ -4,10 +4,10 @@ import puzzle.core.PzlContext
 import puzzle.core.lexer.PzlTokenType
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.binding.ContextSpec
-import puzzle.core.parser.ast.binding.GenericSpec
+import puzzle.core.parser.ast.binding.TypeSpec
 import puzzle.core.parser.ast.declaration.UniqueDeclaration
-import puzzle.core.parser.parser.binding.generic.GenericTarget
-import puzzle.core.parser.parser.binding.generic.check
+import puzzle.core.parser.parser.binding.type.TypeTarget
+import puzzle.core.parser.parser.binding.type.check
 import puzzle.core.parser.parser.declaration.UniqueDeclarationParser
 import puzzle.core.parser.parser.modifier.ModifierTarget
 import puzzle.core.parser.parser.modifier.check
@@ -21,12 +21,12 @@ object MemberUniqueDeclarationMatcher : MemberDeclarationMatcher<UniqueDeclarati
 
     context(_: PzlContext)
     override fun parse(
-        cursor: PzlTokenCursor,
-        genericSpec: GenericSpec?,
-        contextSpec: ContextSpec?,
-        modifiers: List<Modifier>
+	    cursor: PzlTokenCursor,
+	    typeSpec: TypeSpec?,
+	    contextSpec: ContextSpec?,
+	    modifiers: List<Modifier>
     ): UniqueDeclaration {
-        genericSpec?.check(cursor, GenericTarget.UNIQUE)
+        typeSpec?.check(cursor, TypeTarget.UNIQUE)
         modifiers.check(cursor, ModifierTarget.MEMBER_UNIQUE)
         return UniqueDeclarationParser.of(cursor).parse(contextSpec, modifiers, isMember = true)
     }

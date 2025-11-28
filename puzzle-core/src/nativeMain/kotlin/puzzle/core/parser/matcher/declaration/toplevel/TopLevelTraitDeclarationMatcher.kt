@@ -4,10 +4,10 @@ import puzzle.core.PzlContext
 import puzzle.core.lexer.PzlTokenType
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.binding.ContextSpec
-import puzzle.core.parser.ast.binding.GenericSpec
+import puzzle.core.parser.ast.binding.TypeSpec
 import puzzle.core.parser.ast.declaration.TraitDeclaration
-import puzzle.core.parser.parser.binding.generic.GenericTarget
-import puzzle.core.parser.parser.binding.generic.check
+import puzzle.core.parser.parser.binding.type.TypeTarget
+import puzzle.core.parser.parser.binding.type.check
 import puzzle.core.parser.parser.declaration.TraitDeclarationParser
 import puzzle.core.parser.parser.modifier.ModifierTarget
 import puzzle.core.parser.parser.modifier.check
@@ -21,13 +21,13 @@ object TopLevelTraitDeclarationMatcher : TopLevelDeclarationMatcher<TraitDeclara
 
     context(_: PzlContext)
     override fun parse(
-        cursor: PzlTokenCursor,
-        genericSpec: GenericSpec?,
-        contextSpec: ContextSpec?,
-        modifiers: List<Modifier>
+	    cursor: PzlTokenCursor,
+	    typeSpec: TypeSpec?,
+	    contextSpec: ContextSpec?,
+	    modifiers: List<Modifier>
     ): TraitDeclaration {
-        genericSpec?.check(cursor, GenericTarget.TRAIT)
+        typeSpec?.check(cursor, TypeTarget.TRAIT)
         modifiers.check(cursor, ModifierTarget.TOP_LEVEL_TRAIT)
-        return TraitDeclarationParser.of(cursor).parse(genericSpec, contextSpec, modifiers)
+        return TraitDeclarationParser.of(cursor).parse(typeSpec, contextSpec, modifiers)
     }
 }

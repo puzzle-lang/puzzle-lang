@@ -4,10 +4,10 @@ import puzzle.core.PzlContext
 import puzzle.core.lexer.PzlTokenType
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.binding.ContextSpec
-import puzzle.core.parser.ast.binding.GenericSpec
+import puzzle.core.parser.ast.binding.TypeSpec
 import puzzle.core.parser.ast.declaration.ExtensionDeclaration
-import puzzle.core.parser.parser.binding.generic.GenericTarget
-import puzzle.core.parser.parser.binding.generic.check
+import puzzle.core.parser.parser.binding.type.TypeTarget
+import puzzle.core.parser.parser.binding.type.check
 import puzzle.core.parser.parser.declaration.ExtensionDeclarationParser
 import puzzle.core.parser.parser.modifier.ModifierTarget
 import puzzle.core.parser.parser.modifier.check
@@ -21,13 +21,13 @@ object MemberExtensionDeclarationMatcher : MemberDeclarationMatcher<ExtensionDec
 
     context(_: PzlContext)
     override fun parse(
-        cursor: PzlTokenCursor,
-        genericSpec: GenericSpec?,
-        contextSpec: ContextSpec?,
-        modifiers: List<Modifier>
+	    cursor: PzlTokenCursor,
+	    typeSpec: TypeSpec?,
+	    contextSpec: ContextSpec?,
+	    modifiers: List<Modifier>
     ): ExtensionDeclaration {
-        genericSpec?.check(cursor, GenericTarget.EXTENSION)
+        typeSpec?.check(cursor, TypeTarget.EXTENSION)
         modifiers.check(cursor, ModifierTarget.MEMBER_EXTENSION)
-        return ExtensionDeclarationParser.of(cursor).parse(genericSpec, contextSpec, modifiers)
+        return ExtensionDeclarationParser.of(cursor).parse(typeSpec, contextSpec, modifiers)
     }
 }

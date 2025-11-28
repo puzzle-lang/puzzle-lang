@@ -1,7 +1,7 @@
 package puzzle.core.parser.ast.binding
 
 import kotlinx.serialization.Serializable
-import puzzle.core.parser.ast.node.TypeReference
+import puzzle.core.parser.ast.TypeReference
 
 @Serializable
 data class ContextReceiver(

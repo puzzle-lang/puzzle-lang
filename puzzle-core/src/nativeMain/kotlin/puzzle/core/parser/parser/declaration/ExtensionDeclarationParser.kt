@@ -4,7 +4,7 @@ import puzzle.core.PzlContext
 import puzzle.core.lexer.PzlTokenType
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.binding.ContextSpec
-import puzzle.core.parser.ast.binding.GenericSpec
+import puzzle.core.parser.ast.binding.TypeSpec
 import puzzle.core.parser.ast.declaration.ExtensionDeclaration
 import puzzle.core.parser.ast.declaration.SuperTrait
 import puzzle.core.parser.matcher.declaration.member.parseMemberDeclaration
@@ -21,9 +21,9 @@ class ExtensionDeclarationParser private constructor(
 
     context(_: PzlContext)
     fun parse(
-        genericSpec: GenericSpec?,
-        contextSpec: ContextSpec?,
-        modifiers: List<Modifier>
+	    typeSpec: TypeSpec?,
+	    contextSpec: ContextSpec?,
+	    modifiers: List<Modifier>
     ): ExtensionDeclaration {
         val extendedType = TypeReferenceParser.of(cursor).parse()
         val superTraits = parseSuperTypes(cursor, isSupportedClass = false)
@@ -39,7 +39,7 @@ class ExtensionDeclarationParser private constructor(
             extendedType = extendedType,
             modifiers = modifiers,
             superTraits = superTraits,
-            genericSpec = genericSpec,
+            typeSpec = typeSpec,
             contextSpec = contextSpec,
             members = members,
         )

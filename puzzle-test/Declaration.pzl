@@ -201,7 +201,7 @@ trait sealed
 
 fun init(import: ((type.import) -> final?)?) {}
 
-type<type>
+type<T>
 fun type(type: type) {
 
 }

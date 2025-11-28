@@ -2,10 +2,10 @@ package puzzle.core.parser.ast.binding
 
 import kotlinx.serialization.Serializable
 import puzzle.core.parser.ast.TokenRange
-import puzzle.core.parser.ast.node.TypeReference
+import puzzle.core.parser.ast.TypeReference
 
 @Serializable
-data class GenericParameter(
+data class TypeParameter(
 	val name: String,
 	val variance: Variance?,
 	val bounds: List<TypeReference>,
@@ -14,9 +14,9 @@ data class GenericParameter(
 )
 
 @Serializable
-data class GenericSpec(
+data class TypeSpec(
 	val isReified: Boolean,
-	val parameters: List<GenericParameter>,
+	val parameters: List<TypeParameter>,
 	val location: TokenRange
 )
 

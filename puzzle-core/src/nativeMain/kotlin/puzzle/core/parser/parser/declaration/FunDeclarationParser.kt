@@ -5,10 +5,10 @@ import puzzle.core.constants.PzlTypes
 import puzzle.core.lexer.PzlTokenType
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.binding.ContextSpec
-import puzzle.core.parser.ast.binding.GenericSpec
+import puzzle.core.parser.ast.binding.TypeSpec
 import puzzle.core.parser.ast.declaration.FunDeclaration
-import puzzle.core.parser.ast.node.NamedType
-import puzzle.core.parser.ast.node.TypeReference
+import puzzle.core.parser.ast.NamedType
+import puzzle.core.parser.ast.TypeReference
 import puzzle.core.parser.matcher.statement.parseStatement
 import puzzle.core.parser.parser.PzlParser
 import puzzle.core.parser.parser.PzlParserProvider
@@ -26,9 +26,9 @@ class FunDeclarationParser private constructor(
 
     context(_: PzlContext)
     fun parse(
-        genericSpec: GenericSpec?,
-        contextSpec: ContextSpec?,
-        modifiers: List<Modifier>
+	    typeSpec: TypeSpec?,
+	    contextSpec: ContextSpec?,
+	    modifiers: List<Modifier>
     ): FunDeclaration {
         val name = IdentifierNameParser.of(cursor).parse(IdentifierNameTarget.FUN)
         val (funName, extension) = if (cursor.check(PzlTokenType.DOT)) {
@@ -69,7 +69,7 @@ class FunDeclarationParser private constructor(
             modifiers = modifiers,
             returnTypes = returnTypes,
             extension = extension,
-            genericSpec = genericSpec,
+            typeSpec = typeSpec,
             contextSpec = contextSpec,
             statements = statements
         )

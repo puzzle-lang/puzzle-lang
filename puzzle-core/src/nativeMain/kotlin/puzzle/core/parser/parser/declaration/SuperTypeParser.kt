@@ -11,7 +11,7 @@ import puzzle.core.parser.ast.declaration.SuperTrait
 import puzzle.core.parser.ast.declaration.SuperType
 import puzzle.core.parser.ast.expression.InvokeType
 import puzzle.core.parser.parser.expression.parseArguments
-import puzzle.core.parser.ast.node.NamedType
+import puzzle.core.parser.ast.NamedType
 import puzzle.core.parser.parser.node.TypeReferenceParser
 
 context(_: PzlContext)

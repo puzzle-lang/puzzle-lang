@@ -34,7 +34,7 @@ class MemoryUsage(
 		}
 		val gb = (usageBytes / (1024L * 1024L * 1024L)) % 1024L
 		if (gb > 0L) {
-			sb.append("$tb GB ")
+			sb.append("$gb GB ")
 		}
 		val mb = (usageBytes / (1024L * 1024L)) % 1024L
 		if (mb > 0L) {

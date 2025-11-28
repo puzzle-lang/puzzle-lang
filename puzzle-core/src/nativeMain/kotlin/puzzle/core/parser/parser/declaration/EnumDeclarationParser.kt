@@ -5,7 +5,7 @@ import puzzle.core.exception.syntaxError
 import puzzle.core.lexer.PzlTokenType
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.binding.ContextSpec
-import puzzle.core.parser.ast.binding.GenericSpec
+import puzzle.core.parser.ast.binding.TypeSpec
 import puzzle.core.parser.ast.declaration.Declaration
 import puzzle.core.parser.ast.declaration.EnumDeclaration
 import puzzle.core.parser.ast.declaration.EnumEntry
@@ -25,9 +25,9 @@ class EnumDeclarationParser private constructor(
 
     context(_: PzlContext)
     fun parse(
-        genericSpec: GenericSpec?,
-        contextSpec: ContextSpec?,
-        modifiers: List<Modifier>
+	    typeSpec: TypeSpec?,
+	    contextSpec: ContextSpec?,
+	    modifiers: List<Modifier>
     ): EnumDeclaration {
         val name = IdentifierNameParser.of(cursor).parse(IdentifierNameTarget.ENUM)
         val parameters = parseEnumParameters(cursor)
@@ -47,7 +47,7 @@ class EnumDeclarationParser private constructor(
             modifiers = modifiers,
             parameters = parameters,
             entries = entries,
-            genericSpec = genericSpec,
+            typeSpec = typeSpec,
             contextSpec = contextSpec,
             members = members,
         )

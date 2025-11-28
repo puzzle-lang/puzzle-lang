@@ -53,7 +53,7 @@ enum class IdentifierNameTarget(
 		isSupportedAnonymity = true,
 		notFoundMessage = "上下文参数缺少名称",
 	),
-	GENERIC_PARAMETER(
+	TYPE_PARAMETER(
 		isSupportedAnonymity = false,
 		notFoundMessage = "泛型参数缺少名称",
 		notSupportedAnonymityMessage = "泛型参数不支持匿名"

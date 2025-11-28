@@ -4,10 +4,10 @@ import puzzle.core.PzlContext
 import puzzle.core.lexer.PzlTokenType
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.binding.ContextSpec
-import puzzle.core.parser.ast.binding.GenericSpec
+import puzzle.core.parser.ast.binding.TypeSpec
 import puzzle.core.parser.ast.declaration.AnnotationDeclaration
-import puzzle.core.parser.parser.binding.generic.GenericTarget
-import puzzle.core.parser.parser.binding.generic.check
+import puzzle.core.parser.parser.binding.type.TypeTarget
+import puzzle.core.parser.parser.binding.type.check
 import puzzle.core.parser.parser.declaration.AnnotationDeclarationParser
 import puzzle.core.parser.parser.modifier.ModifierTarget
 import puzzle.core.parser.parser.modifier.check
@@ -21,13 +21,13 @@ object TopLevelAnnotationDeclarationMatcher : TopLevelDeclarationMatcher<Annotat
 	
 	context(_: PzlContext)
 	override fun parse(
-        cursor: PzlTokenCursor,
-        genericSpec: GenericSpec?,
-        contextSpec: ContextSpec?,
-        modifiers: List<Modifier>
+		cursor: PzlTokenCursor,
+		typeSpec: TypeSpec?,
+		contextSpec: ContextSpec?,
+		modifiers: List<Modifier>
 	): AnnotationDeclaration {
-		genericSpec?.check(cursor, GenericTarget.ANNOTATION)
+		typeSpec?.check(cursor, TypeTarget.ANNOTATION)
 		modifiers.check(cursor, ModifierTarget.TOP_LEVEL_ANNOTATION)
-		return AnnotationDeclarationParser.of(cursor).parse(genericSpec, modifiers)
+		return AnnotationDeclarationParser.of(cursor).parse(typeSpec, modifiers)
 	}
 }
