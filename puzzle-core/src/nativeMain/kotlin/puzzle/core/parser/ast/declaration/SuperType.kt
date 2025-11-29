@@ -10,12 +10,12 @@ sealed interface SuperType {
 }
 
 @Serializable
-data class SuperClass(
+class SuperClass(
 	override val type: TypeReference,
 	val arguments: List<Argument> = emptyList(),
 ) : SuperType
 
 @Serializable
-data class SuperTrait(
+class SuperTrait(
 	override val type: TypeReference,
 ) : SuperType

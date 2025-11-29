@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 import puzzle.core.util.DotSeparatedListSerializer
 
 @Serializable
-data class ImportDeclaration(
+class ImportDeclaration(
 	@Serializable(with = DotSeparatedListSerializer::class)
 	val segments: List<String>,
 	val alias: String?,

@@ -6,7 +6,7 @@ import puzzle.core.parser.ast.TypeReference
 import puzzle.core.symbol.Modifier
 
 @Serializable
-data class Parameter(
+class Parameter(
 	val name: String?,
 	val modifiers: List<Modifier>,
 	val typeReference: TypeReference,

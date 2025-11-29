@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 import puzzle.core.PzlContext
 
 @Serializable
-data class PzlToken(
+class PzlToken(
 	val type: PzlTokenType,
 	val value: String,
 	val start: Int,

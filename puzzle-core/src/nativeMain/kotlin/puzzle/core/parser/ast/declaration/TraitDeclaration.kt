@@ -6,7 +6,7 @@ import puzzle.core.parser.ast.binding.TypeSpec
 import puzzle.core.symbol.Modifier
 
 @Serializable
-data class TraitDeclaration(
+class TraitDeclaration(
 	val name: String,
 	val modifiers: List<Modifier>,
 	val typeSpec: TypeSpec?,

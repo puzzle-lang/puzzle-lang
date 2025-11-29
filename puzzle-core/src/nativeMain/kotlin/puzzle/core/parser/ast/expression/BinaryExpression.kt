@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 import puzzle.core.symbol.Operator
 
 @Serializable
-data class BinaryExpression(
+class BinaryExpression(
 	val left: Expression,
 	val operator: Operator,
 	val right: Expression,

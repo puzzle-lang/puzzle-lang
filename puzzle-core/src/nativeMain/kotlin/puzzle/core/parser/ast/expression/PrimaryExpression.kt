@@ -3,16 +3,16 @@ package puzzle.core.parser.ast.expression
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class NumberLiteral(val value: String) : Expression
+class NumberLiteral(val value: String) : Expression
 
 @Serializable
-data class StringLiteral(val value: String) : Expression
+class StringLiteral(val value: String) : Expression
 
 @Serializable
-data class BooleanLiteral(val value: Boolean) : Expression
+class BooleanLiteral(val value: Boolean) : Expression
 
 @Serializable
-data class CharLiteral(val value: String) : Expression
+class CharLiteral(val value: String) : Expression
 
 @Serializable
 data object ThisLiteral : Expression
@@ -24,4 +24,4 @@ data object SuperLiteral : Expression
 data object NullLiteral : Expression
 
 @Serializable
-data class IdentifierExpression(val name: String) : Expression
+class IdentifierExpression(val name: String) : Expression

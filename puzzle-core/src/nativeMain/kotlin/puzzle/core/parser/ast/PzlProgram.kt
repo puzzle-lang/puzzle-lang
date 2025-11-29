@@ -3,6 +3,6 @@ package puzzle.core.parser.ast
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class PzlProgram(
+class PzlProgram(
 	val files: List<SourceFileNode>
 )

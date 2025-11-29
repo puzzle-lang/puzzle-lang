@@ -7,7 +7,7 @@ import puzzle.core.parser.ast.TypeReference
 import puzzle.core.symbol.Modifier
 
 @Serializable
-data class ExtensionDeclaration(
+class ExtensionDeclaration(
 	val extendedType: TypeReference,
 	val modifiers: List<Modifier>,
 	val superTraits: List<SuperTrait>,

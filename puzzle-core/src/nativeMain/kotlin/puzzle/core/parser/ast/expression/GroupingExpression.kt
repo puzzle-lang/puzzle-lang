@@ -6,6 +6,6 @@ import kotlinx.serialization.Serializable
  * 括号表达式
  */
 @Serializable
-data class GroupingExpression(
+class GroupingExpression(
 	val expression: Expression
 ) : Expression

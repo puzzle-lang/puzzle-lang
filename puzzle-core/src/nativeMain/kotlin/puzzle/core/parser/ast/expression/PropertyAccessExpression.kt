@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 import puzzle.core.lexer.PzlTokenType
 
 @Serializable
-data class PropertyAccessExpression(
+class PropertyAccessExpression(
 	val receiver: Expression,
 	val operator: AccessOperator,
 	val expression: Expression

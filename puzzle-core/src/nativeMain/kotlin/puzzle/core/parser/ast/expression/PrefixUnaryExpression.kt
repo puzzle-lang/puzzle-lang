@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 import puzzle.core.symbol.Operator
 
 @Serializable
-data class PrefixUnaryExpression(
+class PrefixUnaryExpression(
 	val operator: Operator,
 	val expression: Expression
 ) : Expression

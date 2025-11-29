@@ -5,7 +5,7 @@ import puzzle.core.parser.ast.expression.Expression
 import puzzle.core.parser.ast.TypeReference
 
 @Serializable
-data class VariableDeclarationStatement(
+class VariableDeclarationStatement(
 	val name: String,
 	val initializer: Expression?,
 	val isVariable: Boolean,

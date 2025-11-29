@@ -5,7 +5,7 @@ import puzzle.core.parser.ast.binding.Parameter
 import puzzle.core.util.DotSeparatedListSerializer
 
 @Serializable
-data class TypeReference(
+class TypeReference(
 	val type: Type,
 	val isNullable: Boolean = false
 )
@@ -14,7 +14,7 @@ data class TypeReference(
 sealed interface Type
 
 @Serializable
-data class NamedType(
+class NamedType(
 	@Serializable(with = DotSeparatedListSerializer::class)
 	val segments: List<String>
 ) : Type {
@@ -28,7 +28,7 @@ data class NamedType(
 }
 
 @Serializable
-data class LambdaType(
+class LambdaType(
 	val parameters: List<Parameter>,
 	val returnTypes: List<TypeReference>
 ) : Type

@@ -5,7 +5,7 @@ import puzzle.core.parser.ast.TokenRange
 import puzzle.core.parser.ast.TypeReference
 
 @Serializable
-data class TypeParameter(
+class TypeParameter(
 	val name: String,
 	val variance: Variance?,
 	val bounds: List<TypeReference>,
@@ -14,7 +14,7 @@ data class TypeParameter(
 )
 
 @Serializable
-data class TypeSpec(
+class TypeSpec(
 	val isReified: Boolean,
 	val parameters: List<TypeParameter>,
 	val location: TokenRange

@@ -6,7 +6,7 @@ import puzzle.core.parser.ast.declaration.ImportDeclaration
 import puzzle.core.parser.ast.declaration.PackageDeclaration
 
 @Serializable
-data class SourceFileNode(
+class SourceFileNode(
 	val path: String,
 	val packageDeclaration: PackageDeclaration,
 	val importDeclarations: List<ImportDeclaration>,

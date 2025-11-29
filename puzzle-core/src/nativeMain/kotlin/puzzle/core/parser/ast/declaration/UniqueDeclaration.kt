@@ -5,7 +5,7 @@ import puzzle.core.parser.ast.binding.ContextSpec
 import puzzle.core.symbol.Modifier
 
 @Serializable
-data class UniqueDeclaration(
+class UniqueDeclaration(
     val name: String,
     val modifiers: List<Modifier>,
     val contextSpec: ContextSpec?,

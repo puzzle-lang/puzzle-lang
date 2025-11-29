@@ -5,7 +5,7 @@ import puzzle.core.parser.ast.AstNode
 import puzzle.core.util.DotSeparatedListSerializer
 
 @Serializable
-data class PackageDeclaration(
+class PackageDeclaration(
 	@Serializable(with = DotSeparatedListSerializer::class)
 	val segments: List<String>,
 ) : AstNode

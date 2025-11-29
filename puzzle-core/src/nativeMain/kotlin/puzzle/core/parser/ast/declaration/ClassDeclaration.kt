@@ -7,7 +7,7 @@ import puzzle.core.parser.ast.binding.Parameter
 import puzzle.core.symbol.Modifier
 
 @Serializable
-data class ClassDeclaration(
+class ClassDeclaration(
 	val name: String,
 	val modifiers: List<Modifier>,
 	val constructorModifiers: List<Modifier>,

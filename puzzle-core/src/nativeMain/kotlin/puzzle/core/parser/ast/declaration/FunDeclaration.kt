@@ -9,7 +9,7 @@ import puzzle.core.parser.ast.statement.Statement
 import puzzle.core.symbol.Modifier
 
 @Serializable
-data class FunDeclaration(
+class FunDeclaration(
 	val name: String,
 	val parameters: List<Parameter>,
 	val modifiers: List<Modifier>,

@@ -11,19 +11,19 @@ sealed interface InvokeExpression : Expression {
 }
 
 @Serializable
-data class CallExpression(
+class CallExpression(
 	override val callee: Expression,
 	override val arguments: List<Argument> = emptyList(),
 ) : InvokeExpression
 
 @Serializable
-data class IndexAccessExpression(
+class IndexAccessExpression(
 	override val callee: Expression,
 	override val arguments: List<Argument> = emptyList(),
 ) : InvokeExpression
 
 @Serializable
-data class Argument(
+class Argument(
 	val name: String?,
 	val expression: Expression,
 )

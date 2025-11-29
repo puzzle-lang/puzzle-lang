@@ -7,7 +7,7 @@ import puzzle.core.parser.ast.binding.Parameter
 import puzzle.core.symbol.Modifier
 
 @Serializable
-data class EnumDeclaration(
+class EnumDeclaration(
 	val name: String,
 	val modifiers: List<Modifier>,
 	val parameters: List<Parameter>,
@@ -18,7 +18,7 @@ data class EnumDeclaration(
 ) : Declaration
 
 @Serializable
-data class EnumEntry(
+class EnumEntry(
 	val name: String,
 	val members: List<Declaration>,
 )
