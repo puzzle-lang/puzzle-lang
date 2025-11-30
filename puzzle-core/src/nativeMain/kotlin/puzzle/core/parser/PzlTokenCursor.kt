@@ -76,8 +76,4 @@ class PzlTokenCursor(
 	operator fun get(index: Int): PzlToken {
 		return tokens[index]
 	}
-	
-	fun getOrNull(index: Int): PzlToken? {
-		return tokens.getOrNull(index)
-	}
 }
