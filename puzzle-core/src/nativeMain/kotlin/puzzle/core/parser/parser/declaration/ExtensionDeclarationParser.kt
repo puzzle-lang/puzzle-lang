@@ -10,7 +10,7 @@ import puzzle.core.parser.ast.declaration.SuperTrait
 import puzzle.core.parser.matcher.declaration.member.parseMemberDeclaration
 import puzzle.core.parser.parser.PzlParser
 import puzzle.core.parser.parser.PzlParserProvider
-import puzzle.core.parser.parser.node.TypeReferenceParser
+import puzzle.core.parser.parser.TypeReferenceParser
 import puzzle.core.symbol.Modifier
 
 class ExtensionDeclarationParser private constructor(

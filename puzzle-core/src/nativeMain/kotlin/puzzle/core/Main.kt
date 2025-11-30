@@ -12,7 +12,6 @@ import puzzle.core.parser.ast.PzlProgram
 import puzzle.core.parser.parser.SourceFileNodeParser
 import puzzle.core.util.currentMemoryUsage
 import kotlin.time.measureTime
-import kotlin.time.measureTimedValue
 
 fun main(vararg args: String) {
 	val duration = measureTime {
@@ -41,23 +40,13 @@ private fun run(paths: List<String>) = runBlocking {
 	val files = paths.toSet().map(::File).distinctBy { it.absolutePath }
 	val jobs = files.map { file ->
 		async(Dispatchers.Default) {
-			val source = measureTimedValue {
-				file.readText().toCharArray()
-			}
-			println("READ: ${source.duration}")
-			val lineStarts = source.value.getLineStarts()
+			val source = file.readText().toCharArray()
+			val lineStarts = source.getLineStarts()
 			val context = PzlContext(file.absolutePath, lineStarts)
 			context(context) {
-				val rawTokens = measureTimedValue {
-					PzlLexer(source.value).lex()
-				}
-				println("LEX: ${rawTokens.duration}")
-				val cursor = PzlTokenCursor(rawTokens.value)
-				val node = measureTimedValue {
-					SourceFileNodeParser.of(cursor).parse()
-				}
-				println("PARSE: ${node.duration}")
-				node.value
+				val tokens = PzlLexer(source).lex()
+				val cursor = PzlTokenCursor(tokens)
+				SourceFileNodeParser.of(cursor).parse()
 			}
 		}
 	}

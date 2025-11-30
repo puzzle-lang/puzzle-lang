@@ -15,7 +15,7 @@ import puzzle.core.parser.parser.PzlParserProvider
 import puzzle.core.parser.parser.binding.parameter.parseFunParameters
 import puzzle.core.parser.parser.identifier.IdentifierNameParser
 import puzzle.core.parser.parser.identifier.IdentifierNameTarget
-import puzzle.core.parser.parser.node.TypeReferenceParser
+import puzzle.core.parser.parser.TypeReferenceParser
 import puzzle.core.symbol.Modifier
 
 class FunDeclarationParser private constructor(

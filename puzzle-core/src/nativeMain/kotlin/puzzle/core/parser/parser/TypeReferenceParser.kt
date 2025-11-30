@@ -1,4 +1,4 @@
-package puzzle.core.parser.parser.node
+package puzzle.core.parser.parser
 
 import puzzle.core.PzlContext
 import puzzle.core.exception.syntaxError
@@ -6,9 +6,8 @@ import puzzle.core.lexer.PzlTokenType
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.LambdaType
 import puzzle.core.parser.ast.NamedType
+import puzzle.core.parser.ast.TypeArgument
 import puzzle.core.parser.ast.TypeReference
-import puzzle.core.parser.parser.PzlParser
-import puzzle.core.parser.parser.PzlParserProvider
 import puzzle.core.parser.parser.binding.parameter.parseLambdaParameters
 import puzzle.core.parser.parser.identifier.IdentifierNameParser
 import puzzle.core.parser.parser.identifier.IdentifierNameTarget
@@ -107,10 +106,11 @@ class TypeReferenceParser private constructor(
 	
 	context(_: PzlContext)
 	private fun parseNamedType(isSupportedNullable: Boolean): TypeReference {
-		val type = mutableListOf<String>()
+		val segments = mutableListOf<String>()
 		do {
-			type += IdentifierNameParser.of(cursor).parse(IdentifierNameTarget.TYPE_REFERENCE)
+			segments += IdentifierNameParser.of(cursor).parse(IdentifierNameTarget.TYPE_REFERENCE)
 		} while (cursor.match(PzlTokenType.DOT))
+		val typeArguments = parseTypeArguments()
 		var isNullable = false
 		while (cursor.match(PzlTokenType.QUESTION)) {
 			isNullable = true
@@ -119,8 +119,23 @@ class TypeReferenceParser private constructor(
 			syntaxError("不支持可空类型", cursor.previous)
 		}
 		return TypeReference(
-			type = NamedType(type),
+			type = NamedType(segments, typeArguments),
 			isNullable = isNullable,
 		)
+	}
+	
+	context(_: PzlContext)
+	private fun parseTypeArguments(): List<TypeArgument> {
+		if (!cursor.match(PzlTokenType.LT)) {
+			return emptyList()
+		}
+		val arguments = mutableListOf<TypeArgument>()
+		do {
+			arguments += TypeArgumentParser.of(cursor).parse()
+			if (!cursor.check(PzlTokenType.GT)) {
+				cursor.expect(PzlTokenType.COMMA, "泛型参数缺少 ','")
+			}
+		} while (!cursor.match(PzlTokenType.GT))
+		return arguments
 	}
 }

@@ -9,7 +9,7 @@ import puzzle.core.parser.parser.PzlParser
 import puzzle.core.parser.parser.PzlParserProvider
 import puzzle.core.parser.parser.identifier.IdentifierNameParser
 import puzzle.core.parser.parser.identifier.IdentifierNameTarget
-import puzzle.core.parser.parser.node.TypeReferenceParser
+import puzzle.core.parser.parser.TypeReferenceParser
 import puzzle.core.symbol.Modifier
 
 class ParameterParser private constructor(

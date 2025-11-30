@@ -13,7 +13,7 @@ import puzzle.core.parser.parser.PzlParser
 import puzzle.core.parser.parser.PzlParserProvider
 import puzzle.core.parser.parser.identifier.IdentifierNameParser
 import puzzle.core.parser.parser.identifier.IdentifierNameTarget
-import puzzle.core.parser.parser.node.TypeReferenceParser
+import puzzle.core.parser.parser.TypeReferenceParser
 
 context(_: PzlContext)
 fun parseTypeParameters(cursor: PzlTokenCursor): List<TypeParameter> {

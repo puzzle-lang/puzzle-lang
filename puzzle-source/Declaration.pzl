@@ -216,3 +216,9 @@ context(_: Type)
 fun context2() {
 
 }
+
+class IntList : List<Int> {
+
+}
+
+class DoubleList : List<T = Int>

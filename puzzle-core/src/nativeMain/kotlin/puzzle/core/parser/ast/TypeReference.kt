@@ -16,7 +16,8 @@ sealed interface Type
 @Serializable
 class NamedType(
 	@Serializable(with = DotSeparatedListSerializer::class)
-	val segments: List<String>
+	val segments: List<String>,
+	val typeArguments: List<TypeArgument> = emptyList()
 ) : Type {
 	
 	companion object {

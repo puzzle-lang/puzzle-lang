@@ -12,6 +12,7 @@ import puzzle.core.parser.matcher.expression.parseCompleteExpression
 import puzzle.core.parser.parser.PzlParser
 import puzzle.core.parser.parser.PzlParserProvider
 import puzzle.core.parser.parser.identifier.IdentifierNameParser
+import puzzle.core.parser.parser.identifier.IdentifierNameTarget
 
 context(_: PzlContext)
 fun parseArguments(cursor: PzlTokenCursor, type: InvokeType): List<Argument> {
@@ -35,13 +36,9 @@ private class CallArgumentParser private constructor(
 	context(_: PzlContext)
 	fun parse(type: InvokeType): Argument {
 		val name = if (cursor.offsetOrNull(offset = 1)?.type == PzlTokenType.ASSIGN) {
-			val parser = IdentifierNameParser.of(cursor)
-			if (!parser.match()) {
-				syntaxError("参数名称必须为标识符", cursor.previous)
+			IdentifierNameParser.of(cursor).parse(IdentifierNameTarget.ARGUMENT).also {
+				cursor.advance()
 			}
-			val name = cursor.previous.value
-			cursor.advance()
-			name
 		} else null
 		val expression = parseCompleteExpression(cursor)
 		if (cursor.previous.type == PzlTokenType.SEMICOLON) {

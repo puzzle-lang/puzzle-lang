@@ -17,6 +17,7 @@ data object CharRecognizer : TokenRecognizer {
 			val value = input[start + 1].toString()
 			return PzlToken(PzlTokenType.CHAR, value, TokenRange(start, start + 3))
 		}
+		mutableListOf("")
 		if (start + 3 < input.size && input[start + 3] == '\'' && input[start + 1] == '\\') {
 			val escape = input.concatToString(start + 1, start + 3)
 			if (escape in EscapeType.standardEscapes) {

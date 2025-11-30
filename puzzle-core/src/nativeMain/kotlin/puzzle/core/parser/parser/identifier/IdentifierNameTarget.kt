@@ -106,5 +106,15 @@ enum class IdentifierNameTarget(
 		isSupportedAnonymity = false,
 		notFoundMessage = "访问操作符后必须跟标识符",
 		notSupportedAnonymityMessage = "访问操作符后不支持匿名标识符"
-	)
+	),
+	ARGUMENT(
+		isSupportedAnonymity = false,
+		notFoundMessage = "参数名称必须为标识符",
+		notSupportedAnonymityMessage = "参数不支持匿名"
+	),
+	TYPE_ARGUMENT(
+		isSupportedAnonymity = false,
+		notFoundMessage = "泛型参数名称必须为标识符",
+		notSupportedAnonymityMessage = "泛型参数不支持匿名"
+	),
 }

@@ -15,10 +15,9 @@ private class SyntaxException(
 
 private fun getTokenInfo(token: PzlToken?): String {
 	if (token == null) return ""
-	return if (token.type in setOf(IDENTIFIER, STRING, CHAR, NUMBER)) {
-		">> ${token.value} << "
-	} else {
-		">> ${token.type.value} << "
+	return when (token.type) {
+		IDENTIFIER, STRING, CHAR, NUMBER -> ">> ${token.value} << "
+		else -> ">> ${token.type.value} << "
 	}
 }
 
