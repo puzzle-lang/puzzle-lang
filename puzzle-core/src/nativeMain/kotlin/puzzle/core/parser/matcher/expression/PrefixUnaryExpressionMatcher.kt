@@ -9,7 +9,7 @@ import puzzle.core.parser.parser.expression.PrefixUnaryExpressionParser
 
 object PrefixUnaryExpressionMatcher : ExpressionMatcher<PrefixUnaryExpression> {
 	
-	private val tokenTypes = listOf(
+	private val tokenTypes = arrayOf(
 		PzlTokenType.PLUS,
 		PzlTokenType.MINUS,
 		PzlTokenType.BANG,

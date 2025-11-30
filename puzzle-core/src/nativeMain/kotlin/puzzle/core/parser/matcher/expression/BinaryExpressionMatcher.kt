@@ -10,7 +10,7 @@ import puzzle.core.parser.parser.expression.BinaryExpressionParser
 
 object BinaryExpressionMatcher : ExpressionMatcher<BinaryExpression> {
 	
-	private val tokenTypes = listOf(
+	private val tokenTypes = setOf(
 		PzlTokenType.PLUS,
 		PzlTokenType.MINUS,
 		PzlTokenType.STAR,
@@ -43,7 +43,7 @@ object BinaryExpressionMatcher : ExpressionMatcher<BinaryExpression> {
 	context(_: PzlContext)
 	override fun parse(cursor: PzlTokenCursor, left: Expression?): BinaryExpression {
 		if (left == null) {
-			syntaxError("二元运算符未解析到左值", cursor.offset(offset = -2))
+			syntaxError("二元运算符未解析到左值", cursor.previous)
 		}
 		return BinaryExpressionParser.of(cursor).parse(left)
 	}

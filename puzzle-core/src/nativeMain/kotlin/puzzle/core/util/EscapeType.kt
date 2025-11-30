@@ -15,6 +15,6 @@ enum class EscapeType(
 	
 	companion object {
 		
-		val standardEscapes = entries.filter { it != UNICODE }.map { it.escape }
+		val standardEscapes = entries.filter { it != UNICODE }.map { it.escape }.toSet()
 	}
 }

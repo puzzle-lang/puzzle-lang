@@ -4,6 +4,7 @@ import puzzle.core.PzlContext
 import puzzle.core.exception.syntaxError
 import puzzle.core.lexer.PzlToken
 import puzzle.core.lexer.PzlTokenType
+import puzzle.core.parser.ast.TokenRange
 import puzzle.core.util.isBinary
 import puzzle.core.util.isDecimal
 import puzzle.core.util.isHex
@@ -14,7 +15,7 @@ data object NumberRecognizer : TokenRecognizer {
 	private val legalEndChars = " +-*/%=><!&|^~,;:)]}\n\t".toSet()
 	
 	context(_: PzlContext)
-	override fun tryParse(input: CharArray, start: Int, line: Int, column: Int): PzlToken? {
+	override fun tryParse(input: CharArray, start: Int): PzlToken? {
 		if (!input[start].isDecimal()) return null
 		val numberSystem = if (input[start] == '0' && start + 1 < input.size) {
 			val symbol = input[start + 1]
@@ -31,10 +32,10 @@ data object NumberRecognizer : TokenRecognizer {
 			when {
 				c == '.' -> {
 					if (meta.isDecimals || numberSystem != NumberSystem.DECIMAL) {
-						incorrectDigitalFormat(line, column)
+						incorrectDigitalFormat(start)
 					}
 					if (position + 1 < input.size && !input[position + 1].isDecimal()) {
-						incorrectDigitalFormat(line, column)
+						incorrectDigitalFormat(start)
 					}
 					meta.isDecimals = true
 					position++
@@ -42,7 +43,7 @@ data object NumberRecognizer : TokenRecognizer {
 				
 				c == 'u' || c == 'U' -> {
 					if (meta.isLong || meta.isFloat || meta.isUnsigned) {
-						incorrectDigitalFormat(line, column)
+						incorrectDigitalFormat(start)
 					}
 					meta.isUnsigned = true
 					meta.isNumberFinished = true
@@ -51,7 +52,7 @@ data object NumberRecognizer : TokenRecognizer {
 				
 				c == 'L' -> {
 					if (meta.isLong || meta.isFloat) {
-						incorrectDigitalFormat(line, column)
+						incorrectDigitalFormat(start)
 					}
 					meta.isLong = true
 					meta.isNumberFinished = true
@@ -60,7 +61,7 @@ data object NumberRecognizer : TokenRecognizer {
 				
 				(c == 'f' || c == 'F') && numberSystem != NumberSystem.HEX -> {
 					if (meta.isLong || meta.isFloat || meta.isUnsigned || numberSystem != NumberSystem.DECIMAL) {
-						incorrectDigitalFormat(line, column)
+						incorrectDigitalFormat(start)
 					}
 					meta.isFloat = true
 					meta.isNumberFinished = true
@@ -84,24 +85,16 @@ data object NumberRecognizer : TokenRecognizer {
 				}
 				
 				c in legalEndChars -> break
-				else -> {
-					incorrectDigitalFormat(line, column)
-				}
+				else -> incorrectDigitalFormat(start)
 			}
 		}
-		return PzlToken(
-			PzlTokenType.NUMBER,
-			input.concatToString(start, position),
-			start,
-			position,
-			line,
-			column
-		)
+		val value = input.concatToString(start, position)
+		return PzlToken(PzlTokenType.NUMBER, value, TokenRange(start, position))
 	}
 	
 	context(_: PzlContext)
-	private fun incorrectDigitalFormat(line: Int, column: Int): Nothing {
-		syntaxError("数字格式错误", line, column)
+	private fun incorrectDigitalFormat(position: Int): Nothing {
+		syntaxError("数字格式错误", position)
 	}
 }
 

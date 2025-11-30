@@ -1,16 +1,17 @@
 package puzzle.core.exception
 
+import puzzle.core.LineColumn
 import puzzle.core.PzlContext
+import puzzle.core.getLineColumn
 import puzzle.core.lexer.PzlToken
 import puzzle.core.lexer.PzlTokenType.*
 
 private class SyntaxException(
 	message: String,
 	sourcePath: String,
-	line: Int,
-	column: Int,
+	lineColumn: LineColumn,
 	token: PzlToken?
-) : Exception("错误位置: $sourcePath:$line:$column ${getTokenInfo(token)}$message.")
+) : Exception("错误位置: $sourcePath:${lineColumn.line}:${lineColumn.column} ${getTokenInfo(token)}$message.")
 
 private fun getTokenInfo(token: PzlToken?): String {
 	if (token == null) return ""
@@ -22,11 +23,13 @@ private fun getTokenInfo(token: PzlToken?): String {
 }
 
 context(context: PzlContext)
-fun syntaxError(message: String, line: Int, column: Int): Nothing {
-	throw SyntaxException(message, context.sourcePath, line, column, null)
+fun syntaxError(message: String, position: Int): Nothing {
+	val lineColumn = getLineColumn(position)
+	throw SyntaxException(message, context.sourcePath, lineColumn, null)
 }
 
 context(context: PzlContext)
 fun syntaxError(message: String, token: PzlToken): Nothing {
-	throw SyntaxException(message, context.sourcePath, token.line, token.column, token)
+	val lineColumn = token.lineColumn
+	throw SyntaxException(message, context.sourcePath, lineColumn, token)
 }

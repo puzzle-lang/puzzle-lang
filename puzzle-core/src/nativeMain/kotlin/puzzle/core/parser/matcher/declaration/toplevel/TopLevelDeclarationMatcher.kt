@@ -25,7 +25,7 @@ sealed interface TopLevelDeclarationMatcher<out D : Declaration> {
     ): D
 }
 
-private val matchers = listOf(
+private val matchers = arrayOf(
     TopLevelFunDeclarationMatcher,
     TopLevelClassDeclarationMatcher,
     TopLevelUniqueDeclarationMatcher,

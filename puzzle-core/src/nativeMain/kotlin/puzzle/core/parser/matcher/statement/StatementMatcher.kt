@@ -14,7 +14,7 @@ sealed interface StatementMatcher<S : Statement> {
 	fun parse(cursor: PzlTokenCursor): S
 }
 
-private val matchers = listOf(
+private val matchers = arrayOf(
 	VariableDeclarationStatementMatcher
 )
 

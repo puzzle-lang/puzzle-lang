@@ -118,7 +118,7 @@ class PostfixExpressionParser private constructor(
 	}
 }
 
-private val accessTokenTypes = listOf(
+private val accessTokenTypes = setOf(
 	PzlTokenType.DOT,
 	PzlTokenType.QUESTION_DOT,
 	PzlTokenType.DOUBLE_COLON

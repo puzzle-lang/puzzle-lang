@@ -9,10 +9,9 @@ import puzzle.core.parser.parser.expression.SuffixUnaryExpressionParser
 
 object SuffixUnaryExpressionMatcher : ExpressionMatcher<SuffixUnaryExpression> {
 	
-	private val tokenTypes = listOf(PzlTokenType.DOUBLE_PLUS, PzlTokenType.DOUBLE_MINUS)
-	
 	override fun match(cursor: PzlTokenCursor, left: Expression?): Boolean {
-		return cursor.next.type in tokenTypes
+		val type = cursor.next.type
+		return type == PzlTokenType.DOUBLE_PLUS || type == PzlTokenType.DOUBLE_MINUS
 	}
 	
 	context(_: PzlContext)

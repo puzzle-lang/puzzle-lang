@@ -4,11 +4,12 @@ import puzzle.core.PzlContext
 import puzzle.core.exception.syntaxError
 import puzzle.core.lexer.PzlToken
 import puzzle.core.lexer.PzlTokenType
+import puzzle.core.parser.ast.TokenRange
 
 data object IdentifierRecognizer : TokenRecognizer {
 	
 	context(_: PzlContext)
-	override fun tryParse(input: CharArray, start: Int, line: Int, column: Int): PzlToken? {
+	override fun tryParse(input: CharArray, start: Int): PzlToken? {
 		val char = input[start]
 		if (!char.isEnglishLetter() && char != '_') return null
 		var position = start + 1
@@ -16,15 +17,11 @@ data object IdentifierRecognizer : TokenRecognizer {
 			position++
 		}
 		val identifier = input.concatToString(start, position)
-		var isValid = identifier == "_"
-		for (c in identifier) {
-			if (isValid) break
-			isValid = c != '_'
-		}
+		val isValid = identifier == "_" || identifier.any { it != '_' }
 		if (!isValid) {
-			syntaxError("不合法的标识符", line, column)
+			syntaxError("不合法的标识符", start)
 		}
-		return PzlToken(PzlTokenType.IDENTIFIER, identifier, start, position, line, column)
+		return PzlToken(PzlTokenType.IDENTIFIER, identifier, TokenRange(start, position))
 	}
 	
 	private fun Char.isEnglishLetter(): Boolean {

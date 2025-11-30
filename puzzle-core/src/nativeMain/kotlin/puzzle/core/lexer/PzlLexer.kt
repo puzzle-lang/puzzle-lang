@@ -2,18 +2,16 @@ package puzzle.core.lexer
 
 import puzzle.core.PzlContext
 import puzzle.core.exception.syntaxError
+import puzzle.core.lexer.PzlTokenType.*
 import puzzle.core.lexer.recognizer.*
-import puzzle.core.util.TAB_LENGTH
 
 class PzlLexer(
 	private val input: CharArray
 ) {
 	
 	private var position = 0
-	private var line = 1
-	private var column = 1
 	
-	private val recognizers = listOf(
+	private val recognizers = arrayOf(
 		EOFRecognizer,
 		WhiteSpaceRecognizer,
 		TabRecognizer,
@@ -33,7 +31,7 @@ class PzlLexer(
 			while (true) {
 				val token = nextToken()
 				this += token
-				if (token.type == PzlTokenType.EOF) break
+				if (token.type == EOF) break
 			}
 		}
 	}
@@ -41,25 +39,13 @@ class PzlLexer(
 	context(_: PzlContext)
 	private fun nextToken(): PzlToken {
 		recognizers.forEach {
-			val token = it.tryParse(input, position, line, column) ?: return@forEach
-			position = token.end
-			column += if (token.type != PzlTokenType.TAB) token.length else token.length * TAB_LENGTH
-			if (token.line != token.endLine) {
-				line = token.endLine
-			}
+			val token = it.tryParse(input, position) ?: return@forEach
+			position = token.range.end
 			return when (token.type) {
-				PzlTokenType.NEWLINE -> doNewline()
-				PzlTokenType.WHITE_SPACE, PzlTokenType.TAB -> nextToken()
+				NEWLINE, WHITE_SPACE, TAB, SINGLE_LINE_COMMENT, MULTI_LINE_COMMENT -> nextToken()
 				else -> token
 			}
 		}
-		syntaxError("${input[position]} 无法被识别", line, column)
-	}
-	
-	context(_: PzlContext)
-	private fun doNewline(): PzlToken {
-		column = 1
-		line++
-		return nextToken()
+		syntaxError("${input[position]} 无法被识别", position)
 	}
 }

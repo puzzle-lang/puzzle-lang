@@ -6,5 +6,5 @@ import puzzle.core.lexer.PzlToken
 sealed interface TokenRecognizer {
 	
 	context(_: PzlContext)
-	fun tryParse(input: CharArray, start: Int, line: Int, column: Int): PzlToken?
+	fun tryParse(input: CharArray, start: Int): PzlToken?
 }

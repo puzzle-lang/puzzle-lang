@@ -14,7 +14,7 @@ sealed interface ExpressionMatcher<out E : Expression> {
 	fun parse(cursor: PzlTokenCursor, left: Expression?): E
 }
 
-private val matchers = listOf(
+private val matchers = arrayOf(
 	GroupingExpressionMatcher,
 	PrefixUnaryExpressionMatcher,
 	SuffixUnaryExpressionMatcher,
@@ -49,12 +49,15 @@ private val nonConsumerEndTokenTypes = setOf(
 	PzlTokenType.COMMA
 )
 
+context(_: PzlContext)
 private fun isAtExpressionEnd(cursor: PzlTokenCursor): Boolean {
 	val exists = endTokenTypes.any { cursor.match(it) } ||
 			nonConsumerEndTokenTypes.any { cursor.check(it) }
 	if (exists) return true
 	val previous = cursor.previous
 	val current = cursor.current
-	if (previous.line == current.line) return false
-	return previous.line < current.line && current.type != PzlTokenType.AND && current.type != PzlTokenType.OR
+	val previousLine = previous.lineColumn.line
+	val currentLine = current.lineColumn.line
+	if (previousLine == currentLine) return false
+	return previousLine < currentLine && current.type != PzlTokenType.AND && current.type != PzlTokenType.OR
 }

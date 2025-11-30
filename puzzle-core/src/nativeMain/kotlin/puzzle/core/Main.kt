@@ -12,6 +12,7 @@ import puzzle.core.parser.ast.PzlProgram
 import puzzle.core.parser.parser.SourceFileNodeParser
 import puzzle.core.util.currentMemoryUsage
 import kotlin.time.measureTime
+import kotlin.time.measureTimedValue
 
 fun main(vararg args: String) {
 	val duration = measureTime {
@@ -40,23 +41,40 @@ private fun run(paths: List<String>) = runBlocking {
 	val files = paths.toSet().map(::File).distinctBy { it.absolutePath }
 	val jobs = files.map { file ->
 		async(Dispatchers.Default) {
-			val context = PzlContext(file.absolutePath)
+			val source = measureTimedValue {
+				file.readText().toCharArray()
+			}
+			println("READ: ${source.duration}")
+			val lineStarts = source.value.getLineStarts()
+			val context = PzlContext(file.absolutePath, lineStarts)
 			context(context) {
-				val input = file.readText().toCharArray()
-				val rawTokens = PzlLexer(input).lex()
-				val cursor = PzlTokenCursor(rawTokens)
-				SourceFileNodeParser.of(cursor).parse()
+				val rawTokens = measureTimedValue {
+					PzlLexer(source.value).lex()
+				}
+				println("LEX: ${rawTokens.duration}")
+				val cursor = PzlTokenCursor(rawTokens.value)
+				val node = measureTimedValue {
+					SourceFileNodeParser.of(cursor).parse()
+				}
+				println("PARSE: ${node.duration}")
+				node.value
 			}
 		}
 	}
 	val sourceFileNodes = jobs.awaitAll()
 	val program = PzlProgram(sourceFileNodes)
-	println(json.encodeToString(program))
+//	println(json.encodeToString(program))
 }
 
-class PzlContext(
-	val sourcePath: String
-)
+private fun CharArray.getLineStarts(): IntArray {
+	val starts = mutableListOf(0)
+	this.forEachIndexed { index, char ->
+		if (char == '\n' && index + 1 < this.size) {
+			starts += index + 1
+		}
+	}
+	return starts.toIntArray()
+}
 
 val json = Json {
 	prettyPrint = true

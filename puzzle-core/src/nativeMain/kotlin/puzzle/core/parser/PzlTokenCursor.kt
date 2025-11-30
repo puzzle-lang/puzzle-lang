@@ -4,13 +4,10 @@ import puzzle.core.PzlContext
 import puzzle.core.exception.syntaxError
 import puzzle.core.lexer.PzlToken
 import puzzle.core.lexer.PzlTokenType
-import puzzle.core.lexer.removeComments
 
 class PzlTokenCursor(
-	rawTokens: List<PzlToken>
+	private val tokens: List<PzlToken>
 ) {
-	
-	private val tokens = rawTokens.removeComments()
 	
 	var position = 0
 		private set
@@ -69,7 +66,7 @@ class PzlTokenCursor(
 			advance()
 			return
 		}
-		syntaxError(errorMessage, current.line, current.column)
+		syntaxError(errorMessage, position)
 	}
 	
 	fun isAtEnd(): Boolean {

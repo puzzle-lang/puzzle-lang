@@ -14,7 +14,7 @@ class IdentifierNameParser private constructor(
 	
 	companion object : PzlParserProvider<IdentifierNameParser>(::IdentifierNameParser) {
 		
-		private val supportedTypes = listOf(
+		private val supportedTypes = arrayOf(
 			PzlTokenType.IDENTIFIER,
 			PzlTokenType.ABSTRACT,
 			PzlTokenType.SEALED,

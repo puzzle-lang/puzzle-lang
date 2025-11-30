@@ -9,7 +9,7 @@ import puzzle.core.parser.parser.identifier.IdentifierNameParser
 
 object PostfixExpressionMatcher : ExpressionMatcher<Expression> {
 	
-	private val tokenTypes = listOf(
+	private val tokenTypes = arrayOf(
 		NUMBER, STRING, CHAR, TRUE, FALSE,
 		THIS, SUPER, NULL,
 		DOT, QUESTION_DOT, DOUBLE_COLON

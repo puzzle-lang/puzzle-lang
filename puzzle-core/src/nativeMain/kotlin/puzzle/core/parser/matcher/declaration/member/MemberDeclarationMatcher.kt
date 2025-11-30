@@ -25,7 +25,7 @@ sealed interface MemberDeclarationMatcher<out D : Declaration> {
     ): D
 }
 
-private val matchers = listOf(
+private val matchers = arrayOf(
     MemberFunDeclarationMatcher,
     MemberClassDeclarationMatcher,
     MemberUniqueDeclarationMatcher,
