@@ -1,37 +1,28 @@
 package puzzle.core.parser.parser.statement
 
-import puzzle.core.PzlContext
 import puzzle.core.lexer.PzlTokenType
+import puzzle.core.model.PzlContext
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.statement.VariableDeclarationStatement
 import puzzle.core.parser.matcher.expression.parseCompleteExpression
-import puzzle.core.parser.parser.PzlParser
-import puzzle.core.parser.parser.PzlParserProvider
-import puzzle.core.parser.parser.identifier.IdentifierNameParser
 import puzzle.core.parser.parser.identifier.IdentifierNameTarget
-import puzzle.core.parser.parser.TypeReferenceParser
+import puzzle.core.parser.parser.identifier.parseIdentifierName
+import puzzle.core.parser.parser.parseTypeReference
 
-class VariableDeclarationStatementParser private constructor(
-	private val cursor: PzlTokenCursor
-) : PzlParser {
-	
-	companion object : PzlParserProvider<VariableDeclarationStatementParser>(::VariableDeclarationStatementParser)
-	
-	context(_: PzlContext)
-	fun parse(): VariableDeclarationStatement {
-		val isVariable = cursor.previous.type == PzlTokenType.VAR
-		val name = IdentifierNameParser.of(cursor).parse(IdentifierNameTarget.VARIABLE)
-		val type = if (cursor.match(PzlTokenType.COLON)) {
-			TypeReferenceParser.of(cursor).parse(isSupportedLambdaType = true)
-		} else null
-		val initializer = if (cursor.match(PzlTokenType.ASSIGN)) {
-			parseCompleteExpression(cursor)
-		} else null
-		return VariableDeclarationStatement(
-			name = name,
-			initializer = initializer,
-			isVariable = isVariable,
-			type = type
-		)
-	}
+context(_: PzlContext, cursor: PzlTokenCursor)
+fun parseVariableDeclarationStatement(): VariableDeclarationStatement {
+    val isMutable = cursor.previous.type == PzlTokenType.VAR
+    val name = parseIdentifierName(IdentifierNameTarget.VARIABLE)
+    val type = if (cursor.match(PzlTokenType.COLON)) {
+        parseTypeReference(isSupportedLambdaType = true)
+    } else null
+    val initializer = if (cursor.match(PzlTokenType.ASSIGN)) {
+        parseCompleteExpression()
+    } else null
+    return VariableDeclarationStatement(
+        name = name,
+        type = type,
+        isMutable = isMutable,
+        initializer = initializer,
+    )
 }

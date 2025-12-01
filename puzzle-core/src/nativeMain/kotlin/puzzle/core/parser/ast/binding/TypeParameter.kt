@@ -15,9 +15,9 @@ class TypeParameter(
 
 @Serializable
 class TypeSpec(
-	val isReified: Boolean,
-	val parameters: List<TypeParameter>,
-	val location: TokenRange
+    val reified: Boolean,
+    val parameters: List<TypeParameter>,
+    val location: TokenRange
 )
 
 enum class Variance {

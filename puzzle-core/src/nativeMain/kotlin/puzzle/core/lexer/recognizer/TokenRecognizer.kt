@@ -1,6 +1,6 @@
 package puzzle.core.lexer.recognizer
 
-import puzzle.core.PzlContext
+import puzzle.core.model.PzlContext
 import puzzle.core.lexer.PzlToken
 
 sealed interface TokenRecognizer {

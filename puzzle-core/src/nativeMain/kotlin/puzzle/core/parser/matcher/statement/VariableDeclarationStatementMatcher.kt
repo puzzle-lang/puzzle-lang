@@ -1,19 +1,20 @@
 package puzzle.core.parser.matcher.statement
 
-import puzzle.core.PzlContext
 import puzzle.core.lexer.PzlTokenType
+import puzzle.core.model.PzlContext
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.statement.VariableDeclarationStatement
-import puzzle.core.parser.parser.statement.VariableDeclarationStatementParser
+import puzzle.core.parser.parser.statement.parseVariableDeclarationStatement
 
 object VariableDeclarationStatementMatcher : StatementMatcher<VariableDeclarationStatement> {
-	
-	override fun match(cursor: PzlTokenCursor): Boolean {
-		return cursor.match(PzlTokenType.VAR) || cursor.match(PzlTokenType.VAL)
-	}
-	
-	context(_: PzlContext)
-	override fun parse(cursor: PzlTokenCursor): VariableDeclarationStatement {
-		return VariableDeclarationStatementParser.of(cursor).parse()
-	}
+
+    context(cursor: PzlTokenCursor)
+    override fun match(): Boolean {
+        return cursor.match(PzlTokenType.VAR) || cursor.match(PzlTokenType.VAL)
+    }
+
+    context(_: PzlContext, cursor: PzlTokenCursor)
+    override fun parse(): VariableDeclarationStatement {
+        return parseVariableDeclarationStatement()
+    }
 }

@@ -7,8 +7,8 @@ import puzzle.core.symbol.Modifier
 
 @Serializable
 class Parameter(
-	val name: String?,
-	val modifiers: List<Modifier>,
-	val typeReference: TypeReference,
-	val defaultExpression: Expression? = null
+    val name: String?,
+    val modifiers: List<Modifier>,
+    val type: TypeReference,
+    val defaultExpression: Expression? = null
 )

@@ -1,6 +1,6 @@
 package puzzle.core.lexer
 
-import puzzle.core.PzlContext
+import puzzle.core.model.PzlContext
 import puzzle.core.exception.syntaxError
 import puzzle.core.lexer.PzlTokenType.*
 import puzzle.core.lexer.recognizer.*

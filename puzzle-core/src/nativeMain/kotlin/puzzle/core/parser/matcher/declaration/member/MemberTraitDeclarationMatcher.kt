@@ -1,33 +1,33 @@
 package puzzle.core.parser.matcher.declaration.member
 
-import puzzle.core.PzlContext
 import puzzle.core.lexer.PzlTokenType
+import puzzle.core.model.PzlContext
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.binding.ContextSpec
 import puzzle.core.parser.ast.binding.TypeSpec
 import puzzle.core.parser.ast.declaration.TraitDeclaration
 import puzzle.core.parser.parser.binding.type.TypeTarget
 import puzzle.core.parser.parser.binding.type.check
-import puzzle.core.parser.parser.declaration.TraitDeclarationParser
+import puzzle.core.parser.parser.declaration.parseTraitDeclaration
 import puzzle.core.parser.parser.modifier.ModifierTarget
 import puzzle.core.parser.parser.modifier.check
 import puzzle.core.symbol.Modifier
 
 object MemberTraitDeclarationMatcher : MemberDeclarationMatcher<TraitDeclaration> {
-	
-	override fun match(cursor: PzlTokenCursor): Boolean {
-		return cursor.match(PzlTokenType.TRAIT)
-	}
-	
-	context(_: PzlContext)
-	override fun parse(
-		cursor: PzlTokenCursor,
-		typeSpec: TypeSpec?,
-		contextSpec: ContextSpec?,
-		modifiers: List<Modifier>
-	): TraitDeclaration {
-		typeSpec?.check(cursor, TypeTarget.TRAIT)
-		modifiers.check(cursor, ModifierTarget.MEMBER_TRAIT)
-		return TraitDeclarationParser.of(cursor).parse(typeSpec, contextSpec, modifiers)
-	}
+
+    context(cursor: PzlTokenCursor)
+    override fun match(): Boolean {
+        return cursor.match(PzlTokenType.TRAIT)
+    }
+
+    context(_: PzlContext, cursor: PzlTokenCursor)
+    override fun parse(
+        typeSpec: TypeSpec?,
+        contextSpec: ContextSpec?,
+        modifiers: List<Modifier>
+    ): TraitDeclaration {
+        typeSpec?.check(TypeTarget.TRAIT)
+        modifiers.check(ModifierTarget.MEMBER_TRAIT)
+        return parseTraitDeclaration(typeSpec, contextSpec, modifiers)
+    }
 }

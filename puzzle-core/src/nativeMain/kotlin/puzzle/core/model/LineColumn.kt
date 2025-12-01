@@ -1,4 +1,4 @@
-package puzzle.core
+package puzzle.core.model
 
 class LineColumn(
 	val line: Int,

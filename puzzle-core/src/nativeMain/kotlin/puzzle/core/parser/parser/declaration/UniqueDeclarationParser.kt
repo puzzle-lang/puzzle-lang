@@ -1,44 +1,37 @@
 package puzzle.core.parser.parser.declaration
 
-import puzzle.core.PzlContext
 import puzzle.core.lexer.PzlTokenType
+import puzzle.core.model.PzlContext
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.binding.ContextSpec
 import puzzle.core.parser.ast.declaration.UniqueDeclaration
 import puzzle.core.parser.matcher.declaration.member.parseMemberDeclaration
-import puzzle.core.parser.parser.PzlParser
-import puzzle.core.parser.parser.PzlParserProvider
-import puzzle.core.parser.parser.identifier.IdentifierNameParser
 import puzzle.core.parser.parser.identifier.IdentifierNameTarget
+import puzzle.core.parser.parser.identifier.parseIdentifierName
 import puzzle.core.symbol.Modifier
 
-class UniqueDeclarationParser private constructor(
-    private val cursor: PzlTokenCursor
-) : PzlParser {
-
-    companion object : PzlParserProvider<UniqueDeclarationParser>(::UniqueDeclarationParser)
-
-    context(_: PzlContext)
-    fun parse(
-        contextSpec: ContextSpec?,
-        modifiers: List<Modifier>,
-        isMember: Boolean = false
-    ): UniqueDeclaration {
-        val name = IdentifierNameParser.of(cursor).parse(
-            target = if (isMember) IdentifierNameTarget.MEMBER_UNIQUE else IdentifierNameTarget.UNIQUE
-        )
-        val members = if (cursor.match(PzlTokenType.LBRACE)) {
-            buildList {
-                while (!cursor.match(PzlTokenType.RBRACE)) {
-                    this += parseMemberDeclaration(cursor)
-                }
-            }
-        } else emptyList()
-        return UniqueDeclaration(
-            name = name,
-            modifiers = modifiers,
-            contextSpec = contextSpec,
-            members = members
-        )
+context(_: PzlContext, cursor: PzlTokenCursor)
+fun parseUniqueDeclaration(
+    contextSpec: ContextSpec?,
+    modifiers: List<Modifier>,
+    isMember: Boolean
+): UniqueDeclaration {
+    val name = if (isMember) {
+        parseIdentifierName(IdentifierNameTarget.MEMBER_UNIQUE)
+    } else {
+        parseIdentifierName(IdentifierNameTarget.UNIQUE)
     }
+    val members = if (cursor.match(PzlTokenType.LBRACE)) {
+        buildList {
+            while (!cursor.match(PzlTokenType.RBRACE)) {
+                this += parseMemberDeclaration()
+            }
+        }
+    } else emptyList()
+    return UniqueDeclaration(
+        name = name,
+        modifiers = modifiers,
+        contextSpec = contextSpec,
+        members = members
+    )
 }

@@ -1,4 +1,4 @@
-package puzzle.core
+package puzzle.core.model
 
 class PzlContext(
 	val sourcePath: String,

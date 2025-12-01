@@ -1,8 +1,8 @@
 package puzzle.core.lexer
 
-import puzzle.core.LineColumn
-import puzzle.core.PzlContext
-import puzzle.core.getLineColumn
+import puzzle.core.model.LineColumn
+import puzzle.core.model.PzlContext
+import puzzle.core.model.getLineColumn
 import puzzle.core.parser.ast.TokenRange
 
 class PzlToken(

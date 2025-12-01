@@ -1,33 +1,33 @@
 package puzzle.core.parser.matcher.declaration.member
 
-import puzzle.core.PzlContext
 import puzzle.core.lexer.PzlTokenType
+import puzzle.core.model.PzlContext
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.binding.ContextSpec
 import puzzle.core.parser.ast.binding.TypeSpec
 import puzzle.core.parser.ast.declaration.UniqueDeclaration
 import puzzle.core.parser.parser.binding.type.TypeTarget
 import puzzle.core.parser.parser.binding.type.check
-import puzzle.core.parser.parser.declaration.UniqueDeclarationParser
+import puzzle.core.parser.parser.declaration.parseUniqueDeclaration
 import puzzle.core.parser.parser.modifier.ModifierTarget
 import puzzle.core.parser.parser.modifier.check
 import puzzle.core.symbol.Modifier
 
 object MemberUniqueDeclarationMatcher : MemberDeclarationMatcher<UniqueDeclaration> {
 
-    override fun match(cursor: PzlTokenCursor): Boolean {
+    context(cursor: PzlTokenCursor)
+    override fun match(): Boolean {
         return cursor.match(PzlTokenType.UNIQUE)
     }
 
-    context(_: PzlContext)
+    context(_: PzlContext, cursor: PzlTokenCursor)
     override fun parse(
-	    cursor: PzlTokenCursor,
-	    typeSpec: TypeSpec?,
-	    contextSpec: ContextSpec?,
-	    modifiers: List<Modifier>
+        typeSpec: TypeSpec?,
+        contextSpec: ContextSpec?,
+        modifiers: List<Modifier>
     ): UniqueDeclaration {
-        typeSpec?.check(cursor, TypeTarget.UNIQUE)
-        modifiers.check(cursor, ModifierTarget.MEMBER_UNIQUE)
-        return UniqueDeclarationParser.of(cursor).parse(contextSpec, modifiers, isMember = true)
+        typeSpec?.check(TypeTarget.UNIQUE)
+        modifiers.check(ModifierTarget.MEMBER_UNIQUE)
+        return parseUniqueDeclaration(contextSpec, modifiers, isMember = true)
     }
 }

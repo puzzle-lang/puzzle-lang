@@ -1,8 +1,8 @@
 package puzzle.core.parser.matcher.declaration.toplevel
 
-import puzzle.core.PzlContext
 import puzzle.core.exception.syntaxError
 import puzzle.core.lexer.PzlTokenType
+import puzzle.core.model.PzlContext
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.binding.ContextSpec
 import puzzle.core.parser.ast.binding.TypeSpec
@@ -14,14 +14,14 @@ import puzzle.core.symbol.Modifier
 
 sealed interface TopLevelDeclarationMatcher<out D : Declaration> {
 
-    fun match(cursor: PzlTokenCursor): Boolean
+    context(cursor: PzlTokenCursor)
+    fun match(): Boolean
 
-    context(_: PzlContext)
+    context(_: PzlContext, cursor: PzlTokenCursor)
     fun parse(
-	    cursor: PzlTokenCursor,
-	    typeSpec: TypeSpec?,
-	    contextSpec: ContextSpec?,
-	    modifiers: List<Modifier>,
+        typeSpec: TypeSpec?,
+        contextSpec: ContextSpec?,
+        modifiers: List<Modifier>,
     ): D
 }
 
@@ -36,15 +36,15 @@ private val matchers = arrayOf(
     TopLevelExtensionDeclarationMatcher
 )
 
-context(_: PzlContext)
-fun parseTopLevelDeclaration(cursor: PzlTokenCursor): Declaration {
-    val typeSpec = parseTypeSpec(cursor)
-    val contextSpec = parseContextSpec(cursor)
-    val modifiers = parseModifiers(cursor)
-    val matcher = matchers.find { it.match(cursor) }
+context(_: PzlContext, cursor: PzlTokenCursor)
+fun parseTopLevelDeclaration(): Declaration {
+    val typeSpec = parseTypeSpec()
+    val contextSpec = parseContextSpec()
+    val modifiers = parseModifiers()
+    val matcher = matchers.find { it.match() }
         ?: syntaxError(
             message = if (cursor.current.type == PzlTokenType.EOF) "结尾缺少 '}'" else "未知的顶层声明",
             token = cursor.current
         )
-    return matcher.parse(cursor, typeSpec, contextSpec, modifiers)
+    return matcher.parse(typeSpec, contextSpec, modifiers)
 }
