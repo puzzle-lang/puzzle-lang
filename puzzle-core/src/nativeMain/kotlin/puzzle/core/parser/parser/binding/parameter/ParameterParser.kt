@@ -4,7 +4,7 @@ import puzzle.core.lexer.PzlTokenType
 import puzzle.core.model.PzlContext
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.binding.Parameter
-import puzzle.core.parser.matcher.expression.parseCompleteExpression
+import puzzle.core.parser.matcher.expression.parseExpressionChain
 import puzzle.core.parser.parser.identifier.IdentifierNameTarget
 import puzzle.core.parser.parser.identifier.parseIdentifierName
 import puzzle.core.parser.parser.parseTypeReference
@@ -24,7 +24,7 @@ fun parseParameter(
     }
     val type = parseTypeReference(isSupportedLambdaType = isSupportedLambdaType)
     val defaultExpression = if (cursor.match(PzlTokenType.ASSIGN)) {
-        parseCompleteExpression()
+        parseExpressionChain()
     } else null
     return Parameter(
         name = name,

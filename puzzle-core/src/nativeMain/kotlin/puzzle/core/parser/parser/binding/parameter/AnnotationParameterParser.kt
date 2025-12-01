@@ -30,7 +30,6 @@ private fun parseAnnotationParameter(): Parameter {
     val modifiers = parseModifiers()
     modifiers.check(ModifierTarget.ANNOTATION_PARAMETER)
     if (Modifier.VAL !in modifiers) {
-        println(cursor.current.type)
         syntaxError("注解参数必须添加 'val' 修饰符", cursor.current)
     }
     return parseParameter()

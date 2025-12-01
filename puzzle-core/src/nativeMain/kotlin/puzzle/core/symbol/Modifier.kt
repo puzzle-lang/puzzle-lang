@@ -10,15 +10,18 @@ enum class Modifier(
     MODULE(0),
     PUBLIC(0),
     FINAL(1),
-    OPEN(1),
-    ABSTRACT(1),
-    SEALED(1),
+    OPEN(2),
+    ABSTRACT(2),
+    SEALED(2),
     OVERRIDE(2),
-    CONST(2),
-    OWNER(2),
-    IGNORE(2),
+    CONST(3),
+    OWNER(3),
+    IGNORE(3),
     LATE(3),
-    ARGS(4),
-    VAR(5),
-    VAL(5)
+    LAZY(3),
+    ARGS(3),
+    VAR(4),
+    VAL(4)
 }
+
+val c = "".also { println("D") }

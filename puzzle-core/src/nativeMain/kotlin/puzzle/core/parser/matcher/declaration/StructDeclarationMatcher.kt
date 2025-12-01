@@ -1,4 +1,4 @@
-package puzzle.core.parser.matcher.declaration.member
+package puzzle.core.parser.matcher.declaration
 
 import puzzle.core.lexer.PzlTokenType
 import puzzle.core.model.PzlContext
@@ -7,13 +7,17 @@ import puzzle.core.parser.ast.binding.ContextSpec
 import puzzle.core.parser.ast.binding.TypeSpec
 import puzzle.core.parser.ast.declaration.StructDeclaration
 import puzzle.core.parser.parser.binding.type.TypeTarget
-import puzzle.core.parser.parser.binding.type.check
 import puzzle.core.parser.parser.declaration.parseStructDeclaration
 import puzzle.core.parser.parser.modifier.ModifierTarget
-import puzzle.core.parser.parser.modifier.check
 import puzzle.core.symbol.Modifier
 
-object MemberStructDeclarationMatcher : MemberDeclarationMatcher<StructDeclaration> {
+object StructDeclarationMatcher : DeclarationMatcher<StructDeclaration> {
+
+    override val typeTarget = TypeTarget.STRUCT
+
+    override val memberModifierTarget = ModifierTarget.MEMBER_STRUCT
+
+    override val topLevelModifierTarget = ModifierTarget.TOP_LEVEL_STRUCT
 
     context(cursor: PzlTokenCursor)
     override fun match(): Boolean {
@@ -24,10 +28,7 @@ object MemberStructDeclarationMatcher : MemberDeclarationMatcher<StructDeclarati
     override fun parse(
         typeSpec: TypeSpec?,
         contextSpec: ContextSpec?,
-        modifiers: List<Modifier>
-    ): StructDeclaration {
-        typeSpec?.check(TypeTarget.STRUCT)
-        modifiers.check(ModifierTarget.MEMBER_STRUCT)
-        return parseStructDeclaration(typeSpec, contextSpec, modifiers)
-    }
+        modifiers: List<Modifier>,
+        isMember: Boolean
+    ): StructDeclaration = parseStructDeclaration(typeSpec, contextSpec, modifiers)
 }

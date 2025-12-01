@@ -12,6 +12,7 @@ import puzzle.core.parser.ast.declaration.FunDeclaration
 import puzzle.core.parser.matcher.statement.parseStatement
 import puzzle.core.parser.parser.binding.parameter.parseFunParameters
 import puzzle.core.parser.parser.identifier.IdentifierNameTarget
+import puzzle.core.parser.parser.identifier.parseExtensionAndIdentifierName
 import puzzle.core.parser.parser.identifier.parseIdentifierName
 import puzzle.core.parser.parser.parseTypeReference
 import puzzle.core.symbol.Modifier
@@ -22,23 +23,7 @@ fun parseFunDeclaration(
     contextSpec: ContextSpec?,
     modifiers: List<Modifier>
 ): FunDeclaration {
-    val name = parseIdentifierName(IdentifierNameTarget.FUN)
-    val (funName, extension) = if (cursor.check(PzlTokenType.DOT)) {
-        cursor.retreat()
-        val type = parseTypeReference()
-        if (type.isNullable) {
-            cursor.expect(PzlTokenType.DOT, "函数缺少 '.'")
-            val funName = parseIdentifierName(IdentifierNameTarget.FUN)
-            funName to type
-        } else {
-            val segments = (type.type as NamedType).segments.toMutableList()
-            val funName = segments.removeLast()
-            val type = TypeReference(NamedType(segments))
-            funName to type
-        }
-    } else {
-        name to null
-    }
+    val (extension, name) = parseExtensionAndIdentifierName(IdentifierNameTarget.FUN)
     val parameters = parseFunParameters()
     val returnTypes = mutableListOf<TypeReference>()
     if (cursor.match(PzlTokenType.COLON)) {
@@ -56,7 +41,7 @@ fun parseFunDeclaration(
         }
     } else emptyList()
     return FunDeclaration(
-        name = funName,
+        name = name,
         parameters = parameters,
         modifiers = modifiers,
         returnTypes = returnTypes,

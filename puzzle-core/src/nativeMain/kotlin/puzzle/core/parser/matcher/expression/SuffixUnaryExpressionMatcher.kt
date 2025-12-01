@@ -11,7 +11,7 @@ object SuffixUnaryExpressionMatcher : ExpressionMatcher<SuffixUnaryExpression> {
 
     context(cursor: PzlTokenCursor)
     override fun match(left: Expression?): Boolean {
-        val type = cursor.next.type
+        val type = cursor.next?.type
         return type == PzlTokenType.DOUBLE_PLUS || type == PzlTokenType.DOUBLE_MINUS
     }
 

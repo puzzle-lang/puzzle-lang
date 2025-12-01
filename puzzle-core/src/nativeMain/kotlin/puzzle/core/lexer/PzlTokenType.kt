@@ -29,6 +29,9 @@ enum class PzlTokenType(
     CONST("const"),             // const
     IGNORE("ignore"),           // ignore
     LATE("late"),               // late
+    LAZY("lazy"),               // lazy
+    GET("get"),                 // get
+    SET("set"),                 // set
     TYPE("type"),               // type
     REIFIED("reified"),         // reified
     IN("in"),                   // in

@@ -5,11 +5,11 @@ import puzzle.core.lexer.PzlTokenType
 import puzzle.core.model.PzlContext
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.expression.*
-import puzzle.core.parser.matcher.expression.parseCompleteExpression
+import puzzle.core.parser.matcher.expression.parseExpressionChain
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseGroupingExpression(): Expression {
-    var expression = parseCompleteExpression()
+    var expression = parseExpressionChain()
     if (cursor.current.type != PzlTokenType.RPAREN) {
         syntaxError("'(' 必须由 ')' 结束", cursor.current)
     }

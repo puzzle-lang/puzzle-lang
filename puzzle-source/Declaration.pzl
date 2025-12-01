@@ -221,4 +221,18 @@ class IntList : List<Int> {
 
 }
 
-class DoubleList : List<T = Int>
+class DoubleList : List<T = Int> {
+
+}
+
+var name: String? = ""
+
+val User.age = ""
+
+private val name = 1 + 2 - 3 +
+    4 * 5
+
+class Member {
+
+    private late var private: String
+}

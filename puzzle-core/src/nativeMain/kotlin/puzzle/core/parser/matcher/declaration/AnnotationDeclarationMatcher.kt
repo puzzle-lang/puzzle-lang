@@ -1,4 +1,4 @@
-package puzzle.core.parser.matcher.declaration.toplevel
+package puzzle.core.parser.matcher.declaration
 
 import puzzle.core.lexer.PzlTokenType
 import puzzle.core.model.PzlContext
@@ -7,13 +7,17 @@ import puzzle.core.parser.ast.binding.ContextSpec
 import puzzle.core.parser.ast.binding.TypeSpec
 import puzzle.core.parser.ast.declaration.AnnotationDeclaration
 import puzzle.core.parser.parser.binding.type.TypeTarget
-import puzzle.core.parser.parser.binding.type.check
 import puzzle.core.parser.parser.declaration.parseAnnotationDeclaration
 import puzzle.core.parser.parser.modifier.ModifierTarget
-import puzzle.core.parser.parser.modifier.check
 import puzzle.core.symbol.Modifier
 
-object TopLevelAnnotationDeclarationMatcher : TopLevelDeclarationMatcher<AnnotationDeclaration> {
+object AnnotationDeclarationMatcher : DeclarationMatcher<AnnotationDeclaration> {
+
+    override val typeTarget = TypeTarget.ANNOTATION
+
+    override val memberModifierTarget = ModifierTarget.MEMBER_ANNOTATION
+
+    override val topLevelModifierTarget = ModifierTarget.TOP_LEVEL_ANNOTATION
 
     context(cursor: PzlTokenCursor)
     override fun match(): Boolean {
@@ -24,10 +28,7 @@ object TopLevelAnnotationDeclarationMatcher : TopLevelDeclarationMatcher<Annotat
     override fun parse(
         typeSpec: TypeSpec?,
         contextSpec: ContextSpec?,
-        modifiers: List<Modifier>
-    ): AnnotationDeclaration {
-        typeSpec?.check(TypeTarget.ANNOTATION)
-        modifiers.check(ModifierTarget.TOP_LEVEL_ANNOTATION)
-        return parseAnnotationDeclaration(typeSpec, modifiers)
-    }
+        modifiers: List<Modifier>,
+        isMember: Boolean
+    ): AnnotationDeclaration = parseAnnotationDeclaration(typeSpec, modifiers)
 }

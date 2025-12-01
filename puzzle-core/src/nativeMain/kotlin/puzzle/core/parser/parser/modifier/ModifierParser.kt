@@ -9,9 +9,12 @@ import puzzle.core.symbol.Modifier.*
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseModifiers(): List<Modifier> {
-    val modifiers = mutableListOf<Modifier>()
-    while (true) {
-        modifiers += parseModifier() ?: break
+    val modifiers = buildList {
+        while (true) {
+            val modifier = parseModifier() ?: break
+            if (modifier == VAR || modifier == VAR) break
+            this += modifier
+        }
     }
     checkModifierOrder(modifiers)
     return modifiers
@@ -27,17 +30,18 @@ private fun parseModifier(): Modifier? {
         cursor.match(PzlTokenType.MODULE) -> MODULE
         cursor.match(PzlTokenType.PUBLIC) -> PUBLIC
         cursor.match(PzlTokenType.FINAL) -> FINAL
-        cursor.match(PzlTokenType.IGNORE) -> IGNORE
-        cursor.match(PzlTokenType.LATE) -> LATE
         cursor.match(PzlTokenType.OPEN) -> OPEN
         cursor.match(PzlTokenType.ABSTRACT) -> ABSTRACT
         cursor.match(PzlTokenType.SEALED) -> SEALED
         cursor.match(PzlTokenType.OVERRIDE) -> OVERRIDE
         cursor.match(PzlTokenType.CONST) -> CONST
         cursor.match(PzlTokenType.OWNER) -> OWNER
+        cursor.match(PzlTokenType.IGNORE) -> IGNORE
+        cursor.match(PzlTokenType.LATE) -> LATE
+        cursor.match(PzlTokenType.LAZY) -> LAZY
+        cursor.match(PzlTokenType.ARGS) -> ARGS
         cursor.match(PzlTokenType.VAR) -> VAR
         cursor.match(PzlTokenType.VAL) -> VAL
-        cursor.match(PzlTokenType.ARGS) -> ARGS
         else -> null
     }
 }

@@ -4,10 +4,10 @@ import puzzle.core.model.PzlContext
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.expression.ElvisExpression
 import puzzle.core.parser.ast.expression.Expression
-import puzzle.core.parser.matcher.expression.parseCompleteExpression
+import puzzle.core.parser.matcher.expression.parseExpressionChain
 
 context(_: PzlContext, _: PzlTokenCursor)
 fun parseElvisExpression(left: Expression): ElvisExpression {
-    val right = parseCompleteExpression()
+    val right = parseExpressionChain()
     return ElvisExpression(left, right)
 }

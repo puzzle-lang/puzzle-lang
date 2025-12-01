@@ -7,7 +7,7 @@ import puzzle.core.parser.ast.binding.ContextSpec
 import puzzle.core.parser.ast.binding.TypeSpec
 import puzzle.core.parser.ast.declaration.ExtensionDeclaration
 import puzzle.core.parser.ast.declaration.SuperTrait
-import puzzle.core.parser.matcher.declaration.member.parseMemberDeclaration
+import puzzle.core.parser.matcher.declaration.parseMemberDeclaration
 import puzzle.core.parser.parser.parseTypeReference
 import puzzle.core.symbol.Modifier
 

@@ -8,7 +8,7 @@ import puzzle.core.parser.ast.expression.Argument
 import puzzle.core.parser.ast.expression.InvokeType
 import puzzle.core.parser.ast.expression.InvokeType.CALL
 import puzzle.core.parser.ast.expression.InvokeType.INDEX_ACCESS
-import puzzle.core.parser.matcher.expression.parseCompleteExpression
+import puzzle.core.parser.matcher.expression.parseExpressionChain
 import puzzle.core.parser.parser.identifier.IdentifierNameTarget
 import puzzle.core.parser.parser.identifier.parseIdentifierName
 
@@ -32,7 +32,7 @@ private fun parseCallArgument(type: InvokeType): Argument {
             cursor.advance()
         }
     } else null
-    val expression = parseCompleteExpression()
+    val expression = parseExpressionChain()
     if (cursor.previous.type == PzlTokenType.SEMICOLON) {
         syntaxError("语法错误", cursor.previous)
     }

@@ -1,4 +1,4 @@
-package puzzle.core.parser.matcher.declaration.member
+package puzzle.core.parser.matcher.declaration
 
 import puzzle.core.lexer.PzlTokenType
 import puzzle.core.model.PzlContext
@@ -7,13 +7,17 @@ import puzzle.core.parser.ast.binding.ContextSpec
 import puzzle.core.parser.ast.binding.TypeSpec
 import puzzle.core.parser.ast.declaration.UniqueDeclaration
 import puzzle.core.parser.parser.binding.type.TypeTarget
-import puzzle.core.parser.parser.binding.type.check
 import puzzle.core.parser.parser.declaration.parseUniqueDeclaration
 import puzzle.core.parser.parser.modifier.ModifierTarget
-import puzzle.core.parser.parser.modifier.check
 import puzzle.core.symbol.Modifier
 
-object MemberUniqueDeclarationMatcher : MemberDeclarationMatcher<UniqueDeclaration> {
+object UniqueDeclarationMatcher : DeclarationMatcher<UniqueDeclaration> {
+
+    override val typeTarget = TypeTarget.UNIQUE
+
+    override val memberModifierTarget = ModifierTarget.MEMBER_UNIQUE
+
+    override val topLevelModifierTarget = ModifierTarget.TOP_LEVEL_UNIQUE
 
     context(cursor: PzlTokenCursor)
     override fun match(): Boolean {
@@ -24,10 +28,7 @@ object MemberUniqueDeclarationMatcher : MemberDeclarationMatcher<UniqueDeclarati
     override fun parse(
         typeSpec: TypeSpec?,
         contextSpec: ContextSpec?,
-        modifiers: List<Modifier>
-    ): UniqueDeclaration {
-        typeSpec?.check(TypeTarget.UNIQUE)
-        modifiers.check(ModifierTarget.MEMBER_UNIQUE)
-        return parseUniqueDeclaration(contextSpec, modifiers, isMember = true)
-    }
+        modifiers: List<Modifier>,
+        isMember: Boolean,
+    ): UniqueDeclaration = parseUniqueDeclaration(contextSpec, modifiers, isMember)
 }

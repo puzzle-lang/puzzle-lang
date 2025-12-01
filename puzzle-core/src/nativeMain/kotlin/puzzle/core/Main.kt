@@ -78,6 +78,11 @@ val json = Json {
     classDiscriminator = "class"
 }
 
+inline fun <reified T> T.debug(): T {
+    println(this?.let { json.encodeToString(it) })
+    return this
+}
+
 private fun help() {
     val help = """
 		使用方式:

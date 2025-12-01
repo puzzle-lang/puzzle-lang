@@ -1,4 +1,4 @@
-package puzzle.core.parser.matcher.declaration.toplevel
+package puzzle.core.parser.matcher.declaration
 
 import puzzle.core.lexer.PzlTokenType
 import puzzle.core.model.PzlContext
@@ -7,13 +7,17 @@ import puzzle.core.parser.ast.binding.ContextSpec
 import puzzle.core.parser.ast.binding.TypeSpec
 import puzzle.core.parser.ast.declaration.TraitDeclaration
 import puzzle.core.parser.parser.binding.type.TypeTarget
-import puzzle.core.parser.parser.binding.type.check
 import puzzle.core.parser.parser.declaration.parseTraitDeclaration
 import puzzle.core.parser.parser.modifier.ModifierTarget
-import puzzle.core.parser.parser.modifier.check
 import puzzle.core.symbol.Modifier
 
-object TopLevelTraitDeclarationMatcher : TopLevelDeclarationMatcher<TraitDeclaration> {
+object TraitDeclarationMatcher : DeclarationMatcher<TraitDeclaration> {
+
+    override val typeTarget = TypeTarget.TRAIT
+
+    override val memberModifierTarget = ModifierTarget.MEMBER_TRAIT
+
+    override val topLevelModifierTarget = ModifierTarget.TOP_LEVEL_TRAIT
 
     context(cursor: PzlTokenCursor)
     override fun match(): Boolean {
@@ -24,10 +28,7 @@ object TopLevelTraitDeclarationMatcher : TopLevelDeclarationMatcher<TraitDeclara
     override fun parse(
         typeSpec: TypeSpec?,
         contextSpec: ContextSpec?,
-        modifiers: List<Modifier>
-    ): TraitDeclaration {
-        typeSpec?.check(TypeTarget.TRAIT)
-        modifiers.check(ModifierTarget.TOP_LEVEL_TRAIT)
-        return parseTraitDeclaration(typeSpec, contextSpec, modifiers)
-    }
+        modifiers: List<Modifier>,
+        isMember: Boolean
+    ): TraitDeclaration = parseTraitDeclaration(typeSpec, contextSpec, modifiers)
 }
