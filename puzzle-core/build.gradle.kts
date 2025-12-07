@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.plugin.mpp.NativeBuildType
+
 plugins {
 	alias(libs.plugins.kotlin.multiplatform)
 	alias(libs.plugins.kotlin.serialization)
@@ -11,6 +13,9 @@ kotlin {
 		binaries {
 			executable {
 				entryPoint = "puzzle.core.main"
+				if (this.buildType == NativeBuildType.RELEASE) {
+					freeCompilerArgs += listOf("-Xallocator=std")
+				}
 			}
 		}
 	}

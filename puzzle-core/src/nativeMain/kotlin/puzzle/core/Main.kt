@@ -58,7 +58,7 @@ private fun run(paths: List<String>) = runBlocking {
 		}
 	}
 	val sourceFileNodes = jobs.awaitAll()
-	val program = PzlProgram(sourceFileNodes).debug()
+	PzlProgram(sourceFileNodes).debug()
 }
 
 private fun CharArray.getLineStarts(): IntArray {
@@ -75,6 +75,7 @@ val json = Json {
 	prettyPrint = true
 	encodeDefaults = true
 	classDiscriminator = "class"
+	ignoreUnknownKeys = true
 }
 
 inline fun <reified T> T.debug(): T {
