@@ -1,12 +1,12 @@
-package puzzle.core.parser.parser.binding.type
+package puzzle.core.parser.parser.parameter.type
 
 import puzzle.core.exception.syntaxError
 import puzzle.core.lexer.PzlTokenType
 import puzzle.core.model.PzlContext
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.TokenRange
-import puzzle.core.parser.ast.binding.TypeSpec
-import puzzle.core.parser.ast.binding.Variance
+import puzzle.core.parser.ast.parameter.TypeSpec
+import puzzle.core.parser.ast.parameter.Variance
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseTypeSpec(): TypeSpec? {

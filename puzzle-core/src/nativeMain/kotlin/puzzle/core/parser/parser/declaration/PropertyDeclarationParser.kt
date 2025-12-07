@@ -4,10 +4,11 @@ import puzzle.core.lexer.PzlTokenType
 import puzzle.core.lexer.PzlTokenType.DOT
 import puzzle.core.model.PzlContext
 import puzzle.core.parser.PzlTokenCursor
+import puzzle.core.parser.ast.AnnotationCall
 import puzzle.core.parser.ast.NamedType
 import puzzle.core.parser.ast.TypeReference
-import puzzle.core.parser.ast.binding.ContextSpec
-import puzzle.core.parser.ast.binding.TypeSpec
+import puzzle.core.parser.ast.parameter.ContextSpec
+import puzzle.core.parser.ast.parameter.TypeSpec
 import puzzle.core.parser.ast.declaration.PropertyDeclaration
 import puzzle.core.parser.matcher.expression.parseExpressionChain
 import puzzle.core.parser.parser.identifier.IdentifierNameTarget
@@ -19,7 +20,8 @@ context(_: PzlContext, cursor: PzlTokenCursor)
 fun parsePropertyDeclaration(
 	typeSpec: TypeSpec?,
 	contextSpec: ContextSpec?,
-	modifiers: List<Modifier>
+	modifiers: List<Modifier>,
+	annotationCalls: List<AnnotationCall>,
 ): PropertyDeclaration {
 	val (extension, name) = parseExtensionAndPropertyName()
 	val type = if (cursor.match(PzlTokenType.COLON)) parseTypeReference(isSupportedLambdaType = true) else null
@@ -31,6 +33,7 @@ fun parsePropertyDeclaration(
 		extension = extension,
 		typeSpec = typeSpec,
 		contextSpec = contextSpec,
+		annotationCalls = annotationCalls,
 		initializer = initialize
 	)
 }

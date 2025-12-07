@@ -7,7 +7,8 @@ import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.LambdaType
 import puzzle.core.parser.ast.NamedType
 import puzzle.core.parser.ast.TypeReference
-import puzzle.core.parser.parser.binding.parameter.parseLambdaParameters
+import puzzle.core.parser.parser.argument.parseTypeArguments
+import puzzle.core.parser.parser.parameter.parameter.parseLambdaParameters
 import puzzle.core.parser.parser.identifier.IdentifierNameTarget
 import puzzle.core.parser.parser.identifier.parseIdentifierName
 

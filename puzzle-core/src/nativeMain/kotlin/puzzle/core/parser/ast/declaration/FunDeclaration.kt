@@ -1,10 +1,11 @@
 package puzzle.core.parser.ast.declaration
 
 import kotlinx.serialization.Serializable
+import puzzle.core.parser.ast.AnnotationCall
 import puzzle.core.parser.ast.TypeReference
-import puzzle.core.parser.ast.binding.ContextSpec
-import puzzle.core.parser.ast.binding.Parameter
-import puzzle.core.parser.ast.binding.TypeSpec
+import puzzle.core.parser.ast.parameter.ContextSpec
+import puzzle.core.parser.ast.parameter.Parameter
+import puzzle.core.parser.ast.parameter.TypeSpec
 import puzzle.core.parser.ast.statement.Statement
 import puzzle.core.symbol.Modifier
 import puzzle.core.util.FunNameSerializer
@@ -19,7 +20,8 @@ class FunDeclaration(
 	val extension: TypeReference?,
 	val typeSpec: TypeSpec?,
 	val contextSpec: ContextSpec?,
-	val statements: List<Statement> = emptyList(),
+	val annotationCalls: List<AnnotationCall>,
+	val statements: List<Statement>
 ) : Declaration
 
 @Serializable

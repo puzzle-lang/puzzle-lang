@@ -1,4 +1,4 @@
-package puzzle.core.parser.ast.binding
+package puzzle.core.parser.ast.parameter
 
 import kotlinx.serialization.Serializable
 import puzzle.core.parser.ast.TypeReference

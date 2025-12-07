@@ -1,21 +1,19 @@
-package puzzle.core.parser.parser.binding.parameter
+package puzzle.core.parser.parser.parameter.parameter
 
 import puzzle.core.lexer.PzlTokenType
 import puzzle.core.model.PzlContext
 import puzzle.core.parser.PzlTokenCursor
-import puzzle.core.parser.ast.binding.Parameter
+import puzzle.core.parser.ast.parameter.Parameter
 import puzzle.core.parser.parser.modifier.ModifierTarget
 import puzzle.core.parser.parser.modifier.check
 import puzzle.core.parser.parser.modifier.parseModifiers
 
 context(_: PzlContext, cursor: PzlTokenCursor)
-fun parseClassParameters(): List<Parameter> {
-    if (!cursor.match(PzlTokenType.LPAREN)) {
-        return emptyList()
-    }
+fun parseStructParameters(): List<Parameter> {
+    cursor.expect(PzlTokenType.LPAREN, "结构体缺少 '('")
     val parameters = mutableListOf<Parameter>()
     while (!cursor.match(PzlTokenType.RPAREN)) {
-        parameters += parseClassParameter()
+        parameters += parseStructParameter()
         if (!cursor.check(PzlTokenType.RPAREN)) {
             cursor.expect(PzlTokenType.COMMA, "参数缺少 ','")
         }
@@ -24,8 +22,8 @@ fun parseClassParameters(): List<Parameter> {
 }
 
 context(_: PzlContext, cursor: PzlTokenCursor)
-private fun parseClassParameter(): Parameter {
+private fun parseStructParameter(): Parameter {
     val modifiers = parseModifiers()
-    modifiers.check(ModifierTarget.CLASS_PARAMETER)
-    return parseParameter(modifiers, isSupportedLambdaType = true)
+    modifiers.check(ModifierTarget.STRUCT_PARAMETER)
+    return parseParameter(modifiers)
 }

@@ -3,10 +3,11 @@ package puzzle.core.parser.matcher.declaration
 import puzzle.core.lexer.PzlTokenType
 import puzzle.core.model.PzlContext
 import puzzle.core.parser.PzlTokenCursor
-import puzzle.core.parser.ast.binding.ContextSpec
-import puzzle.core.parser.ast.binding.TypeSpec
+import puzzle.core.parser.ast.AnnotationCall
+import puzzle.core.parser.ast.parameter.ContextSpec
+import puzzle.core.parser.ast.parameter.TypeSpec
 import puzzle.core.parser.ast.declaration.PropertyDeclaration
-import puzzle.core.parser.parser.binding.type.TypeTarget
+import puzzle.core.parser.parser.parameter.type.TypeTarget
 import puzzle.core.parser.parser.declaration.parsePropertyDeclaration
 import puzzle.core.parser.parser.modifier.ModifierTarget
 import puzzle.core.symbol.Modifier
@@ -30,6 +31,7 @@ object PropertyDeclarationMatcher : DeclarationMatcher<PropertyDeclaration> {
         typeSpec: TypeSpec?,
         contextSpec: ContextSpec?,
         modifiers: List<Modifier>,
+        annotationCalls: List<AnnotationCall>,
         isMember: Boolean
-    ): PropertyDeclaration = parsePropertyDeclaration(typeSpec, contextSpec, modifiers)
+    ): PropertyDeclaration = parsePropertyDeclaration(typeSpec, contextSpec, modifiers, annotationCalls)
 }

@@ -3,8 +3,9 @@ package puzzle.core.parser.parser.declaration
 import puzzle.core.lexer.PzlTokenType
 import puzzle.core.model.PzlContext
 import puzzle.core.parser.PzlTokenCursor
-import puzzle.core.parser.ast.binding.ContextSpec
+import puzzle.core.parser.ast.AnnotationCall
 import puzzle.core.parser.ast.declaration.UniqueDeclaration
+import puzzle.core.parser.ast.parameter.ContextSpec
 import puzzle.core.parser.matcher.declaration.parseMemberDeclaration
 import puzzle.core.parser.parser.identifier.IdentifierNameTarget
 import puzzle.core.parser.parser.identifier.parseIdentifierName
@@ -12,26 +13,28 @@ import puzzle.core.symbol.Modifier
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseUniqueDeclaration(
-    contextSpec: ContextSpec?,
-    modifiers: List<Modifier>,
-    isMember: Boolean
+	contextSpec: ContextSpec?,
+	modifiers: List<Modifier>,
+	annotationCalls: List<AnnotationCall>,
+	isMember: Boolean
 ): UniqueDeclaration {
-    val name = if (isMember) {
-        parseIdentifierName(IdentifierNameTarget.MEMBER_UNIQUE)
-    } else {
-        parseIdentifierName(IdentifierNameTarget.UNIQUE)
-    }
-    val members = if (cursor.match(PzlTokenType.LBRACE)) {
-        buildList {
-            while (!cursor.match(PzlTokenType.RBRACE)) {
-                this += parseMemberDeclaration()
-            }
-        }
-    } else emptyList()
-    return UniqueDeclaration(
-        name = name,
-        modifiers = modifiers,
-        contextSpec = contextSpec,
-        members = members
-    )
+	val name = if (isMember) {
+		parseIdentifierName(IdentifierNameTarget.MEMBER_UNIQUE)
+	} else {
+		parseIdentifierName(IdentifierNameTarget.UNIQUE)
+	}
+	val members = if (cursor.match(PzlTokenType.LBRACE)) {
+		buildList {
+			while (!cursor.match(PzlTokenType.RBRACE)) {
+				this += parseMemberDeclaration()
+			}
+		}
+	} else emptyList()
+	return UniqueDeclaration(
+		name = name,
+		modifiers = modifiers,
+		contextSpec = contextSpec,
+		annotationCalls = annotationCalls,
+		members = members
+	)
 }

@@ -1,4 +1,4 @@
-package puzzle.core.parser.parser.binding.type
+package puzzle.core.parser.parser.parameter.type
 
 import puzzle.core.exception.syntaxError
 import puzzle.core.lexer.PzlTokenType
@@ -7,8 +7,8 @@ import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.NamedType
 import puzzle.core.parser.ast.TokenRange
 import puzzle.core.parser.ast.TypeReference
-import puzzle.core.parser.ast.binding.TypeParameter
-import puzzle.core.parser.ast.binding.Variance
+import puzzle.core.parser.ast.parameter.TypeParameter
+import puzzle.core.parser.ast.parameter.Variance
 import puzzle.core.parser.parser.identifier.IdentifierNameTarget
 import puzzle.core.parser.parser.identifier.parseIdentifierName
 import puzzle.core.parser.parser.parseTypeReference

@@ -1,9 +1,9 @@
-package puzzle.core.parser.parser.binding.parameter
+package puzzle.core.parser.parser.parameter.parameter
 
 import puzzle.core.lexer.PzlTokenType
 import puzzle.core.model.PzlContext
 import puzzle.core.parser.PzlTokenCursor
-import puzzle.core.parser.ast.binding.Parameter
+import puzzle.core.parser.ast.parameter.Parameter
 import puzzle.core.parser.matcher.expression.parseExpressionChain
 import puzzle.core.parser.parser.identifier.IdentifierNameTarget
 import puzzle.core.parser.parser.identifier.parseIdentifierName

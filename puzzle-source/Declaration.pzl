@@ -168,7 +168,8 @@ struct Info(
     val number: Int
 )
 
-annotation Target(val name: String)
+type<T>
+annotation Target(val name: T)
 
 trait NameProvider {
 
@@ -248,8 +249,11 @@ class Int {
     }
 }
 
+@Annotation1
+@Annotation2(name = "Test")
 class List {
 
+    @Test.Annotation2(name = "Hello" + " " + "World")
     fun []=(key: String, value: String) {
 
     }

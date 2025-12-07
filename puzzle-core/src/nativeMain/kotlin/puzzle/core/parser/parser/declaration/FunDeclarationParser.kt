@@ -5,18 +5,19 @@ import puzzle.core.exception.syntaxError
 import puzzle.core.lexer.PzlTokenType.*
 import puzzle.core.model.PzlContext
 import puzzle.core.parser.PzlTokenCursor
+import puzzle.core.parser.ast.AnnotationCall
 import puzzle.core.parser.ast.NamedType
 import puzzle.core.parser.ast.TypeReference
-import puzzle.core.parser.ast.binding.ContextSpec
-import puzzle.core.parser.ast.binding.TypeSpec
 import puzzle.core.parser.ast.declaration.FunDeclaration
 import puzzle.core.parser.ast.declaration.FunName
 import puzzle.core.parser.ast.declaration.IdentifierFunName
 import puzzle.core.parser.ast.declaration.OperatorFunName
+import puzzle.core.parser.ast.parameter.ContextSpec
+import puzzle.core.parser.ast.parameter.TypeSpec
 import puzzle.core.parser.matcher.statement.parseStatement
-import puzzle.core.parser.parser.binding.parameter.parseFunParameters
 import puzzle.core.parser.parser.identifier.IdentifierNameTarget
 import puzzle.core.parser.parser.identifier.tryParseIdentifierName
+import puzzle.core.parser.parser.parameter.parameter.parseFunParameters
 import puzzle.core.parser.parser.parseTypeReference
 import puzzle.core.symbol.Modifier
 
@@ -24,7 +25,8 @@ context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseFunDeclaration(
 	typeSpec: TypeSpec?,
 	contextSpec: ContextSpec?,
-	modifiers: List<Modifier>
+	modifiers: List<Modifier>,
+	annotationCalls: List<AnnotationCall>,
 ): FunDeclaration {
 	val (extension, funName) = parseExtensionAndFunName()
 	val parameters = parseFunParameters()
@@ -51,6 +53,7 @@ fun parseFunDeclaration(
 		extension = extension,
 		typeSpec = typeSpec,
 		contextSpec = contextSpec,
+		annotationCalls = annotationCalls,
 		statements = statements
 	)
 }

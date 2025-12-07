@@ -1,4 +1,4 @@
-package puzzle.core.parser.parser.binding.type
+package puzzle.core.parser.parser.parameter.type
 
 enum class TypeTarget(
     val displayName: String,
