@@ -207,7 +207,7 @@ fun type(type: type) {
 
 }
 
-type<T>
+reified type<T : Any1 & Any2>
 context(_: T, name: String)
 fun context() {
 
@@ -261,4 +261,10 @@ class List {
     fun [](key: String): String {
 
     }
+}
+
+fun param(
+    @Param name: String = ""
+) {
+
 }

@@ -165,6 +165,8 @@ class Generic2(
     }
 }
 
+@Annotation1
+@Annotation2(name = "Hi")
 reified type<T>
 fun generic3(type: T) {
     println(type is Int)

@@ -7,6 +7,7 @@ import puzzle.core.parser.ast.parameter.Parameter
 import puzzle.core.parser.parser.modifier.ModifierTarget
 import puzzle.core.parser.parser.modifier.check
 import puzzle.core.parser.parser.modifier.parseModifiers
+import puzzle.core.parser.parser.parseAnnotationCalls
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseFunParameters(): List<Parameter> {
@@ -26,7 +27,8 @@ fun parseFunParameters(): List<Parameter> {
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 private fun parseFunParameter(): Parameter {
+	val annotationCalls = parseAnnotationCalls()
 	val modifiers = parseModifiers()
 	modifiers.check(ModifierTarget.FUN_PARAMETER)
-	return parseParameter(modifiers, isSupportedLambdaType = true)
+	return parseParameter(modifiers, annotationCalls, isSupportedLambdaType = true)
 }
