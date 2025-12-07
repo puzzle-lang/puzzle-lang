@@ -59,7 +59,7 @@ private fun run(paths: List<String>) = runBlocking {
     }
     val sourceFileNodes = jobs.awaitAll()
     val program = PzlProgram(sourceFileNodes)
-//    println(json.encodeToString(program))
+    println(json.encodeToString(program))
 }
 
 private fun CharArray.getLineStarts(): IntArray {

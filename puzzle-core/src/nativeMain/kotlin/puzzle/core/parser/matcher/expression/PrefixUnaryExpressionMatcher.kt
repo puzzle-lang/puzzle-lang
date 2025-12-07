@@ -12,7 +12,7 @@ object PrefixUnaryExpressionMatcher : ExpressionMatcher<PrefixUnaryExpression> {
     private val tokenTypes = arrayOf(
         PzlTokenType.PLUS,
         PzlTokenType.MINUS,
-        PzlTokenType.BANG,
+        PzlTokenType.NOT,
         PzlTokenType.BIT_NOT,
         PzlTokenType.DOUBLE_PLUS,
         PzlTokenType.DOUBLE_MINUS

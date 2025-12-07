@@ -91,7 +91,7 @@ private fun parseInitialExpression(receiver: Expression?): Expression {
 context(_: PzlContext, cursor: PzlTokenCursor)
 private fun parseExpression(receiver: Expression): Expression {
     var receiver = receiver
-    while (cursor.match(PzlTokenType.BANG)) {
+    while (cursor.match(PzlTokenType.NOT)) {
         if (receiver !is NonNullAssertionExpression) {
             receiver = NonNullAssertionExpression(receiver)
         }
@@ -99,7 +99,7 @@ private fun parseExpression(receiver: Expression): Expression {
     while (isInvoke()) {
         receiver = parseInvokeExpression(receiver)
     }
-    while (cursor.match(PzlTokenType.BANG)) {
+    while (cursor.match(PzlTokenType.NOT)) {
         if (receiver !is NonNullAssertionExpression) {
             receiver = NonNullAssertionExpression(receiver)
         }

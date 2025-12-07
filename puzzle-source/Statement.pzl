@@ -29,5 +29,5 @@ fun main() {
     val a = i++.name()
     // val b = ++i.name()    // 语法错误
     val a = b ? c ?: (d + 1) * 10 : e ?: f
-    val a = b.c ~> d && e.f() !> g.h[0]
+    val a = b.c ~> d && e.f() !~> g.h[0]
 }

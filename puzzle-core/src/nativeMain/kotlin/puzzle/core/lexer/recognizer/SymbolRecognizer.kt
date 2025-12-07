@@ -8,7 +8,7 @@ import puzzle.core.util.ranges.rangeTo
 
 data object SymbolRecognizer : TokenRecognizer {
 	
-	private val symbols = (PzlTokenType.PLUS..PzlTokenType.DOUBLE_DOT)
+	private val symbols = (PzlTokenType.PLUS..PzlTokenType.RANGE_UNTIL)
 		.groupBy { it.value.length }
 		.mapValues { (_, value) -> value.associateBy { it.value } }
 	

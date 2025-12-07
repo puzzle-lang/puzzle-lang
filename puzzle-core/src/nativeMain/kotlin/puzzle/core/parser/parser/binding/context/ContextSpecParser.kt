@@ -17,6 +17,6 @@ fun parseContextSpec(): ContextSpec? {
             }
         } while (!cursor.match(PzlTokenType.RPAREN))
     }
-    val isInherited = cursor.match(PzlTokenType.BANG)
+    val isInherited = cursor.match(PzlTokenType.NOT)
     return ContextSpec(receivers, isInherited)
 }
