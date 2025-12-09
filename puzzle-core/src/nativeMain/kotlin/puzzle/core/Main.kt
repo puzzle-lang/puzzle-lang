@@ -42,23 +42,24 @@ private fun run(paths: List<String>) = runBlocking {
 	val files = paths.toSet().map(::File).distinctBy { it.absolutePath }
 	val jobs = files.map { file ->
 		async(Dispatchers.Default) {
-			val source = file.readText().toCharArray()
-			val lineStarts = source.getLineStarts()
+			val source = measureTimedValue { file.readChars() }
+			println("${file.absolutePath} -> 文件读取: ${source.duration}")
+			val lineStarts = source.value.getLineStarts()
 			val context = PzlContext(file.absolutePath, lineStarts)
 			context(context) {
-				val tokens = measureTimedValue { PzlLexer(source).lex() }
-				println("词法分析: ${tokens.duration}")
+				val tokens = measureTimedValue { PzlLexer(source.value).lex() }
+				println("${file.absolutePath} -> 词法分析: ${tokens.duration}")
 				val cursor = PzlTokenCursor(tokens.value)
 				context(cursor) {
 					val node = measureTimedValue { parseSourceFileNode() }
-					println("语法分析: ${node.duration}")
+					println("${file.absolutePath} -> 语法分析: ${node.duration}")
 					node.value
 				}
 			}
 		}
 	}
 	val sourceFileNodes = jobs.awaitAll()
-	PzlProgram(sourceFileNodes).debug()
+//	PzlProgram(sourceFileNodes).printLog()
 }
 
 private fun CharArray.getLineStarts(): IntArray {
@@ -78,7 +79,7 @@ val json = Json {
 	ignoreUnknownKeys = true
 }
 
-inline fun <reified T> T.debug(): T {
+inline fun <reified T> T.printLog(): T {
 	println(this?.let { json.encodeToString(it) })
 	return this
 }

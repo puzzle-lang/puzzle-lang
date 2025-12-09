@@ -1,6 +1,7 @@
 package pzl.example
 
 fun main() {
+    var a = println("你好")
     var n = 0
     val n1 = ++n / n--
     val n2 = n++ + 10

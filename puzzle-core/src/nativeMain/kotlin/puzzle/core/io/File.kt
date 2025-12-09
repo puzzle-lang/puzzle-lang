@@ -4,6 +4,7 @@ package puzzle.core.io
 
 import kotlinx.cinterop.*
 import platform.posix.*
+import kotlin.math.min
 
 class File(
 	private val path: String
@@ -37,20 +38,28 @@ class File(
 			}.also { _absolutePath = it }
 		}
 	
-	fun readText(): String {
+	fun readChars(): CharArray {
 		val file = fopen(path, "rb") ?: error("无法打开文件: $path")
 		try {
-			val buffers = StringBuilder()
+			fseek(file, 0, SEEK_END)
+			val size = ftell(file).toInt()
+			rewind(file)
+			val result = CharArray(size)
 			memScoped {
-				val buf = allocArray<ByteVar>(4096)
+				val pageSize = min(size, sysconf(_SC_PAGESIZE).toInt())
+				val buf = allocArray<ByteVar>(pageSize)
+				var offset = 0
 				while (true) {
-					val bytesRead = fread(buf, 1u, 4096u, file)
-					if (bytesRead == 0UL) break
-					val chunk = buf.readBytes(bytesRead.toInt()).decodeToString()
-					buffers.append(chunk)
+					val toRead = minOf(pageSize, size - offset)
+					val bytesRead = fread(buf, 1u, toRead.toULong(), file).toInt()
+					if (bytesRead == 0) break
+					repeat(bytesRead) {
+						result[offset + it] = buf[it].toInt().toChar()
+					}
+					offset += bytesRead
 				}
 			}
-			return buffers.toString()
+			return result
 		} finally {
 			fclose(file)
 		}
