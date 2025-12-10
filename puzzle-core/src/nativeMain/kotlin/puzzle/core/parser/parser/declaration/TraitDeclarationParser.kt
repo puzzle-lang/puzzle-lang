@@ -7,7 +7,6 @@ import puzzle.core.parser.ast.AnnotationCall
 import puzzle.core.parser.ast.declaration.TraitDeclaration
 import puzzle.core.parser.ast.parameter.ContextSpec
 import puzzle.core.parser.ast.parameter.TypeSpec
-import puzzle.core.parser.matcher.declaration.parseMemberDeclaration
 import puzzle.core.parser.parser.identifier.IdentifierNameTarget
 import puzzle.core.parser.parser.identifier.parseIdentifierName
 import puzzle.core.symbol.Modifier

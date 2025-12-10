@@ -6,25 +6,25 @@ import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.SourceFileNode
 import puzzle.core.parser.ast.declaration.Declaration
 import puzzle.core.parser.ast.declaration.ImportDeclaration
-import puzzle.core.parser.matcher.declaration.parseTopLevelDeclaration
 import puzzle.core.parser.parser.declaration.parseImportDeclaration
 import puzzle.core.parser.parser.declaration.parsePackageDeclaration
+import puzzle.core.parser.parser.declaration.parseTopLevelDeclaration
 
 context(context: PzlContext, cursor: PzlTokenCursor)
 fun parseSourceFileNode(): SourceFileNode {
-    val packageDeclaration = parsePackageDeclaration()
-    val importDeclarations = mutableListOf<ImportDeclaration>()
-    while (cursor.match(PzlTokenType.IMPORT)) {
-        importDeclarations += parseImportDeclaration()
-    }
-    val declarations = mutableListOf<Declaration>()
-    while (!cursor.isAtEnd()) {
-        declarations += parseTopLevelDeclaration()
-    }
-    return SourceFileNode(
-        path = context.sourcePath,
-        packageDeclaration = packageDeclaration,
-        importDeclarations = importDeclarations,
-        declarations = declarations,
-    )
+	val packageDeclaration = parsePackageDeclaration()
+	val importDeclarations = mutableListOf<ImportDeclaration>()
+	while (cursor.match(PzlTokenType.IMPORT)) {
+		importDeclarations += parseImportDeclaration()
+	}
+	val declarations = mutableListOf<Declaration>()
+	while (!cursor.isAtEnd()) {
+		declarations += parseTopLevelDeclaration()
+	}
+	return SourceFileNode(
+		path = context.sourcePath,
+		packageDeclaration = packageDeclaration,
+		importDeclarations = importDeclarations,
+		declarations = declarations,
+	)
 }

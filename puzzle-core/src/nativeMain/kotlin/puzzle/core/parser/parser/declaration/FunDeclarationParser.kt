@@ -14,11 +14,11 @@ import puzzle.core.parser.ast.declaration.IdentifierFunName
 import puzzle.core.parser.ast.declaration.OperatorFunName
 import puzzle.core.parser.ast.parameter.ContextSpec
 import puzzle.core.parser.ast.parameter.TypeSpec
-import puzzle.core.parser.matcher.statement.parseStatement
 import puzzle.core.parser.parser.identifier.IdentifierNameTarget
 import puzzle.core.parser.parser.identifier.tryParseIdentifierName
 import puzzle.core.parser.parser.parameter.parameter.parseFunParameters
 import puzzle.core.parser.parser.parseTypeReference
+import puzzle.core.parser.parser.statement.parseStatements
 import puzzle.core.symbol.Modifier
 
 context(_: PzlContext, cursor: PzlTokenCursor)
@@ -38,13 +38,7 @@ fun parseFunDeclaration(
 	} else {
 		returnTypes += TypeReference(PzlTypes.Unit)
 	}
-	val statements = if (cursor.match(LBRACE)) {
-		buildList {
-			while (!cursor.match(RBRACE)) {
-				this += parseStatement()
-			}
-		}
-	} else emptyList()
+	val expressions = if (cursor.match(LBRACE)) parseStatements() else emptyList()
 	return FunDeclaration(
 		name = funName,
 		parameters = parameters,
@@ -54,7 +48,7 @@ fun parseFunDeclaration(
 		typeSpec = typeSpec,
 		contextSpec = contextSpec,
 		annotationCalls = annotationCalls,
-		statements = statements
+		statements = expressions
 	)
 }
 

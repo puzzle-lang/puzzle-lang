@@ -10,7 +10,6 @@ import puzzle.core.parser.ast.declaration.EnumDeclaration
 import puzzle.core.parser.ast.declaration.EnumEntry
 import puzzle.core.parser.ast.parameter.ContextSpec
 import puzzle.core.parser.ast.parameter.TypeSpec
-import puzzle.core.parser.matcher.declaration.parseMemberDeclaration
 import puzzle.core.parser.parser.identifier.IdentifierNameTarget
 import puzzle.core.parser.parser.identifier.parseIdentifierName
 import puzzle.core.parser.parser.parameter.parameter.parseEnumParameters

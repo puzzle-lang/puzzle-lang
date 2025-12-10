@@ -44,7 +44,7 @@ class File(
 			fseek(file, 0, SEEK_END)
 			val size = ftell(file).toInt()
 			rewind(file)
-			val result = CharArray(size)
+			val bytes = ByteArray(size)
 			memScoped {
 				val pageSize = min(size, sysconf(_SC_PAGESIZE).toInt())
 				val buf = allocArray<ByteVar>(pageSize)
@@ -54,12 +54,12 @@ class File(
 					val bytesRead = fread(buf, 1u, toRead.toULong(), file).toInt()
 					if (bytesRead == 0) break
 					repeat(bytesRead) {
-						result[offset + it] = buf[it].toInt().toChar()
+						bytes[offset + it] = buf[it]
 					}
 					offset += bytesRead
 				}
 			}
-			return result
+			return bytes.decodeToString().toCharArray()
 		} finally {
 			fclose(file)
 		}

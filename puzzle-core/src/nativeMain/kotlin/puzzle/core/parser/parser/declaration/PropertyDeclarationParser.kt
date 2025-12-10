@@ -7,10 +7,10 @@ import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.AnnotationCall
 import puzzle.core.parser.ast.NamedType
 import puzzle.core.parser.ast.TypeReference
+import puzzle.core.parser.ast.declaration.PropertyDeclaration
 import puzzle.core.parser.ast.parameter.ContextSpec
 import puzzle.core.parser.ast.parameter.TypeSpec
-import puzzle.core.parser.ast.declaration.PropertyDeclaration
-import puzzle.core.parser.matcher.expression.parseExpressionChain
+import puzzle.core.parser.parser.expression.parseExpressionChain
 import puzzle.core.parser.parser.identifier.IdentifierNameTarget
 import puzzle.core.parser.parser.identifier.parseIdentifierName
 import puzzle.core.parser.parser.parseTypeReference

@@ -21,7 +21,7 @@ class FunDeclaration(
 	val typeSpec: TypeSpec?,
 	val contextSpec: ContextSpec?,
 	val annotationCalls: List<AnnotationCall>,
-	val statements: List<Statement>
+	val statements: List<Statement>,
 ) : Declaration
 
 @Serializable

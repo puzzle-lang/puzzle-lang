@@ -9,7 +9,17 @@ class NumberLiteral(val value: String) : Expression
 class StringLiteral(val value: String) : Expression
 
 @Serializable
-class BooleanLiteral(val value: Boolean) : Expression
+class BooleanLiteral private constructor(
+	val value: Boolean
+) : Expression {
+	
+	companion object {
+		
+		val True = BooleanLiteral(true)
+		
+		val False = BooleanLiteral(false)
+	}
+}
 
 @Serializable
 class CharLiteral(val value: String) : Expression

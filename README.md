@@ -151,7 +151,8 @@ class Generic1(
 ) {
     
     init {
-        println(T is String) // 支持运行时获取泛型
+        println(T::type == String::type)        // 支持运行时获取泛型类型信息
+        println(T::type < Object::type)         // 支持是否是某个类型的子类型
     }
 }
 
@@ -161,7 +162,7 @@ class Generic2(
 ) {
 
     init {
-        // println(T is String)  // 泛型为具体化，不支持判断类型
+        // println(T::type)                     // error! 泛型为具体化，不支持判断类型
     }
 }
 

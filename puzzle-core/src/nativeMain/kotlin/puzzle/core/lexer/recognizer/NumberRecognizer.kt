@@ -85,6 +85,7 @@ data object NumberRecognizer : TokenRecognizer {
 				}
 				
 				c in legalEndChars -> break
+				
 				else -> incorrectDigitalFormat(start)
 			}
 		}

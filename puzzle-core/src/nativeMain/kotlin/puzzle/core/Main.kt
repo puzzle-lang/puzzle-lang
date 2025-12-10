@@ -18,79 +18,79 @@ import kotlin.time.measureTimedValue
 
 @OptIn(NativeRuntimeApi::class, ExperimentalStdlibApi::class)
 fun main(vararg args: String) {
-    val duration = measureTime {
-        val command = args.firstOrNull() ?: run {
-            help()
-            return
-        }
-        when (command) {
-            "-c" -> {
-                val paths = args.drop(1)
-                if (paths.isEmpty()) {
-                    println("请至少指定一个 Puzzle 程序文件，使用 puzzle -h 查看使用手册")
-                    return
-                }
-                run(args.drop(1))
-            }
-
-            else -> help()
-        }
-    }
-    println("执行耗时: $duration")
-    println("内存使用: ${currentMemoryUsage()}")
+	val duration = measureTime {
+		val command = args.firstOrNull() ?: run {
+			help()
+			return
+		}
+		when (command) {
+			"-c" -> {
+				val paths = args.drop(1)
+				if (paths.isEmpty()) {
+					println("请至少指定一个 Puzzle 程序文件，使用 puzzle -h 查看使用手册")
+					return
+				}
+				run(args.drop(1))
+			}
+			
+			else -> help()
+		}
+	}
+	println("执行耗时: $duration")
+	println("内存使用: ${currentMemoryUsage()}")
 }
 
 private fun run(paths: List<String>) = runBlocking {
-    val files = paths.toSet().map(::File).distinctBy { it.absolutePath }
-    val jobs = files.map { file ->
-        async(Dispatchers.Default) {
-            val source = measureTimedValue { file.readChars() }
-            println("${file.absolutePath} -> 文件读取: ${source.duration}")
-            val lineStarts = source.value.getLineStarts()
-            val context = PzlContext(file.absolutePath, lineStarts)
-            context(context) {
-                val tokens = measureTimedValue { PzlLexer(source.value).lex() }
-                println("${file.absolutePath} -> 词法分析: ${tokens.duration}")
-                val cursor = PzlTokenCursor(tokens.value)
-                context(cursor) {
-                    val node = measureTimedValue { parseSourceFileNode() }
-                    println("${file.absolutePath} -> 语法分析: ${node.duration}")
-                    node.value
-                }
-            }
-        }
-    }
-    val sourceFileNodes = jobs.awaitAll()
-    PzlProgram(sourceFileNodes).printLog()
+	val files = paths.toSet().map(::File).distinctBy { it.absolutePath }
+	val jobs = files.map { file ->
+		async(Dispatchers.Default) {
+			val source = measureTimedValue { file.readChars() }
+			println("${file.absolutePath} -> 文件读取: ${source.duration}")
+			val lineStarts = source.value.getLineStarts()
+			val context = PzlContext(file.absolutePath, lineStarts)
+			context(context) {
+				val tokens = measureTimedValue { PzlLexer(source.value).lex() }
+				println("${file.absolutePath} -> 词法分析: ${tokens.duration}")
+				val cursor = PzlTokenCursor(tokens.value)
+				context(cursor) {
+					val node = measureTimedValue { parseSourceFileNode() }
+					println("${file.absolutePath} -> 语法分析: ${node.duration}")
+					node.value
+				}
+			}
+		}
+	}
+	val sourceFileNodes = jobs.awaitAll()
+	PzlProgram(sourceFileNodes).alsoLog()
 }
 
 private fun CharArray.getLineStarts(): IntArray {
-    val starts = mutableListOf(0)
-    this.forEachIndexed { index, char ->
-        if (char == '\n' && index + 1 < this.size) {
-            starts += index + 1
-        }
-    }
-    return starts.toIntArray()
+	val starts = mutableListOf(0)
+	this.forEachIndexed { index, char ->
+		if (char == '\n' && index + 1 < this.size) {
+			starts += index + 1
+		}
+	}
+	return starts.toIntArray()
 }
 
 val json = Json {
-    prettyPrint = true
-    encodeDefaults = true
-    classDiscriminator = "class"
-    ignoreUnknownKeys = true
+	prettyPrint = true
+	encodeDefaults = true
+	classDiscriminator = "class"
+	ignoreUnknownKeys = true
 }
 
-inline fun <reified T> T.printLog(): T {
-    println(this?.let { json.encodeToString(it) })
-    return this
+inline fun <reified T> T.alsoLog(): T {
+	println(this?.let { json.encodeToString(it) })
+	return this
 }
 
 private fun help() {
-    val help = """
+	val help = """
 		使用方式:
             puzzle -c <main.pzl> [file1.pzl, file2.pzl, ...]  编译 Puzzle (.pzl) 程序文件
             puzzle -h                                         查看使用手册
 	""".trimIndent()
-    println(help)
+	println(help)
 }

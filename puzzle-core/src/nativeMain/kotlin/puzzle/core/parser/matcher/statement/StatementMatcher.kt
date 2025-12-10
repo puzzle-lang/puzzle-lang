@@ -1,30 +1,23 @@
 package puzzle.core.parser.matcher.statement
 
-import puzzle.core.exception.syntaxError
-import puzzle.core.lexer.PzlTokenType
 import puzzle.core.model.PzlContext
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.statement.Statement
 
 sealed interface StatementMatcher<S : Statement> {
-
-    context(cursor: PzlTokenCursor)
-    fun match(): Boolean
-
-    context(_: PzlContext, cursor: PzlTokenCursor)
-    fun parse(): S
-}
-
-private val matchers = arrayOf(
-    VariableDeclarationStatementMatcher
-)
-
-context(_: PzlContext, cursor: PzlTokenCursor)
-fun parseStatement(): Statement {
-    val matcher = matchers.find { it.match() }
-        ?: syntaxError(
-            message = if (cursor.current.type == PzlTokenType.EOF) "缺少 '}'" else "不支持的语句",
-            token = cursor.current
-        )
-    return matcher.parse()
+	
+	companion object {
+		
+		val matchers = arrayOf(
+			VariableDeclarationStatementMatcher,
+			IfStatementMatcher,
+			ExpressionStatementMatcher
+		)
+	}
+	
+	context(cursor: PzlTokenCursor)
+	fun match(): Boolean
+	
+	context(_: PzlContext, cursor: PzlTokenCursor)
+	fun parse(): S
 }

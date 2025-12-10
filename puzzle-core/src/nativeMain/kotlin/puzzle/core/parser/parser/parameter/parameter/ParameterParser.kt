@@ -5,7 +5,7 @@ import puzzle.core.model.PzlContext
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.AnnotationCall
 import puzzle.core.parser.ast.parameter.Parameter
-import puzzle.core.parser.matcher.expression.parseExpressionChain
+import puzzle.core.parser.parser.expression.parseExpressionChain
 import puzzle.core.parser.parser.identifier.IdentifierNameTarget
 import puzzle.core.parser.parser.identifier.parseIdentifierName
 import puzzle.core.parser.parser.parseTypeReference
