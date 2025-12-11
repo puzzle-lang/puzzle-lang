@@ -7,7 +7,7 @@ import puzzle.core.parser.ast.parameter.ContextSpec
 import puzzle.core.parser.ast.parameter.Parameter
 import puzzle.core.parser.ast.parameter.TypeSpec
 import puzzle.core.parser.ast.statement.Statement
-import puzzle.core.symbol.Modifier
+import puzzle.core.token.ModifierKind
 import puzzle.core.util.FunNameSerializer
 
 @Serializable
@@ -15,7 +15,7 @@ class FunDeclaration(
 	@Serializable(with = FunNameSerializer::class)
 	val name: FunName,
 	val parameters: List<Parameter>,
-	val modifiers: List<Modifier>,
+	val modifiers: List<ModifierKind>,
 	val returnTypes: List<TypeReference>,
 	val extension: TypeReference?,
 	val typeSpec: TypeSpec?,

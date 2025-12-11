@@ -1,12 +1,12 @@
 package puzzle.core.lexer.recognizer
 
-import puzzle.core.model.PzlContext
 import puzzle.core.exception.syntaxError
-import puzzle.core.lexer.PzlToken
-import puzzle.core.lexer.PzlTokenType
+import puzzle.core.model.PzlContext
 import puzzle.core.parser.ast.TokenRange
+import puzzle.core.token.IdentifierKind
+import puzzle.core.token.PzlToken
 
-data object IdentifierRecognizer : TokenRecognizer {
+object IdentifierRecognizer : TokenRecognizer {
 	
 	context(_: PzlContext)
 	override fun tryParse(input: CharArray, start: Int): PzlToken? {
@@ -21,7 +21,8 @@ data object IdentifierRecognizer : TokenRecognizer {
 		if (!isValid) {
 			syntaxError("不合法的标识符", start)
 		}
-		return PzlToken(PzlTokenType.IDENTIFIER, identifier, TokenRange(start, position))
+		val kind = IdentifierKind(identifier)
+		return PzlToken(kind, TokenRange(start, position))
 	}
 	
 	private fun Char.isEnglishLetter(): Boolean {

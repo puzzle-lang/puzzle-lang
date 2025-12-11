@@ -1,12 +1,19 @@
 package puzzle.core.parser.parser.identifier
 
 import puzzle.core.exception.syntaxError
-import puzzle.core.lexer.PzlToken
-import puzzle.core.lexer.PzlTokenType.*
 import puzzle.core.model.PzlContext
 import puzzle.core.parser.PzlTokenCursor
+import puzzle.core.token.AccessorKind.GET
+import puzzle.core.token.AccessorKind.SET
+import puzzle.core.token.ContextualKind.*
+import puzzle.core.token.IdentifierKind
+import puzzle.core.token.KeywordKind
+import puzzle.core.token.ModifierKind.*
+import puzzle.core.token.NamespaceKind.IMPORT
+import puzzle.core.token.NamespaceKind.PACKAGE
+import puzzle.core.token.PzlToken
 
-private val softKeywords = arrayOf(
+private val softKeywords = arrayOf<KeywordKind>(
 	PRIVATE, PROTECTED, FILE, INTERNAL, MODULE, PUBLIC,
 	FINAL,
 	OPEN, ABSTRACT, SEALED, OVERRIDE,
@@ -26,7 +33,7 @@ fun parseIdentifierName(target: IdentifierNameTarget): String {
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun tryParseIdentifierName(target: IdentifierNameTarget): String? {
-	if (cursor.match(IDENTIFIER)) {
+	if (cursor.match<IdentifierKind>()) {
 		val value = cursor.previous.value
 		if (value == "_" && !target.isSupportedAnonymity) {
 			syntaxError(target.notSupportedAnonymityMessage, cursor.previous)
@@ -41,11 +48,11 @@ fun tryParseIdentifierName(target: IdentifierNameTarget): String? {
 	return null
 }
 
-fun PzlToken.isIdentifier(): Boolean {
-	return this.type == IDENTIFIER || softKeywords.any { this.type == it }
+fun PzlToken.isIdentifierName(): Boolean {
+	return this.kind is IdentifierKind || softKeywords.any { this.kind == it }
 }
 
 context(cursor: PzlTokenCursor)
 fun matchIdentifierName(): Boolean {
-	return cursor.match(IDENTIFIER) || softKeywords.any { cursor.match(it) }
+	return cursor.match<IdentifierKind>() || softKeywords.any { cursor.match(it) }
 }

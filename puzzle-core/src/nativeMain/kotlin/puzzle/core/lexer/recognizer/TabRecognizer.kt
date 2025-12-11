@@ -1,11 +1,11 @@
 package puzzle.core.lexer.recognizer
 
 import puzzle.core.model.PzlContext
-import puzzle.core.lexer.PzlToken
-import puzzle.core.lexer.PzlTokenType
 import puzzle.core.parser.ast.TokenRange
+import puzzle.core.token.PzlToken
+import puzzle.core.token.WhiteSpaceKind
 
-data object TabRecognizer : TokenRecognizer {
+object TabRecognizer : TokenRecognizer {
 	
 	context(_: PzlContext)
 	override fun tryParse(input: CharArray, start: Int): PzlToken? {
@@ -14,6 +14,6 @@ data object TabRecognizer : TokenRecognizer {
 		while (position < input.size && input[position] == '\t') {
 			position++
 		}
-		return PzlToken(PzlTokenType.TAB, "", TokenRange(start, position))
+		return PzlToken(WhiteSpaceKind.TAB, TokenRange(start, position))
 	}
 }

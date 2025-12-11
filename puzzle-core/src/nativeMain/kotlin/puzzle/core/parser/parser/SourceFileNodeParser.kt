@@ -1,6 +1,5 @@
 package puzzle.core.parser.parser
 
-import puzzle.core.lexer.PzlTokenType
 import puzzle.core.model.PzlContext
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.SourceFileNode
@@ -9,12 +8,13 @@ import puzzle.core.parser.ast.declaration.ImportDeclaration
 import puzzle.core.parser.parser.declaration.parseImportDeclaration
 import puzzle.core.parser.parser.declaration.parsePackageDeclaration
 import puzzle.core.parser.parser.declaration.parseTopLevelDeclaration
+import puzzle.core.token.NamespaceKind
 
 context(context: PzlContext, cursor: PzlTokenCursor)
 fun parseSourceFileNode(): SourceFileNode {
 	val packageDeclaration = parsePackageDeclaration()
 	val importDeclarations = mutableListOf<ImportDeclaration>()
-	while (cursor.match(PzlTokenType.IMPORT)) {
+	while (cursor.match(NamespaceKind.IMPORT::class)) {
 		importDeclarations += parseImportDeclaration()
 	}
 	val declarations = mutableListOf<Declaration>()

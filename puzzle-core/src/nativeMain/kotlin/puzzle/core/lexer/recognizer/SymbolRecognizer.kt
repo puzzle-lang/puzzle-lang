@@ -1,14 +1,13 @@
 package puzzle.core.lexer.recognizer
 
 import puzzle.core.model.PzlContext
-import puzzle.core.lexer.PzlToken
-import puzzle.core.lexer.PzlTokenType
 import puzzle.core.parser.ast.TokenRange
-import puzzle.core.util.ranges.rangeTo
+import puzzle.core.token.PzlToken
+import puzzle.core.token.SymbolKind
 
-data object SymbolRecognizer : TokenRecognizer {
+object SymbolRecognizer : TokenRecognizer {
 	
-	private val symbols = (PzlTokenType.PLUS..PzlTokenType.RANGE_UNTIL)
+	private val symbols = SymbolKind.kinds
 		.groupBy { it.value.length }
 		.mapValues { (_, value) -> value.associateBy { it.value } }
 	
@@ -20,8 +19,8 @@ data object SymbolRecognizer : TokenRecognizer {
 		for (length in maxLength downTo 1) {
 			if (start + length > input.size) continue
 			val symbol = input.concatToString(start, start + length)
-			val tokenType = symbols[length]!![symbol] ?: continue
-			return PzlToken(tokenType, symbol, TokenRange(start, start + length))
+			val kind = symbols[length]!![symbol] ?: continue
+			return PzlToken(kind, TokenRange(start, start + length))
 		}
 		return null
 	}

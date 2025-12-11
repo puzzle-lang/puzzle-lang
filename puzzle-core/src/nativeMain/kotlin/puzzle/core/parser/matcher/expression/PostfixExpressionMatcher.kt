@@ -1,27 +1,32 @@
 package puzzle.core.parser.matcher.expression
 
-import puzzle.core.lexer.PzlTokenType.*
 import puzzle.core.model.PzlContext
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.expression.Expression
 import puzzle.core.parser.parser.expression.parsePostfixExpression
 import puzzle.core.parser.parser.identifier.matchIdentifierName
+import puzzle.core.token.AccessKind.*
+import puzzle.core.token.ContextualKind.SUPER
+import puzzle.core.token.ContextualKind.THIS
+import puzzle.core.token.IdentifierKind
+import puzzle.core.token.LiteralKind.*
+import puzzle.core.token.PzlTokenKind
 
 object PostfixExpressionMatcher : ExpressionMatcher<Expression> {
-
-    private val tokenTypes = arrayOf(
-        NUMBER, STRING, CHAR, TRUE, FALSE,
-        THIS, SUPER, NULL,
-        DOT, QUESTION_DOT, DOUBLE_COLON
-    )
-
-    context(cursor: PzlTokenCursor)
-    override fun match(left: Expression?): Boolean {
-        return tokenTypes.any { cursor.match(it) } || matchIdentifierName()
-    }
-
-    context(_: PzlContext, cursor: PzlTokenCursor)
-    override fun parse(left: Expression?): Expression {
-        return parsePostfixExpression(left)
-    }
+	
+	private val kinds: Array<PzlTokenKind> = arrayOf(DOT, QUESTION_DOT, DOUBLE_COLON, BooleanKind.TRUE, BooleanKind.FALSE, NULL, THIS, SUPER)
+	
+	context(cursor: PzlTokenCursor)
+	override fun match(left: Expression?): Boolean {
+		return kinds.any { cursor.match(it) } ||
+				cursor.match<Number>() ||
+				cursor.match<IdentifierKind>() ||
+				cursor.match<String>() ||
+				matchIdentifierName()
+	}
+	
+	context(_: PzlContext, cursor: PzlTokenCursor)
+	override fun parse(left: Expression?): Expression {
+		return parsePostfixExpression(left)
+	}
 }

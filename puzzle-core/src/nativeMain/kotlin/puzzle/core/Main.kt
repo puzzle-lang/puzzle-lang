@@ -61,7 +61,7 @@ private fun run(paths: List<String>) = runBlocking {
 		}
 	}
 	val sourceFileNodes = jobs.awaitAll()
-	PzlProgram(sourceFileNodes).alsoLog()
+	PzlProgram(sourceFileNodes)
 }
 
 private fun CharArray.getLineStarts(): IntArray {

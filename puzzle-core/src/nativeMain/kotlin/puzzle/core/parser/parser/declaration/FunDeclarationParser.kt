@@ -2,7 +2,6 @@ package puzzle.core.parser.parser.declaration
 
 import puzzle.core.constants.PzlTypes
 import puzzle.core.exception.syntaxError
-import puzzle.core.lexer.PzlTokenType.*
 import puzzle.core.model.PzlContext
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.AnnotationCall
@@ -19,26 +18,28 @@ import puzzle.core.parser.parser.identifier.tryParseIdentifierName
 import puzzle.core.parser.parser.parameter.parameter.parseFunParameters
 import puzzle.core.parser.parser.parseTypeReference
 import puzzle.core.parser.parser.statement.parseStatements
-import puzzle.core.symbol.Modifier
+import puzzle.core.token.*
+import puzzle.core.token.AssignmentKind.*
+import puzzle.core.token.OperatorKind.*
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseFunDeclaration(
 	typeSpec: TypeSpec?,
 	contextSpec: ContextSpec?,
-	modifiers: List<Modifier>,
+	modifiers: List<ModifierKind>,
 	annotationCalls: List<AnnotationCall>,
 ): FunDeclaration {
 	val (extension, funName) = parseExtensionAndFunName()
 	val parameters = parseFunParameters()
 	val returnTypes = mutableListOf<TypeReference>()
-	if (cursor.match(COLON)) {
+	if (cursor.match(SymbolKind.COLON)) {
 		do {
 			returnTypes += parseTypeReference(isSupportedLambdaType = true)
-		} while (cursor.match(COMMA))
+		} while (cursor.match(SeparatorKind.COMMA))
 	} else {
 		returnTypes += TypeReference(PzlTypes.Unit)
 	}
-	val expressions = if (cursor.match(LBRACE)) parseStatements() else emptyList()
+	val expressions = if (cursor.match(BracketKind.LBRACE)) parseStatements() else emptyList()
 	return FunDeclaration(
 		name = funName,
 		parameters = parameters,
@@ -56,13 +57,13 @@ context(_: PzlContext, cursor: PzlTokenCursor)
 private fun parseExtensionAndFunName(): Pair<TypeReference?, FunName> {
 	val name = tryParseIdentifierName(IdentifierNameTarget.FUN)
 		?: return null to (tryParseOperatorFunName() ?: syntaxError("函数缺少名称", cursor.current))
-	if (!cursor.check(DOT)) {
+	if (!cursor.check(AccessKind.DOT)) {
 		return null to IdentifierFunName(name)
 	}
 	cursor.retreat()
 	val segments = mutableListOf<String>()
 	do {
-		val type = if (cursor.match(QUESTION_DOT)) {
+		val type = if (cursor.match(AccessKind.QUESTION_DOT)) {
 			TypeReference(NamedType(segments), isNullable = true)
 		} else null
 		val segment = tryParseIdentifierName(IdentifierNameTarget.TYPE_REFERENCE)
@@ -77,23 +78,23 @@ private fun parseExtensionAndFunName(): Pair<TypeReference?, FunName> {
 			return type to segment
 		}
 		segments += segment as String
-	} while (cursor.match(DOT))
+	} while (cursor.match(AccessKind.DOT))
 	val funName = IdentifierFunName(segments.removeLast())
 	val type = TypeReference(NamedType(segments))
 	return type to funName
 }
 
-private val overloadableOperators = arrayOf(
+private val overloadableOperators = arrayOf<SymbolKind>(
 	PLUS, MINUS, NOT, BIT_NOT, DOUBLE_PLUS, DOUBLE_MINUS,
 	STAR, SLASH, PERCENT, DOUBLE_STAR,
 	EQUALS, NOT_EQUALS, GT, GT_EQUALS, LT, LT_EQUALS,
 	CONTAINS, NOT_CONTAINS,
 	BIT_AND, BIT_OR, BIT_XOR, SHL, SHR, USHR,
 	PLUS_ASSIGN, MINUS_ASSIGN, STAR_ASSIGN, SLASH_ASSIGN, PERCENT_ASSIGN,
-	INDEX_GET, INDEX_SET, RANGE_TO, RANGE_UNTIL
+	SymbolKind.INDEX_GET, SymbolKind.INDEX_SET, SymbolKind.RANGE_TO, SymbolKind.RANGE_UNTIL
 )
 
-private val notOverloadableOperators = arrayOf(
+private val notOverloadableOperators = arrayOf<SymbolKind>(
 	TRIPLE_EQUALS, TRIPLE_NOT_EQUALS,
 	AND, OR
 )

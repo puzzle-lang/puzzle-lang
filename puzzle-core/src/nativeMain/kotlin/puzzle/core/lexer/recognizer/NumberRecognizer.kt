@@ -1,16 +1,16 @@
 package puzzle.core.lexer.recognizer
 
-import puzzle.core.model.PzlContext
 import puzzle.core.exception.syntaxError
-import puzzle.core.lexer.PzlToken
-import puzzle.core.lexer.PzlTokenType
+import puzzle.core.model.PzlContext
 import puzzle.core.parser.ast.TokenRange
+import puzzle.core.token.LiteralKind
+import puzzle.core.token.PzlToken
 import puzzle.core.util.isBinary
 import puzzle.core.util.isDecimal
 import puzzle.core.util.isHex
 import puzzle.core.util.isOctal
 
-data object NumberRecognizer : TokenRecognizer {
+object NumberRecognizer : TokenRecognizer {
 	
 	private val legalEndChars = " +-*/%=><!&|^~,;:)]}\n\t".toSet()
 	
@@ -90,7 +90,8 @@ data object NumberRecognizer : TokenRecognizer {
 			}
 		}
 		val value = input.concatToString(start, position)
-		return PzlToken(PzlTokenType.NUMBER, value, TokenRange(start, position))
+		val kind = LiteralKind.Number(value)
+		return PzlToken(kind, TokenRange(start, position))
 	}
 	
 	context(_: PzlContext)

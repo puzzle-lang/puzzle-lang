@@ -1,15 +1,15 @@
 package puzzle.core.lexer.recognizer
 
 import puzzle.core.model.PzlContext
-import puzzle.core.lexer.PzlToken
-import puzzle.core.lexer.PzlTokenType
 import puzzle.core.parser.ast.TokenRange
+import puzzle.core.token.MetaKind
+import puzzle.core.token.PzlToken
 
-data object EOFRecognizer : TokenRecognizer {
+object EOFRecognizer : TokenRecognizer {
 	
 	context(_: PzlContext)
 	override fun tryParse(input: CharArray, start: Int): PzlToken? {
 		if (start < input.size) return null
-		return PzlToken(PzlTokenType.EOF, "", TokenRange(start, start + 1))
+		return PzlToken(MetaKind.EOF, TokenRange(start, start + 1))
 	}
 }

@@ -15,9 +15,9 @@ class BooleanLiteral private constructor(
 	
 	companion object {
 		
-		val True = BooleanLiteral(true)
+		val TRUE = BooleanLiteral(true)
 		
-		val False = BooleanLiteral(false)
+		val FALSE = BooleanLiteral(false)
 	}
 }
 
@@ -25,13 +25,13 @@ class BooleanLiteral private constructor(
 class CharLiteral(val value: String) : Expression
 
 @Serializable
-data object ThisLiteral : Expression
+object ThisLiteral : Expression
 
 @Serializable
-data object SuperLiteral : Expression
+object SuperLiteral : Expression
 
 @Serializable
-data object NullLiteral : Expression
+object NullLiteral : Expression
 
 @Serializable
 class IdentifierExpression(val name: String) : Expression

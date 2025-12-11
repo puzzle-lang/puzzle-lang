@@ -6,13 +6,13 @@ import puzzle.core.parser.ast.TypeReference
 import puzzle.core.parser.ast.expression.Expression
 import puzzle.core.parser.ast.parameter.ContextSpec
 import puzzle.core.parser.ast.parameter.TypeSpec
-import puzzle.core.symbol.Modifier
+import puzzle.core.token.ModifierKind
 
 @Serializable
 class PropertyDeclaration(
 	val name: String,
 	val type: TypeReference?,
-	val modifiers: List<Modifier>,
+	val modifiers: List<ModifierKind>,
 	val extension: TypeReference?,
 	val typeSpec: TypeSpec?,
 	val contextSpec: ContextSpec?,

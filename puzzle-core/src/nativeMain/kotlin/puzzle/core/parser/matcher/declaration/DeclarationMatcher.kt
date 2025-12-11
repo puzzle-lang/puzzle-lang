@@ -8,7 +8,7 @@ import puzzle.core.parser.ast.parameter.ContextSpec
 import puzzle.core.parser.ast.parameter.TypeSpec
 import puzzle.core.parser.parser.modifier.ModifierTarget
 import puzzle.core.parser.parser.parameter.type.TypeTarget
-import puzzle.core.symbol.Modifier
+import puzzle.core.token.ModifierKind
 
 sealed interface DeclarationMatcher<out D : Declaration> {
 	
@@ -40,7 +40,7 @@ sealed interface DeclarationMatcher<out D : Declaration> {
 	fun parse(
 		typeSpec: TypeSpec?,
 		contextSpec: ContextSpec?,
-		modifiers: List<Modifier>,
+		modifiers: List<ModifierKind>,
 		annotationCalls: List<AnnotationCall>,
 		isMember: Boolean
 	): D

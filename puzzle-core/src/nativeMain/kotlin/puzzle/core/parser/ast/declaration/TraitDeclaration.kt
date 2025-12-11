@@ -4,12 +4,12 @@ import kotlinx.serialization.Serializable
 import puzzle.core.parser.ast.AnnotationCall
 import puzzle.core.parser.ast.parameter.ContextSpec
 import puzzle.core.parser.ast.parameter.TypeSpec
-import puzzle.core.symbol.Modifier
+import puzzle.core.token.ModifierKind
 
 @Serializable
 class TraitDeclaration(
 	val name: String,
-	val modifiers: List<Modifier>,
+	val modifiers: List<ModifierKind>,
 	val typeSpec: TypeSpec?,
 	val contextSpec: ContextSpec?,
 	val annotationCalls: List<AnnotationCall>,

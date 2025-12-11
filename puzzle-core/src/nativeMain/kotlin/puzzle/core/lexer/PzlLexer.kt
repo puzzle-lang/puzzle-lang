@@ -1,9 +1,12 @@
 package puzzle.core.lexer
 
-import puzzle.core.model.PzlContext
 import puzzle.core.exception.syntaxError
-import puzzle.core.lexer.PzlTokenType.*
 import puzzle.core.lexer.recognizer.*
+import puzzle.core.model.PzlContext
+import puzzle.core.token.CommentKind
+import puzzle.core.token.MetaKind
+import puzzle.core.token.PzlToken
+import puzzle.core.token.WhiteSpaceKind
 
 class PzlLexer(
 	private val input: CharArray
@@ -31,7 +34,7 @@ class PzlLexer(
 			while (true) {
 				val token = nextToken()
 				this += token
-				if (token.type == EOF) break
+				if (token.kind == MetaKind.EOF) break
 			}
 		}
 	}
@@ -41,8 +44,8 @@ class PzlLexer(
 		recognizers.forEach {
 			val token = it.tryParse(input, position) ?: return@forEach
 			position = token.range.end
-			return when (token.type) {
-				NEWLINE, WHITE_SPACE, TAB, SINGLE_LINE_COMMENT, MULTI_LINE_COMMENT -> nextToken()
+			return when (token.kind) {
+				is WhiteSpaceKind, is CommentKind -> nextToken()
 				else -> token
 			}
 		}

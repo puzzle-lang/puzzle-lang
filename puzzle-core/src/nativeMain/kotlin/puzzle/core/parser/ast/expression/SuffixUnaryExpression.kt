@@ -1,10 +1,10 @@
 package puzzle.core.parser.ast.expression
 
 import kotlinx.serialization.Serializable
-import puzzle.core.symbol.Operator
+import puzzle.core.token.OperatorKind
 
 @Serializable
 class SuffixUnaryExpression(
 	val expression: Expression,
-	val operator: Operator
+	val operator: OperatorKind
 ) : Expression

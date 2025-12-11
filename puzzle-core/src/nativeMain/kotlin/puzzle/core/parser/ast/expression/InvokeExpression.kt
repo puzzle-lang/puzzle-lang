@@ -1,7 +1,7 @@
 package puzzle.core.parser.ast.expression
 
 import kotlinx.serialization.Serializable
-import puzzle.core.lexer.PzlTokenType
+import puzzle.core.token.BracketKind
 
 sealed interface InvokeExpression : Expression {
 	
@@ -29,9 +29,9 @@ class Argument(
 )
 
 enum class InvokeType(
-	val startTokenType: PzlTokenType,
-	val endTokenType: PzlTokenType,
+	val startTokenKind: BracketKind,
+	val endTokenKind: BracketKind,
 ) {
-	CALL(PzlTokenType.LPAREN, PzlTokenType.RPAREN),
-	INDEX_ACCESS(PzlTokenType.LBRACKET, PzlTokenType.RBRACKET),
+	CALL(BracketKind.LPAREN, BracketKind.RPAREN),
+	INDEX_ACCESS(BracketKind.LBRACKET, BracketKind.RBRACKET),
 }

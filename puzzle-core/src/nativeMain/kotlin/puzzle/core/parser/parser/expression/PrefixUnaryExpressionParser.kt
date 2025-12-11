@@ -6,12 +6,12 @@ import puzzle.core.parser.ast.expression.IdentifierExpression
 import puzzle.core.parser.ast.expression.PrefixUnaryExpression
 import puzzle.core.parser.parser.identifier.IdentifierNameTarget
 import puzzle.core.parser.parser.identifier.parseIdentifierName
-import puzzle.core.symbol.toOperator
+import puzzle.core.token.OperatorKind
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parsePrefixUnaryExpression(): PrefixUnaryExpression {
-    val operator = cursor.previous.type.toOperator()
-    val name = parseIdentifierName(IdentifierNameTarget.PREFIX_UNARY)
-    val expression = IdentifierExpression(name)
-    return PrefixUnaryExpression(operator, expression)
+	val operator = cursor.previous.kind as OperatorKind
+	val name = parseIdentifierName(IdentifierNameTarget.PREFIX_UNARY)
+	val expression = IdentifierExpression(name)
+	return PrefixUnaryExpression(operator, expression)
 }

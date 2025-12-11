@@ -1,29 +1,24 @@
 package puzzle.core.exception
 
-import puzzle.core.model.LineColumn
 import puzzle.core.model.PzlContext
-import puzzle.core.model.getLineColumn
-import puzzle.core.lexer.PzlToken
-import puzzle.core.lexer.PzlTokenType.*
+import puzzle.core.token.LineColumn
+import puzzle.core.token.PzlToken
 
 private class SyntaxException(
 	message: String,
 	sourcePath: String,
 	lineColumn: LineColumn,
 	token: PzlToken?
-) : Exception("错误位置: $sourcePath:${lineColumn.line}:${lineColumn.column} ${getTokenInfo(token)}$message.")
+) : Exception("错误位置: $sourcePath:${lineColumn.line}:${lineColumn.column}${getTokenInfo(token)}$message.")
 
 private fun getTokenInfo(token: PzlToken?): String {
 	if (token == null) return ""
-	return when (token.type) {
-		IDENTIFIER, STRING, CHAR, NUMBER -> ">> ${token.value} << "
-		else -> ">> ${token.type.value} << "
-	}
+	return " >> ${token.value} << "
 }
 
 context(context: PzlContext)
 fun syntaxError(message: String, position: Int): Nothing {
-	val lineColumn = getLineColumn(position)
+	val lineColumn = LineColumn.get(position)
 	throw SyntaxException(message, context.sourcePath, lineColumn, null)
 }
 

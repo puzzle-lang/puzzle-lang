@@ -1,7 +1,6 @@
 package puzzle.core.parser.parser.declaration
 
 import puzzle.core.exception.syntaxError
-import puzzle.core.lexer.PzlTokenType
 import puzzle.core.model.PzlContext
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.AnnotationCall
@@ -10,17 +9,18 @@ import puzzle.core.parser.ast.parameter.TypeSpec
 import puzzle.core.parser.parser.identifier.IdentifierNameTarget
 import puzzle.core.parser.parser.identifier.parseIdentifierName
 import puzzle.core.parser.parser.parameter.parameter.parseAnnotationParameters
-import puzzle.core.symbol.Modifier
+import puzzle.core.token.BracketKind
+import puzzle.core.token.ModifierKind
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseAnnotationDeclaration(
 	typeSpec: TypeSpec?,
-	modifiers: List<Modifier>,
+	modifiers: List<ModifierKind>,
 	annotationCalls: List<AnnotationCall>,
 ): AnnotationDeclaration {
 	val name = parseIdentifierName(IdentifierNameTarget.ANNOTATION)
 	val parameters = parseAnnotationParameters()
-	if (cursor.match(PzlTokenType.LBRACE)) {
+	if (cursor.match(BracketKind.LBRACE)) {
 		syntaxError("注解不支持 '{'", cursor.previous)
 	}
 	return AnnotationDeclaration(

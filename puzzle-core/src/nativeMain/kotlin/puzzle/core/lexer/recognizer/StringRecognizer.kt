@@ -1,14 +1,14 @@
 package puzzle.core.lexer.recognizer
 
-import puzzle.core.model.PzlContext
 import puzzle.core.exception.syntaxError
-import puzzle.core.lexer.PzlToken
-import puzzle.core.lexer.PzlTokenType
+import puzzle.core.model.PzlContext
 import puzzle.core.parser.ast.TokenRange
+import puzzle.core.token.LiteralKind
+import puzzle.core.token.PzlToken
 import puzzle.core.util.EscapeType
 import puzzle.core.util.isHex
 
-data object StringRecognizer : TokenRecognizer {
+object StringRecognizer : TokenRecognizer {
 	
 	context(_: PzlContext)
 	override fun tryParse(input: CharArray, start: Int): PzlToken? {
@@ -19,23 +19,23 @@ data object StringRecognizer : TokenRecognizer {
 		while (position < input.size) {
 			when (val c = input[position]) {
 				'\\' -> {
-					when (val escape = input.concatToString(position, position + 2)) {
+					when (val escape = input[position + 1]) {
 						in EscapeType.standardEscapes -> {
 							sb.append(escape)
 							position += 2
 						}
 						
-						EscapeType.UNICODE.escape -> {
+						EscapeType.UNICODE.value -> {
 							val unicode = input.concatToString(position + 2, position + 6)
 							if (!unicode.isHex()) {
-								syntaxError("非法转义字符: '\\u$unicode'", start + 1)
+								syntaxError("非法转义字符: '\\u$unicode'", position)
 							}
 							sb.append("\\u$unicode")
 							position += 6
 						}
 						
 						else -> {
-							syntaxError("非法转义字符: '$escape'", start + 1)
+							syntaxError("非法转义字符: '\\$escape'", position)
 						}
 					}
 				}
@@ -55,6 +55,7 @@ data object StringRecognizer : TokenRecognizer {
 		if (!close) {
 			syntaxError("字符串未闭合", start + 1)
 		}
-		return PzlToken(PzlTokenType.STRING, sb.toString(), TokenRange(start, position))
+		val kind = LiteralKind.String(sb.toString())
+		return PzlToken(kind, TokenRange(start, position))
 	}
 }

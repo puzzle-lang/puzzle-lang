@@ -1,20 +1,20 @@
 package puzzle.core.parser.parser.expression
 
 import puzzle.core.exception.syntaxError
-import puzzle.core.lexer.PzlTokenType
 import puzzle.core.model.PzlContext
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.expression.*
 import puzzle.core.parser.parser.identifier.IdentifierNameTarget
-import puzzle.core.parser.parser.identifier.isIdentifier
+import puzzle.core.parser.parser.identifier.isIdentifierName
 import puzzle.core.parser.parser.identifier.parseIdentifierName
+import puzzle.core.token.*
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parsePostfixExpression(left: Expression?): Expression {
 	var receiver = parseInitialExpression(left)
 	receiver = parseExpression(receiver)
 	while (isAccessOperator()) {
-		val operator = cursor.previous.type.toAccessOperator()
+		val operator = cursor.previous.kind as AccessKind
 		var expression = parseIdentifierExpression()
 		expression = parseExpression(expression)
 		receiver = PropertyAccessExpression(
@@ -28,18 +28,18 @@ fun parsePostfixExpression(left: Expression?): Expression {
 
 context(cursor: PzlTokenCursor)
 private fun isInvoke(): Boolean {
-	return cursor.match(PzlTokenType.LPAREN) || cursor.match(PzlTokenType.LBRACKET)
+	return cursor.match(BracketKind.LPAREN) || cursor.match(BracketKind.LBRACKET)
 }
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 private fun parseInvokeExpression(callee: Expression): InvokeExpression {
-	return when (cursor.previous.type) {
-		InvokeType.CALL.startTokenType -> {
+	return when (cursor.previous.kind) {
+		InvokeType.CALL.startTokenKind -> {
 			val arguments = parseArguments(InvokeType.CALL)
 			CallExpression(callee, arguments)
 		}
 		
-		InvokeType.INDEX_ACCESS.startTokenType -> {
+		InvokeType.INDEX_ACCESS.startTokenKind -> {
 			val arguments = parseArguments(InvokeType.INDEX_ACCESS)
 			if (arguments.isEmpty()) {
 				syntaxError("索引访问不允许空参数", cursor.previous)
@@ -61,15 +61,15 @@ context(_: PzlContext, cursor: PzlTokenCursor)
 private fun parseInitialExpression(receiver: Expression?): Expression {
 	val token = cursor.previous
 	return when {
-		token.type == PzlTokenType.NUMBER -> NumberLiteral(token.value)
-		token.type == PzlTokenType.STRING -> StringLiteral(token.value)
-		token.type == PzlTokenType.CHAR -> CharLiteral(token.value)
-		token.type == PzlTokenType.TRUE -> BooleanLiteral.True
-		token.type == PzlTokenType.FALSE -> BooleanLiteral.False
-		token.type == PzlTokenType.THIS -> ThisLiteral
-		token.type == PzlTokenType.SUPER -> SuperLiteral
-		token.type == PzlTokenType.NULL -> NullLiteral
-		token.type in accessTokenTypes -> {
+		token.kind is LiteralKind.Number -> NumberLiteral(token.value)
+		token.kind is LiteralKind.String -> StringLiteral(token.value)
+		token.kind is LiteralKind.Char -> CharLiteral(token.value)
+		token.kind == LiteralKind.BooleanKind.TRUE -> BooleanLiteral.TRUE
+		token.kind == LiteralKind.BooleanKind.FALSE -> BooleanLiteral.FALSE
+		token.kind == ContextualKind.THIS -> ThisLiteral
+		token.kind == ContextualKind.SUPER -> SuperLiteral
+		token.kind == LiteralKind.NULL -> NullLiteral
+		token.kind in AccessKind.kinds -> {
 			cursor.retreat()
 			when {
 				receiver != null -> {
@@ -78,12 +78,12 @@ private fun parseInitialExpression(receiver: Expression?): Expression {
 					} else receiver
 				}
 				
-				token.type == PzlTokenType.DOUBLE_COLON -> ThisLiteral
+				token.kind == AccessKind.DOUBLE_COLON -> ThisLiteral
 				else -> syntaxError("'.' 和 '?.' 访问操作符前缺少接收者", cursor.previous)
 			}
 		}
 		
-		token.isIdentifier() -> IdentifierExpression(token.value)
+		token.isIdentifierName() -> IdentifierExpression(token.value)
 		else -> syntaxError("不支持的基础表达式", token)
 	}
 }
@@ -91,7 +91,7 @@ private fun parseInitialExpression(receiver: Expression?): Expression {
 context(_: PzlContext, cursor: PzlTokenCursor)
 private fun parseExpression(receiver: Expression): Expression {
 	var receiver = receiver
-	while (cursor.match(PzlTokenType.NOT)) {
+	while (cursor.match(OperatorKind.NOT)) {
 		if (receiver !is NonNullAssertionExpression) {
 			receiver = NonNullAssertionExpression(receiver)
 		}
@@ -99,7 +99,7 @@ private fun parseExpression(receiver: Expression): Expression {
 	while (isInvoke()) {
 		receiver = parseInvokeExpression(receiver)
 	}
-	while (cursor.match(PzlTokenType.NOT)) {
+	while (cursor.match(OperatorKind.NOT)) {
 		if (receiver !is NonNullAssertionExpression) {
 			receiver = NonNullAssertionExpression(receiver)
 		}
@@ -107,13 +107,7 @@ private fun parseExpression(receiver: Expression): Expression {
 	return receiver
 }
 
-private val accessTokenTypes = setOf(
-	PzlTokenType.DOT,
-	PzlTokenType.QUESTION_DOT,
-	PzlTokenType.DOUBLE_COLON
-)
-
 context(cursor: PzlTokenCursor)
 fun isAccessOperator(): Boolean {
-	return accessTokenTypes.any { cursor.match(it) }
+	return AccessKind.kinds.any { cursor.match(it) }
 }
