@@ -2,9 +2,6 @@ package puzzle.core.parser.ast.expression
 
 import kotlinx.serialization.Serializable
 
-/**
- * 三元表达式
- */
 @Serializable
 class TernaryExpression(
 	val condition: Expression,

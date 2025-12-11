@@ -39,19 +39,6 @@ class FastSet<T>(
 	}
 }
 
-//operator fun <T : PzlTokenKind> TokenKindSet<T>.plus(element: T): TokenKindSet<T> {
-//	if (element in hashSet) return this
-//	val newElements = elements + element
-//	return TokenKindSet(newElements)
-//}
-//
-//operator fun plus(others: TokenKindSet<T>): TokenKindSet<T> {
-//	if (others.isEmpty()) return this
-//	val result = this - others
-//	if (result.isEmpty()) return this
-//	return TokenKindSet(this.elements + result)
-//}
-
 inline fun <reified T> fastSetOf(vararg elements: T): FastSet<T> {
 	return FastSet(elements.toSet().toTypedArray())
 }
