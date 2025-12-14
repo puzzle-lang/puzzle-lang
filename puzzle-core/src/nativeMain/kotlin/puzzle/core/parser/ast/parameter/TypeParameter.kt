@@ -4,10 +4,12 @@ import kotlinx.serialization.Serializable
 import puzzle.core.parser.ast.TokenRange
 import puzzle.core.parser.ast.TypeReference
 import puzzle.core.token.VarianceKind
+import puzzle.core.util.VarianceKindSerializer
 
 @Serializable
 class TypeParameter(
 	val name: String,
+	@Serializable(with = VarianceKindSerializer::class)
 	val variance: VarianceKind?,
 	val bounds: List<TypeReference>,
 	val defaultType: TypeReference?,

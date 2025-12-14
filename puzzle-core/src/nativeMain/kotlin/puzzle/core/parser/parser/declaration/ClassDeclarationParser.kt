@@ -27,9 +27,9 @@ fun parseClassDeclaration(
 	constructorModifiers.check(ModifierTarget.CONSTRUCTOR_FUN)
 	val parameters = parseClassParameters()
 	val superTypes = parseSuperTypes()
-	val members = if (cursor.match(BracketKind.LBRACE)) {
+	val members = if (cursor.match(BracketKind.Start.LBRACE)) {
 		buildList {
-			while (!cursor.match(BracketKind.RBRACE)) {
+			while (!cursor.match(BracketKind.End.RBRACE)) {
 				this += parseMemberDeclaration()
 			}
 		}

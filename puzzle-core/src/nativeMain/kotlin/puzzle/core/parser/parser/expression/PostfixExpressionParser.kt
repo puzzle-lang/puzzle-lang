@@ -19,7 +19,7 @@ fun parsePostfixExpression(left: Expression?): Expression {
 		expression = parseExpression(expression)
 		receiver = PropertyAccessExpression(
 			receiver = receiver,
-			operator = operator,
+			access = operator,
 			expression = expression
 		)
 	}
@@ -28,7 +28,7 @@ fun parsePostfixExpression(left: Expression?): Expression {
 
 context(cursor: PzlTokenCursor)
 private fun isInvoke(): Boolean {
-	return cursor.match(BracketKind.LPAREN) || cursor.match(BracketKind.LBRACKET)
+	return cursor.match(BracketKind.Start.LPAREN) || cursor.match(BracketKind.Start.LBRACKET)
 }
 
 context(_: PzlContext, cursor: PzlTokenCursor)

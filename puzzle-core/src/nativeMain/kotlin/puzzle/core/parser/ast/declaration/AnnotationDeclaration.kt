@@ -5,10 +5,12 @@ import puzzle.core.parser.ast.AnnotationCall
 import puzzle.core.parser.ast.parameter.TypeSpec
 import puzzle.core.parser.ast.parameter.Parameter
 import puzzle.core.token.ModifierKind
+import puzzle.core.util.ModifierKindListSerializer
 
 @Serializable
 class AnnotationDeclaration(
 	val name: String,
+	@Serializable(with = ModifierKindListSerializer::class)
 	val modifiers: List<ModifierKind>,
 	val parameters: List<Parameter>,
 	val typeSpec: TypeSpec?,

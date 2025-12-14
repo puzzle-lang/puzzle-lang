@@ -19,9 +19,9 @@ fun parseTraitDeclaration(
 	annotationCalls: List<AnnotationCall>,
 ): TraitDeclaration {
 	val name = parseIdentifierName(IdentifierNameTarget.TRAIT)
-	val members = if (cursor.match(BracketKind.LBRACE)) {
+	val members = if (cursor.match(BracketKind.Start.LBRACE)) {
 		buildList {
-			while (!cursor.match(BracketKind.RBRACE)) {
+			while (!cursor.match(BracketKind.End.RBRACE)) {
 				this += parseMemberDeclaration()
 			}
 		}

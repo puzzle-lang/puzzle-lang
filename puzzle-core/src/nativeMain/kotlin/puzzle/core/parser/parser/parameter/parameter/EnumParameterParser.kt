@@ -12,13 +12,13 @@ import puzzle.core.token.SeparatorKind
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseEnumParameters(): List<Parameter> {
-	if (!cursor.match(BracketKind.LPAREN)) {
+	if (!cursor.match(BracketKind.Start.LPAREN)) {
 		return emptyList()
 	}
 	val parameters = mutableListOf<Parameter>()
-	while (!cursor.match(BracketKind.RPAREN)) {
+	while (!cursor.match(BracketKind.End.RPAREN)) {
 		parameters += parseEnumParameter()
-		if (!cursor.check(BracketKind.RPAREN)) {
+		if (!cursor.check(BracketKind.End.RPAREN)) {
 			cursor.expect(SeparatorKind.COMMA, "参数缺少 ','")
 		}
 	}

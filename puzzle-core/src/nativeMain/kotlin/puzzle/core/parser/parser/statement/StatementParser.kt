@@ -21,7 +21,7 @@ fun parseStatement(): Statement {
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseStatements(): List<Statement> {
 	return buildList {
-		while (!cursor.match(BracketKind.RBRACE)) {
+		while (!cursor.match(BracketKind.End.RBRACE)) {
 			this += parseStatement()
 		}
 	}

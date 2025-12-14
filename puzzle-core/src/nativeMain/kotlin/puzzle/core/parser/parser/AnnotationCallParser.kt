@@ -23,7 +23,7 @@ fun parseAnnotationCalls(): List<AnnotationCall> {
 context(_: PzlContext, cursor: PzlTokenCursor)
 private fun parseAnnotationCall(): AnnotationCall {
 	val type = parseTypeReference(isSupportedLambdaType = false)
-	if (!cursor.match(BracketKind.LPAREN)) {
+	if (!cursor.match(BracketKind.Start.LPAREN)) {
 		return AnnotationCall(type)
 	}
 	val arguments = parseArguments(InvokeType.CALL)

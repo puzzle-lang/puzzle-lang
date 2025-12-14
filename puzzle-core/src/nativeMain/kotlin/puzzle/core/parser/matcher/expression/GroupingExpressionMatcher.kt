@@ -10,7 +10,7 @@ object GroupingExpressionMatcher : ExpressionMatcher<Expression> {
 	
 	context(cursor: PzlTokenCursor)
 	override fun match(left: Expression?): Boolean {
-		return cursor.match(BracketKind.LPAREN)
+		return cursor.match(BracketKind.Start.LPAREN)
 	}
 	
 	context(_: PzlContext, cursor: PzlTokenCursor)

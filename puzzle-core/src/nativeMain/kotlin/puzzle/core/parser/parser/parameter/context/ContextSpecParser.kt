@@ -11,14 +11,14 @@ import puzzle.core.token.SeparatorKind
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseContextSpec(): ContextSpec? {
 	if (!cursor.match(ContextualKind.CONTEXT)) return null
-	cursor.expect(BracketKind.LPAREN, "上下文缺少 '('")
+	cursor.expect(BracketKind.Start.LPAREN, "上下文缺少 '('")
 	val receivers = buildList {
 		do {
 			this += parseContextReceiver()
-			if (!cursor.check(BracketKind.RPAREN)) {
+			if (!cursor.check(BracketKind.End.RPAREN)) {
 				cursor.expect(SeparatorKind.COMMA, "上下文参数缺少 ','")
 			}
-		} while (!cursor.match(BracketKind.RPAREN))
+		} while (!cursor.match(BracketKind.End.RPAREN))
 	}
 	val isInherited = cursor.match(OperatorKind.NOT)
 	return ContextSpec(receivers, isInherited)

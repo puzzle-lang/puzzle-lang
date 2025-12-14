@@ -19,6 +19,5 @@ fun parsePackageDeclaration(): PackageDeclaration {
 	while (cursor.match(AccessKind.DOT)) {
 		packages += parseIdentifierName(IdentifierNameTarget.PACKAGE_DOT)
 	}
-	
 	return PackageDeclaration(packages)
 }

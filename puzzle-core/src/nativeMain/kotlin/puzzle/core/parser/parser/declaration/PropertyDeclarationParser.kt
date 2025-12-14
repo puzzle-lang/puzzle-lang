@@ -50,7 +50,7 @@ private fun parseExtensionAndPropertyName(): Pair<TypeReference?, String> {
 			val name = parseIdentifierName(IdentifierNameTarget.FUN)
 			type to name
 		} else {
-			val segments = (type.type as NamedType).segments.toMutableList()
+			val segments = (type.type as NamedType).qualifiedName.toMutableList()
 			val name = segments.removeLast()
 			val type = TypeReference(NamedType(segments))
 			type to name

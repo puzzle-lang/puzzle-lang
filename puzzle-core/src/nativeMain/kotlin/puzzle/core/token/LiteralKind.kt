@@ -15,7 +15,6 @@ sealed interface LiteralKind : PzlTokenKind {
 		)
 	}
 	
-	@Serializable
 	sealed class BooleanKind(
 		override val value: KString
 	) : LiteralKind, KeywordKind {
@@ -25,14 +24,11 @@ sealed interface LiteralKind : PzlTokenKind {
 			val kinds = fastSetOf<BooleanKind>(TRUE, FALSE)
 		}
 		
-		@Serializable
 		object TRUE : BooleanKind("true")
 		
-		@Serializable
 		object FALSE : BooleanKind("false")
 	}
 	
-	@Serializable
 	object NULL : LiteralKind, KeywordKind {
 		override val value = "null"
 	}

@@ -12,16 +12,16 @@ import puzzle.core.token.ControlFlowKind
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseIfStatement(): Statement {
-	cursor.expect(BracketKind.LPAREN, "if 缺少 '('")
+	cursor.expect(BracketKind.Start.LPAREN, "if 缺少 '('")
 	val condition = parseExpressionChain()
-	cursor.expect(BracketKind.RPAREN, "if 缺少 ')'")
-	val thenStatements = if (cursor.match(BracketKind.LBRACE)) {
+	cursor.expect(BracketKind.End.RPAREN, "if 缺少 ')'")
+	val thenStatements = if (cursor.match(BracketKind.Start.LBRACE)) {
 		parseStatements()
 	} else {
 		listOf(parseStatement())
 	}
 	return if (cursor.match(ControlFlowKind.ELSE)) {
-		val elseStatements = if (cursor.match(BracketKind.LBRACE)) {
+		val elseStatements = if (cursor.match(BracketKind.Start.LBRACE)) {
 			parseStatements()
 		} else {
 			listOf(parseStatement())
@@ -31,7 +31,7 @@ fun parseIfStatement(): Statement {
 			thenStatements = thenStatements,
 			elseStatements = elseStatements
 		)
-		ExpressionStatement(expression)
+		ExpressionStatement(parseExpressionChain(expression))
 	} else {
 		IfStatement(
 			condition = condition,

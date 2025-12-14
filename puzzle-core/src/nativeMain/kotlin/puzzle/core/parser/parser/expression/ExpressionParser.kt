@@ -15,17 +15,18 @@ fun parseExpression(left: Expression? = null): Expression {
 }
 
 context(_: PzlContext, _: PzlTokenCursor)
-fun parseExpressionChain(): Expression {
-	var expression: Expression? = null
-	do {
+fun parseExpressionChain(left: Expression? = null): Expression {
+	var expression = left
+	while (!isAtExpressionEnd() || expression == null) {
 		expression = parseExpression(expression)
-	} while (!isAtExpressionEnd())
+	}
 	return expression
 }
 
 private val nonConsumableEndTokenTypes = arrayOf<PzlTokenKind>(
-	BracketKind.RPAREN,
-	BracketKind.RBRACKET,
+	BracketKind.End.RPAREN,
+	BracketKind.End.RBRACKET,
+	BracketKind.End.RBRACE,
 	SymbolKind.COLON,
 	SeparatorKind.COMMA,
 	ControlFlowKind.ELSE

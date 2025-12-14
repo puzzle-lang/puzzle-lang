@@ -8,13 +8,17 @@ import puzzle.core.parser.ast.parameter.Parameter
 import puzzle.core.parser.ast.parameter.TypeSpec
 import puzzle.core.parser.ast.statement.Statement
 import puzzle.core.token.ModifierKind
+import puzzle.core.token.SymbolKind
 import puzzle.core.util.FunNameSerializer
+import puzzle.core.util.ModifierKindListSerializer
+import puzzle.core.util.SymbolKindSerializer
 
 @Serializable
 class FunDeclaration(
 	@Serializable(with = FunNameSerializer::class)
 	val name: FunName,
 	val parameters: List<Parameter>,
+	@Serializable(with = ModifierKindListSerializer::class)
 	val modifiers: List<ModifierKind>,
 	val returnTypes: List<TypeReference>,
 	val extension: TypeReference?,
@@ -33,6 +37,7 @@ class IdentifierFunName(
 ) : FunName
 
 @Serializable
-class OperatorFunName(
-	val operator: String
+class SymbolFunName(
+	@Serializable(with = SymbolKindSerializer::class)
+	val symbol: SymbolKind
 ) : FunName

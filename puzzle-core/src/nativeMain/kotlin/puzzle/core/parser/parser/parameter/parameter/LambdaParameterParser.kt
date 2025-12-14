@@ -13,9 +13,9 @@ import puzzle.core.token.SeparatorKind
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseLambdaParameters(): List<Parameter> {
 	val parameters = mutableListOf<Parameter>()
-	while (!cursor.match(BracketKind.RPAREN)) {
+	while (!cursor.match(BracketKind.End.RPAREN)) {
 		parameters += parseLambdaParameter()
-		if (!cursor.check(BracketKind.RPAREN)) {
+		if (!cursor.check(BracketKind.End.RPAREN)) {
 			cursor.expect(SeparatorKind.COMMA, "参数缺少 ','")
 		}
 	}

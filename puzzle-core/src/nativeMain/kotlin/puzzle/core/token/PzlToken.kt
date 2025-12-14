@@ -31,4 +31,8 @@ class LineColumn private constructor(
 			return LineColumn(line + 1, column + 1)
 		}
 	}
+	
+	override fun toString(): String {
+		return "$line:$column"
+	}
 }

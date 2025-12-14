@@ -20,7 +20,7 @@ fun parseTypeReference(
 	isSupportedLambdaType: Boolean = false,
 	isSupportedNullable: Boolean = true
 ): TypeReference {
-	return if (cursor.match(BracketKind.LPAREN)) {
+	return if (cursor.match(BracketKind.Start.LPAREN)) {
 		parseLambdaType(isSupportedLambdaType, isSupportedNullable)
 	} else {
 		parseNamedType(isSupportedNullable)
@@ -38,10 +38,10 @@ private fun parseLambdaType(
 			syntaxError("不支持 Lambda 类型", cursor.previous)
 		}
 		val returnTypes = mutableListOf<TypeReference>()
-		if (cursor.match(BracketKind.LBRACKET)) {
-			while (!cursor.match(BracketKind.RBRACKET)) {
+		if (cursor.match(BracketKind.Start.LBRACKET)) {
+			while (!cursor.match(BracketKind.End.RBRACKET)) {
 				returnTypes += parseTypeReference(isSupportedLambdaType = true)
-				if (!cursor.check(BracketKind.RBRACKET)) {
+				if (!cursor.check(BracketKind.End.RBRACKET)) {
 					cursor.expect(SeparatorKind.COMMA, "Lambda 缺少 ','")
 				}
 			}
@@ -63,7 +63,7 @@ private fun parseLambdaType(
 				syntaxError("不支持可空类型", cursor.previous)
 			}
 			val token = cursor.offset(offset = -2)
-			if (token.kind != BracketKind.RPAREN) {
+			if (token.kind != BracketKind.End.RPAREN) {
 				syntaxError("Lambda 表示可空前必须加 ')'", token)
 			}
 		}

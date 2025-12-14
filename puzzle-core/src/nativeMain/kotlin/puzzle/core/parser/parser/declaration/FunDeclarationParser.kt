@@ -10,7 +10,7 @@ import puzzle.core.parser.ast.TypeReference
 import puzzle.core.parser.ast.declaration.FunDeclaration
 import puzzle.core.parser.ast.declaration.FunName
 import puzzle.core.parser.ast.declaration.IdentifierFunName
-import puzzle.core.parser.ast.declaration.OperatorFunName
+import puzzle.core.parser.ast.declaration.SymbolFunName
 import puzzle.core.parser.ast.parameter.ContextSpec
 import puzzle.core.parser.ast.parameter.TypeSpec
 import puzzle.core.parser.parser.identifier.IdentifierNameTarget
@@ -21,6 +21,8 @@ import puzzle.core.parser.parser.statement.parseStatements
 import puzzle.core.token.*
 import puzzle.core.token.AssignmentKind.*
 import puzzle.core.token.OperatorKind.*
+import puzzle.core.token.SymbolKind.INDEX_GET
+import puzzle.core.token.SymbolKind.INDEX_SET
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseFunDeclaration(
@@ -39,7 +41,7 @@ fun parseFunDeclaration(
 	} else {
 		returnTypes += TypeReference(PzlTypes.Unit)
 	}
-	val expressions = if (cursor.match(BracketKind.LBRACE)) parseStatements() else emptyList()
+	val expressions = if (cursor.match(BracketKind.Start.LBRACE)) parseStatements() else emptyList()
 	return FunDeclaration(
 		name = funName,
 		parameters = parameters,
@@ -70,10 +72,10 @@ private fun parseExtensionAndFunName(): Pair<TypeReference?, FunName> {
 			?: tryParseOperatorFunName()
 			?: syntaxError("无法识别标识符", cursor.current)
 		if (type != null) {
-			val funName = if (segment is String) IdentifierFunName(segment) else segment as OperatorFunName
+			val funName = if (segment is String) IdentifierFunName(segment) else segment as SymbolFunName
 			return type to funName
 		}
-		if (segment is OperatorFunName) {
+		if (segment is SymbolFunName) {
 			val type = TypeReference(NamedType(segments))
 			return type to segment
 		}
@@ -91,7 +93,7 @@ private val overloadableOperators = arrayOf<SymbolKind>(
 	CONTAINS, NOT_CONTAINS,
 	BIT_AND, BIT_OR, BIT_XOR, SHL, SHR, USHR,
 	PLUS_ASSIGN, MINUS_ASSIGN, STAR_ASSIGN, SLASH_ASSIGN, PERCENT_ASSIGN,
-	SymbolKind.INDEX_GET, SymbolKind.INDEX_SET, SymbolKind.RANGE_TO, SymbolKind.RANGE_UNTIL
+	INDEX_GET, INDEX_SET, RANGE_TO, RANGE_UNTIL
 )
 
 private val notOverloadableOperators = arrayOf<SymbolKind>(
@@ -100,10 +102,10 @@ private val notOverloadableOperators = arrayOf<SymbolKind>(
 )
 
 context(_: PzlContext, cursor: PzlTokenCursor)
-private fun tryParseOperatorFunName(): OperatorFunName? {
+private fun tryParseOperatorFunName(): SymbolFunName? {
 	var operator = overloadableOperators.find { cursor.match(it) }
 	if (operator != null) {
-		return OperatorFunName(operator.value)
+		return SymbolFunName(operator)
 	}
 	operator = notOverloadableOperators.find { cursor.match(it) }
 	if (operator != null) {

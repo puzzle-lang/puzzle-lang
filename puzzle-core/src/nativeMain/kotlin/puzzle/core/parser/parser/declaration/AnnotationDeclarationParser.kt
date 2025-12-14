@@ -20,7 +20,7 @@ fun parseAnnotationDeclaration(
 ): AnnotationDeclaration {
 	val name = parseIdentifierName(IdentifierNameTarget.ANNOTATION)
 	val parameters = parseAnnotationParameters()
-	if (cursor.match(BracketKind.LBRACE)) {
+	if (cursor.match(BracketKind.Start.LBRACE)) {
 		syntaxError("注解不支持 '{'", cursor.previous)
 	}
 	return AnnotationDeclaration(

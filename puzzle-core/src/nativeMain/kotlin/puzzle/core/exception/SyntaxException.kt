@@ -9,7 +9,7 @@ private class SyntaxException(
 	sourcePath: String,
 	lineColumn: LineColumn,
 	token: PzlToken?
-) : Exception("错误位置: $sourcePath:${lineColumn.line}:${lineColumn.column}${getTokenInfo(token)}$message.")
+) : Exception("错误位置: $sourcePath:$lineColumn${getTokenInfo(token)}$message.")
 
 private fun getTokenInfo(token: PzlToken?): String {
 	if (token == null) return ""

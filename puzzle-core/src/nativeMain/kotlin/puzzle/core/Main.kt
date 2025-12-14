@@ -61,7 +61,7 @@ private fun run(paths: List<String>) = runBlocking {
 		}
 	}
 	val sourceFileNodes = jobs.awaitAll()
-	PzlProgram(sourceFileNodes)
+	PzlProgram(sourceFileNodes).alsoLog()
 }
 
 private fun CharArray.getLineStarts(): IntArray {
@@ -82,7 +82,12 @@ val json = Json {
 }
 
 inline fun <reified T> T.alsoLog(): T {
-	println(this?.let { json.encodeToString(it) })
+	println(this?.let { json.encodeToString(it) }?.also {
+		val duration = measureTime {
+			json.decodeFromString<T>(it)
+		}
+		println("解码耗时：$duration")
+	})
 	return this
 }
 

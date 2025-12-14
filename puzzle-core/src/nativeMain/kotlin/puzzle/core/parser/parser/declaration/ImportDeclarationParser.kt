@@ -39,7 +39,7 @@ fun parseImportDeclaration(): ImportDeclaration {
 		}
 	}
 	return ImportDeclaration(
-		segments = paths,
+		qualifiedName = paths,
 		alias = alias,
 		scope = scope
 	)

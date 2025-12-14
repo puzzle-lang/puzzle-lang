@@ -29,9 +29,9 @@ class Argument(
 )
 
 enum class InvokeType(
-	val startTokenKind: BracketKind,
-	val endTokenKind: BracketKind,
+	val startTokenKind: BracketKind.Start,
+	val endTokenKind: BracketKind.End
 ) {
-	CALL(BracketKind.LPAREN, BracketKind.RPAREN),
-	INDEX_ACCESS(BracketKind.LBRACKET, BracketKind.RBRACKET),
+	CALL(BracketKind.Start.LPAREN, BracketKind.End.RPAREN),
+	INDEX_ACCESS(BracketKind.Start.LBRACKET, BracketKind.End.RBRACKET),
 }

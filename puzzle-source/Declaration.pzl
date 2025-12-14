@@ -1,44 +1,68 @@
 package pzl.example
 
-fun variableDeclarationStatement() {
-    var n = 0
-    val n1 = ++n / n--
-    val n2 = n++ + 10
-    val n3 = n1 + n2 * 5 + 10
-    val n4 = 1 + (2 + 3) * 10
-    val result = (++a * b-- / c % d ** e - f) +
+/**
+ * 操作符测试
+ */
+fun operatorTest() {
+    var num = 0
+    val plus = 1 + 2
+    val prefixPlus = ++num
+    val suffixPlus = num++
+    val minus = 1 - 2
+    val prefixMinus = --num
+    val suffixPlus = num--
+    val star = 1 * 2
+    val slash = 1 / 2
+    val percent = 1 % 2
+    val group = (++a * b-- / c % d ** e - f) +
         (g << h >> i >>> j) +
         (x + y - z)
-    val bool1 = true || false
-    val bool2 = true ||
-        false
-    val bool3 = true
-        || false
-    val third1 = a ? (a ? b : c) : d
-    val third2 = true ? true ? 1 : 0 : true ? 1 : 1 + 2
-    val value1 = a.b + c.d?.e! - f!.g
-    val pr1 = ::println
-    val pr2 = super::println
-    val a = (1 + 2) + (a.b.c).d.f
-    val c = (d).e
-    val b = (((((a)))))                                             // 语法分析阶段去除无效 '(' 和 ')'
-    val name = getInfos(age = 18, param = "Hello").first()["name"]
-    val a = i++.name()
-    // val b = ++i.name()    // 语法错误
-    val a = b ? c ?: (d + 1) * 10 : e ?: f
-    val a = b.c ~> d && e.f() !~> g.h[0]
+    val and = true && false
+    val or = true || false
+    val third = true ? true ? 1 : 2 : 3
 }
 
-private fun expressionStatement(): Long? {
+/**
+ * 调用访问测试
+ */
+fun accessTest() {
+    val value1 = a.b + c.d?.e! - f!.g
+    val value2 = ::println
+    val value3 = super::println
+    val value4 = (1 + 2) + (a.b.c).d.f
+    val value5 = (d).e
+    val value6 = (((((a)))))                                             // 语法分析阶段去除无效 '(' 和 ')'
+    val value7 = getInfos(age = 18, param = "Hello").first()["name"]
+    val value8 = i++.name()
+    // val value9 = ++i.name()    // 语法错误
+    val value10 = b ? c ?: (d + 1) * 10 : e ?: f
+    val value11 = b.c ~> d && e.f() !~> g.h[0]
+}
+
+/**
+ * 条件控制测试
+ */
+private fun controlFlowTest(): Long? {
     println("Hello World, 你好世界")
-    val name = "你好"
-    println(name)
-    val num = 1 + 2 * 3 ** 4
+    val value1 = "你好"
+    println(value1)
+    2000
+    val value2 = if (1 + 2 == 3) "A" else {
 
-    val a = if (1 + 2 == 3) "A" else {
-
+    } + 100
+    (if (true) 333L else null) + 200
+    if (true) 100 + 200 + 300 else 400
+    val value3 = if (boolean1) {
+        value31
+    } else if (b) {
+        value32
+    } else {
+        value33
     }
-    if (true) 1L else null
+    if (true) {
+        2000
+    } else { 2 } * 20 - 1000
+    true && false && false
 }
 
 private const fun add(num1: Int, num2: Int?): Int {

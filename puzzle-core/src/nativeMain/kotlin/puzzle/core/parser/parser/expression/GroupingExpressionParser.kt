@@ -9,7 +9,7 @@ import puzzle.core.token.BracketKind
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseGroupingExpression(): Expression {
 	var expression = parseExpressionChain()
-	if (cursor.current.kind != BracketKind.RPAREN) {
+	if (cursor.current.kind != BracketKind.End.RPAREN) {
 		syntaxError("'(' 必须由 ')' 结束", cursor.current)
 	}
 	cursor.advance()

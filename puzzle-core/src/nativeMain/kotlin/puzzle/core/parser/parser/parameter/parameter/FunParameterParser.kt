@@ -12,14 +12,14 @@ import puzzle.core.token.SeparatorKind
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseFunParameters(): List<Parameter> {
-	cursor.expect(BracketKind.LPAREN, "函数缺少 '('")
-	if (cursor.match(BracketKind.RPAREN)) {
+	cursor.expect(BracketKind.Start.LPAREN, "函数缺少 '('")
+	if (cursor.match(BracketKind.End.RPAREN)) {
 		return emptyList()
 	}
 	val parameters = mutableListOf<Parameter>()
-	while (!cursor.match(BracketKind.RPAREN)) {
+	while (!cursor.match(BracketKind.End.RPAREN)) {
 		parameters += parseFunParameter()
-		if (!cursor.check(BracketKind.RPAREN)) {
+		if (!cursor.check(BracketKind.End.RPAREN)) {
 			cursor.expect(SeparatorKind.COMMA, "参数缺少 ','")
 		}
 	}
