@@ -1,10 +1,10 @@
-package puzzle.core.lexer.recognizer
+package puzzle.core.lexer.recognition
 
 import puzzle.core.model.PzlContext
 import puzzle.core.token.PzlToken
 import puzzle.core.token.SymbolKind
 
-object SymbolRecognizer : TokenRecognizer {
+object SymbolRecognition : TokenRecognition {
 	
 	private val symbols = SymbolKind.kinds
 		.groupBy { it.value.length }

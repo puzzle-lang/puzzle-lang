@@ -1,4 +1,4 @@
-package puzzle.core.lexer.recognizer
+package puzzle.core.lexer.recognition
 
 import puzzle.core.exception.syntaxError
 import puzzle.core.model.PzlContext
@@ -10,7 +10,7 @@ import puzzle.core.util.isBinary
 import puzzle.core.util.isDecimal
 import puzzle.core.util.isHex
 
-object NumberRecognizer : TokenRecognizer {
+object NumberRecognition : TokenRecognition {
 	
 	context(_: PzlContext)
 	override fun tryParse(input: CharArray, start: Int): PzlToken? {

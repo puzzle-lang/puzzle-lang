@@ -1,7 +1,7 @@
 package puzzle.core.lexer
 
 import puzzle.core.exception.syntaxError
-import puzzle.core.lexer.recognizer.*
+import puzzle.core.lexer.recognition.*
 import puzzle.core.model.PzlContext
 import puzzle.core.token.CommentKind
 import puzzle.core.token.MetaKind
@@ -14,18 +14,18 @@ class PzlLexer(
 	
 	private var position = 0
 	
-	private val recognizers = arrayOf(
-		EOFRecognizer,
-		WhiteSpaceRecognizer,
-		TabRecognizer,
-		NewlineRecognizer,
-		CommentRecognizer,
-		KeywordRecognizer,
-		CharRecognizer,
-		StringRecognizer,
-		NumberRecognizer,
-		SymbolRecognizer,
-		IdentifierRecognizer,
+	private val recognitions = arrayOf(
+		EOFRecognition,
+		WhiteSpaceRecognition,
+		TabRecognition,
+		NewlineRecognition,
+		CommentRecognition,
+		KeywordRecognition,
+		CharRecognition,
+		StringRecognition,
+		NumberRecognition,
+		SymbolRecognition,
+		IdentifierRecognition,
 	)
 	
 	context(_: PzlContext)
@@ -41,7 +41,7 @@ class PzlLexer(
 	
 	context(_: PzlContext)
 	private fun nextToken(): PzlToken {
-		recognizers.forEach {
+		recognitions.forEach {
 			val token = it.tryParse(input, position) ?: return@forEach
 			position = token.end
 			return when (token.kind) {

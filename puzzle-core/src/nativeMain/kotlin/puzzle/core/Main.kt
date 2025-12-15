@@ -12,11 +12,9 @@ import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.PzlProgram
 import puzzle.core.parser.parser.parseSourceFileNode
 import puzzle.core.util.currentMemoryUsage
-import kotlin.native.runtime.NativeRuntimeApi
 import kotlin.time.measureTime
 import kotlin.time.measureTimedValue
 
-@OptIn(NativeRuntimeApi::class, ExperimentalStdlibApi::class)
 fun main(vararg args: String) {
 	val duration = measureTime {
 		val command = args.firstOrNull() ?: run {

@@ -1,11 +1,11 @@
-package puzzle.core.lexer.recognizer
+package puzzle.core.lexer.recognition
 
 import puzzle.core.exception.syntaxError
 import puzzle.core.model.PzlContext
 import puzzle.core.token.CommentKind
 import puzzle.core.token.PzlToken
 
-object CommentRecognizer : TokenRecognizer {
+object CommentRecognition : TokenRecognition {
 	
 	context(_: PzlContext)
 	override fun tryParse(input: CharArray, start: Int): PzlToken? {

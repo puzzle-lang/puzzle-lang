@@ -1,4 +1,4 @@
-package puzzle.core.lexer.recognizer
+package puzzle.core.lexer.recognition
 
 import puzzle.core.exception.syntaxError
 import puzzle.core.model.PzlContext
@@ -7,7 +7,7 @@ import puzzle.core.token.PzlToken
 import puzzle.core.util.EscapeType
 import puzzle.core.util.isHex
 
-object StringRecognizer : TokenRecognizer {
+object StringRecognition : TokenRecognition {
 	
 	context(_: PzlContext)
 	override fun tryParse(input: CharArray, start: Int): PzlToken? {
