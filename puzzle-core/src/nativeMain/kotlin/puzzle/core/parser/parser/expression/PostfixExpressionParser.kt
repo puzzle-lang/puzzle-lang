@@ -61,7 +61,7 @@ context(_: PzlContext, cursor: PzlTokenCursor)
 private fun parseInitialExpression(receiver: Expression?): Expression {
 	val token = cursor.previous
 	return when {
-		token.kind is LiteralKind.Number -> NumberLiteral(token.value)
+		token.kind is LiteralKind.Number -> NumberLiteral(token.value, token.kind.system, token.kind.type)
 		token.kind is LiteralKind.String -> StringLiteral(token.value)
 		token.kind is LiteralKind.Char -> CharLiteral(token.value)
 		token.kind == LiteralKind.BooleanKind.TRUE -> BooleanLiteral.TRUE

@@ -1,6 +1,5 @@
 package puzzle.core.token
 
-import kotlinx.serialization.Serializable
 import puzzle.core.collections.fastSetOf
 import puzzle.core.collections.mergeFastSets
 

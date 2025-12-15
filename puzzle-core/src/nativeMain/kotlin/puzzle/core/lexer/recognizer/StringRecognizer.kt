@@ -2,7 +2,6 @@ package puzzle.core.lexer.recognizer
 
 import puzzle.core.exception.syntaxError
 import puzzle.core.model.PzlContext
-import puzzle.core.parser.ast.TokenRange
 import puzzle.core.token.LiteralKind
 import puzzle.core.token.PzlToken
 import puzzle.core.util.EscapeType
@@ -56,6 +55,6 @@ object StringRecognizer : TokenRecognizer {
 			syntaxError("字符串未闭合", start + 1)
 		}
 		val kind = LiteralKind.String(sb.toString())
-		return PzlToken(kind, TokenRange(start, position))
+		return PzlToken(kind, start, position)
 	}
 }

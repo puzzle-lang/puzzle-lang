@@ -2,7 +2,6 @@ package puzzle.core.lexer.recognizer
 
 import puzzle.core.exception.syntaxError
 import puzzle.core.model.PzlContext
-import puzzle.core.parser.ast.TokenRange
 import puzzle.core.token.CommentKind
 import puzzle.core.token.PzlToken
 
@@ -25,7 +24,7 @@ object CommentRecognizer : TokenRecognizer {
 		}
 		val comment = input.concatToString(start + 1, position).trim()
 		val kind = CommentKind.SingleLine(comment)
-		return PzlToken(kind, TokenRange(start, position))
+		return PzlToken(kind, start, position)
 	}
 	
 	context(_: PzlContext)
@@ -51,6 +50,6 @@ object CommentRecognizer : TokenRecognizer {
 				it.trim().trimStart('*').trimStart()
 			}.trim('\n')
 		val kind = CommentKind.MultiLine(comment)
-		return PzlToken(kind, TokenRange(start, position + 2))
+		return PzlToken(kind, start, position + 2)
 	}
 }

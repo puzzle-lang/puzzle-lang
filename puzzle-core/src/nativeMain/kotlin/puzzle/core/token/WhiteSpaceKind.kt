@@ -1,7 +1,5 @@
 package puzzle.core.token
 
-import kotlinx.serialization.Serializable
-
 sealed interface WhiteSpaceKind : PzlTokenKind {
 	
 	object NEWLINE : WhiteSpaceKind {

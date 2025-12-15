@@ -1,7 +1,6 @@
 package puzzle.core.lexer.recognizer
 
 import puzzle.core.model.PzlContext
-import puzzle.core.parser.ast.TokenRange
 import puzzle.core.token.PzlToken
 import puzzle.core.token.SymbolKind
 
@@ -20,7 +19,7 @@ object SymbolRecognizer : TokenRecognizer {
 			if (start + length > input.size) continue
 			val symbol = input.concatToString(start, start + length)
 			val kind = symbols[length]!![symbol] ?: continue
-			return PzlToken(kind, TokenRange(start, start + length))
+			return PzlToken(kind, start, start + length)
 		}
 		return null
 	}

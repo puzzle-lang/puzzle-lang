@@ -1,7 +1,6 @@
 package puzzle.core.lexer.recognizer
 
 import puzzle.core.model.PzlContext
-import puzzle.core.parser.ast.TokenRange
 import puzzle.core.token.PzlToken
 import puzzle.core.token.WhiteSpaceKind
 
@@ -11,6 +10,6 @@ object NewlineRecognizer : TokenRecognizer {
 	override fun tryParse(input: CharArray, start: Int): PzlToken? {
 		val char = input[start]
 		if (char != '\n') return null
-		return PzlToken(WhiteSpaceKind.NEWLINE, TokenRange(start, start + 1))
+		return PzlToken(WhiteSpaceKind.NEWLINE, start, start + 1)
 	}
 }

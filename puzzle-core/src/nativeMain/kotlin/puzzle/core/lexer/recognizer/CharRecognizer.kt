@@ -2,7 +2,6 @@ package puzzle.core.lexer.recognizer
 
 import puzzle.core.exception.syntaxError
 import puzzle.core.model.PzlContext
-import puzzle.core.parser.ast.TokenRange
 import puzzle.core.token.LiteralKind
 import puzzle.core.token.PzlToken
 import puzzle.core.util.EscapeType
@@ -15,13 +14,13 @@ object CharRecognizer : TokenRecognizer {
 		if (input[start] != '\'') return null
 		if (start + 2 < input.size && input[start + 2] == '\'' && input[start + 1] != '\\') {
 			val value = input[start + 1].toString()
-			return PzlToken(LiteralKind.Char(value), TokenRange(start, start + 3))
+			return PzlToken(LiteralKind.Char(value), start, start + 3)
 		}
 		if (start + 3 < input.size && input[start + 3] == '\'' && input[start + 1] == '\\') {
 			val escape = input[start + 2]
 			if (escape in EscapeType.standardEscapes) {
 				val kind = LiteralKind.Char("\\$escape")
-				return PzlToken(kind, TokenRange(start, start + 4))
+				return PzlToken(kind, start, start + 4)
 			} else {
 				syntaxError("非法转义字符: '\\$escape'", start + 1)
 			}
@@ -32,7 +31,7 @@ object CharRecognizer : TokenRecognizer {
 				syntaxError("非法转义字符: '\\u$unicode'", start + 1)
 			}
 			val kind = LiteralKind.Char("\\u$unicode")
-			return PzlToken(kind, TokenRange(start, start + 8))
+			return PzlToken(kind, start, start + 8)
 		}
 		syntaxError("字符语法错误", start + 1)
 	}

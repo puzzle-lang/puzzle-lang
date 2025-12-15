@@ -1,7 +1,6 @@
 package puzzle.core.lexer.recognizer
 
 import puzzle.core.model.PzlContext
-import puzzle.core.parser.ast.TokenRange
 import puzzle.core.token.PzlToken
 import puzzle.core.token.WhiteSpaceKind
 
@@ -14,6 +13,6 @@ object TabRecognizer : TokenRecognizer {
 		while (position < input.size && input[position] == '\t') {
 			position++
 		}
-		return PzlToken(WhiteSpaceKind.TAB, TokenRange(start, position))
+		return PzlToken(WhiteSpaceKind.TAB, start, position)
 	}
 }

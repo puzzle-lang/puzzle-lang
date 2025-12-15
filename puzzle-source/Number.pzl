@@ -1,0 +1,21 @@
+package puzzle.sample
+
+fun main() {
+    val hex1 = 0xFFFFL
+    val hex2 = 0xFFFFUL
+    val hex3 = 0X1234567890123
+    val binary1 = 0b0111001UL
+    val binary2 = 0B1001001110010011100100111001001110010011100100111001001110010011U
+    val decimal1 = 10.2
+    val decimal2 = 10f
+    val decimal3 = 1.20f
+    val decimal4 = .9
+    val decimal5 = .2f
+    val decimal6 = 100
+    val decimal7 = 999L
+    val decimal8 = 100000000000
+    val decimal9 = 1231232312312L
+    val call1 = 1.toString()
+    val call2 = 10f.toString()
+    val call3 = 10.2.toString()
+}

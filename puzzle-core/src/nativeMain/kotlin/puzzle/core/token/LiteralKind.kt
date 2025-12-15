@@ -1,6 +1,5 @@
 package puzzle.core.token
 
-import kotlinx.serialization.Serializable
 import puzzle.core.collections.fastSetOf
 import puzzle.core.collections.mergeFastSets
 import kotlin.String as KString
@@ -42,6 +41,40 @@ sealed interface LiteralKind : PzlTokenKind {
 	) : LiteralKind
 	
 	class Number(
-		override val value: KString
+		override val value: KString,
+		val system: NumberSystem,
+		val type: NumberLiteralType
 	) : LiteralKind
+}
+
+enum class NumberSystem {
+	BINARY,
+	DECIMAL,
+	HEX
+}
+
+enum class NumberLiteralType(
+	val isDecimal: Boolean,
+	val isUnsigned: Boolean,
+	val byteSize: Int
+) {
+	INT(isDecimal = false, isUnsigned = false, byteSize = 4),
+	LONG(isDecimal = false, isUnsigned = false, byteSize = 8),
+	UINT(isDecimal = false, isUnsigned = true, byteSize = 4),
+	ULONG(isDecimal = false, isUnsigned = true, byteSize = 8),
+	FLOAT(isDecimal = true, isUnsigned = false, byteSize = 4),
+	DOUBLE(isDecimal = true, isUnsigned = false, byteSize = 8);
+	
+	companion object {
+		
+		fun get(
+			isDecimal: Boolean,
+			isUnsigned: Boolean,
+			byteSize: Int
+		): NumberLiteralType {
+			return NumberLiteralType.entries.first {
+				it.isDecimal == isDecimal && it.isUnsigned == isUnsigned && it.byteSize == byteSize
+			}
+		}
+	}
 }

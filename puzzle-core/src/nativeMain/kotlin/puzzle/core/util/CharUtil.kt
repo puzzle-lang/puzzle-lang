@@ -8,14 +8,6 @@ fun String.isHex(): Boolean {
 
 fun Char.isHex(): Boolean = this in hexChars
 
-private val octalChars = "01234567".toSet()
-
-fun String.isOctal(): Boolean {
-	return this.all { it.isOctal() }
-}
-
-fun Char.isOctal(): Boolean = this in octalChars
-
 private val decimalChars = "0123456789".toSet()
 
 fun String.isDecimal(): Boolean {

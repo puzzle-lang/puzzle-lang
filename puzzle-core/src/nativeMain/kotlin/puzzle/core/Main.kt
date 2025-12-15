@@ -82,12 +82,18 @@ val json = Json {
 }
 
 inline fun <reified T> T.alsoLog(): T {
-	println(this?.let { json.encodeToString(it) }?.also {
-		val duration = measureTime {
-			json.decodeFromString<T>(it)
+	val str = this?.let {
+		val value = measureTimedValue {
+			json.encodeToString(it)
 		}
-		println("解码耗时：$duration")
-	})
+		println("编码耗时: ${value.duration}")
+		value.value
+	} ?: return this
+	println(str)
+	val duration = measureTime {
+		json.decodeFromString<T>(str)
+	}
+	println("解码耗时: $duration")
 	return this
 }
 

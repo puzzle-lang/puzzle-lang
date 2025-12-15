@@ -1,17 +1,17 @@
 package puzzle.core.token
 
 import puzzle.core.model.PzlContext
-import puzzle.core.parser.ast.TokenRange
 
 class PzlToken(
 	val kind: PzlTokenKind,
-	val range: TokenRange
+	val start: Int,
+	val end: Int
 ) {
 	private var _lineColumn: LineColumn? = null
 	
 	context(_: PzlContext)
 	val lineColumn: LineColumn
-		get() = _lineColumn ?: LineColumn.get(range.start).also { _lineColumn = it }
+		get() = _lineColumn ?: LineColumn.get(start).also { _lineColumn = it }
 	
 	val value: String
 		get() = this.kind.value

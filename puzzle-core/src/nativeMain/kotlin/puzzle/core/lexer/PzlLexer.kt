@@ -43,7 +43,7 @@ class PzlLexer(
 	private fun nextToken(): PzlToken {
 		recognizers.forEach {
 			val token = it.tryParse(input, position) ?: return@forEach
-			position = token.range.end
+			position = token.end
 			return when (token.kind) {
 				is WhiteSpaceKind, is CommentKind -> nextToken()
 				else -> token

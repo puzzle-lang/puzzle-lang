@@ -1,9 +1,15 @@
 package puzzle.core.parser.ast.expression
 
 import kotlinx.serialization.Serializable
+import puzzle.core.token.NumberLiteralType
+import puzzle.core.token.NumberSystem
 
 @Serializable
-class NumberLiteral(val value: String) : Expression
+class NumberLiteral(
+	val value: String,
+	val system: NumberSystem,
+	val type: NumberLiteralType
+) : Expression
 
 @Serializable
 class StringLiteral(val value: String) : Expression
