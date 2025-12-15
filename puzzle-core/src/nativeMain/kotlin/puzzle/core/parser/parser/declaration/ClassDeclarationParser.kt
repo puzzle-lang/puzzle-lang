@@ -2,10 +2,8 @@ package puzzle.core.parser.parser.declaration
 
 import puzzle.core.model.PzlContext
 import puzzle.core.parser.PzlTokenCursor
-import puzzle.core.parser.ast.AnnotationCall
 import puzzle.core.parser.ast.declaration.ClassDeclaration
-import puzzle.core.parser.ast.parameter.ContextSpec
-import puzzle.core.parser.ast.parameter.TypeSpec
+import puzzle.core.parser.matcher.declaration.DeclarationHeader
 import puzzle.core.parser.parser.identifier.IdentifierNameTarget
 import puzzle.core.parser.parser.identifier.parseIdentifierName
 import puzzle.core.parser.parser.modifier.ModifierTarget
@@ -13,15 +11,9 @@ import puzzle.core.parser.parser.modifier.check
 import puzzle.core.parser.parser.modifier.parseModifiers
 import puzzle.core.parser.parser.parameter.parameter.parseClassParameters
 import puzzle.core.token.BracketKind
-import puzzle.core.token.ModifierKind
 
 context(_: PzlContext, cursor: PzlTokenCursor)
-fun parseClassDeclaration(
-	typeSpec: TypeSpec?,
-	contextSpec: ContextSpec?,
-	modifiers: List<ModifierKind>,
-	annotationCalls: List<AnnotationCall>,
-): ClassDeclaration {
+fun parseClassDeclaration(header: DeclarationHeader): ClassDeclaration {
 	val name = parseIdentifierName(IdentifierNameTarget.CLASS)
 	val constructorModifiers = parseModifiers()
 	constructorModifiers.check(ModifierTarget.CONSTRUCTOR_FUN)
@@ -36,13 +28,14 @@ fun parseClassDeclaration(
 	} else emptyList()
 	return ClassDeclaration(
 		name = name,
-		modifiers = modifiers,
+		docComment = header.docComment,
+		modifiers = header.modifiers,
 		constructorModifiers = constructorModifiers,
 		parameters = parameters,
 		superTypes = superTypes,
-		typeSpec = typeSpec,
-		contextSpec = contextSpec,
-		annotationCalls = annotationCalls,
+		typeSpec = header.typeSpec,
+		contextSpec = header.contextSpec,
+		annotationCalls = header.annotationCalls,
 		members = members
 	)
 }

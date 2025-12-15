@@ -45,7 +45,7 @@ class PzlLexer(
 			val token = it.tryParse(input, position) ?: return@forEach
 			position = token.end
 			return when (token.kind) {
-				is WhiteSpaceKind, is CommentKind -> nextToken()
+				is WhiteSpaceKind, is CommentKind.SingleLine, is CommentKind.MultiLine -> nextToken()
 				else -> token
 			}
 		}

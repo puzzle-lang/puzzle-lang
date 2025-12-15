@@ -3,26 +3,18 @@ package puzzle.core.parser.parser.declaration
 import puzzle.core.exception.syntaxError
 import puzzle.core.model.PzlContext
 import puzzle.core.parser.PzlTokenCursor
-import puzzle.core.parser.ast.AnnotationCall
 import puzzle.core.parser.ast.declaration.Declaration
 import puzzle.core.parser.ast.declaration.EnumDeclaration
 import puzzle.core.parser.ast.declaration.EnumEntry
-import puzzle.core.parser.ast.parameter.ContextSpec
-import puzzle.core.parser.ast.parameter.TypeSpec
+import puzzle.core.parser.matcher.declaration.DeclarationHeader
 import puzzle.core.parser.parser.identifier.IdentifierNameTarget
 import puzzle.core.parser.parser.identifier.parseIdentifierName
 import puzzle.core.parser.parser.parameter.parameter.parseEnumParameters
 import puzzle.core.token.BracketKind
-import puzzle.core.token.ModifierKind
 import puzzle.core.token.SeparatorKind
 
 context(_: PzlContext, cursor: PzlTokenCursor)
-fun parseEnumDeclaration(
-	typeSpec: TypeSpec?,
-	contextSpec: ContextSpec?,
-	modifiers: List<ModifierKind>,
-	annotationCalls: List<AnnotationCall>,
-): EnumDeclaration {
+fun parseEnumDeclaration(header: DeclarationHeader): EnumDeclaration {
 	val name = parseIdentifierName(IdentifierNameTarget.ENUM)
 	val parameters = parseEnumParameters()
 	cursor.expect(BracketKind.Start.LBRACE, "枚举缺少 '{'")
@@ -38,12 +30,13 @@ fun parseEnumDeclaration(
 	}
 	return EnumDeclaration(
 		name = name,
-		modifiers = modifiers,
+		docComment = header.docComment,
+		modifiers = header.modifiers,
 		parameters = parameters,
 		entries = entries,
-		typeSpec = typeSpec,
-		contextSpec = contextSpec,
-		annotationCalls = annotationCalls,
+		typeSpec = header.typeSpec,
+		contextSpec = header.contextSpec,
+		annotationCalls = header.annotationCalls,
 		members = members,
 	)
 }

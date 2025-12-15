@@ -4,33 +4,29 @@ import puzzle.core.constants.PzlTypes
 import puzzle.core.exception.syntaxError
 import puzzle.core.model.PzlContext
 import puzzle.core.parser.PzlTokenCursor
-import puzzle.core.parser.ast.AnnotationCall
 import puzzle.core.parser.ast.NamedType
 import puzzle.core.parser.ast.TypeReference
 import puzzle.core.parser.ast.declaration.FunDeclaration
 import puzzle.core.parser.ast.declaration.FunName
 import puzzle.core.parser.ast.declaration.IdentifierFunName
 import puzzle.core.parser.ast.declaration.SymbolFunName
-import puzzle.core.parser.ast.parameter.ContextSpec
-import puzzle.core.parser.ast.parameter.TypeSpec
+import puzzle.core.parser.matcher.declaration.DeclarationHeader
 import puzzle.core.parser.parser.identifier.IdentifierNameTarget
 import puzzle.core.parser.parser.identifier.tryParseIdentifierName
 import puzzle.core.parser.parser.parameter.parameter.parseFunParameters
 import puzzle.core.parser.parser.parseTypeReference
 import puzzle.core.parser.parser.statement.parseStatements
-import puzzle.core.token.*
+import puzzle.core.token.AccessKind
 import puzzle.core.token.AssignmentKind.*
+import puzzle.core.token.BracketKind
 import puzzle.core.token.OperatorKind.*
+import puzzle.core.token.SeparatorKind
+import puzzle.core.token.SymbolKind
 import puzzle.core.token.SymbolKind.INDEX_GET
 import puzzle.core.token.SymbolKind.INDEX_SET
 
 context(_: PzlContext, cursor: PzlTokenCursor)
-fun parseFunDeclaration(
-	typeSpec: TypeSpec?,
-	contextSpec: ContextSpec?,
-	modifiers: List<ModifierKind>,
-	annotationCalls: List<AnnotationCall>,
-): FunDeclaration {
+fun parseFunDeclaration(header: DeclarationHeader): FunDeclaration {
 	val (extension, funName) = parseExtensionAndFunName()
 	val parameters = parseFunParameters()
 	val returnTypes = mutableListOf<TypeReference>()
@@ -44,13 +40,14 @@ fun parseFunDeclaration(
 	val expressions = if (cursor.match(BracketKind.Start.LBRACE)) parseStatements() else emptyList()
 	return FunDeclaration(
 		name = funName,
+		docComment = header.docComment,
 		parameters = parameters,
-		modifiers = modifiers,
+		modifiers = header.modifiers,
 		returnTypes = returnTypes,
 		extension = extension,
-		typeSpec = typeSpec,
-		contextSpec = contextSpec,
-		annotationCalls = annotationCalls,
+		typeSpec = header.typeSpec,
+		contextSpec = header.contextSpec,
+		annotationCalls = header.annotationCalls,
 		statements = expressions
 	)
 }

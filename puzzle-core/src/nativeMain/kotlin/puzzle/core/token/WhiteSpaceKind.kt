@@ -1,16 +1,12 @@
 package puzzle.core.token
 
-sealed interface WhiteSpaceKind : PzlTokenKind {
+sealed class WhiteSpaceKind(
+	override val value: String,
+) : PzlTokenKind {
 	
-	object NEWLINE : WhiteSpaceKind {
-		override val value = "NEWLINE"
-	}
+	object NEWLINE : WhiteSpaceKind("NEWLINE")
 	
-	object WHITESPACE : WhiteSpaceKind {
-		override val value = "WHITESPACE"
-	}
+	object WHITESPACE : WhiteSpaceKind("WHITESPACE")
 	
-	object TAB : WhiteSpaceKind {
-		override val value = "TAB"
-	}
+	object TAB : WhiteSpaceKind("TAB")
 }

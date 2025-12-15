@@ -2,6 +2,7 @@ package puzzle.core.parser.ast.declaration
 
 import kotlinx.serialization.Serializable
 import puzzle.core.parser.ast.AnnotationCall
+import puzzle.core.parser.ast.DocComment
 import puzzle.core.parser.ast.parameter.ContextSpec
 import puzzle.core.parser.ast.parameter.TypeSpec
 import puzzle.core.token.ModifierKind
@@ -10,6 +11,7 @@ import puzzle.core.util.ModifierKindListSerializer
 @Serializable
 class TraitDeclaration(
 	val name: String,
+	val docComment: DocComment?,
 	@Serializable(with = ModifierKindListSerializer::class)
 	val modifiers: List<ModifierKind>,
 	val typeSpec: TypeSpec?,

@@ -27,10 +27,7 @@ object EnumDeclarationMatcher : DeclarationMatcher<EnumDeclaration> {
 	
 	context(_: PzlContext, cursor: PzlTokenCursor)
 	override fun parse(
-		typeSpec: TypeSpec?,
-		contextSpec: ContextSpec?,
-		modifiers: List<ModifierKind>,
-		annotationCalls: List<AnnotationCall>,
+		header: DeclarationHeader,
 		isMember: Boolean
-	): EnumDeclaration = parseEnumDeclaration(typeSpec, contextSpec, modifiers, annotationCalls)
+	): EnumDeclaration = parseEnumDeclaration(header)
 }

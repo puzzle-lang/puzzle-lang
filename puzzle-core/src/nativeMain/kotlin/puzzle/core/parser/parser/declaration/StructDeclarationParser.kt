@@ -2,23 +2,15 @@ package puzzle.core.parser.parser.declaration
 
 import puzzle.core.model.PzlContext
 import puzzle.core.parser.PzlTokenCursor
-import puzzle.core.parser.ast.AnnotationCall
 import puzzle.core.parser.ast.declaration.StructDeclaration
-import puzzle.core.parser.ast.parameter.ContextSpec
-import puzzle.core.parser.ast.parameter.TypeSpec
+import puzzle.core.parser.matcher.declaration.DeclarationHeader
 import puzzle.core.parser.parser.identifier.IdentifierNameTarget
 import puzzle.core.parser.parser.identifier.parseIdentifierName
 import puzzle.core.parser.parser.parameter.parameter.parseStructParameters
 import puzzle.core.token.BracketKind
-import puzzle.core.token.ModifierKind
 
 context(_: PzlContext, cursor: PzlTokenCursor)
-fun parseStructDeclaration(
-	typeSpec: TypeSpec?,
-	contextSpec: ContextSpec?,
-	modifiers: List<ModifierKind>,
-	annotationCalls: List<AnnotationCall>,
-): StructDeclaration {
+fun parseStructDeclaration(header: DeclarationHeader): StructDeclaration {
 	val name = parseIdentifierName(IdentifierNameTarget.STRUCT)
 	val parameters = parseStructParameters()
 	val members = if (cursor.match(BracketKind.Start.LBRACE)) {
@@ -30,11 +22,12 @@ fun parseStructDeclaration(
 	} else emptyList()
 	return StructDeclaration(
 		name = name,
-		modifiers = modifiers,
+		docComment = header.docComment,
+		modifiers = header.modifiers,
 		parameters = parameters,
-		typeSpec = typeSpec,
-		contextSpec = contextSpec,
-		annotationCalls = annotationCalls,
+		typeSpec = header.typeSpec,
+		contextSpec = header.contextSpec,
+		annotationCalls = header.annotationCalls,
 		members = members
 	)
 }

@@ -1,8 +1,8 @@
 package puzzle.core.token
 
-sealed interface MetaKind : PzlTokenKind {
+sealed class MetaKind(
+	override val value: String,
+) : PzlTokenKind {
 	
-	object EOF : MetaKind {
-		override val value = "EOF"
-	}
+	object EOF : MetaKind("EOF")
 }

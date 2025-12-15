@@ -27,10 +27,7 @@ object PropertyDeclarationMatcher : DeclarationMatcher<PropertyDeclaration> {
 	
 	context(_: PzlContext, cursor: PzlTokenCursor)
 	override fun parse(
-		typeSpec: TypeSpec?,
-		contextSpec: ContextSpec?,
-		modifiers: List<ModifierKind>,
-		annotationCalls: List<AnnotationCall>,
+		header: DeclarationHeader,
 		isMember: Boolean
-	): PropertyDeclaration = parsePropertyDeclaration(typeSpec, contextSpec, modifiers, annotationCalls)
+	): PropertyDeclaration = parsePropertyDeclaration(header)
 }

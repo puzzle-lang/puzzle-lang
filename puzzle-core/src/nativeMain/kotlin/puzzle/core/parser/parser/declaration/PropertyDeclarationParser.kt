@@ -2,39 +2,31 @@ package puzzle.core.parser.parser.declaration
 
 import puzzle.core.model.PzlContext
 import puzzle.core.parser.PzlTokenCursor
-import puzzle.core.parser.ast.AnnotationCall
 import puzzle.core.parser.ast.NamedType
 import puzzle.core.parser.ast.TypeReference
 import puzzle.core.parser.ast.declaration.PropertyDeclaration
-import puzzle.core.parser.ast.parameter.ContextSpec
-import puzzle.core.parser.ast.parameter.TypeSpec
+import puzzle.core.parser.matcher.declaration.DeclarationHeader
 import puzzle.core.parser.parser.expression.parseExpressionChain
 import puzzle.core.parser.parser.identifier.IdentifierNameTarget
 import puzzle.core.parser.parser.identifier.parseIdentifierName
 import puzzle.core.parser.parser.parseTypeReference
 import puzzle.core.token.AccessKind
 import puzzle.core.token.AssignmentKind
-import puzzle.core.token.ModifierKind
 import puzzle.core.token.SymbolKind
 
 context(_: PzlContext, cursor: PzlTokenCursor)
-fun parsePropertyDeclaration(
-	typeSpec: TypeSpec?,
-	contextSpec: ContextSpec?,
-	modifiers: List<ModifierKind>,
-	annotationCalls: List<AnnotationCall>,
-): PropertyDeclaration {
+fun parsePropertyDeclaration(header: DeclarationHeader): PropertyDeclaration {
 	val (extension, name) = parseExtensionAndPropertyName()
 	val type = if (cursor.match(SymbolKind.COLON)) parseTypeReference(isSupportedLambdaType = true) else null
 	val initialize = if (cursor.match(AssignmentKind.ASSIGN)) parseExpressionChain() else null
 	return PropertyDeclaration(
 		name = name,
 		type = type,
-		modifiers = modifiers,
+		modifiers = header.modifiers,
 		extension = extension,
-		typeSpec = typeSpec,
-		contextSpec = contextSpec,
-		annotationCalls = annotationCalls,
+		typeSpec = header.typeSpec,
+		contextSpec = header.contextSpec,
+		annotationCalls = header.annotationCalls,
 		initializer = initialize
 	)
 }

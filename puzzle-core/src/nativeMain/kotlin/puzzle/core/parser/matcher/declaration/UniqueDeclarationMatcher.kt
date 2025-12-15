@@ -27,10 +27,7 @@ object UniqueDeclarationMatcher : DeclarationMatcher<UniqueDeclaration> {
 	
 	context(_: PzlContext, cursor: PzlTokenCursor)
 	override fun parse(
-		typeSpec: TypeSpec?,
-		contextSpec: ContextSpec?,
-		modifiers: List<ModifierKind>,
-		annotationCalls: List<AnnotationCall>,
+		header: DeclarationHeader,
 		isMember: Boolean,
-	): UniqueDeclaration = parseUniqueDeclaration(contextSpec, modifiers, annotationCalls, isMember)
+	): UniqueDeclaration = parseUniqueDeclaration(header, isMember)
 }
