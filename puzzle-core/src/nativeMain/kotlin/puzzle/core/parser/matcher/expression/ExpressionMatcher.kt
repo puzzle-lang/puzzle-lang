@@ -16,7 +16,10 @@ sealed interface ExpressionMatcher<out E : Expression> {
 			BinaryExpressionMatcher,
 			ElvisExpressionMatcher,
 			TernaryExpressionMatcher,
-			IfExpressionMatcher
+			IfExpressionMatcher,
+			MatchExpressionMatcher,
+			IsExpressionMatcher,
+			AsExpressionMatcher
 		)
 	}
 	

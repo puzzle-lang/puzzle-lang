@@ -12,7 +12,7 @@ context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseStatement(): Statement {
 	val matcher = StatementMatcher.matchers.find { it.match() }
 		?: syntaxError(
-			message = if (cursor.current.kind == MetaKind.EOF) "缺少 '}'" else "不支持的语句",
+			message = if (cursor.current.kind == MetaKind.EOF) "结尾缺少 '}'" else "不支持的语句",
 			token = cursor.current
 		)
 	return matcher.parse()

@@ -19,11 +19,11 @@ import puzzle.core.parser.parser.statement.parseStatements
 import puzzle.core.token.AccessKind
 import puzzle.core.token.AssignmentKind.*
 import puzzle.core.token.BracketKind
+import puzzle.core.token.IndexKind.INDEX_GET
+import puzzle.core.token.IndexKind.INDEX_SET
 import puzzle.core.token.OperatorKind.*
 import puzzle.core.token.SeparatorKind
 import puzzle.core.token.SymbolKind
-import puzzle.core.token.SymbolKind.INDEX_GET
-import puzzle.core.token.SymbolKind.INDEX_SET
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseFunDeclaration(header: DeclarationHeader): FunDeclaration {

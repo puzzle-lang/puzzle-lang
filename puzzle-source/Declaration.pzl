@@ -20,6 +20,8 @@ fun operatorTest() {
     val and = true && false
     val or = true || false
     val third = true ? true ? 1 : 2 : 3
+    var i = 0
+    val result = ++i + i++ - ++i + i++
 }
 
 /**

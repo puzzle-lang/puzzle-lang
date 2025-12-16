@@ -29,7 +29,8 @@ private val nonConsumableEndTokenTypes = arrayOf<PzlTokenKind>(
 	BracketKind.End.RBRACE,
 	SymbolKind.COLON,
 	SeparatorKind.COMMA,
-	ControlFlowKind.ELSE
+	ControlFlowKind.ELSE,
+	SymbolKind.ARROW
 )
 
 context(_: PzlContext, cursor: PzlTokenCursor)

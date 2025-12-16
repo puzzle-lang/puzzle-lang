@@ -8,8 +8,8 @@ import puzzle.core.parser.parser.identifier.IdentifierNameTarget
 import puzzle.core.parser.parser.identifier.matchIdentifierName
 import puzzle.core.parser.parser.identifier.parseIdentifierName
 import puzzle.core.token.AccessKind
-import puzzle.core.token.ContextualKind
 import puzzle.core.token.OperatorKind
+import puzzle.core.token.TypeOperatorKind
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseImportDeclaration(): ImportDeclaration {
@@ -21,7 +21,7 @@ fun parseImportDeclaration(): ImportDeclaration {
 		when {
 			matchIdentifierName() -> {
 				paths += cursor.previous.value
-				if (cursor.match(ContextualKind.AS)) {
+				if (cursor.match(TypeOperatorKind.AS)) {
 					alias = parseIdentifierName(IdentifierNameTarget.IMPORT_AS)
 					break
 				}
@@ -39,7 +39,7 @@ fun parseImportDeclaration(): ImportDeclaration {
 		}
 	}
 	return ImportDeclaration(
-		qualifiedName = paths,
+		segments = paths,
 		alias = alias,
 		scope = scope
 	)

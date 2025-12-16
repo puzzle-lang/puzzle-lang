@@ -40,7 +40,7 @@ private fun parseTypeParameter(): TypeParameter {
 							cursor.previous
 						} else {
 							val type = type.type as NamedType
-							cursor.offset(offset = -type.qualifiedName.size * 2 - 1)
+							cursor.offset(offset = -type.segments.size * 2 - 1)
 						}
 						syntaxError("泛型上界指定多个类型时，可空需要一致", token)
 					}

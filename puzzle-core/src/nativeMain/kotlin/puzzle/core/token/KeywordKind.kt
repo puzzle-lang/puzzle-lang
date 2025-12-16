@@ -6,6 +6,7 @@ import puzzle.core.collections.mergeFastSets
 sealed interface KeywordKind : PzlTokenKind {
 	
 	companion object {
+		
 		val kinds = mergeFastSets(
 			ModifierKind.kinds,
 			NamespaceKind.kinds,
@@ -14,6 +15,7 @@ sealed interface KeywordKind : PzlTokenKind {
 			ControlFlowKind.kinds,
 			JumpKind.kinds,
 			ContextualKind.kinds,
+			TypeOperatorKind.kinds,
 			LiteralKind.keywordKinds
 		)
 	}
@@ -174,7 +176,7 @@ sealed class ContextualKind(
 	
 	companion object {
 		
-		val kinds = fastSetOf<ContextualKind>(TYPE, REIFIED, CONTEXT, INIT, DELETE, AS, IS, THIS, SUPER)
+		val kinds = fastSetOf<ContextualKind>(TYPE, REIFIED, CONTEXT, INIT, DELETE, THIS, SUPER)
 	}
 	
 	object TYPE : ContextualKind("type")
@@ -186,10 +188,6 @@ sealed class ContextualKind(
 	object INIT : ContextualKind("init")
 	
 	object DELETE : ContextualKind("delete")
-	
-	object AS : ContextualKind("as")
-	
-	object IS : ContextualKind("is")
 	
 	object THIS : ContextualKind("this")
 	
@@ -208,4 +206,18 @@ sealed class VarianceKind(
 	object IN : VarianceKind("in")
 	
 	object OUT : VarianceKind("out")
+}
+
+sealed class TypeOperatorKind(
+	override val value: String
+) : KeywordKind {
+	
+	companion object {
+		
+		val kinds = fastSetOf(AS, IS)
+	}
+	
+	object AS : TypeOperatorKind("as")
+	
+	object IS : TypeOperatorKind("is")
 }

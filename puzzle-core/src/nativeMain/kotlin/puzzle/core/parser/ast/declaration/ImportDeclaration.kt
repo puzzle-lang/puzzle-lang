@@ -6,9 +6,9 @@ import puzzle.core.util.DotStringListSerializer
 @Serializable
 class ImportDeclaration(
 	@Serializable(with = DotStringListSerializer::class)
-	val qualifiedName: List<String>,
+	val segments: List<String>,
 	val alias: String?,
-	val scope: ImportScope
+	val scope: ImportScope,
 ) : Declaration
 
 enum class ImportScope {

@@ -40,7 +40,7 @@ private fun parseSuperType(
 	if (!cursor.match(BracketKind.Start.LPAREN)) {
 		return SuperTrait(type)
 	}
-	val offset = -1 - ((type.type as NamedType).qualifiedName.size - 1) * 2
+	val offset = -1 - ((type.type as NamedType).segments.size - 1) * 2
 	if (!isSupportedClass) {
 		syntaxError("不支持继承类", cursor.offset(offset))
 	}

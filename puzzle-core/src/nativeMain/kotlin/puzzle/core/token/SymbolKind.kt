@@ -5,7 +5,9 @@ package puzzle.core.token
 import puzzle.core.collections.fastSetOf
 import puzzle.core.collections.mergeFastSets
 
-sealed interface SymbolKind : PzlTokenKind {
+sealed class SymbolKind(
+	override val value: String
+) : PzlTokenKind {
 	
 	companion object {
 		
@@ -15,53 +17,35 @@ sealed interface SymbolKind : PzlTokenKind {
 			AccessKind.kinds,
 			BracketKind.kinds,
 			SeparatorKind.kinds,
-			fastSetOf<SymbolKind>(
+			IndexKind.kinds,
+			fastSetOf(
 				COLON, QUESTION, ELVIS,
 				AT,
-				ARROW,
-				INDEX_GET, INDEX_SET
+				ARROW
 			)
 		)
 	}
 	
-	object COLON : SymbolKind {
-		override val value = ":"
-	}
+	object COLON : SymbolKind(":")
 	
-	object QUESTION : SymbolKind {
-		override val value = "?"
-	}
+	object QUESTION : SymbolKind("?")
 	
-	object ELVIS : SymbolKind {
-		override val value = "?:"
-	}
+	object ELVIS : SymbolKind("?:")
 	
-	object AT : SymbolKind {
-		override val value = "@"
-	}
+	object AT : SymbolKind("@")
 	
-	object ARROW : SymbolKind {
-		override val value = "->"
-	}
-	
-	object INDEX_GET : SymbolKind {
-		override val value = "[]"
-	}
-	
-	object INDEX_SET : SymbolKind {
-		override val value = "[]="
-	}
+	object ARROW : SymbolKind("->")
 }
 
 sealed class OperatorKind(
-	override val value: String,
+	value: String,
 	val priority: Int,
 	val assoc: Assoc,
-) : SymbolKind {
+) : SymbolKind(value) {
 	
 	companion object {
 		
-		val kinds = fastSetOf<OperatorKind>(
+		val kinds = fastSetOf(
 			DOUBLE_PLUS, DOUBLE_MINUS,
 			NOT, BIT_NOT,
 			DOUBLE_STAR,
@@ -145,13 +129,11 @@ enum class Assoc {
 	RIGHT
 }
 
-sealed class AssignmentKind(
-	override val value: String
-) : SymbolKind {
+sealed class AssignmentKind(value: String) : SymbolKind(value) {
 	
 	companion object {
 		
-		val kinds = fastSetOf<AssignmentKind>(
+		val kinds = fastSetOf(
 			ASSIGN, QUESTION_ASSIGN,
 			PLUS_ASSIGN, MINUS_ASSIGN, STAR_ASSIGN, SLASH_ASSIGN, PERCENT_ASSIGN,
 		)
@@ -172,13 +154,11 @@ sealed class AssignmentKind(
 	object PERCENT_ASSIGN : AssignmentKind("%=")
 }
 
-sealed class AccessKind(
-	override val value: String,
-) : SymbolKind {
+sealed class AccessKind(value: String) : SymbolKind(value) {
 	
 	companion object {
 		
-		val kinds = fastSetOf<AccessKind>(DOT, QUESTION_DOT, DOUBLE_COLON)
+		val kinds = fastSetOf(DOT, QUESTION_DOT, DOUBLE_COLON)
 	}
 	
 	object DOT : AccessKind(".")
@@ -188,20 +168,18 @@ sealed class AccessKind(
 	object DOUBLE_COLON : AccessKind("::")
 }
 
-sealed interface BracketKind : SymbolKind {
+sealed class BracketKind(value: String) : SymbolKind(value) {
 	
 	companion object {
 		
 		val kinds = mergeFastSets(Start.kinds, End.kinds)
 	}
 	
-	sealed class Start(
-		override val value: String
-	) : BracketKind {
+	sealed class Start(value: String) : BracketKind(value) {
 		
 		companion object {
 			
-			val kinds = fastSetOf<Start>(LPAREN, LBRACKET, LBRACE)
+			val kinds = fastSetOf(LPAREN, LBRACKET, LBRACE)
 		}
 		
 		object LPAREN : Start("(")
@@ -211,13 +189,11 @@ sealed interface BracketKind : SymbolKind {
 		object LBRACE : Start("{")
 	}
 	
-	sealed class End(
-		override val value: String
-	) : BracketKind {
+	sealed class End(value: String) : BracketKind(value) {
 		
 		companion object {
 			
-			val kinds = fastSetOf<End>(RPAREN, RBRACKET, RBRACE)
+			val kinds = fastSetOf(RPAREN, RBRACKET, RBRACE)
 		}
 		
 		object RPAREN : End(")")
@@ -228,16 +204,26 @@ sealed interface BracketKind : SymbolKind {
 	}
 }
 
-sealed class SeparatorKind(
-	override val value: String,
-) : SymbolKind {
+sealed class SeparatorKind(value: String) : SymbolKind(value) {
 	
 	companion object {
 		
-		val kinds = fastSetOf<SeparatorKind>(COMMA, SEMICOLON)
+		val kinds = fastSetOf(COMMA, SEMICOLON)
 	}
 	
 	object COMMA : SeparatorKind(",")
 	
 	object SEMICOLON : SeparatorKind(";")
+}
+
+sealed class IndexKind(value: String) : SymbolKind(value) {
+	
+	companion object {
+		
+		val kinds = fastSetOf(INDEX_GET, INDEX_SET)
+	}
+	
+	object INDEX_GET : SymbolKind("[]")
+	
+	object INDEX_SET : SymbolKind("[]=")
 }

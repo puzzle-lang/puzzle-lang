@@ -12,7 +12,7 @@ context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseSuffixUnaryExpression(): SuffixUnaryExpression {
 	val name = parseIdentifierName(IdentifierNameTarget.SUFFIX_UNARY)
 	val expression = IdentifierExpression(name)
+	val operator = cursor.current.kind as OperatorKind
 	cursor.advance()
-	val operator = cursor.previous.kind as OperatorKind
 	return SuffixUnaryExpression(expression, operator)
 }

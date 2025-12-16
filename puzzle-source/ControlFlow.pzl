@@ -7,6 +7,30 @@ fun main() {
     } else {
         println(false)
     }.printLog()
-    // val value = if (cursor.match(1)) 1 else { 2 + 3 }
-    // println(value)
+    val value1 = 1 + if (cursor.check(1)) 1 else { 2 + 3 }
+    println(value1)
+
+    val str = "Hello"
+    val num = str as? Int
+    val isStr = str is String
+    println(isStr)
+
+    /*val result1 = match (value) {
+        1 -> "1"
+        2, 3 -> { "2 or 3" }
+        4 if value.isNumber() -> { "4 is Number" }
+        else -> "else"
+    }*/
+    val result2 = match {
+        value is String && value == "1" -> {
+            "1 is String"
+        }
+
+        value == "2" -> "2"
+
+        else -> {
+            println("else")
+            "else"
+        }
+    }
 }

@@ -18,7 +18,7 @@ object ElvisExpressionMatcher : ExpressionMatcher<ElvisExpression> {
 	context(_: PzlContext, cursor: PzlTokenCursor)
 	override fun parse(left: Expression?): ElvisExpression {
 		if (left == null) {
-			syntaxError("'?:' 操作符前必须跟表达式", cursor.previous)
+			syntaxError("'?:' 操作符前未解析到表达式", cursor.previous)
 		}
 		return parseElvisExpression(left)
 	}

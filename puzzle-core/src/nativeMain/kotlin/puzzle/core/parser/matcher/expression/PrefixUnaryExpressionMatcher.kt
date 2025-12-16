@@ -9,7 +9,7 @@ import puzzle.core.token.OperatorKind.*
 
 object PrefixUnaryExpressionMatcher : ExpressionMatcher<PrefixUnaryExpression> {
 	
-	private val tokenTypes = arrayOf(
+	private val tokenTypes = setOf(
 		PLUS,
 		MINUS,
 		NOT,

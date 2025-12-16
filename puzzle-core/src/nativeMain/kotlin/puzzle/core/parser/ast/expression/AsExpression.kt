@@ -1,0 +1,11 @@
+package puzzle.core.parser.ast.expression
+
+import kotlinx.serialization.Serializable
+import puzzle.core.parser.ast.TypeReference
+
+@Serializable
+class AsExpression(
+	val expression: Expression,
+	val type: TypeReference,
+	val isSafe: Boolean
+) : Expression

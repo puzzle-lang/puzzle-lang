@@ -16,7 +16,7 @@ sealed interface Type
 @Serializable
 class NamedType(
 	@Serializable(with = DotStringListSerializer::class)
-	val qualifiedName: List<String>,
+	val segments: List<String>,
 	val typeArguments: List<TypeArgument> = emptyList()
 ) : Type {
 	
