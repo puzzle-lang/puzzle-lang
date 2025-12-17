@@ -1,9 +1,10 @@
 package puzzle.core.parser.ast.expression
 
 import kotlinx.serialization.Serializable
+import puzzle.core.model.SourceLocation
 import puzzle.core.parser.ast.AstNode
+import puzzle.core.parser.ast.TypeReference
 import puzzle.core.parser.ast.statement.Statement
-import puzzle.core.token.SourceLocation
 
 @Serializable
 sealed interface MatchExpression : Expression
@@ -26,14 +27,27 @@ class MatchCase(
 class MatchPatternExpression(
 	val subject: Expression,
 	val arms: List<MatchArm>,
-	val elseStatements: List<Statement>?,
 	override val location: SourceLocation,
+	val elseStatements: List<Statement>? = null,
 ) : MatchExpression
 
 @Serializable
 class MatchArm(
-	val patterns: List<Expression>,
+	val patterns: List<MatchPattern>,
 	val guard: Expression?,
 	val statements: List<Statement>,
 	override val location: SourceLocation,
 ) : AstNode
+
+@Serializable
+sealed interface MatchPattern
+
+@Serializable
+class ExpressionMatchPattern(
+	val expression: Expression,
+) : MatchPattern
+
+@Serializable
+class IsTypeMatchPattern(
+	val type: TypeReference,
+) : MatchPattern

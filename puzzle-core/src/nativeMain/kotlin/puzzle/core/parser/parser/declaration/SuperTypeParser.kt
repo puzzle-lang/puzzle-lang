@@ -12,7 +12,7 @@ import puzzle.core.parser.parser.parseTypeReference
 import puzzle.core.token.kinds.BracketKind
 import puzzle.core.token.kinds.SeparatorKind
 import puzzle.core.token.kinds.SymbolKind
-import puzzle.core.token.span
+import puzzle.core.model.span
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseSuperTypes(

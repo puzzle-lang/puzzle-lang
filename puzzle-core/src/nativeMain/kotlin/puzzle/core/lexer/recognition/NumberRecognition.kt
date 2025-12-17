@@ -6,7 +6,7 @@ import puzzle.core.token.PzlToken
 import puzzle.core.token.kinds.LiteralKind
 import puzzle.core.token.kinds.NumberLiteralType
 import puzzle.core.token.kinds.NumberSystem
-import puzzle.core.token.span
+import puzzle.core.model.span
 import puzzle.core.util.isBinary
 import puzzle.core.util.isDecimal
 import puzzle.core.util.isHex

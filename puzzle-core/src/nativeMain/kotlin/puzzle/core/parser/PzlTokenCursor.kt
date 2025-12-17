@@ -36,16 +36,16 @@ class PzlTokenCursor(
 	
 	fun advance(): PzlToken {
 		if (position < tokens.size - 1) {
-			position++
+			return current.also { position++ }
 		}
-		return current
+		error("position 超出 tokens 的范围")
 	}
 	
-	fun retreat(count: Int = 1): PzlToken {
-		if (position >= count) {
-			position -= count
+	fun retreat(): PzlToken {
+		if (position > 0) {
+			return current.also { position-- }
 		}
-		return current
+		error("position 超出 tokens 的范围")
 	}
 	
 	inline fun <reified K : PzlTokenKind> match(): Boolean = match(K::class)

@@ -10,7 +10,7 @@ import puzzle.core.token.kinds.BracketKind.End.RBRACKET
 import puzzle.core.token.kinds.BracketKind.End.RPAREN
 import puzzle.core.token.kinds.SeparatorKind.COMMA
 import puzzle.core.token.kinds.SeparatorKind.SEMICOLON
-import puzzle.core.token.span
+import puzzle.core.model.span
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseArguments(endKind: BracketKind.End): List<Argument> {

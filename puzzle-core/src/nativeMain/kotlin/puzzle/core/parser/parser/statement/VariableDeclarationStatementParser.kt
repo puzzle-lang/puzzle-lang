@@ -10,7 +10,7 @@ import puzzle.core.parser.parser.parseTypeReference
 import puzzle.core.token.kinds.AssignmentKind
 import puzzle.core.token.kinds.ModifierKind
 import puzzle.core.token.kinds.SymbolKind
-import puzzle.core.token.span
+import puzzle.core.model.span
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseVariableDeclarationStatement(): VariableDeclarationStatement {

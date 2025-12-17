@@ -12,7 +12,7 @@ import puzzle.core.parser.parser.expression.parseIdentifierString
 import puzzle.core.token.kinds.AccessKind
 import puzzle.core.token.kinds.OperatorKind
 import puzzle.core.token.kinds.TypeOperatorKind
-import puzzle.core.token.span
+import puzzle.core.model.span
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseImportDeclaration(): ImportDeclaration {

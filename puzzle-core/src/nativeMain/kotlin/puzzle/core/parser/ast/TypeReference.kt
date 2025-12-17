@@ -2,7 +2,7 @@ package puzzle.core.parser.ast
 
 import kotlinx.serialization.Serializable
 import puzzle.core.parser.ast.parameter.Parameter
-import puzzle.core.token.SourceLocation
+import puzzle.core.model.SourceLocation
 import puzzle.core.util.DotStringListSerializer
 
 @Serializable

@@ -10,7 +10,7 @@ import puzzle.core.parser.ast.parameter.ContextSpec
 import puzzle.core.parser.ast.parameter.TypeSpec
 import puzzle.core.parser.parser.modifier.ModifierTarget
 import puzzle.core.parser.parser.parameter.type.TypeTarget
-import puzzle.core.token.SourceLocation
+import puzzle.core.model.SourceLocation
 
 sealed interface DeclarationMatcher<out D : Declaration> {
 	

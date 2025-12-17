@@ -4,8 +4,8 @@ import kotlinx.serialization.Serializable
 import puzzle.core.parser.ast.AstNode
 import puzzle.core.parser.ast.TypeReference
 import puzzle.core.parser.ast.expression.IdentifierExpression
-import puzzle.core.token.SourceLocation
-import puzzle.core.token.span
+import puzzle.core.model.SourceLocation
+import puzzle.core.model.span
 
 @Serializable
 class ContextSpec(

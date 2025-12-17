@@ -1,8 +1,9 @@
 package puzzle.sample
 
 fun main() {
+    val n = 500
     val a = if (true) 1 else 2
-    if (1 + 2 == 3) {
+    if (123 + 2 == 3) {
         println(true)
     } else {
         println(false)
@@ -13,14 +14,18 @@ fun main() {
     val str = "Hello"
     val num = str as? Int
     val isStr = str is String
-    println(isStr)
+    println(3 + if (true) 1 else 2)
 
-    /*val result1 = match (value) {
+    val result1 = "start: " + match (value) {
         1 -> "1"
-        2, 3 -> { "2 or 3" }
+        2, 2 + 3 -> { "2 or 5" }
         4 if value.isNumber() -> { "4 is Number" }
+        5 if (value.isInt()) -> {
+            println("5 is Int")
+            "5" + " is Number"
+        }
         else -> "else"
-    }*/
+    }
     val result2 = match {
         value is String && value == "1" -> {
             "1 is String"

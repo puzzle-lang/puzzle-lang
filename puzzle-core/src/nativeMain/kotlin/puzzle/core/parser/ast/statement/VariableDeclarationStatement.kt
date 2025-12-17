@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 import puzzle.core.parser.ast.TypeReference
 import puzzle.core.parser.ast.expression.Expression
 import puzzle.core.parser.ast.expression.IdentifierExpression
-import puzzle.core.token.SourceLocation
+import puzzle.core.model.SourceLocation
 
 @Serializable
 class VariableDeclarationStatement(

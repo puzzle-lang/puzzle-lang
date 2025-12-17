@@ -1,6 +1,6 @@
 package puzzle.core.parser.ast
 
-import puzzle.core.token.SourceLocation
+import puzzle.core.model.SourceLocation
 
 interface AstNode {
 	

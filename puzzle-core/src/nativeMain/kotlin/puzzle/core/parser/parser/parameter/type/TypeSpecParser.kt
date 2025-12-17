@@ -6,7 +6,7 @@ import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.parameter.TypeSpec
 import puzzle.core.token.kinds.ContextualKind
 import puzzle.core.token.kinds.OperatorKind
-import puzzle.core.token.span
+import puzzle.core.model.span
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseTypeSpec(): TypeSpec? {

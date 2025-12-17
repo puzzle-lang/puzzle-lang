@@ -24,21 +24,23 @@ fun parseExpressionChain(left: Expression? = null): Expression {
 }
 
 private val nonConsumableEndTokenTypes = arrayOf<PzlTokenKind>(
-	BracketKind.End.RPAREN,
-	BracketKind.End.RBRACKET,
-	BracketKind.End.RBRACE,
 	SymbolKind.COLON,
 	SeparatorKind.COMMA,
 	ControlFlowKind.ELSE,
-	SymbolKind.ARROW
+	SymbolKind.ARROW,
+	ControlFlowKind.IF
 )
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 private fun isAtExpressionEnd(): Boolean {
-	val isEnd = cursor.current.kind == MetaKind.EOF
-			|| cursor.match(SeparatorKind.SEMICOLON)
-			|| nonConsumableEndTokenTypes.any { cursor.check(it) }
-	if (isEnd) return true
+	val kind = cursor.current.kind
+	if (kind == MetaKind.EOF || kind is BracketKind.End || nonConsumableEndTokenTypes.any { kind == it }) {
+		return true
+	}
+	if (kind == SeparatorKind.SEMICOLON) {
+		cursor.advance()
+		return true
+	}
 	val previousLine = cursor.previous.location.startPosition.line
 	val current = cursor.current
 	val currentLine = current.location.startPosition.line

@@ -6,7 +6,7 @@ import puzzle.core.parser.ast.declaration.UniqueDeclaration
 import puzzle.core.parser.parser.declaration.parseUniqueDeclaration
 import puzzle.core.parser.parser.modifier.ModifierTarget
 import puzzle.core.parser.parser.parameter.type.TypeTarget
-import puzzle.core.token.SourceLocation
+import puzzle.core.model.SourceLocation
 import puzzle.core.token.kinds.DeclarationKind
 
 object UniqueDeclarationMatcher : DeclarationMatcher<UniqueDeclaration> {

@@ -2,7 +2,7 @@ package puzzle.core.parser.ast.expression
 
 import kotlinx.serialization.Serializable
 import puzzle.core.parser.ast.statement.Statement
-import puzzle.core.token.SourceLocation
+import puzzle.core.model.SourceLocation
 
 @Serializable
 class IfExpression(

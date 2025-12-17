@@ -7,7 +7,7 @@ import puzzle.core.parser.parser.statement.parseStatement
 import puzzle.core.parser.parser.statement.parseStatements
 import puzzle.core.token.kinds.BracketKind
 import puzzle.core.token.kinds.ControlFlowKind
-import puzzle.core.token.span
+import puzzle.core.model.span
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseIfExpression(): IfExpression {

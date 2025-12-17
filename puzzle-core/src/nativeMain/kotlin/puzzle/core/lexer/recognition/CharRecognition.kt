@@ -4,7 +4,7 @@ import puzzle.core.exception.syntaxError
 import puzzle.core.model.PzlContext
 import puzzle.core.token.PzlToken
 import puzzle.core.token.kinds.LiteralKind
-import puzzle.core.token.span
+import puzzle.core.model.span
 import puzzle.core.util.EscapeType
 import puzzle.core.util.isHex
 

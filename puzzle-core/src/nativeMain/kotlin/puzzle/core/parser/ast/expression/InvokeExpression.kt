@@ -2,7 +2,7 @@ package puzzle.core.parser.ast.expression
 
 import kotlinx.serialization.Serializable
 import puzzle.core.parser.ast.AstNode
-import puzzle.core.token.SourceLocation
+import puzzle.core.model.SourceLocation
 
 sealed interface InvokeExpression : Expression {
 	

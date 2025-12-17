@@ -3,7 +3,7 @@ package puzzle.core.lexer.recognition
 import puzzle.core.model.PzlContext
 import puzzle.core.token.PzlToken
 import puzzle.core.token.kinds.KeywordKind
-import puzzle.core.token.span
+import puzzle.core.model.span
 import puzzle.core.util.startsWith
 
 object KeywordRecognition : TokenRecognition {

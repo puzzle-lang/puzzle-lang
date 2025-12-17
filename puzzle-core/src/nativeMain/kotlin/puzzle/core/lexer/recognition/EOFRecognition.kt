@@ -3,7 +3,7 @@ package puzzle.core.lexer.recognition
 import puzzle.core.model.PzlContext
 import puzzle.core.token.PzlToken
 import puzzle.core.token.kinds.MetaKind
-import puzzle.core.token.span
+import puzzle.core.model.span
 
 object EOFRecognition : TokenRecognition {
 	

@@ -6,9 +6,9 @@ import puzzle.core.parser.ast.declaration.ExtensionDeclaration
 import puzzle.core.parser.ast.declaration.SuperTrait
 import puzzle.core.parser.matcher.declaration.DeclarationHeader
 import puzzle.core.parser.parser.parseTypeReference
-import puzzle.core.token.SourceLocation
+import puzzle.core.model.SourceLocation
 import puzzle.core.token.kinds.BracketKind
-import puzzle.core.token.span
+import puzzle.core.model.span
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseExtensionDeclaration(header: DeclarationHeader, start: SourceLocation): ExtensionDeclaration {

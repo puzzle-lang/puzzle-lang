@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 import puzzle.core.parser.ast.declaration.Declaration
 import puzzle.core.parser.ast.declaration.ImportDeclaration
 import puzzle.core.parser.ast.declaration.PackageDeclaration
-import puzzle.core.token.SourceLocation
+import puzzle.core.model.SourceLocation
 
 @Serializable
 class SourceFileNode(

@@ -18,7 +18,7 @@ import puzzle.core.parser.parser.expression.tryParseIdentifierString
 import puzzle.core.parser.parser.parameter.parameter.parseFunParameters
 import puzzle.core.parser.parser.parseTypeReference
 import puzzle.core.parser.parser.statement.parseStatements
-import puzzle.core.token.SourceLocation
+import puzzle.core.model.SourceLocation
 import puzzle.core.token.kinds.AccessKind
 import puzzle.core.token.kinds.AssignmentKind.*
 import puzzle.core.token.kinds.BracketKind
@@ -27,7 +27,7 @@ import puzzle.core.token.kinds.IndexKind.INDEX_SET
 import puzzle.core.token.kinds.OperatorKind.*
 import puzzle.core.token.kinds.SeparatorKind
 import puzzle.core.token.kinds.SymbolKind
-import puzzle.core.token.span
+import puzzle.core.model.span
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseFunDeclaration(header: DeclarationHeader, start: SourceLocation): FunDeclaration {

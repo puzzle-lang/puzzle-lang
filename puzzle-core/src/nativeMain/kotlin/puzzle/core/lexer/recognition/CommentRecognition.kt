@@ -4,7 +4,7 @@ import puzzle.core.exception.syntaxError
 import puzzle.core.model.PzlContext
 import puzzle.core.token.kinds.CommentKind
 import puzzle.core.token.PzlToken
-import puzzle.core.token.span
+import puzzle.core.model.span
 
 object CommentRecognition : TokenRecognition {
 	

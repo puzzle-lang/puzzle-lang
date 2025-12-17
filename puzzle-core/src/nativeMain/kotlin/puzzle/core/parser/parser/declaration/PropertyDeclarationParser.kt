@@ -11,12 +11,12 @@ import puzzle.core.parser.parser.expression.IdentifierTarget
 import puzzle.core.parser.parser.expression.parseExpressionChain
 import puzzle.core.parser.parser.expression.parseIdentifierExpression
 import puzzle.core.parser.parser.parseTypeReference
-import puzzle.core.token.SourceLocation
-import puzzle.core.token.copy
+import puzzle.core.model.SourceLocation
+import puzzle.core.model.copy
 import puzzle.core.token.kinds.AccessKind
 import puzzle.core.token.kinds.AssignmentKind
 import puzzle.core.token.kinds.SymbolKind
-import puzzle.core.token.span
+import puzzle.core.model.span
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parsePropertyDeclaration(header: DeclarationHeader, start: SourceLocation): PropertyDeclaration {

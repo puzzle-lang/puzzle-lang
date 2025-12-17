@@ -7,7 +7,7 @@ import puzzle.core.parser.ast.Modifier
 import puzzle.core.parser.ast.expression.IdentifierExpression
 import puzzle.core.parser.ast.parameter.ContextSpec
 import puzzle.core.parser.ast.parameter.TypeSpec
-import puzzle.core.token.SourceLocation
+import puzzle.core.model.SourceLocation
 
 @Serializable
 class TraitDeclaration(

@@ -8,7 +8,7 @@ import puzzle.core.parser.parser.expression.IdentifierTarget
 import puzzle.core.parser.parser.expression.parseIdentifierString
 import puzzle.core.token.kinds.AccessKind
 import puzzle.core.token.kinds.NamespaceKind
-import puzzle.core.token.span
+import puzzle.core.model.span
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parsePackageDeclaration(): PackageDeclaration {

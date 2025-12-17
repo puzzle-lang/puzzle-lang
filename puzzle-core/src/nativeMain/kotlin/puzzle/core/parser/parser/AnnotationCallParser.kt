@@ -6,7 +6,7 @@ import puzzle.core.parser.ast.AnnotationCall
 import puzzle.core.parser.parser.expression.parseArguments
 import puzzle.core.token.kinds.BracketKind
 import puzzle.core.token.kinds.SymbolKind
-import puzzle.core.token.span
+import puzzle.core.model.span
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseAnnotationCalls(): List<AnnotationCall> {

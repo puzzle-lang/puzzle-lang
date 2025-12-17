@@ -8,9 +8,9 @@ import puzzle.core.parser.matcher.declaration.DeclarationHeader
 import puzzle.core.parser.parser.expression.IdentifierTarget
 import puzzle.core.parser.parser.expression.parseIdentifierExpression
 import puzzle.core.parser.parser.parameter.parameter.parseAnnotationParameters
-import puzzle.core.token.SourceLocation
+import puzzle.core.model.SourceLocation
 import puzzle.core.token.kinds.BracketKind
-import puzzle.core.token.span
+import puzzle.core.model.span
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseAnnotationDeclaration(header: DeclarationHeader, start: SourceLocation): AnnotationDeclaration {

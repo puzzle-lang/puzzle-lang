@@ -7,7 +7,7 @@ import puzzle.core.token.kinds.BracketKind
 import puzzle.core.token.kinds.ContextualKind
 import puzzle.core.token.kinds.OperatorKind
 import puzzle.core.token.kinds.SeparatorKind
-import puzzle.core.token.span
+import puzzle.core.model.span
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseContextSpec(): ContextSpec? {

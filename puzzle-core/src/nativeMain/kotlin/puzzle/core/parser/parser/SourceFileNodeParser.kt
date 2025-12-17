@@ -9,7 +9,7 @@ import puzzle.core.parser.parser.declaration.parseImportDeclaration
 import puzzle.core.parser.parser.declaration.parsePackageDeclaration
 import puzzle.core.parser.parser.declaration.parseTopLevelDeclaration
 import puzzle.core.token.kinds.NamespaceKind
-import puzzle.core.token.span
+import puzzle.core.model.span
 
 context(context: PzlContext, cursor: PzlTokenCursor)
 fun parseSourceFileNode(): SourceFileNode {

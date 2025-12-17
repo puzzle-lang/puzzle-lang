@@ -1,7 +1,7 @@
 package puzzle.core.parser.ast
 
 import kotlinx.serialization.Serializable
-import puzzle.core.token.SourceLocation
+import puzzle.core.model.SourceLocation
 import puzzle.core.token.kinds.ModifierKind
 import puzzle.core.token.kinds.OperatorKind
 import puzzle.core.token.kinds.SymbolKind

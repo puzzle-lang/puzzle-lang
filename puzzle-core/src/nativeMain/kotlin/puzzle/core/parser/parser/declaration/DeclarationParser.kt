@@ -13,7 +13,7 @@ import puzzle.core.parser.parser.parameter.type.check
 import puzzle.core.parser.parser.parameter.type.parseTypeSpec
 import puzzle.core.parser.parser.parseAnnotationCalls
 import puzzle.core.parser.parser.parseDocComment
-import puzzle.core.token.SourceLocation
+import puzzle.core.model.SourceLocation
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseTopLevelDeclaration(): Declaration {

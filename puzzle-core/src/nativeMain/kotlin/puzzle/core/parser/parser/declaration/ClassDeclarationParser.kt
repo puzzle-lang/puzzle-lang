@@ -10,9 +10,9 @@ import puzzle.core.parser.parser.modifier.ModifierTarget
 import puzzle.core.parser.parser.modifier.check
 import puzzle.core.parser.parser.modifier.parseModifiers
 import puzzle.core.parser.parser.parameter.parameter.parseClassParameters
-import puzzle.core.token.SourceLocation
+import puzzle.core.model.SourceLocation
 import puzzle.core.token.kinds.BracketKind
-import puzzle.core.token.span
+import puzzle.core.model.span
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseClassDeclaration(header: DeclarationHeader, start: SourceLocation): ClassDeclaration {

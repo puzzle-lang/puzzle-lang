@@ -9,7 +9,7 @@ import puzzle.core.parser.ast.statement.Statement
 import puzzle.core.parser.parser.expression.parseExpressionChain
 import puzzle.core.token.kinds.BracketKind
 import puzzle.core.token.kinds.ControlFlowKind
-import puzzle.core.token.span
+import puzzle.core.model.span
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseIfStatement(): Statement {

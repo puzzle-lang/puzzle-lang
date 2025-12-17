@@ -1,8 +1,7 @@
-package puzzle.core.token
+package puzzle.core.model
 
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
-import puzzle.core.model.PzlContext
 
 @Serializable
 class SourceLocation(

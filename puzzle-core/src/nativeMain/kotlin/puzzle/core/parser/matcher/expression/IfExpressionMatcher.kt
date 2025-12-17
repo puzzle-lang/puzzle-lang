@@ -11,7 +11,7 @@ object IfExpressionMatcher : ExpressionMatcher<IfExpression> {
 	
 	context(cursor: PzlTokenCursor)
 	override fun match(left: Expression?): Boolean {
-		return cursor.match(ControlFlowKind.IF)
+		return left == null && cursor.match(ControlFlowKind.IF)
 	}
 	
 	context(_: PzlContext, cursor: PzlTokenCursor)
