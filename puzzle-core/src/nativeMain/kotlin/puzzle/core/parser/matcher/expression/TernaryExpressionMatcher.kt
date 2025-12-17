@@ -6,7 +6,7 @@ import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.expression.Expression
 import puzzle.core.parser.ast.expression.TernaryExpression
 import puzzle.core.parser.parser.expression.parseTernaryExpression
-import puzzle.core.token.SymbolKind
+import puzzle.core.token.kinds.SymbolKind
 
 object TernaryExpressionMatcher : ExpressionMatcher<TernaryExpression> {
 	

@@ -1,7 +1,7 @@
 package puzzle.core.parser.parser.modifier
 
-import puzzle.core.token.ModifierKind
-import puzzle.core.token.ModifierKind.*
+import puzzle.core.token.kinds.ModifierKind
+import puzzle.core.token.kinds.ModifierKind.*
 
 enum class ModifierTarget(
 	val displayName: String,

@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 import puzzle.core.token.SourceLocation
 
 @Serializable
-class NonNullAssertionExpression(
-	val receiver: Expression,
-	override val location: SourceLocation
+class IdentifierExpression(
+	val name: String,
+	override val location: SourceLocation,
 ) : Expression

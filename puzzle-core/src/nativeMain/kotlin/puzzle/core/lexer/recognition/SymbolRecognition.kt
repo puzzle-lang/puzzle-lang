@@ -2,7 +2,8 @@ package puzzle.core.lexer.recognition
 
 import puzzle.core.model.PzlContext
 import puzzle.core.token.PzlToken
-import puzzle.core.token.SymbolKind
+import puzzle.core.token.kinds.SymbolKind
+import puzzle.core.token.span
 
 object SymbolRecognition : TokenRecognition {
 	
@@ -19,7 +20,7 @@ object SymbolRecognition : TokenRecognition {
 			if (start + length > input.size) continue
 			val symbol = input.concatToString(start, start + length)
 			val kind = symbols[length]!![symbol] ?: continue
-			return PzlToken(kind, start, start + length)
+			return PzlToken(kind, start span start + length)
 		}
 		return null
 	}

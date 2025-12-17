@@ -13,6 +13,7 @@ import puzzle.core.parser.parser.parameter.type.check
 import puzzle.core.parser.parser.parameter.type.parseTypeSpec
 import puzzle.core.parser.parser.parseAnnotationCalls
 import puzzle.core.parser.parser.parseDocComment
+import puzzle.core.token.SourceLocation
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseTopLevelDeclaration(): Declaration {
@@ -27,8 +28,9 @@ fun parseTopLevelDeclaration(): Declaration {
 	)
 	typeSpec?.check(matcher.typeTarget)
 	modifiers.check(matcher.topLevelModifierTarget)
-	val header = DeclarationHeader.create(docComment, annotationCalls, typeSpec, contextSpec, modifiers)
-	return matcher.parse(header, isMember = false)
+	val header = DeclarationHeader(docComment, annotationCalls, typeSpec, contextSpec, modifiers)
+	val start = header.start
+	return matcher.parse(header, start, isMember = false)
 }
 
 context(_: PzlContext, cursor: PzlTokenCursor)
@@ -44,6 +46,18 @@ fun parseMemberDeclaration(): Declaration {
 	)
 	typeSpec?.check(matcher.typeTarget)
 	modifiers.check(matcher.memberModifierTarget)
-	val header = DeclarationHeader.create(docComment, annotationCalls, typeSpec, contextSpec, modifiers)
-	return matcher.parse(header, isMember = true)
+	val header = DeclarationHeader(docComment, annotationCalls, typeSpec, contextSpec, modifiers)
+	val start = header.start
+	return matcher.parse(header, start, isMember = true)
 }
+
+context(cursor: PzlTokenCursor)
+private val DeclarationHeader.start: SourceLocation
+	get() {
+		if (docComment != null) return docComment.location
+		if (annotationCalls.isNotEmpty()) return annotationCalls.first().location
+		if (typeSpec != null) return typeSpec.location
+		if (contextSpec != null) return contextSpec.location
+		if (modifiers.isNotEmpty()) return modifiers.first().location
+		return cursor.previous.location
+	}

@@ -6,7 +6,7 @@ import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.expression.BinaryExpression
 import puzzle.core.parser.ast.expression.Expression
 import puzzle.core.parser.parser.expression.parseBinaryExpression
-import puzzle.core.token.OperatorKind.*
+import puzzle.core.token.kinds.OperatorKind.*
 
 object BinaryExpressionMatcher : ExpressionMatcher<BinaryExpression> {
 	

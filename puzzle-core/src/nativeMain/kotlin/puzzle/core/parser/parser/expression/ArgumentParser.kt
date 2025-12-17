@@ -4,53 +4,56 @@ import puzzle.core.exception.syntaxError
 import puzzle.core.model.PzlContext
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.expression.Argument
-import puzzle.core.parser.ast.expression.InvokeType
-import puzzle.core.parser.ast.expression.InvokeType.CALL
-import puzzle.core.parser.ast.expression.InvokeType.INDEX_ACCESS
-import puzzle.core.parser.parser.identifier.IdentifierNameTarget
-import puzzle.core.parser.parser.identifier.parseIdentifierName
-import puzzle.core.token.AssignmentKind
-import puzzle.core.token.SeparatorKind
+import puzzle.core.token.kinds.AssignmentKind.ASSIGN
+import puzzle.core.token.kinds.BracketKind
+import puzzle.core.token.kinds.BracketKind.End.RBRACKET
+import puzzle.core.token.kinds.BracketKind.End.RPAREN
+import puzzle.core.token.kinds.SeparatorKind.COMMA
+import puzzle.core.token.kinds.SeparatorKind.SEMICOLON
+import puzzle.core.token.span
 
 context(_: PzlContext, cursor: PzlTokenCursor)
-fun parseArguments(type: InvokeType): List<Argument> {
-	if (cursor.match(type.endTokenKind)) return emptyList()
+fun parseArguments(endKind: BracketKind.End): List<Argument> {
+	if (cursor.match(endKind)) return emptyList()
 	val arguments = mutableListOf<Argument>()
 	do {
-		arguments += parseCallArgument(type)
-		if (!cursor.check(type.endTokenKind)) {
-			cursor.expect(SeparatorKind.COMMA, "参数缺少 ','")
+		arguments += parseCallArgument(endKind)
+		if (!cursor.check(endKind)) {
+			cursor.expect(COMMA, "参数缺少 ','")
 		}
-	} while (!cursor.match(type.endTokenKind))
+	} while (!cursor.match(endKind))
 	return arguments
 }
 
 context(_: PzlContext, cursor: PzlTokenCursor)
-private fun parseCallArgument(type: InvokeType): Argument {
-	val name = if (cursor.offsetOrNull(offset = 1)?.kind == AssignmentKind.ASSIGN) {
-		parseIdentifierName(IdentifierNameTarget.ARGUMENT).also {
+private fun parseCallArgument(endKind: BracketKind.End): Argument {
+	val name = if (cursor.offsetOrNull(offset = 1)?.kind == ASSIGN) {
+		parseIdentifierExpression(IdentifierTarget.ARGUMENT).also {
 			cursor.advance()
 		}
 	} else null
 	val expression = parseExpressionChain()
-	if (cursor.previous.kind == SeparatorKind.SEMICOLON) {
-		syntaxError("语法错误", cursor.previous)
+	val start = name?.location ?: expression.location
+	
+	if (cursor.previous.kind == SEMICOLON) {
+		syntaxError("参数不支持使用 ';' 结束表达式", cursor.previous)
 	}
+	val end = cursor.previous.location
 	val currentType = cursor.current.kind
-	if (currentType == SeparatorKind.COMMA) {
-		return Argument(name, expression)
+	if (currentType == COMMA) {
+		return Argument(name, expression, start span end)
 	}
-	when (type) {
-		CALL if (currentType == INDEX_ACCESS.endTokenKind) -> syntaxError(
-			"函数参数表达式后只允许根 ')' 和 ','",
-			cursor.current
+	return when (endKind) {
+		RPAREN if currentType == RBRACKET -> syntaxError(
+			message = "函数参数表达式后只允许根 ')' 和 ','",
+			token = cursor.current
 		)
 		
-		INDEX_ACCESS if (currentType == CALL.endTokenKind) -> syntaxError(
-			"索引访问参数表达式后只允许根 ']' 和 ','",
-			cursor.current
+		RBRACKET if currentType == RPAREN -> syntaxError(
+			message = "索引访问参数表达式后只允许根 ']' 和 ','",
+			token = cursor.current
 		)
 		
-		else -> return Argument(name, expression)
+		else -> Argument(name, expression, start span end)
 	}
 }

@@ -2,13 +2,13 @@ package puzzle.core.parser
 
 import puzzle.core.exception.syntaxError
 import puzzle.core.model.PzlContext
-import puzzle.core.token.MetaKind
 import puzzle.core.token.PzlToken
-import puzzle.core.token.PzlTokenKind
+import puzzle.core.token.kinds.MetaKind
+import puzzle.core.token.kinds.PzlTokenKind
 import kotlin.reflect.KClass
 
 class PzlTokenCursor(
-	private val tokens: List<PzlToken>
+	private val tokens: List<PzlToken>,
 ) {
 	
 	var position = 0
@@ -20,7 +20,10 @@ class PzlTokenCursor(
 	val previous: PzlToken
 		get() = this.tokens[position - 1]
 	
-	val next: PzlToken?
+	val next: PzlToken
+		get() = this.tokens[position + 1]
+	
+	val nextOrNull: PzlToken?
 		get() = this.tokens.getOrNull(position + 1)
 	
 	fun offset(offset: Int): PzlToken {

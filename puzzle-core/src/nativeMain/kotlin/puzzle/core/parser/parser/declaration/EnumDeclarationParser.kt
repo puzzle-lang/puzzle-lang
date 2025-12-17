@@ -7,15 +7,17 @@ import puzzle.core.parser.ast.declaration.Declaration
 import puzzle.core.parser.ast.declaration.EnumDeclaration
 import puzzle.core.parser.ast.declaration.EnumEntry
 import puzzle.core.parser.matcher.declaration.DeclarationHeader
-import puzzle.core.parser.parser.identifier.IdentifierNameTarget
-import puzzle.core.parser.parser.identifier.parseIdentifierName
+import puzzle.core.parser.parser.expression.IdentifierTarget
+import puzzle.core.parser.parser.expression.parseIdentifierExpression
 import puzzle.core.parser.parser.parameter.parameter.parseEnumParameters
-import puzzle.core.token.BracketKind
-import puzzle.core.token.SeparatorKind
+import puzzle.core.token.SourceLocation
+import puzzle.core.token.kinds.BracketKind
+import puzzle.core.token.kinds.SeparatorKind
+import puzzle.core.token.span
 
 context(_: PzlContext, cursor: PzlTokenCursor)
-fun parseEnumDeclaration(header: DeclarationHeader): EnumDeclaration {
-	val name = parseIdentifierName(IdentifierNameTarget.ENUM)
+fun parseEnumDeclaration(header: DeclarationHeader, start: SourceLocation): EnumDeclaration {
+	val name = parseIdentifierExpression(IdentifierTarget.ENUM)
 	val parameters = parseEnumParameters()
 	cursor.expect(BracketKind.Start.LBRACE, "枚举缺少 '{'")
 	val entries = parseEnumEntries()
@@ -28,6 +30,7 @@ fun parseEnumDeclaration(header: DeclarationHeader): EnumDeclaration {
 			}
 		}
 	}
+	val end = cursor.previous.location
 	return EnumDeclaration(
 		name = name,
 		docComment = header.docComment,
@@ -38,6 +41,7 @@ fun parseEnumDeclaration(header: DeclarationHeader): EnumDeclaration {
 		contextSpec = header.contextSpec,
 		annotationCalls = header.annotationCalls,
 		members = members,
+		location = start span end
 	)
 }
 
@@ -58,7 +62,8 @@ private fun parseEnumEntries(): List<EnumEntry> {
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 private fun parseEnumEntry(): EnumEntry {
-	val name = parseIdentifierName(IdentifierNameTarget.ENUM_ENTRY)
+	val name = parseIdentifierExpression(IdentifierTarget.ENUM_ENTRY)
+	val start = name.location
 	if (cursor.match(BracketKind.Start.LPAREN)) {
 		while (!cursor.match(BracketKind.End.RPAREN)) {
 			cursor.advance()
@@ -70,8 +75,10 @@ private fun parseEnumEntry(): EnumEntry {
 			members += parseMemberDeclaration()
 		}
 	}
+	val end = cursor.previous.location
 	return EnumEntry(
 		name = name,
-		members = members
+		members = members,
+		location = start span end
 	)
 }

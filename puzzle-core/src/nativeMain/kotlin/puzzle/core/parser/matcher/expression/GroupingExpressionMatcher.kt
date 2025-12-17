@@ -4,7 +4,7 @@ import puzzle.core.model.PzlContext
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.expression.Expression
 import puzzle.core.parser.parser.expression.parseGroupingExpression
-import puzzle.core.token.BracketKind
+import puzzle.core.token.kinds.BracketKind
 
 object GroupingExpressionMatcher : ExpressionMatcher<Expression> {
 	

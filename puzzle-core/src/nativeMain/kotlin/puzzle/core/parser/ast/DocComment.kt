@@ -1,9 +1,10 @@
 package puzzle.core.parser.ast
 
 import kotlinx.serialization.Serializable
+import puzzle.core.token.SourceLocation
 
 @Serializable
 class DocComment(
 	val value: String,
-	val range: TokenRange
-)
+	override val location: SourceLocation,
+) : AstNode

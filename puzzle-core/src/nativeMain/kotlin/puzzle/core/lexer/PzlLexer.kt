@@ -3,10 +3,10 @@ package puzzle.core.lexer
 import puzzle.core.exception.syntaxError
 import puzzle.core.lexer.recognition.*
 import puzzle.core.model.PzlContext
-import puzzle.core.token.CommentKind
-import puzzle.core.token.MetaKind
+import puzzle.core.token.kinds.CommentKind
+import puzzle.core.token.kinds.MetaKind
 import puzzle.core.token.PzlToken
-import puzzle.core.token.WhiteSpaceKind
+import puzzle.core.token.kinds.WhiteSpaceKind
 
 class PzlLexer(
 	private val input: CharArray
@@ -43,7 +43,7 @@ class PzlLexer(
 	private fun nextToken(): PzlToken {
 		recognitions.forEach {
 			val token = it.tryParse(input, position) ?: return@forEach
-			position = token.end
+			position = token.location.end
 			return when (token.kind) {
 				is WhiteSpaceKind, is CommentKind.SingleLine, is CommentKind.MultiLine -> nextToken()
 				else -> token

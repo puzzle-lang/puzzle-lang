@@ -8,7 +8,8 @@ import puzzle.core.parser.ast.declaration.ImportDeclaration
 import puzzle.core.parser.parser.declaration.parseImportDeclaration
 import puzzle.core.parser.parser.declaration.parsePackageDeclaration
 import puzzle.core.parser.parser.declaration.parseTopLevelDeclaration
-import puzzle.core.token.NamespaceKind
+import puzzle.core.token.kinds.NamespaceKind
+import puzzle.core.token.span
 
 context(context: PzlContext, cursor: PzlTokenCursor)
 fun parseSourceFileNode(): SourceFileNode {
@@ -21,10 +22,12 @@ fun parseSourceFileNode(): SourceFileNode {
 	while (!cursor.isAtEnd()) {
 		declarations += parseTopLevelDeclaration()
 	}
+	val location = packageDeclaration.location span cursor.previous.location
 	return SourceFileNode(
 		path = context.sourcePath,
 		packageDeclaration = packageDeclaration,
 		importDeclarations = importDeclarations,
 		declarations = declarations,
+		location = location
 	)
 }

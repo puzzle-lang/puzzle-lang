@@ -2,10 +2,11 @@ package puzzle.core.lexer.recognition
 
 import puzzle.core.exception.syntaxError
 import puzzle.core.model.PzlContext
-import puzzle.core.token.LiteralKind
-import puzzle.core.token.NumberLiteralType
-import puzzle.core.token.NumberSystem
 import puzzle.core.token.PzlToken
+import puzzle.core.token.kinds.LiteralKind
+import puzzle.core.token.kinds.NumberLiteralType
+import puzzle.core.token.kinds.NumberSystem
+import puzzle.core.token.span
 import puzzle.core.util.isBinary
 import puzzle.core.util.isDecimal
 import puzzle.core.util.isHex
@@ -100,7 +101,7 @@ object NumberRecognition : TokenRecognition {
 		}
 		val type = NumberLiteralType.get(isDecimal = false, isUnsigned = isUnsigned, byteSize = byteSize)
 		val kind = LiteralKind.Number(binary, NumberSystem.BINARY, type)
-		return PzlToken(kind, start, position)
+		return PzlToken(kind, start span position)
 	}
 	
 	private const val DECIMAL_INT_MAX = Int.MAX_VALUE.toString()
@@ -192,7 +193,7 @@ object NumberRecognition : TokenRecognition {
 			}
 		}
 		val kind = LiteralKind.Number(decimal, NumberSystem.DECIMAL, type)
-		return PzlToken(kind, start, position)
+		return PzlToken(kind, start span position)
 	}
 	
 	private const val HEX_UINT_MAX_LENGTH = 8
@@ -246,7 +247,7 @@ object NumberRecognition : TokenRecognition {
 		}
 		val type = NumberLiteralType.get(isDecimal = false, isUnsigned = isUnsigned, byteSize = byteSize)
 		val kind = LiteralKind.Number(hex, NumberSystem.HEX, type)
-		return PzlToken(kind, start, position)
+		return PzlToken(kind, start span position)
 	}
 	
 	context(_: PzlContext)

@@ -1,7 +1,8 @@
 package puzzle.core.parser.ast.expression
 
 import kotlinx.serialization.Serializable
-import puzzle.core.token.BracketKind
+import puzzle.core.parser.ast.AstNode
+import puzzle.core.token.SourceLocation
 
 sealed interface InvokeExpression : Expression {
 	
@@ -13,25 +14,20 @@ sealed interface InvokeExpression : Expression {
 @Serializable
 class CallExpression(
 	override val callee: Expression,
+	override val location: SourceLocation,
 	override val arguments: List<Argument> = emptyList(),
 ) : InvokeExpression
 
 @Serializable
 class IndexAccessExpression(
 	override val callee: Expression,
+	override val location: SourceLocation,
 	override val arguments: List<Argument> = emptyList(),
 ) : InvokeExpression
 
 @Serializable
 class Argument(
-	val name: String?,
+	val name: IdentifierExpression?,
 	val expression: Expression,
-)
-
-enum class InvokeType(
-	val startTokenKind: BracketKind.Start,
-	val endTokenKind: BracketKind.End
-) {
-	CALL(BracketKind.Start.LPAREN, BracketKind.End.RPAREN),
-	INDEX_ACCESS(BracketKind.Start.LBRACKET, BracketKind.End.RBRACKET),
-}
+	override val location: SourceLocation,
+) : AstNode

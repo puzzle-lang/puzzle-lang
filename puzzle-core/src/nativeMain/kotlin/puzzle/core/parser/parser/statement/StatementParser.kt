@@ -5,8 +5,8 @@ import puzzle.core.model.PzlContext
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.statement.Statement
 import puzzle.core.parser.matcher.statement.StatementMatcher
-import puzzle.core.token.BracketKind
-import puzzle.core.token.MetaKind
+import puzzle.core.token.kinds.BracketKind
+import puzzle.core.token.kinds.MetaKind
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseStatement(): Statement {

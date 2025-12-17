@@ -2,34 +2,30 @@ package puzzle.core.parser.ast
 
 import kotlinx.serialization.Serializable
 import puzzle.core.parser.ast.parameter.Parameter
+import puzzle.core.token.SourceLocation
 import puzzle.core.util.DotStringListSerializer
 
 @Serializable
 class TypeReference(
 	val type: Type,
-	val isNullable: Boolean = false
-)
+	override val location: SourceLocation,
+	val isNullable: Boolean = false,
+) : AstNode
 
 @Serializable
-sealed interface Type
+sealed interface Type : AstNode
 
 @Serializable
 class NamedType(
 	@Serializable(with = DotStringListSerializer::class)
 	val segments: List<String>,
-	val typeArguments: List<TypeArgument> = emptyList()
-) : Type {
-	
-	companion object {
-		
-		fun parse(qualifiedName: String): NamedType {
-			return NamedType(qualifiedName.split("."))
-		}
-	}
-}
+	override val location: SourceLocation,
+	val typeArguments: List<TypeArgument> = emptyList(),
+) : Type
 
 @Serializable
 class LambdaType(
 	val parameters: List<Parameter>,
-	val returnTypes: List<TypeReference>
+	val returnTypes: List<TypeReference>,
+	override val location: SourceLocation,
 ) : Type

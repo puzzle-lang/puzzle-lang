@@ -2,14 +2,12 @@ package puzzle.core.parser.matcher.declaration
 
 import puzzle.core.model.PzlContext
 import puzzle.core.parser.PzlTokenCursor
-import puzzle.core.parser.ast.AnnotationCall
 import puzzle.core.parser.ast.declaration.PropertyDeclaration
-import puzzle.core.parser.ast.parameter.ContextSpec
-import puzzle.core.parser.ast.parameter.TypeSpec
 import puzzle.core.parser.parser.declaration.parsePropertyDeclaration
 import puzzle.core.parser.parser.modifier.ModifierTarget
 import puzzle.core.parser.parser.parameter.type.TypeTarget
-import puzzle.core.token.ModifierKind
+import puzzle.core.token.SourceLocation
+import puzzle.core.token.kinds.ModifierKind
 
 object PropertyDeclarationMatcher : DeclarationMatcher<PropertyDeclaration> {
 	
@@ -28,6 +26,7 @@ object PropertyDeclarationMatcher : DeclarationMatcher<PropertyDeclaration> {
 	context(_: PzlContext, cursor: PzlTokenCursor)
 	override fun parse(
 		header: DeclarationHeader,
-		isMember: Boolean
-	): PropertyDeclaration = parsePropertyDeclaration(header)
+		start: SourceLocation,
+		isMember: Boolean,
+	): PropertyDeclaration = parsePropertyDeclaration(header, start)
 }

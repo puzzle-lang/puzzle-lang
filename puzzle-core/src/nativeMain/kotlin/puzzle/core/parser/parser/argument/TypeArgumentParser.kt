@@ -3,12 +3,12 @@ package puzzle.core.parser.parser.argument
 import puzzle.core.model.PzlContext
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.TypeArgument
-import puzzle.core.parser.parser.identifier.IdentifierNameTarget
-import puzzle.core.parser.parser.identifier.parseIdentifierName
+import puzzle.core.parser.parser.expression.IdentifierTarget
+import puzzle.core.parser.parser.expression.parseIdentifierExpression
 import puzzle.core.parser.parser.parseTypeReference
-import puzzle.core.token.AssignmentKind
-import puzzle.core.token.OperatorKind
-import puzzle.core.token.SeparatorKind
+import puzzle.core.token.kinds.AssignmentKind
+import puzzle.core.token.kinds.OperatorKind
+import puzzle.core.token.kinds.SeparatorKind
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseTypeArguments(): List<TypeArgument> {
@@ -28,7 +28,7 @@ fun parseTypeArguments(): List<TypeArgument> {
 context(_: PzlContext, cursor: PzlTokenCursor)
 private fun parseTypeArgument(): TypeArgument {
 	val name = if (cursor.offsetOrNull(offset = 1)?.kind == AssignmentKind.ASSIGN) {
-		parseIdentifierName(IdentifierNameTarget.TYPE_ARGUMENT).also {
+		parseIdentifierExpression(IdentifierTarget.TYPE_ARGUMENT).also {
 			cursor.advance()
 		}
 	} else null

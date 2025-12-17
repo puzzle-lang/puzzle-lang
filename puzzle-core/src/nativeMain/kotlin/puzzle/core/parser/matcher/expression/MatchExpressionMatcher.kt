@@ -5,7 +5,7 @@ import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.expression.Expression
 import puzzle.core.parser.ast.expression.MatchExpression
 import puzzle.core.parser.parser.expression.parseMatchExpression
-import puzzle.core.token.ControlFlowKind
+import puzzle.core.token.kinds.ControlFlowKind
 
 object MatchExpressionMatcher : ExpressionMatcher<MatchExpression> {
 	

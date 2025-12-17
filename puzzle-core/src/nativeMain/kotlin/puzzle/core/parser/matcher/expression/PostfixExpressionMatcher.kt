@@ -3,14 +3,14 @@ package puzzle.core.parser.matcher.expression
 import puzzle.core.model.PzlContext
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.expression.Expression
+import puzzle.core.parser.parser.expression.matchIdentifier
 import puzzle.core.parser.parser.expression.parsePostfixExpression
-import puzzle.core.parser.parser.identifier.matchIdentifierName
-import puzzle.core.token.AccessKind.*
-import puzzle.core.token.ContextualKind.SUPER
-import puzzle.core.token.ContextualKind.THIS
-import puzzle.core.token.IdentifierKind
-import puzzle.core.token.LiteralKind.*
-import puzzle.core.token.PzlTokenKind
+import puzzle.core.token.kinds.AccessKind.*
+import puzzle.core.token.kinds.ContextualKind.SUPER
+import puzzle.core.token.kinds.ContextualKind.THIS
+import puzzle.core.token.kinds.IdentifierKind
+import puzzle.core.token.kinds.LiteralKind.*
+import puzzle.core.token.kinds.PzlTokenKind
 
 object PostfixExpressionMatcher : ExpressionMatcher<Expression> {
 	
@@ -22,7 +22,7 @@ object PostfixExpressionMatcher : ExpressionMatcher<Expression> {
 				cursor.match<Number>() ||
 				cursor.match<IdentifierKind>() ||
 				cursor.match<String>() ||
-				matchIdentifierName()
+				matchIdentifier()
 	}
 	
 	context(_: PzlContext, cursor: PzlTokenCursor)

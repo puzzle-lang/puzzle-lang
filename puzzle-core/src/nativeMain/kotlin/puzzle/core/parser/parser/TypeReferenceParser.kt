@@ -7,18 +7,19 @@ import puzzle.core.parser.ast.LambdaType
 import puzzle.core.parser.ast.NamedType
 import puzzle.core.parser.ast.TypeReference
 import puzzle.core.parser.parser.argument.parseTypeArguments
-import puzzle.core.parser.parser.identifier.IdentifierNameTarget
-import puzzle.core.parser.parser.identifier.parseIdentifierName
+import puzzle.core.parser.parser.expression.IdentifierTarget
+import puzzle.core.parser.parser.expression.parseIdentifierString
 import puzzle.core.parser.parser.parameter.parameter.parseLambdaParameters
-import puzzle.core.token.AccessKind
-import puzzle.core.token.BracketKind
-import puzzle.core.token.SeparatorKind
-import puzzle.core.token.SymbolKind
+import puzzle.core.token.kinds.AccessKind
+import puzzle.core.token.kinds.BracketKind
+import puzzle.core.token.kinds.SeparatorKind
+import puzzle.core.token.kinds.SymbolKind
+import puzzle.core.token.span
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseTypeReference(
 	isSupportedLambdaType: Boolean = false,
-	isSupportedNullable: Boolean = true
+	isSupportedNullable: Boolean = true,
 ): TypeReference {
 	return if (cursor.match(BracketKind.Start.LPAREN)) {
 		parseLambdaType(isSupportedLambdaType, isSupportedNullable)
@@ -30,8 +31,9 @@ fun parseTypeReference(
 context(_: PzlContext, cursor: PzlTokenCursor)
 private fun parseLambdaType(
 	isSupportedLambdaType: Boolean,
-	isSupportedNullable: Boolean
+	isSupportedNullable: Boolean,
 ): TypeReference {
+	val start = cursor.current.location
 	val parameters = parseLambdaParameters()
 	if (cursor.match(SymbolKind.ARROW)) {
 		if (!isSupportedLambdaType) {
@@ -54,6 +56,8 @@ private fun parseLambdaType(
 		} else {
 			returnTypes += parseTypeReference(isSupportedLambdaType = true)
 		}
+		val end = cursor.previous.location
+		val type = LambdaType(parameters, returnTypes, start span end)
 		var isNullable = false
 		while (cursor.match(SymbolKind.QUESTION)) {
 			isNullable = true
@@ -67,13 +71,8 @@ private fun parseLambdaType(
 				syntaxError("Lambda 表示可空前必须加 ')'", token)
 			}
 		}
-		return TypeReference(
-			type = LambdaType(
-				parameters = parameters,
-				returnTypes = returnTypes
-			),
-			isNullable = isNullable
-		)
+		val location = start span cursor.previous.location
+		return TypeReference(type, location, isNullable)
 	} else {
 		if (parameters.size != 1) {
 			if (isSupportedLambdaType) {
@@ -93,9 +92,10 @@ private fun parseLambdaType(
 		if (isNullable && !isSupportedNullable) {
 			syntaxError("不支持可空类型", cursor.previous)
 		}
-		val type = parameter.type.type
+		val end = cursor.previous.location
 		return TypeReference(
-			type = type,
+			type = parameter.type.type,
+			location = start span end,
 			isNullable = isNullable
 		)
 	}
@@ -103,11 +103,14 @@ private fun parseLambdaType(
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 private fun parseNamedType(isSupportedNullable: Boolean): TypeReference {
+	val start = cursor.current.location
 	val segments = mutableListOf<String>()
 	do {
-		segments += parseIdentifierName(IdentifierNameTarget.TYPE_REFERENCE)
+		segments += parseIdentifierString(IdentifierTarget.TYPE_REFERENCE)
 	} while (cursor.match(AccessKind.DOT))
 	val typeArguments = parseTypeArguments()
+	val location = start span cursor.previous.location
+	val type = NamedType(segments, location, typeArguments)
 	var isNullable = false
 	while (cursor.match(SymbolKind.QUESTION)) {
 		isNullable = true
@@ -115,8 +118,6 @@ private fun parseNamedType(isSupportedNullable: Boolean): TypeReference {
 	if (isNullable && !isSupportedNullable) {
 		syntaxError("不支持可空类型", cursor.previous)
 	}
-	return TypeReference(
-		type = NamedType(segments, typeArguments),
-		isNullable = isNullable,
-	)
+	val end = cursor.previous.location
+	return TypeReference(type, start span end, isNullable)
 }

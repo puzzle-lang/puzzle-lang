@@ -4,13 +4,14 @@ import puzzle.core.exception.syntaxError
 import puzzle.core.model.PzlContext
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.NamedType
-import puzzle.core.parser.ast.TokenRange
 import puzzle.core.parser.ast.TypeReference
 import puzzle.core.parser.ast.parameter.TypeParameter
-import puzzle.core.parser.parser.identifier.IdentifierNameTarget
-import puzzle.core.parser.parser.identifier.parseIdentifierName
+import puzzle.core.parser.ast.parameter.Variance
+import puzzle.core.parser.parser.expression.IdentifierTarget
+import puzzle.core.parser.parser.expression.parseIdentifierExpression
 import puzzle.core.parser.parser.parseTypeReference
-import puzzle.core.token.*
+import puzzle.core.token.SourceLocation
+import puzzle.core.token.kinds.*
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseTypeParameters(): List<TypeParameter> {
@@ -28,7 +29,7 @@ context(_: PzlContext, cursor: PzlTokenCursor)
 private fun parseTypeParameter(): TypeParameter {
 	val start = cursor.position
 	val variance = parseVariance()
-	val name = parseIdentifierName(IdentifierNameTarget.TYPE_PARAMETER)
+	val name = parseIdentifierExpression(IdentifierTarget.TYPE_PARAMETER)
 	val bounds = if (cursor.match(SymbolKind.COLON)) {
 		buildList<TypeReference> {
 			do {
@@ -58,15 +59,15 @@ private fun parseTypeParameter(): TypeParameter {
 		variance = variance,
 		bounds = bounds,
 		defaultType = defaultType,
-		location = TokenRange(start, end)
+		location = SourceLocation(start, end)
 	)
 }
 
 context(cursor: PzlTokenCursor)
-private fun parseVariance(): VarianceKind? {
+private fun parseVariance(): Variance? {
 	return when {
-		cursor.match(VarianceKind.IN) -> VarianceKind.IN
-		cursor.match(VarianceKind.OUT) -> VarianceKind.OUT
+		cursor.match(VarianceKind.IN) -> Variance(VarianceKind.IN, cursor.previous.location)
+		cursor.match(VarianceKind.OUT) -> Variance(VarianceKind.OUT, cursor.previous.location)
 		else -> null
 	}
 }

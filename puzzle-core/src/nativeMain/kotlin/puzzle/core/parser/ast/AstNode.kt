@@ -1,3 +1,8 @@
 package puzzle.core.parser.ast
 
-interface AstNode
+import puzzle.core.token.SourceLocation
+
+interface AstNode {
+	
+	val location: SourceLocation
+}

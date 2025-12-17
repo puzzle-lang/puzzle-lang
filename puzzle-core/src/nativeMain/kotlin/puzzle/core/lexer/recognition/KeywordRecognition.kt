@@ -1,8 +1,9 @@
 package puzzle.core.lexer.recognition
 
 import puzzle.core.model.PzlContext
-import puzzle.core.token.KeywordKind
 import puzzle.core.token.PzlToken
+import puzzle.core.token.kinds.KeywordKind
+import puzzle.core.token.span
 import puzzle.core.util.startsWith
 
 object KeywordRecognition : TokenRecognition {
@@ -18,7 +19,7 @@ object KeywordRecognition : TokenRecognition {
 			if (nextChar != null && (nextChar.isLetterOrDigit() || nextChar == '_')) {
 				return@fastForEach
 			}
-			return PzlToken(kind, start, end)
+			return PzlToken(kind, start span end)
 		}
 		return null
 	}

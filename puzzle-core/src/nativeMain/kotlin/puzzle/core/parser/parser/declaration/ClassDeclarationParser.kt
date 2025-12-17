@@ -4,17 +4,19 @@ import puzzle.core.model.PzlContext
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.declaration.ClassDeclaration
 import puzzle.core.parser.matcher.declaration.DeclarationHeader
-import puzzle.core.parser.parser.identifier.IdentifierNameTarget
-import puzzle.core.parser.parser.identifier.parseIdentifierName
+import puzzle.core.parser.parser.expression.IdentifierTarget
+import puzzle.core.parser.parser.expression.parseIdentifierExpression
 import puzzle.core.parser.parser.modifier.ModifierTarget
 import puzzle.core.parser.parser.modifier.check
 import puzzle.core.parser.parser.modifier.parseModifiers
 import puzzle.core.parser.parser.parameter.parameter.parseClassParameters
-import puzzle.core.token.BracketKind
+import puzzle.core.token.SourceLocation
+import puzzle.core.token.kinds.BracketKind
+import puzzle.core.token.span
 
 context(_: PzlContext, cursor: PzlTokenCursor)
-fun parseClassDeclaration(header: DeclarationHeader): ClassDeclaration {
-	val name = parseIdentifierName(IdentifierNameTarget.CLASS)
+fun parseClassDeclaration(header: DeclarationHeader, start: SourceLocation): ClassDeclaration {
+	val name = parseIdentifierExpression(IdentifierTarget.CLASS)
 	val constructorModifiers = parseModifiers()
 	constructorModifiers.check(ModifierTarget.CONSTRUCTOR_FUN)
 	val parameters = parseClassParameters()
@@ -26,6 +28,7 @@ fun parseClassDeclaration(header: DeclarationHeader): ClassDeclaration {
 			}
 		}
 	} else emptyList()
+	val end = cursor.previous.location
 	return ClassDeclaration(
 		name = name,
 		docComment = header.docComment,
@@ -36,6 +39,7 @@ fun parseClassDeclaration(header: DeclarationHeader): ClassDeclaration {
 		typeSpec = header.typeSpec,
 		contextSpec = header.contextSpec,
 		annotationCalls = header.annotationCalls,
-		members = members
+		members = members,
+		location = start span end
 	)
 }

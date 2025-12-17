@@ -1,24 +1,30 @@
 package puzzle.core.parser.ast.parameter
 
 import kotlinx.serialization.Serializable
-import puzzle.core.parser.ast.TokenRange
+import puzzle.core.parser.ast.AstNode
 import puzzle.core.parser.ast.TypeReference
-import puzzle.core.token.VarianceKind
-import puzzle.core.util.VarianceKindSerializer
+import puzzle.core.parser.ast.expression.IdentifierExpression
+import puzzle.core.token.SourceLocation
+import puzzle.core.token.kinds.VarianceKind
 
 @Serializable
 class TypeParameter(
-	val name: String,
-	@Serializable(with = VarianceKindSerializer::class)
-	val variance: VarianceKind?,
+	val name: IdentifierExpression,
+	val variance: Variance?,
 	val bounds: List<TypeReference>,
 	val defaultType: TypeReference?,
-	val location: TokenRange
-)
+	override val location: SourceLocation,
+) : AstNode
 
 @Serializable
 class TypeSpec(
 	val reified: Boolean,
 	val parameters: List<TypeParameter>,
-	val location: TokenRange
-)
+	override val location: SourceLocation,
+) : AstNode
+
+@Serializable
+class Variance(
+	val kind: VarianceKind,
+	override val location: SourceLocation,
+) : AstNode

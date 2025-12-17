@@ -5,7 +5,7 @@ import puzzle.core.model.PzlContext
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.expression.Expression
 import puzzle.core.parser.matcher.expression.ExpressionMatcher
-import puzzle.core.token.*
+import puzzle.core.token.kinds.*
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseExpression(left: Expression? = null): Expression {
@@ -39,10 +39,9 @@ private fun isAtExpressionEnd(): Boolean {
 			|| cursor.match(SeparatorKind.SEMICOLON)
 			|| nonConsumableEndTokenTypes.any { cursor.check(it) }
 	if (isEnd) return true
-	val previous = cursor.previous
+	val previousLine = cursor.previous.location.startPosition.line
 	val current = cursor.current
-	val previousLine = previous.lineColumn.line
-	val currentLine = current.lineColumn.line
+	val currentLine = current.location.startPosition.line
 	if (previousLine == currentLine) return false
 	return previousLine < currentLine &&
 			current.kind != OperatorKind.AND &&

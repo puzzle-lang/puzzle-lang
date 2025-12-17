@@ -4,20 +4,23 @@ import puzzle.core.exception.syntaxError
 import puzzle.core.model.PzlContext
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.declaration.PackageDeclaration
-import puzzle.core.parser.parser.identifier.IdentifierNameTarget
-import puzzle.core.parser.parser.identifier.parseIdentifierName
-import puzzle.core.token.AccessKind
-import puzzle.core.token.NamespaceKind
+import puzzle.core.parser.parser.expression.IdentifierTarget
+import puzzle.core.parser.parser.expression.parseIdentifierString
+import puzzle.core.token.kinds.AccessKind
+import puzzle.core.token.kinds.NamespaceKind
+import puzzle.core.token.span
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parsePackageDeclaration(): PackageDeclaration {
 	if (!cursor.match(NamespaceKind.PACKAGE)) {
 		syntaxError("文件缺少包定义", cursor.current)
 	}
+	val start = cursor.previous.location
 	val packages = mutableListOf<String>()
-	packages += parseIdentifierName(IdentifierNameTarget.PACKAGE)
+	packages += parseIdentifierString(IdentifierTarget.PACKAGE)
 	while (cursor.match(AccessKind.DOT)) {
-		packages += parseIdentifierName(IdentifierNameTarget.PACKAGE_DOT)
+		packages += parseIdentifierString(IdentifierTarget.PACKAGE_DOT)
 	}
-	return PackageDeclaration(packages)
+	val end = cursor.previous.location
+	return PackageDeclaration(packages, start span end)
 }

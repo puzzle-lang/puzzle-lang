@@ -4,18 +4,18 @@ import puzzle.core.model.PzlContext
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.expression.Expression
 import puzzle.core.parser.ast.expression.SuffixUnaryExpression
+import puzzle.core.parser.parser.expression.isIdentifier
 import puzzle.core.parser.parser.expression.parseSuffixUnaryExpression
-import puzzle.core.parser.parser.identifier.isIdentifierName
-import puzzle.core.token.OperatorKind.DOUBLE_MINUS
-import puzzle.core.token.OperatorKind.DOUBLE_PLUS
+import puzzle.core.token.kinds.OperatorKind.DOUBLE_MINUS
+import puzzle.core.token.kinds.OperatorKind.DOUBLE_PLUS
 
 object SuffixUnaryExpressionMatcher : ExpressionMatcher<SuffixUnaryExpression> {
 	
 	context(cursor: PzlTokenCursor)
 	override fun match(left: Expression?): Boolean {
-		val nextKind = cursor.next?.kind ?: return false
+		val nextKind = cursor.nextOrNull?.kind ?: return false
 		if (nextKind != DOUBLE_PLUS && nextKind != DOUBLE_MINUS) return false
-		return cursor.current.isIdentifierName()
+		return cursor.current.isIdentifier()
 	}
 	
 	context(_: PzlContext, cursor: PzlTokenCursor)

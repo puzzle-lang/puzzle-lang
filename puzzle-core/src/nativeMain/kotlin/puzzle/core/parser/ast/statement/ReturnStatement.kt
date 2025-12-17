@@ -5,7 +5,8 @@ import puzzle.core.parser.ast.expression.Expression
 import puzzle.core.token.SourceLocation
 
 @Serializable
-class ExpressionStatement(
-	val expression: Expression,
-	override val location: SourceLocation = expression.location,
+class ReturnStatement(
+	val label: String?,
+	val expression: Expression?,
+	override val location: SourceLocation,
 ) : Statement

@@ -1,12 +1,12 @@
 @file:Suppress("ClassName")
 
-package puzzle.core.token
+package puzzle.core.token.kinds
 
 import puzzle.core.collections.fastSetOf
 import puzzle.core.collections.mergeFastSets
 
 sealed class SymbolKind(
-	override val value: String
+	override val value: String,
 ) : PzlTokenKind {
 	
 	companion object {

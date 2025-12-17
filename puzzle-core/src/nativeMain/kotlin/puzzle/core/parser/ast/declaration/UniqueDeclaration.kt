@@ -3,17 +3,18 @@ package puzzle.core.parser.ast.declaration
 import kotlinx.serialization.Serializable
 import puzzle.core.parser.ast.AnnotationCall
 import puzzle.core.parser.ast.DocComment
+import puzzle.core.parser.ast.Modifier
+import puzzle.core.parser.ast.expression.IdentifierExpression
 import puzzle.core.parser.ast.parameter.ContextSpec
-import puzzle.core.token.ModifierKind
-import puzzle.core.util.ModifierKindListSerializer
+import puzzle.core.token.SourceLocation
 
 @Serializable
 class UniqueDeclaration(
-	val name: String,
+	val name: IdentifierExpression,
 	val docComment: DocComment?,
-	@Serializable(with = ModifierKindListSerializer::class)
-	val modifiers: List<ModifierKind>,
+	val modifiers: List<Modifier>,
 	val contextSpec: ContextSpec?,
 	val annotationCalls: List<AnnotationCall>,
-	val members: List<Declaration>
+	val members: List<Declaration>,
+	override val location: SourceLocation,
 ) : Declaration

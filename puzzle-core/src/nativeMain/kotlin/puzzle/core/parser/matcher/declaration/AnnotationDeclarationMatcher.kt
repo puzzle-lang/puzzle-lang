@@ -6,7 +6,8 @@ import puzzle.core.parser.ast.declaration.AnnotationDeclaration
 import puzzle.core.parser.parser.declaration.parseAnnotationDeclaration
 import puzzle.core.parser.parser.modifier.ModifierTarget
 import puzzle.core.parser.parser.parameter.type.TypeTarget
-import puzzle.core.token.DeclarationKind
+import puzzle.core.token.SourceLocation
+import puzzle.core.token.kinds.DeclarationKind
 
 object AnnotationDeclarationMatcher : DeclarationMatcher<AnnotationDeclaration> {
 	
@@ -24,6 +25,7 @@ object AnnotationDeclarationMatcher : DeclarationMatcher<AnnotationDeclaration> 
 	context(_: PzlContext, cursor: PzlTokenCursor)
 	override fun parse(
 		header: DeclarationHeader,
-		isMember: Boolean
-	): AnnotationDeclaration = parseAnnotationDeclaration(header)
+		start: SourceLocation,
+		isMember: Boolean,
+	): AnnotationDeclaration = parseAnnotationDeclaration(header, start)
 }

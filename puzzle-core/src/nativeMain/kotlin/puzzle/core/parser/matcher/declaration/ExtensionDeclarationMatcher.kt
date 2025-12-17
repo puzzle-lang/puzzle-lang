@@ -6,7 +6,8 @@ import puzzle.core.parser.ast.declaration.ExtensionDeclaration
 import puzzle.core.parser.parser.declaration.parseExtensionDeclaration
 import puzzle.core.parser.parser.modifier.ModifierTarget
 import puzzle.core.parser.parser.parameter.type.TypeTarget
-import puzzle.core.token.DeclarationKind
+import puzzle.core.token.SourceLocation
+import puzzle.core.token.kinds.DeclarationKind
 
 object ExtensionDeclarationMatcher : DeclarationMatcher<ExtensionDeclaration> {
 	
@@ -24,6 +25,7 @@ object ExtensionDeclarationMatcher : DeclarationMatcher<ExtensionDeclaration> {
 	context(_: PzlContext, cursor: PzlTokenCursor)
 	override fun parse(
 		header: DeclarationHeader,
+		start: SourceLocation,
 		isMember: Boolean
-	): ExtensionDeclaration = parseExtensionDeclaration(header)
+	): ExtensionDeclaration = parseExtensionDeclaration(header, start)
 }

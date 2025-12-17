@@ -2,10 +2,13 @@ package puzzle.core.parser.ast.expression
 
 import kotlinx.serialization.Serializable
 import puzzle.core.parser.ast.TypeReference
+import puzzle.core.token.SourceLocation
+import puzzle.core.token.span
 
 @Serializable
 class AsExpression(
 	val expression: Expression,
 	val type: TypeReference,
-	val isSafe: Boolean
+	val isSafe: Boolean,
+	override val location: SourceLocation = expression.location span type.location,
 ) : Expression

@@ -3,25 +3,31 @@ package puzzle.core.parser.parser.parameter.parameter
 import puzzle.core.model.PzlContext
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.AnnotationCall
+import puzzle.core.parser.ast.Modifier
 import puzzle.core.parser.ast.parameter.Parameter
+import puzzle.core.parser.parser.expression.IdentifierTarget
 import puzzle.core.parser.parser.expression.parseExpressionChain
-import puzzle.core.parser.parser.identifier.IdentifierNameTarget
-import puzzle.core.parser.parser.identifier.parseIdentifierName
+import puzzle.core.parser.parser.expression.parseIdentifierExpression
 import puzzle.core.parser.parser.parseTypeReference
-import puzzle.core.token.AssignmentKind
-import puzzle.core.token.ModifierKind
-import puzzle.core.token.SymbolKind
+import puzzle.core.token.kinds.AssignmentKind
+import puzzle.core.token.kinds.SymbolKind
+import puzzle.core.token.span
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseParameter(
-	modifiers: List<ModifierKind>,
+	modifiers: List<Modifier>,
 	annotationCalls: List<AnnotationCall>,
 	isSupportedUnnameable: Boolean = false,
-	isSupportedLambdaType: Boolean = false
+	isSupportedLambdaType: Boolean = false,
 ): Parameter {
+	val start = when {
+		annotationCalls.isNotEmpty() -> annotationCalls.first().location
+		modifiers.isNotEmpty() -> modifiers.first().location
+		else -> cursor.current.location
+	}
 	val name = when {
 		isSupportedUnnameable && cursor.offsetOrNull(offset = 1)?.kind != SymbolKind.COLON -> null
-		else -> parseIdentifierName(IdentifierNameTarget.PARAMETER).also {
+		else -> parseIdentifierExpression(IdentifierTarget.PARAMETER).also {
 			cursor.expect(SymbolKind.COLON, "参数缺少 ':'")
 		}
 	}
@@ -29,11 +35,13 @@ fun parseParameter(
 	val defaultExpression = if (cursor.match(AssignmentKind.ASSIGN)) {
 		parseExpressionChain()
 	} else null
+	val location = start span cursor.previous.location
 	return Parameter(
 		name = name,
 		modifiers = modifiers,
 		type = type,
 		annotationCalls = annotationCalls,
-		defaultExpression = defaultExpression
+		defaultExpression = defaultExpression,
+		location = location
 	)
 }

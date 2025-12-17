@@ -1,4 +1,4 @@
-package puzzle.core.token
+package puzzle.core.token.kinds
 
 sealed interface CommentKind : PzlTokenKind {
 	

@@ -4,25 +4,29 @@ import puzzle.core.model.PzlContext
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.declaration.ImportDeclaration
 import puzzle.core.parser.ast.declaration.ImportScope
-import puzzle.core.parser.parser.identifier.IdentifierNameTarget
-import puzzle.core.parser.parser.identifier.matchIdentifierName
-import puzzle.core.parser.parser.identifier.parseIdentifierName
-import puzzle.core.token.AccessKind
-import puzzle.core.token.OperatorKind
-import puzzle.core.token.TypeOperatorKind
+import puzzle.core.parser.ast.expression.IdentifierExpression
+import puzzle.core.parser.parser.expression.IdentifierTarget
+import puzzle.core.parser.parser.expression.matchIdentifier
+import puzzle.core.parser.parser.expression.parseIdentifierExpression
+import puzzle.core.parser.parser.expression.parseIdentifierString
+import puzzle.core.token.kinds.AccessKind
+import puzzle.core.token.kinds.OperatorKind
+import puzzle.core.token.kinds.TypeOperatorKind
+import puzzle.core.token.span
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseImportDeclaration(): ImportDeclaration {
-	val name = parseIdentifierName(IdentifierNameTarget.IMPORT)
-	val paths = mutableListOf(name)
+	val start = cursor.previous.location
+	val name = parseIdentifierString(IdentifierTarget.IMPORT)
+	val segments = mutableListOf(name)
 	var scope = ImportScope.SINGLE
-	var alias: String? = null
+	var alias: IdentifierExpression? = null
 	while (cursor.match(AccessKind.DOT)) {
 		when {
-			matchIdentifierName() -> {
-				paths += cursor.previous.value
+			matchIdentifier() -> {
+				segments += cursor.previous.value
 				if (cursor.match(TypeOperatorKind.AS)) {
-					alias = parseIdentifierName(IdentifierNameTarget.IMPORT_AS)
+					alias = parseIdentifierExpression(IdentifierTarget.IMPORT_AS)
 					break
 				}
 			}
@@ -38,9 +42,11 @@ fun parseImportDeclaration(): ImportDeclaration {
 			}
 		}
 	}
+	val end = cursor.previous.location
 	return ImportDeclaration(
-		segments = paths,
+		segments = segments,
 		alias = alias,
-		scope = scope
+		scope = scope,
+		location = start span end
 	)
 }

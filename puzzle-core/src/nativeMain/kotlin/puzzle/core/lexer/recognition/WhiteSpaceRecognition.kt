@@ -2,7 +2,8 @@ package puzzle.core.lexer.recognition
 
 import puzzle.core.model.PzlContext
 import puzzle.core.token.PzlToken
-import puzzle.core.token.WhiteSpaceKind
+import puzzle.core.token.kinds.WhiteSpaceKind
+import puzzle.core.token.span
 
 object WhiteSpaceRecognition : TokenRecognition {
 	
@@ -13,6 +14,6 @@ object WhiteSpaceRecognition : TokenRecognition {
 		while (position < input.size && input[position] == ' ') {
 			position++
 		}
-		return PzlToken(WhiteSpaceKind.WHITESPACE, start, position)
+		return PzlToken(WhiteSpaceKind.WHITESPACE, start span position)
 	}
 }

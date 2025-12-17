@@ -5,7 +5,7 @@ import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.expression.Expression
 import puzzle.core.parser.ast.expression.PrefixUnaryExpression
 import puzzle.core.parser.parser.expression.parsePrefixUnaryExpression
-import puzzle.core.token.OperatorKind.*
+import puzzle.core.token.kinds.OperatorKind.*
 
 object PrefixUnaryExpressionMatcher : ExpressionMatcher<PrefixUnaryExpression> {
 	

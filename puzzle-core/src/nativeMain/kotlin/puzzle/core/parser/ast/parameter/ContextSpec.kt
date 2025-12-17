@@ -1,20 +1,22 @@
 package puzzle.core.parser.ast.parameter
 
 import kotlinx.serialization.Serializable
-import puzzle.core.parser.ast.AnnotationCall
 import puzzle.core.parser.ast.AstNode
-import puzzle.core.parser.ast.Modifier
 import puzzle.core.parser.ast.TypeReference
-import puzzle.core.parser.ast.expression.Expression
 import puzzle.core.parser.ast.expression.IdentifierExpression
 import puzzle.core.token.SourceLocation
+import puzzle.core.token.span
 
 @Serializable
-class Parameter(
-	val name: IdentifierExpression?,
-	val modifiers: List<Modifier>,
-	val type: TypeReference,
-	val annotationCalls: List<AnnotationCall>,
-	val defaultExpression: Expression?,
+class ContextSpec(
+	val receivers: List<ContextReceiver>,
+	val isInherited: Boolean,
 	override val location: SourceLocation,
+) : AstNode
+
+@Serializable
+class ContextReceiver(
+	val name: IdentifierExpression,
+	val type: TypeReference,
+	override val location: SourceLocation = name.location span type.location,
 ) : AstNode

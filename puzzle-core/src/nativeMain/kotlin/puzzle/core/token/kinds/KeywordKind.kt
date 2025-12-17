@@ -1,5 +1,6 @@
-package puzzle.core.token
+package puzzle.core.token.kinds
 
+import kotlinx.serialization.Serializable
 import puzzle.core.collections.fastSetOf
 import puzzle.core.collections.mergeFastSets
 
@@ -23,7 +24,7 @@ sealed interface KeywordKind : PzlTokenKind {
 
 sealed class ModifierKind(
 	override val value: String,
-	val order: Int
+	val order: Int,
 ) : KeywordKind {
 	
 	companion object {
@@ -117,7 +118,7 @@ sealed class DeclarationKind(
 }
 
 sealed class AccessorKind(
-	override val value: String
+	override val value: String,
 ) : KeywordKind {
 	
 	companion object {
@@ -131,7 +132,7 @@ sealed class AccessorKind(
 }
 
 sealed class ControlFlowKind(
-	override val value: String
+	override val value: String,
 ) : KeywordKind {
 	
 	companion object {
@@ -155,7 +156,7 @@ sealed class ControlFlowKind(
 }
 
 sealed class JumpKind(
-	override val value: String
+	override val value: String,
 ) : KeywordKind {
 	
 	companion object {
@@ -171,7 +172,7 @@ sealed class JumpKind(
 }
 
 sealed class ContextualKind(
-	override val value: String
+	override val value: String,
 ) : KeywordKind {
 	
 	companion object {
@@ -194,8 +195,9 @@ sealed class ContextualKind(
 	object SUPER : ContextualKind("super")
 }
 
+@Serializable
 sealed class VarianceKind(
-	override val value: String
+	override val value: String,
 ) : KeywordKind {
 	
 	companion object {
@@ -209,7 +211,7 @@ sealed class VarianceKind(
 }
 
 sealed class TypeOperatorKind(
-	override val value: String
+	override val value: String,
 ) : KeywordKind {
 	
 	companion object {

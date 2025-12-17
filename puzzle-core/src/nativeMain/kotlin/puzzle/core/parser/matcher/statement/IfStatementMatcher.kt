@@ -4,7 +4,7 @@ import puzzle.core.model.PzlContext
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.statement.Statement
 import puzzle.core.parser.parser.statement.parseIfStatement
-import puzzle.core.token.ControlFlowKind
+import puzzle.core.token.kinds.ControlFlowKind
 
 object IfStatementMatcher : StatementMatcher<Statement> {
 	

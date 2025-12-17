@@ -1,32 +1,36 @@
 package puzzle.core.parser.parser.declaration
 
-import puzzle.core.constants.PzlTypes
 import puzzle.core.exception.syntaxError
 import puzzle.core.model.PzlContext
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.NamedType
+import puzzle.core.parser.ast.Symbol
 import puzzle.core.parser.ast.TypeReference
 import puzzle.core.parser.ast.declaration.FunDeclaration
 import puzzle.core.parser.ast.declaration.FunName
 import puzzle.core.parser.ast.declaration.IdentifierFunName
 import puzzle.core.parser.ast.declaration.SymbolFunName
+import puzzle.core.parser.ast.expression.IdentifierExpression
 import puzzle.core.parser.matcher.declaration.DeclarationHeader
-import puzzle.core.parser.parser.identifier.IdentifierNameTarget
-import puzzle.core.parser.parser.identifier.tryParseIdentifierName
+import puzzle.core.parser.parser.expression.IdentifierTarget
+import puzzle.core.parser.parser.expression.tryParseIdentifierExpression
+import puzzle.core.parser.parser.expression.tryParseIdentifierString
 import puzzle.core.parser.parser.parameter.parameter.parseFunParameters
 import puzzle.core.parser.parser.parseTypeReference
 import puzzle.core.parser.parser.statement.parseStatements
-import puzzle.core.token.AccessKind
-import puzzle.core.token.AssignmentKind.*
-import puzzle.core.token.BracketKind
-import puzzle.core.token.IndexKind.INDEX_GET
-import puzzle.core.token.IndexKind.INDEX_SET
-import puzzle.core.token.OperatorKind.*
-import puzzle.core.token.SeparatorKind
-import puzzle.core.token.SymbolKind
+import puzzle.core.token.SourceLocation
+import puzzle.core.token.kinds.AccessKind
+import puzzle.core.token.kinds.AssignmentKind.*
+import puzzle.core.token.kinds.BracketKind
+import puzzle.core.token.kinds.IndexKind.INDEX_GET
+import puzzle.core.token.kinds.IndexKind.INDEX_SET
+import puzzle.core.token.kinds.OperatorKind.*
+import puzzle.core.token.kinds.SeparatorKind
+import puzzle.core.token.kinds.SymbolKind
+import puzzle.core.token.span
 
 context(_: PzlContext, cursor: PzlTokenCursor)
-fun parseFunDeclaration(header: DeclarationHeader): FunDeclaration {
+fun parseFunDeclaration(header: DeclarationHeader, start: SourceLocation): FunDeclaration {
 	val (extension, funName) = parseExtensionAndFunName()
 	val parameters = parseFunParameters()
 	val returnTypes = mutableListOf<TypeReference>()
@@ -34,10 +38,9 @@ fun parseFunDeclaration(header: DeclarationHeader): FunDeclaration {
 		do {
 			returnTypes += parseTypeReference(isSupportedLambdaType = true)
 		} while (cursor.match(SeparatorKind.COMMA))
-	} else {
-		returnTypes += TypeReference(PzlTypes.Unit)
 	}
 	val expressions = if (cursor.match(BracketKind.Start.LBRACE)) parseStatements() else emptyList()
+	val end = cursor.previous.location
 	return FunDeclaration(
 		name = funName,
 		docComment = header.docComment,
@@ -48,14 +51,16 @@ fun parseFunDeclaration(header: DeclarationHeader): FunDeclaration {
 		typeSpec = header.typeSpec,
 		contextSpec = header.contextSpec,
 		annotationCalls = header.annotationCalls,
-		statements = expressions
+		statements = expressions,
+		location = start span end
 	)
 }
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 private fun parseExtensionAndFunName(): Pair<TypeReference?, FunName> {
-	val name = tryParseIdentifierName(IdentifierNameTarget.FUN)
+	val name = tryParseIdentifierExpression(IdentifierTarget.FUN)
 		?: return null to (tryParseOperatorFunName() ?: syntaxError("函数缺少名称", cursor.current))
+	val start = name.location
 	if (!cursor.check(AccessKind.DOT)) {
 		return null to IdentifierFunName(name)
 	}
@@ -63,23 +68,31 @@ private fun parseExtensionAndFunName(): Pair<TypeReference?, FunName> {
 	val segments = mutableListOf<String>()
 	do {
 		val type = if (cursor.match(AccessKind.QUESTION_DOT)) {
-			TypeReference(NamedType(segments), isNullable = true)
+			TypeReference(
+				type = NamedType(segments, start span cursor.offset(-2).location),
+				location = start span cursor.previous.location,
+				isNullable = true
+			)
 		} else null
-		val segment = tryParseIdentifierName(IdentifierNameTarget.TYPE_REFERENCE)
+		val name = tryParseIdentifierString(IdentifierTarget.TYPE_REFERENCE)
 			?: tryParseOperatorFunName()
 			?: syntaxError("无法识别标识符", cursor.current)
 		if (type != null) {
-			val funName = if (segment is String) IdentifierFunName(segment) else segment as SymbolFunName
-			return type to funName
+			return type to when (name) {
+				is String -> IdentifierFunName(IdentifierExpression(name, cursor.previous.location))
+				else -> name as SymbolFunName
+			}
 		}
-		if (segment is SymbolFunName) {
-			val type = TypeReference(NamedType(segments))
-			return type to segment
+		if (name is SymbolFunName) {
+			val location = start span cursor.previous.location
+			val type = TypeReference(NamedType(segments, location), location)
+			return type to name
 		}
-		segments += segment as String
+		segments += name as String
 	} while (cursor.match(AccessKind.DOT))
-	val funName = IdentifierFunName(segments.removeLast())
-	val type = TypeReference(NamedType(segments))
+	val funName = IdentifierFunName(IdentifierExpression(segments.removeLast(), cursor.previous.location))
+	val location = start span cursor.previous.location
+	val type = TypeReference(NamedType(segments, location), location)
 	return type to funName
 }
 
@@ -100,13 +113,13 @@ private val notOverloadableOperators = arrayOf<SymbolKind>(
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 private fun tryParseOperatorFunName(): SymbolFunName? {
-	var operator = overloadableOperators.find { cursor.match(it) }
-	if (operator != null) {
-		return SymbolFunName(operator)
+	var kind = overloadableOperators.find { cursor.match(it) }
+	if (kind != null) {
+		return SymbolFunName(Symbol(kind, cursor.previous.location))
 	}
-	operator = notOverloadableOperators.find { cursor.match(it) }
-	if (operator != null) {
-		syntaxError("'${operator.value}' 运算符不支持被重载", cursor.previous)
+	kind = notOverloadableOperators.find { cursor.match(it) }
+	if (kind != null) {
+		syntaxError("'${kind.value}' 运算符不支持被重载", cursor.previous)
 	}
 	return null
 }

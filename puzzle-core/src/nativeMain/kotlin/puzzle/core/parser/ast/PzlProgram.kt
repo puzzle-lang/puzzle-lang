@@ -4,5 +4,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 class PzlProgram(
-	val files: List<SourceFileNode>
+	val files: List<SourceFileNode>,
 )

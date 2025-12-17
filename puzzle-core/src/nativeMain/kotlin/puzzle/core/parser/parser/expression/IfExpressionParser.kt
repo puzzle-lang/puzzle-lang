@@ -5,11 +5,13 @@ import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.expression.IfExpression
 import puzzle.core.parser.parser.statement.parseStatement
 import puzzle.core.parser.parser.statement.parseStatements
-import puzzle.core.token.BracketKind
-import puzzle.core.token.ControlFlowKind
+import puzzle.core.token.kinds.BracketKind
+import puzzle.core.token.kinds.ControlFlowKind
+import puzzle.core.token.span
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseIfExpression(): IfExpression {
+	val start = cursor.previous.location
 	cursor.expect(BracketKind.Start.LPAREN, "if 表达式缺少 '('")
 	val condition = parseExpressionChain()
 	cursor.expect(BracketKind.End.RPAREN, "if 表达式缺少 ')'")
@@ -24,9 +26,11 @@ fun parseIfExpression(): IfExpression {
 	} else {
 		listOf(parseStatement())
 	}
+	val end = cursor.previous.location
 	return IfExpression(
 		condition = condition,
 		thenStatements = thenStatements,
-		elseStatements = elseStatements
+		elseStatements = elseStatements,
+		location = start span end
 	)
 }

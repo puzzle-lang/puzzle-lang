@@ -6,8 +6,8 @@ import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.expression.Expression
 import puzzle.core.parser.ast.expression.IsExpression
 import puzzle.core.parser.parser.expression.parseIsExpression
-import puzzle.core.token.OperatorKind.NOT
-import puzzle.core.token.TypeOperatorKind.IS
+import puzzle.core.token.kinds.OperatorKind.NOT
+import puzzle.core.token.kinds.TypeOperatorKind.IS
 
 object IsExpressionMatcher : ExpressionMatcher<IsExpression> {
 	

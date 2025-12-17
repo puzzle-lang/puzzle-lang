@@ -6,7 +6,8 @@ import puzzle.core.parser.ast.declaration.ClassDeclaration
 import puzzle.core.parser.parser.declaration.parseClassDeclaration
 import puzzle.core.parser.parser.modifier.ModifierTarget
 import puzzle.core.parser.parser.parameter.type.TypeTarget
-import puzzle.core.token.DeclarationKind
+import puzzle.core.token.SourceLocation
+import puzzle.core.token.kinds.DeclarationKind
 
 object ClassDeclarationMatcher : DeclarationMatcher<ClassDeclaration> {
 	
@@ -24,6 +25,7 @@ object ClassDeclarationMatcher : DeclarationMatcher<ClassDeclaration> {
 	context(_: PzlContext, cursor: PzlTokenCursor)
 	override fun parse(
 		header: DeclarationHeader,
+		start: SourceLocation,
 		isMember: Boolean
-	): ClassDeclaration = parseClassDeclaration(header)
+	): ClassDeclaration = parseClassDeclaration(header, start)
 }

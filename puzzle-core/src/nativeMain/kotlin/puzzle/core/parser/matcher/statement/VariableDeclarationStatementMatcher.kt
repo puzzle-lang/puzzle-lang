@@ -4,7 +4,7 @@ import puzzle.core.model.PzlContext
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.statement.VariableDeclarationStatement
 import puzzle.core.parser.parser.statement.parseVariableDeclarationStatement
-import puzzle.core.token.ModifierKind
+import puzzle.core.token.kinds.ModifierKind
 
 object VariableDeclarationStatementMatcher : StatementMatcher<VariableDeclarationStatement> {
 	

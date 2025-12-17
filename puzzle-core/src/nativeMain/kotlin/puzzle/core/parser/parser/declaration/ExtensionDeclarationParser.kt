@@ -6,10 +6,12 @@ import puzzle.core.parser.ast.declaration.ExtensionDeclaration
 import puzzle.core.parser.ast.declaration.SuperTrait
 import puzzle.core.parser.matcher.declaration.DeclarationHeader
 import puzzle.core.parser.parser.parseTypeReference
-import puzzle.core.token.BracketKind
+import puzzle.core.token.SourceLocation
+import puzzle.core.token.kinds.BracketKind
+import puzzle.core.token.span
 
 context(_: PzlContext, cursor: PzlTokenCursor)
-fun parseExtensionDeclaration(header: DeclarationHeader): ExtensionDeclaration {
+fun parseExtensionDeclaration(header: DeclarationHeader, start: SourceLocation): ExtensionDeclaration {
 	val extendedType = parseTypeReference()
 	val superTraits = parseSuperTypes(isSupportedClass = false)
 		.filterIsInstance<SuperTrait>()
@@ -20,6 +22,7 @@ fun parseExtensionDeclaration(header: DeclarationHeader): ExtensionDeclaration {
 			}
 		}
 	} else emptyList()
+	val end = cursor.previous.location
 	return ExtensionDeclaration(
 		extendedType = extendedType,
 		modifiers = header.modifiers,
@@ -28,5 +31,6 @@ fun parseExtensionDeclaration(header: DeclarationHeader): ExtensionDeclaration {
 		contextSpec = header.contextSpec,
 		annotationCalls = header.annotationCalls,
 		members = members,
+		location = start span end
 	)
 }

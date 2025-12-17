@@ -7,8 +7,8 @@ import puzzle.core.parser.parser.modifier.ModifierTarget
 import puzzle.core.parser.parser.modifier.check
 import puzzle.core.parser.parser.modifier.parseModifiers
 import puzzle.core.parser.parser.parseAnnotationCalls
-import puzzle.core.token.BracketKind
-import puzzle.core.token.SeparatorKind
+import puzzle.core.token.kinds.BracketKind
+import puzzle.core.token.kinds.SeparatorKind
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseClassParameters(): List<Parameter> {

@@ -1,43 +1,47 @@
 package puzzle.core.parser.ast.expression
 
 import kotlinx.serialization.Serializable
-import puzzle.core.token.NumberLiteralType
-import puzzle.core.token.NumberSystem
+import puzzle.core.token.SourceLocation
+import puzzle.core.token.kinds.NumberLiteralType
+import puzzle.core.token.kinds.NumberSystem
 
 @Serializable
 class NumberLiteral(
 	val value: String,
 	val system: NumberSystem,
-	val type: NumberLiteralType
+	val type: NumberLiteralType,
+	override val location: SourceLocation,
 ) : Expression
 
 @Serializable
-class StringLiteral(val value: String) : Expression
+class StringLiteral(
+	val value: String,
+	override val location: SourceLocation,
+) : Expression
 
 @Serializable
-class BooleanLiteral private constructor(
-	val value: Boolean
-) : Expression {
-	
-	companion object {
-		
-		val TRUE = BooleanLiteral(true)
-		
-		val FALSE = BooleanLiteral(false)
-	}
-}
+class BooleanLiteral(
+	val value: Boolean,
+	override val location: SourceLocation,
+) : Expression
 
 @Serializable
-class CharLiteral(val value: String) : Expression
+class CharLiteral(
+	val value: String,
+	override val location: SourceLocation,
+) : Expression
 
 @Serializable
-object ThisLiteral : Expression
+class ThisLiteral(
+	override val location: SourceLocation,
+) : Expression
 
 @Serializable
-object SuperLiteral : Expression
+class SuperLiteral(
+	override val location: SourceLocation,
+) : Expression
 
 @Serializable
-object NullLiteral : Expression
-
-@Serializable
-class IdentifierExpression(val name: String) : Expression
+class NullLiteral(
+	override val location: SourceLocation,
+) : Expression
