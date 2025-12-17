@@ -15,7 +15,7 @@ sealed interface LiteralKind : PzlTokenKind {
 	}
 	
 	sealed class BooleanKind(
-		override val value: KString
+		override val value: KString,
 	) : LiteralKind, KeywordKind {
 		
 		companion object {
@@ -33,17 +33,17 @@ sealed interface LiteralKind : PzlTokenKind {
 	}
 	
 	class String(
-		override val value: KString
+		override val value: KString,
 	) : LiteralKind
 	
 	class Char(
-		override val value: KString
+		override val value: KString,
 	) : LiteralKind
 	
 	class Number(
 		override val value: KString,
 		val system: NumberSystem,
-		val type: NumberLiteralType
+		val type: NumberLiteralType,
 	) : LiteralKind
 }
 
@@ -56,24 +56,24 @@ enum class NumberSystem {
 enum class NumberLiteralType(
 	val isDecimal: Boolean,
 	val isUnsigned: Boolean,
-	val byteSize: Int
+	val is8Byte: Boolean,
 ) {
-	INT(isDecimal = false, isUnsigned = false, byteSize = 4),
-	LONG(isDecimal = false, isUnsigned = false, byteSize = 8),
-	UINT(isDecimal = false, isUnsigned = true, byteSize = 4),
-	ULONG(isDecimal = false, isUnsigned = true, byteSize = 8),
-	FLOAT(isDecimal = true, isUnsigned = false, byteSize = 4),
-	DOUBLE(isDecimal = true, isUnsigned = false, byteSize = 8);
+	INT(isDecimal = false, isUnsigned = false, is8Byte = false),
+	LONG(isDecimal = false, isUnsigned = false, is8Byte = true),
+	UINT(isDecimal = false, isUnsigned = true, is8Byte = false),
+	ULONG(isDecimal = false, isUnsigned = true, is8Byte = true),
+	FLOAT(isDecimal = true, isUnsigned = false, is8Byte = false),
+	DOUBLE(isDecimal = true, isUnsigned = false, is8Byte = true);
 	
 	companion object {
 		
 		fun get(
 			isDecimal: Boolean,
 			isUnsigned: Boolean,
-			byteSize: Int
+			is8Byte: Boolean,
 		): NumberLiteralType {
 			return entries.first {
-				it.isDecimal == isDecimal && it.isUnsigned == isUnsigned && it.byteSize == byteSize
+				it.isDecimal == isDecimal && it.isUnsigned == isUnsigned && it.is8Byte == is8Byte
 			}
 		}
 	}

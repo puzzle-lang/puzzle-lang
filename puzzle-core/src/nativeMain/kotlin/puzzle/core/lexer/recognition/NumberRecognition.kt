@@ -2,11 +2,11 @@ package puzzle.core.lexer.recognition
 
 import puzzle.core.exception.syntaxError
 import puzzle.core.model.PzlContext
+import puzzle.core.model.span
 import puzzle.core.token.PzlToken
 import puzzle.core.token.kinds.LiteralKind
 import puzzle.core.token.kinds.NumberLiteralType
 import puzzle.core.token.kinds.NumberSystem
-import puzzle.core.model.span
 import puzzle.core.util.isBinary
 import puzzle.core.util.isDecimal
 import puzzle.core.util.isHex
@@ -56,7 +56,7 @@ object NumberRecognition : TokenRecognition {
 	context(_: PzlContext)
 	private fun parseBinaryPzlToken(input: CharArray, start: Int): PzlToken {
 		var position = start + 2
-		var byteSize = 4
+		var is8Byte = false
 		var isUnsigned = false
 		val binary = buildString {
 			while (true) {
@@ -72,14 +72,14 @@ object NumberRecognition : TokenRecognition {
 						position++
 						val nextChar = input.getOrNull(position) ?: break
 						if (nextChar == 'L') {
-							byteSize = 8
+							is8Byte = true
 							position++
 						}
 						break
 					}
 					
 					char == 'L' -> {
-						byteSize = 8
+						is8Byte = true
 						position++
 						break
 					}
@@ -93,13 +93,13 @@ object NumberRecognition : TokenRecognition {
 		if (binary.isEmpty()) {
 			numberFormatError(position)
 		}
-		if (byteSize == 4 && (isUnsigned && binary.length > BINARY_UINT_MAX_LENGTH) || (!isUnsigned && binary.length >= BINARY_UINT_MAX_LENGTH)) {
-			byteSize = 8
+		if (!is8Byte && (isUnsigned && binary.length > BINARY_UINT_MAX_LENGTH) || (!isUnsigned && binary.length >= BINARY_UINT_MAX_LENGTH)) {
+			is8Byte = true
 		}
 		if ((isUnsigned && binary.length > BINARY_ULONG_MAX_LENGTH) || (!isUnsigned && binary.length >= BINARY_ULONG_MAX_LENGTH)) {
 			numberValueIsOutOfRangeError(start)
 		}
-		val type = NumberLiteralType.get(isDecimal = false, isUnsigned = isUnsigned, byteSize = byteSize)
+		val type = NumberLiteralType.get(isDecimal = false, isUnsigned = isUnsigned, is8Byte = is8Byte)
 		val kind = LiteralKind.Number(binary, NumberSystem.BINARY, type)
 		return PzlToken(kind, start span position)
 	}
@@ -113,7 +113,7 @@ object NumberRecognition : TokenRecognition {
 	private fun parseDecimalPzlToken(input: CharArray, start: Int): PzlToken {
 		var position = start
 		var isDecimal = false
-		var byteSize = 4
+		var is8Byte = false
 		var isUnsigned = false
 		val decimal = buildString {
 			while (true) {
@@ -133,14 +133,14 @@ object NumberRecognition : TokenRecognition {
 						this.append('.')
 						this.append(nextChar)
 						isDecimal = true
-						byteSize = 8
+						is8Byte = true
 						position += 2
 					}
 					
 					char == 'F' || char == 'f' -> {
 						isDecimal = true
 						position++
-						byteSize = 4
+						is8Byte = false
 						break
 					}
 					
@@ -150,14 +150,14 @@ object NumberRecognition : TokenRecognition {
 						val nextChar = input.getOrNull(position) ?: break
 						if (nextChar == 'L') {
 							position++
-							byteSize = 8
+							is8Byte = true
 						}
 						break
 					}
 					
 					char == 'L' -> {
 						position++
-						byteSize = 8
+						is8Byte = true
 						break
 					}
 					
@@ -169,27 +169,27 @@ object NumberRecognition : TokenRecognition {
 			numberFormatError(position)
 		}
 		val type = if (isDecimal) {
-			NumberLiteralType.get(isDecimal = true, isUnsigned = isUnsigned, byteSize = byteSize)
+			NumberLiteralType.get(isDecimal = true, isUnsigned = isUnsigned, is8Byte = is8Byte)
 		} else {
-			if (byteSize == 4) {
-				if (isUnsigned && (decimal.length > DECIMAL_UINT_MAX.length || decimal > DECIMAL_UINT_MAX)) {
-					byteSize = 8
-				} else if (!isUnsigned && (decimal.length > DECIMAL_INT_MAX.length || decimal > DECIMAL_INT_MAX)) {
-					byteSize = 8
+			if (!is8Byte) {
+				is8Byte = when {
+					isUnsigned && (decimal.length > DECIMAL_UINT_MAX.length || (decimal.length == DECIMAL_UINT_MAX.length && decimal > DECIMAL_UINT_MAX)) -> true
+					!isUnsigned && (decimal.length > DECIMAL_INT_MAX.length || (decimal.length == DECIMAL_INT_MAX.length && decimal > DECIMAL_INT_MAX)) -> true
+					else -> false
 				}
 			}
+			println("$is8Byte $decimal")
 			when {
-				byteSize == 4 -> NumberLiteralType.get(isDecimal = false, isUnsigned = isUnsigned, byteSize = 4)
+				!is8Byte -> NumberLiteralType.get(isDecimal = false, isUnsigned = isUnsigned, is8Byte = false)
 				isUnsigned && (decimal.length > DECIMAL_ULONG_MAX.length || (decimal.length == DECIMAL_ULONG_MAX.length && decimal > DECIMAL_ULONG_MAX)) -> {
 					numberValueIsOutOfRangeError(start)
 				}
 				
 				!isUnsigned && (decimal.length > DECIMAL_LONG_MAX.length || (decimal.length == DECIMAL_LONG_MAX.length && decimal > DECIMAL_LONG_MAX)) -> {
-					println(decimal)
 					numberValueIsOutOfRangeError(start)
 				}
 				
-				else -> NumberLiteralType.get(isDecimal = false, isUnsigned = isUnsigned, byteSize = 8)
+				else -> NumberLiteralType.get(isDecimal = false, isUnsigned = isUnsigned, is8Byte = true)
 			}
 		}
 		val kind = LiteralKind.Number(decimal, NumberSystem.DECIMAL, type)
@@ -202,7 +202,7 @@ object NumberRecognition : TokenRecognition {
 	context(_: PzlContext)
 	private fun parseHexPzlToken(input: CharArray, start: Int): PzlToken {
 		var position = start + 2
-		var byteSize = 4
+		var is8Byte = false
 		var isUnsigned = false
 		val hex = buildString {
 			while (true) {
@@ -218,14 +218,14 @@ object NumberRecognition : TokenRecognition {
 						position++
 						val nextChar = input.getOrNull(position) ?: break
 						if (nextChar == 'L') {
-							byteSize = 8
+							is8Byte = true
 							position++
 						}
 						break
 					}
 					
 					char == 'L' -> {
-						byteSize = 8
+						is8Byte = true
 						position++
 						break
 					}
@@ -239,13 +239,13 @@ object NumberRecognition : TokenRecognition {
 		if (hex.isEmpty()) {
 			numberFormatError(position)
 		}
-		if (byteSize == 4 && (isUnsigned && hex.length > HEX_UINT_MAX_LENGTH) || (!isUnsigned && hex.length >= HEX_UINT_MAX_LENGTH)) {
-			byteSize = 8
+		if (!is8Byte && (isUnsigned && hex.length > HEX_UINT_MAX_LENGTH) || (!isUnsigned && hex.length >= HEX_UINT_MAX_LENGTH)) {
+			is8Byte = true
 		}
 		if ((isUnsigned && hex.length > HEX_ULONG_MAX_LENGTH) || (!isUnsigned && hex.length >= HEX_ULONG_MAX_LENGTH)) {
 			numberValueIsOutOfRangeError(start)
 		}
-		val type = NumberLiteralType.get(isDecimal = false, isUnsigned = isUnsigned, byteSize = byteSize)
+		val type = NumberLiteralType.get(isDecimal = false, isUnsigned = isUnsigned, is8Byte = is8Byte)
 		val kind = LiteralKind.Number(hex, NumberSystem.HEX, type)
 		return PzlToken(kind, start span position)
 	}
