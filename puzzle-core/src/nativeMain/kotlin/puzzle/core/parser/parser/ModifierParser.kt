@@ -131,7 +131,7 @@ enum class ModifierTarget(
 	),
 	MEMBER_CLASS(
 		displayName = "成员类",
-		supportedModifiers = MemberAccessModifiers + setOf(OWNER, OPEN, ABSTRACT)
+		supportedModifiers = MemberAccessModifiers + setOf(INNER, OPEN, ABSTRACT)
 	),
 	MEMBER_UNIQUE(
 		displayName = "成员单例类",

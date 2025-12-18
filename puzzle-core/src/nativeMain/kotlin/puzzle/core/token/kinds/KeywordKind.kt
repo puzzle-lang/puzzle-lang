@@ -1,6 +1,5 @@
 package puzzle.core.token.kinds
 
-import kotlinx.serialization.Serializable
 import puzzle.core.collections.fastSetOf
 import puzzle.core.collections.mergeFastSets
 
@@ -33,7 +32,7 @@ sealed class ModifierKind(
 			PRIVATE, PROTECTED, FILE, INTERNAL, MODULE, PUBLIC,
 			FINAL,
 			OPEN, ABSTRACT, SEALED, OVERRIDE,
-			CONST, OWNER, IGNORE, LATE, LAZY, ARGS,
+			CONST, INNER, IGNORE, LATE, LAZY, ARGS,
 			VAR, VAL
 		)
 	}
@@ -62,7 +61,7 @@ sealed class ModifierKind(
 	
 	object CONST : ModifierKind("const", 3)
 	
-	object OWNER : ModifierKind("owner", 3)
+	object INNER : ModifierKind("inner", 3)
 	
 	object IGNORE : ModifierKind("ignore", 3)
 	
