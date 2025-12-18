@@ -46,5 +46,16 @@ fun main() {
 
     do {
         ++count
+        if (count == 150) {
+            break
+        } else if (count == 140) {
+            count++
+            continue
+        }
     } while (count < 200)
+}
+
+fun add(num1: Int, num2: Int): Int {
+    if (num1 == num2) return num1 * 2
+    return@add num1 + num2
 }

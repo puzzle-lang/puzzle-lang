@@ -33,6 +33,15 @@ fun parseExpressionChain(left: Expression? = null): Expression {
 	return expression
 }
 
+context(_: PzlContext, _: PzlTokenCursor)
+fun tryParseExpressionChain(): Expression? {
+	var expression: Expression? = null
+	while (!isAtExpressionEnd()) {
+		expression = parseExpression(expression)
+	}
+	return expression
+}
+
 private val nonConsumableEndTokenTypes = arrayOf<PzlTokenKind>(
 	COLON,
 	COMMA,

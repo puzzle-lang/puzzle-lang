@@ -193,4 +193,9 @@ enum class IdentifierTarget(
 		notFoundMessage = "泛型参数名称必须为标识符",
 		notSupportedAnonymityMessage = "泛型参数不支持匿名"
 	),
+	LABEL(
+		isSupportedAnonymity = false,
+		notFoundMessage = "标签必须为标识符",
+		notSupportedAnonymityMessage = "标签不支持匿名"
+	)
 }

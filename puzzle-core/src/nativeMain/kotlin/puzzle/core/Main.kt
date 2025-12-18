@@ -90,7 +90,7 @@ private fun help() {
 	val help = """
 		使用方式:
             puzzle -c --compile <Main.pzl> [Puzzle1.pzl, Puzzle2.pzl, ...]  编译 Puzzle (.pzl) 程序文件
-            puzzle -h --help                                            查看使用手册
+            puzzle -h --help                                                查看使用手册
 	""".trimIndent()
 	println(help)
 }

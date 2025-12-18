@@ -10,6 +10,9 @@ sealed interface StatementMatcher<S : Statement> {
 		
 		val matchers = arrayOf(
 			VariableDeclarationStatementMatcher,
+			ReturnStatementMatcher,
+			BreakStatementMatcher,
+			ContinueStatementMatcher,
 			IfStatementMatcher,
 			WhileStatementMatcher,
 			ExpressionStatementMatcher

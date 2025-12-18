@@ -6,7 +6,7 @@ import puzzle.core.parser.ast.expression.Expression
 import puzzle.core.parser.ast.expression.IdentifierExpression
 
 @Serializable
-class ReturnStatement(
+class BreakStatement(
 	val label: IdentifierExpression?,
 	val expression: Expression?,
 	override val location: SourceLocation,
