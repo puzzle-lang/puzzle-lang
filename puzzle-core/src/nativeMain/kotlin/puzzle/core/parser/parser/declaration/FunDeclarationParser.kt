@@ -2,6 +2,8 @@ package puzzle.core.parser.parser.declaration
 
 import puzzle.core.exception.syntaxError
 import puzzle.core.model.PzlContext
+import puzzle.core.model.SourceLocation
+import puzzle.core.model.span
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.NamedType
 import puzzle.core.parser.ast.Symbol
@@ -18,28 +20,28 @@ import puzzle.core.parser.parser.expression.tryParseIdentifierString
 import puzzle.core.parser.parser.parameter.parameter.parseFunParameters
 import puzzle.core.parser.parser.parseTypeReference
 import puzzle.core.parser.parser.statement.parseStatements
-import puzzle.core.model.SourceLocation
-import puzzle.core.token.kinds.AccessKind
+import puzzle.core.token.kinds.AccessKind.DOT
+import puzzle.core.token.kinds.AccessKind.QUESTION_DOT
 import puzzle.core.token.kinds.AssignmentKind.*
-import puzzle.core.token.kinds.BracketKind
+import puzzle.core.token.kinds.BracketKind.Start.LBRACE
 import puzzle.core.token.kinds.IndexKind.INDEX_GET
 import puzzle.core.token.kinds.IndexKind.INDEX_SET
 import puzzle.core.token.kinds.OperatorKind.*
-import puzzle.core.token.kinds.SeparatorKind
+import puzzle.core.token.kinds.SeparatorKind.COMMA
 import puzzle.core.token.kinds.SymbolKind
-import puzzle.core.model.span
+import puzzle.core.token.kinds.SymbolKind.COLON
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseFunDeclaration(header: DeclarationHeader, start: SourceLocation): FunDeclaration {
 	val (extension, funName) = parseExtensionAndFunName()
 	val parameters = parseFunParameters()
 	val returnTypes = mutableListOf<TypeReference>()
-	if (cursor.match(SymbolKind.COLON)) {
+	if (cursor.match(COLON)) {
 		do {
 			returnTypes += parseTypeReference(isSupportedLambdaType = true)
-		} while (cursor.match(SeparatorKind.COMMA))
+		} while (cursor.match(COMMA))
 	}
-	val expressions = if (cursor.match(BracketKind.Start.LBRACE)) parseStatements() else emptyList()
+	val expressions = if (cursor.match(LBRACE)) parseStatements() else emptyList()
 	val end = cursor.previous.location
 	return FunDeclaration(
 		name = funName,
@@ -61,13 +63,13 @@ private fun parseExtensionAndFunName(): Pair<TypeReference?, FunName> {
 	val name = tryParseIdentifierExpression(IdentifierTarget.FUN)
 		?: return null to (tryParseOperatorFunName() ?: syntaxError("函数缺少名称", cursor.current))
 	val start = name.location
-	if (!cursor.check(AccessKind.DOT)) {
+	if (!cursor.check(DOT)) {
 		return null to IdentifierFunName(name)
 	}
 	cursor.retreat()
 	val segments = mutableListOf<String>()
 	do {
-		val type = if (cursor.match(AccessKind.QUESTION_DOT)) {
+		val type = if (cursor.match(QUESTION_DOT)) {
 			TypeReference(
 				type = NamedType(segments, start span cursor.offset(-2).location),
 				location = start span cursor.previous.location,
@@ -89,7 +91,7 @@ private fun parseExtensionAndFunName(): Pair<TypeReference?, FunName> {
 			return type to name
 		}
 		segments += name as String
-	} while (cursor.match(AccessKind.DOT))
+	} while (cursor.match(DOT))
 	val funName = IdentifierFunName(IdentifierExpression(segments.removeLast(), cursor.previous.location))
 	val location = start span cursor.previous.location
 	val type = TypeReference(NamedType(segments, location), location)

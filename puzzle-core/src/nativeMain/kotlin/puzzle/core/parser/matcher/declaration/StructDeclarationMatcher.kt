@@ -8,6 +8,7 @@ import puzzle.core.parser.parser.modifier.ModifierTarget
 import puzzle.core.parser.parser.parameter.type.TypeTarget
 import puzzle.core.model.SourceLocation
 import puzzle.core.token.kinds.DeclarationKind
+import puzzle.core.token.kinds.DeclarationKind.STRUCT
 
 object StructDeclarationMatcher : DeclarationMatcher<StructDeclaration> {
 	
@@ -19,7 +20,7 @@ object StructDeclarationMatcher : DeclarationMatcher<StructDeclaration> {
 	
 	context(cursor: PzlTokenCursor)
 	override fun match(): Boolean {
-		return cursor.match(DeclarationKind.STRUCT)
+		return cursor.match(STRUCT)
 	}
 	
 	context(_: PzlContext, cursor: PzlTokenCursor)

@@ -6,13 +6,13 @@ import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.expression.Expression
 import puzzle.core.parser.ast.expression.TernaryExpression
 import puzzle.core.parser.parser.expression.parseTernaryExpression
-import puzzle.core.token.kinds.SymbolKind
+import puzzle.core.token.kinds.SymbolKind.QUESTION
 
 object TernaryExpressionMatcher : ExpressionMatcher<TernaryExpression> {
 	
 	context(cursor: PzlTokenCursor)
 	override fun match(left: Expression?): Boolean {
-		return cursor.match(SymbolKind.QUESTION)
+		return cursor.match(QUESTION)
 	}
 	
 	context(_: PzlContext, cursor: PzlTokenCursor)

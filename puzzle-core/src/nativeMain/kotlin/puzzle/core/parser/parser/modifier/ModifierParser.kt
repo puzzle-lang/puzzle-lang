@@ -7,6 +7,7 @@ import puzzle.core.parser.ast.Modifier
 import puzzle.core.token.kinds.ModifierKind
 import puzzle.core.token.kinds.ModifierKind.*
 import puzzle.core.token.kinds.SymbolKind
+import puzzle.core.token.kinds.SymbolKind.COLON
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseModifiers(): List<Modifier> {
@@ -25,7 +26,7 @@ fun parseModifiers(): List<Modifier> {
 context(cursor: PzlTokenCursor)
 private fun parseModifier(): Modifier? {
 	ModifierKind.kinds.fastForEach { kind ->
-		if (cursor.current.kind == kind && cursor.nextOrNull?.kind != SymbolKind.COLON) {
+		if (cursor.current.kind == kind && cursor.nextOrNull?.kind != COLON) {
 			val token = cursor.advance()
 			return Modifier(kind, token.location)
 		}

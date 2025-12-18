@@ -195,7 +195,6 @@ sealed class ContextualKind(
 	object SUPER : ContextualKind("super")
 }
 
-@Serializable
 sealed class VarianceKind(
 	override val value: String,
 ) : KeywordKind {

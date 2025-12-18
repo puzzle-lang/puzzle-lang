@@ -1,6 +1,9 @@
 package puzzle.core.parser.parser.declaration
 
 import puzzle.core.model.PzlContext
+import puzzle.core.model.SourceLocation
+import puzzle.core.model.copy
+import puzzle.core.model.span
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.NamedType
 import puzzle.core.parser.ast.TypeReference
@@ -11,18 +14,16 @@ import puzzle.core.parser.parser.expression.IdentifierTarget
 import puzzle.core.parser.parser.expression.parseExpressionChain
 import puzzle.core.parser.parser.expression.parseIdentifierExpression
 import puzzle.core.parser.parser.parseTypeReference
-import puzzle.core.model.SourceLocation
-import puzzle.core.model.copy
 import puzzle.core.token.kinds.AccessKind
-import puzzle.core.token.kinds.AssignmentKind
-import puzzle.core.token.kinds.SymbolKind
-import puzzle.core.model.span
+import puzzle.core.token.kinds.AccessKind.DOT
+import puzzle.core.token.kinds.AssignmentKind.ASSIGN
+import puzzle.core.token.kinds.SymbolKind.COLON
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parsePropertyDeclaration(header: DeclarationHeader, start: SourceLocation): PropertyDeclaration {
 	val (extension, name) = parseExtensionAndPropertyName()
-	val type = if (cursor.match(SymbolKind.COLON)) parseTypeReference(isSupportedLambdaType = true) else null
-	val initialize = if (cursor.match(AssignmentKind.ASSIGN)) parseExpressionChain() else null
+	val type = if (cursor.match(COLON)) parseTypeReference(isSupportedLambdaType = true) else null
+	val initialize = if (cursor.match(ASSIGN)) parseExpressionChain() else null
 	val end = cursor.previous.location
 	return PropertyDeclaration(
 		name = name,
@@ -40,11 +41,11 @@ fun parsePropertyDeclaration(header: DeclarationHeader, start: SourceLocation): 
 context(_: PzlContext, cursor: PzlTokenCursor)
 private fun parseExtensionAndPropertyName(): Pair<TypeReference?, IdentifierExpression> {
 	val name = parseIdentifierExpression(IdentifierTarget.PROPERTY)
-	return if (cursor.check(AccessKind.DOT)) {
+	return if (cursor.check(DOT)) {
 		cursor.retreat()
 		val type = parseTypeReference()
 		if (type.isNullable) {
-			cursor.expect(AccessKind.DOT, "属性缺少 '.'")
+			cursor.expect(DOT, "属性缺少 '.'")
 			val name = parseIdentifierExpression(IdentifierTarget.FUN)
 			type to name
 		} else {

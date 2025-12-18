@@ -13,6 +13,10 @@ import puzzle.core.token.kinds.AccessKind
 import puzzle.core.token.kinds.OperatorKind
 import puzzle.core.token.kinds.TypeOperatorKind
 import puzzle.core.model.span
+import puzzle.core.token.kinds.AccessKind.DOT
+import puzzle.core.token.kinds.OperatorKind.DOUBLE_STAR
+import puzzle.core.token.kinds.OperatorKind.STAR
+import puzzle.core.token.kinds.TypeOperatorKind.AS
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseImportDeclaration(): ImportDeclaration {
@@ -21,22 +25,22 @@ fun parseImportDeclaration(): ImportDeclaration {
 	val segments = mutableListOf(name)
 	var scope = ImportScope.SINGLE
 	var alias: IdentifierExpression? = null
-	while (cursor.match(AccessKind.DOT)) {
+	while (cursor.match(DOT)) {
 		when {
 			matchIdentifier() -> {
 				segments += cursor.previous.value
-				if (cursor.match(TypeOperatorKind.AS)) {
+				if (cursor.match(AS)) {
 					alias = parseIdentifierExpression(IdentifierTarget.IMPORT_AS)
 					break
 				}
 			}
 			
-			cursor.match(OperatorKind.STAR) -> {
+			cursor.match(STAR) -> {
 				scope = ImportScope.WILDCARD
 				break
 			}
 			
-			cursor.match(OperatorKind.DOUBLE_STAR) -> {
+			cursor.match(DOUBLE_STAR) -> {
 				scope = ImportScope.RECURSIVE
 				break
 			}

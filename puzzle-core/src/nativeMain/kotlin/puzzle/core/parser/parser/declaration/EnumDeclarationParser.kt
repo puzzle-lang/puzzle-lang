@@ -2,6 +2,8 @@ package puzzle.core.parser.parser.declaration
 
 import puzzle.core.exception.syntaxError
 import puzzle.core.model.PzlContext
+import puzzle.core.model.SourceLocation
+import puzzle.core.model.span
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.declaration.Declaration
 import puzzle.core.parser.ast.declaration.EnumDeclaration
@@ -10,22 +12,24 @@ import puzzle.core.parser.matcher.declaration.DeclarationHeader
 import puzzle.core.parser.parser.expression.IdentifierTarget
 import puzzle.core.parser.parser.expression.parseIdentifierExpression
 import puzzle.core.parser.parser.parameter.parameter.parseEnumParameters
-import puzzle.core.model.SourceLocation
-import puzzle.core.token.kinds.BracketKind
-import puzzle.core.token.kinds.SeparatorKind
-import puzzle.core.model.span
+import puzzle.core.token.kinds.BracketKind.End.RBRACE
+import puzzle.core.token.kinds.BracketKind.End.RPAREN
+import puzzle.core.token.kinds.BracketKind.Start.LBRACE
+import puzzle.core.token.kinds.BracketKind.Start.LPAREN
+import puzzle.core.token.kinds.SeparatorKind.COMMA
+import puzzle.core.token.kinds.SeparatorKind.SEMICOLON
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseEnumDeclaration(header: DeclarationHeader, start: SourceLocation): EnumDeclaration {
 	val name = parseIdentifierExpression(IdentifierTarget.ENUM)
 	val parameters = parseEnumParameters()
-	cursor.expect(BracketKind.Start.LBRACE, "枚举缺少 '{'")
+	cursor.expect(LBRACE, "枚举缺少 '{'")
 	val entries = parseEnumEntries()
-	val members = if (cursor.previous.kind == BracketKind.End.RBRACE) {
+	val members = if (cursor.previous.kind == RBRACE) {
 		emptyList()
 	} else {
 		buildList {
-			while (!cursor.match(BracketKind.End.RBRACE)) {
+			while (!cursor.match(RBRACE)) {
 				this += parseMemberDeclaration()
 			}
 		}
@@ -48,10 +52,10 @@ fun parseEnumDeclaration(header: DeclarationHeader, start: SourceLocation): Enum
 context(_: PzlContext, cursor: PzlTokenCursor)
 private fun parseEnumEntries(): List<EnumEntry> {
 	val entries = mutableListOf<EnumEntry>()
-	while (!cursor.match(SeparatorKind.SEMICOLON) && !cursor.match(BracketKind.End.RBRACE)) {
+	while (!cursor.match(SEMICOLON) && !cursor.match(RBRACE)) {
 		entries += parseEnumEntry()
-		if (!cursor.check(SeparatorKind.SEMICOLON) && !cursor.check(BracketKind.End.RBRACE)) {
-			cursor.match(SeparatorKind.COMMA)
+		if (!cursor.check(SEMICOLON) && !cursor.check(RBRACE)) {
+			cursor.match(COMMA)
 		}
 	}
 	if (entries.isEmpty()) {
@@ -64,14 +68,14 @@ context(_: PzlContext, cursor: PzlTokenCursor)
 private fun parseEnumEntry(): EnumEntry {
 	val name = parseIdentifierExpression(IdentifierTarget.ENUM_ENTRY)
 	val start = name.location
-	if (cursor.match(BracketKind.Start.LPAREN)) {
-		while (!cursor.match(BracketKind.End.RPAREN)) {
+	if (cursor.match(LPAREN)) {
+		while (!cursor.match(RPAREN)) {
 			cursor.advance()
 		}
 	}
 	val members = mutableListOf<Declaration>()
-	if (cursor.match(BracketKind.Start.LBRACE)) {
-		while (!cursor.match(BracketKind.End.RBRACE)) {
+	if (cursor.match(LBRACE)) {
+		while (!cursor.match(RBRACE)) {
 			members += parseMemberDeclaration()
 		}
 	}

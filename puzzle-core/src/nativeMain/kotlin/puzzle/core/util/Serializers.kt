@@ -5,10 +5,7 @@ import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
-import puzzle.core.token.kinds.AccessKind
-import puzzle.core.token.kinds.ModifierKind
-import puzzle.core.token.kinds.OperatorKind
-import puzzle.core.token.kinds.SymbolKind
+import puzzle.core.token.kinds.*
 
 object DotStringListSerializer : KSerializer<List<String>> {
 	
@@ -91,5 +88,22 @@ object AccessKindSerializer : KSerializer<AccessKind> {
 	override fun deserialize(decoder: Decoder): AccessKind {
 		val symbol = decoder.decodeString()
 		return AccessKind.kinds.first { it.value == symbol }
+	}
+}
+
+object VarianceKindSerializer : KSerializer<VarianceKind> {
+	
+	override val descriptor = PrimitiveSerialDescriptor(
+		VarianceKindSerializer::class.qualifiedName!!,
+		PrimitiveKind.STRING
+	)
+	
+	override fun serialize(encoder: Encoder, value: VarianceKind) {
+		encoder.encodeString(value.value)
+	}
+	
+	override fun deserialize(decoder: Decoder): VarianceKind {
+		val symbol = decoder.decodeString()
+		return VarianceKind.kinds.first { it.value == symbol }
 	}
 }

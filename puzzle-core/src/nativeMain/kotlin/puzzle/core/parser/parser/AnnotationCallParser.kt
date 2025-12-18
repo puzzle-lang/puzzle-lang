@@ -1,22 +1,24 @@
 package puzzle.core.parser.parser
 
 import puzzle.core.model.PzlContext
+import puzzle.core.model.span
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.AnnotationCall
 import puzzle.core.parser.parser.expression.parseArguments
-import puzzle.core.token.kinds.BracketKind
+import puzzle.core.token.kinds.BracketKind.End.RPAREN
+import puzzle.core.token.kinds.BracketKind.Start.LPAREN
 import puzzle.core.token.kinds.SymbolKind
-import puzzle.core.model.span
+import puzzle.core.token.kinds.SymbolKind.AT
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseAnnotationCalls(): List<AnnotationCall> {
-	if (!cursor.match(SymbolKind.AT)) {
+	if (!cursor.match(AT)) {
 		return emptyList()
 	}
 	return buildList {
 		do {
 			this += parseAnnotationCall()
-		} while (cursor.match(SymbolKind.AT))
+		} while (cursor.match(AT))
 	}
 }
 
@@ -24,11 +26,11 @@ context(_: PzlContext, cursor: PzlTokenCursor)
 private fun parseAnnotationCall(): AnnotationCall {
 	val start = cursor.previous.location
 	val type = parseTypeReference(isSupportedLambdaType = false)
-	if (!cursor.match(BracketKind.Start.LPAREN)) {
+	if (!cursor.match(LPAREN)) {
 		val location = start span cursor.previous.location
 		return AnnotationCall(type, location)
 	}
-	val arguments = parseArguments(BracketKind.End.RPAREN)
+	val arguments = parseArguments(RPAREN)
 	val location = start span cursor.previous.location
 	return AnnotationCall(type, location, arguments)
 }

@@ -7,12 +7,13 @@ import puzzle.core.parser.ast.expression.ElvisExpression
 import puzzle.core.parser.ast.expression.Expression
 import puzzle.core.parser.parser.expression.parseElvisExpression
 import puzzle.core.token.kinds.SymbolKind
+import puzzle.core.token.kinds.SymbolKind.ELVIS
 
 object ElvisExpressionMatcher : ExpressionMatcher<ElvisExpression> {
 	
 	context(cursor: PzlTokenCursor)
 	override fun match(left: Expression?): Boolean {
-		return cursor.match(SymbolKind.ELVIS)
+		return cursor.match(ELVIS)
 	}
 	
 	context(_: PzlContext, cursor: PzlTokenCursor)

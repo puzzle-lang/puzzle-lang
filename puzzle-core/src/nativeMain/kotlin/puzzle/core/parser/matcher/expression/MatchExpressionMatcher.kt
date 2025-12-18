@@ -5,13 +5,13 @@ import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.expression.Expression
 import puzzle.core.parser.ast.expression.MatchExpression
 import puzzle.core.parser.parser.expression.parseMatchExpression
-import puzzle.core.token.kinds.ControlFlowKind
+import puzzle.core.token.kinds.ControlFlowKind.MATCH
 
 object MatchExpressionMatcher : ExpressionMatcher<MatchExpression> {
 	
 	context(cursor: PzlTokenCursor)
 	override fun match(left: Expression?): Boolean {
-		return left == null && cursor.match(ControlFlowKind.MATCH)
+		return left == null && cursor.match(MATCH)
 	}
 	
 	context(_: PzlContext, cursor: PzlTokenCursor)

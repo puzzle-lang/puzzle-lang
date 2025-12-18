@@ -32,15 +32,15 @@ sealed interface LiteralKind : PzlTokenKind {
 		override val value = "null"
 	}
 	
-	class String(
+	class StringKind(
 		override val value: KString,
 	) : LiteralKind
 	
-	class Char(
+	class CharKind(
 		override val value: KString,
 	) : LiteralKind
 	
-	class Number(
+	class NumberKind(
 		override val value: KString,
 		val system: NumberSystem,
 		val type: NumberLiteralType,

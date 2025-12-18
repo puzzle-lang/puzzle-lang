@@ -9,13 +9,21 @@ import puzzle.core.parser.ast.statement.Statement
 import puzzle.core.parser.parser.parseTypeReference
 import puzzle.core.parser.parser.statement.parseStatement
 import puzzle.core.parser.parser.statement.parseStatements
-import puzzle.core.token.kinds.*
+import puzzle.core.token.kinds.BracketKind.End.RBRACE
+import puzzle.core.token.kinds.BracketKind.End.RPAREN
+import puzzle.core.token.kinds.BracketKind.Start.LBRACE
+import puzzle.core.token.kinds.BracketKind.Start.LPAREN
+import puzzle.core.token.kinds.ControlFlowKind.ELSE
+import puzzle.core.token.kinds.ControlFlowKind.IF
+import puzzle.core.token.kinds.SeparatorKind.COMMA
+import puzzle.core.token.kinds.SymbolKind.ARROW
+import puzzle.core.token.kinds.TypeOperatorKind.IS
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseMatchExpression(): MatchExpression {
 	return when {
-		cursor.match(BracketKind.Start.LPAREN) -> parseMatchPatternExpression()
-		cursor.match(BracketKind.Start.LBRACE) -> parseMatchConditionExpression()
+		cursor.match(LPAREN) -> parseMatchPatternExpression()
+		cursor.match(LBRACE) -> parseMatchConditionExpression()
 		else -> syntaxError("match 语法错误", cursor.current)
 	}
 }
@@ -24,11 +32,11 @@ context(_: PzlContext, cursor: PzlTokenCursor)
 private fun parseMatchPatternExpression(): MatchPatternExpression {
 	val start = cursor.offset(-2).location
 	val subject = parseExpressionChain()
-	cursor.expect(BracketKind.End.RPAREN, "match 的匹配表达式结尾必须使用 ')'")
-	cursor.expect(BracketKind.Start.LBRACE, "match 匹配语句缺少 '{'")
+	cursor.expect(RPAREN, "match 的匹配表达式结尾必须使用 ')'")
+	cursor.expect(LBRACE, "match 匹配语句缺少 '{'")
 	val arms = mutableListOf<MatchArm>()
-	while (!cursor.match(BracketKind.End.RBRACE)) {
-		if (cursor.match(ControlFlowKind.ELSE)) {
+	while (!cursor.match(RBRACE)) {
+		if (cursor.match(ELSE)) {
 			val elseStatements = parseElseStatements()
 			val end = cursor.previous.location
 			return MatchPatternExpression(subject, arms, start span end, elseStatements)
@@ -37,7 +45,7 @@ private fun parseMatchPatternExpression(): MatchPatternExpression {
 		val patterns = buildList {
 			do {
 				when {
-					cursor.match(TypeOperatorKind.IS) -> {
+					cursor.match(IS) -> {
 						val type = parseTypeReference()
 						this += IsTypeMatchPattern(type)
 					}
@@ -52,17 +60,17 @@ private fun parseMatchPatternExpression(): MatchPatternExpression {
 						
 					}
 				}
-				if (cursor.match(ControlFlowKind.IF)) {
+				if (cursor.match(IF)) {
 					guard = parseExpressionChain()
-					cursor.expect(SymbolKind.ARROW, "match 匹配分支缺少 '->'")
+					cursor.expect(ARROW, "match 匹配分支缺少 '->'")
 					break
 				}
-				if (cursor.current.kind != SymbolKind.ARROW) {
-					cursor.expect(SeparatorKind.COMMA, "match 匹配分支缺少 ','")
+				if (cursor.current.kind != ARROW) {
+					cursor.expect(COMMA, "match 匹配分支缺少 ','")
 				}
-			} while (!cursor.match(SymbolKind.ARROW))
+			} while (!cursor.match(ARROW))
 		}
-		val statements = if (cursor.match(BracketKind.Start.LBRACE)) {
+		val statements = if (cursor.match(LBRACE)) {
 			parseStatements()
 		} else {
 			listOf(parseStatement())
@@ -81,16 +89,16 @@ context(_: PzlContext, cursor: PzlTokenCursor)
 private fun parseMatchConditionExpression(): MatchConditionExpression {
 	val start = cursor.offset(-2).location
 	val cases = mutableListOf<MatchCase>()
-	while (!cursor.match(BracketKind.End.RBRACE)) {
-		if (cursor.match(ControlFlowKind.ELSE)) {
+	while (!cursor.match(RBRACE)) {
+		if (cursor.match(ELSE)) {
 			val elseStatements = parseElseStatements()
 			val end = cursor.previous.location
 			return MatchConditionExpression(cases, start span end, elseStatements)
 		}
 		val condition = parseExpressionChain()
 		val start = condition.location
-		cursor.expect(SymbolKind.ARROW, "match 条件分支缺少 '->'")
-		val statements = if (cursor.match(BracketKind.Start.LBRACE)) {
+		cursor.expect(ARROW, "match 条件分支缺少 '->'")
+		val statements = if (cursor.match(LBRACE)) {
 			parseStatements()
 		} else {
 			listOf(parseStatement())
@@ -107,12 +115,12 @@ private fun parseMatchConditionExpression(): MatchConditionExpression {
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 private fun parseElseStatements(): List<Statement> {
-	cursor.expect(SymbolKind.ARROW, "else 缺少 '->'")
-	val elseStatements = if (cursor.match(BracketKind.Start.LBRACE)) {
+	cursor.expect(ARROW, "else 缺少 '->'")
+	val elseStatements = if (cursor.match(LBRACE)) {
 		parseStatements()
 	} else {
 		listOf(parseStatement())
 	}
-	cursor.expect(BracketKind.End.RBRACE, "match 结尾缺少 '}'")
+	cursor.expect(RBRACE, "match 结尾缺少 '}'")
 	return elseStatements
 }

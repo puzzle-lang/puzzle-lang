@@ -11,6 +11,7 @@ sealed interface StatementMatcher<S : Statement> {
 		val matchers = arrayOf(
 			VariableDeclarationStatementMatcher,
 			IfStatementMatcher,
+			WhileStatementMatcher,
 			ExpressionStatementMatcher
 		)
 	}

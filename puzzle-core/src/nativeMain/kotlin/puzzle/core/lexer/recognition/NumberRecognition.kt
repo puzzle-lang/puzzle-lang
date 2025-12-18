@@ -4,7 +4,7 @@ import puzzle.core.exception.syntaxError
 import puzzle.core.model.PzlContext
 import puzzle.core.model.span
 import puzzle.core.token.PzlToken
-import puzzle.core.token.kinds.LiteralKind
+import puzzle.core.token.kinds.LiteralKind.NumberKind
 import puzzle.core.token.kinds.NumberLiteralType
 import puzzle.core.token.kinds.NumberSystem
 import puzzle.core.util.isBinary
@@ -100,7 +100,7 @@ object NumberRecognition : TokenRecognition {
 			numberValueIsOutOfRangeError(start)
 		}
 		val type = NumberLiteralType.get(isDecimal = false, isUnsigned = isUnsigned, is8Byte = is8Byte)
-		val kind = LiteralKind.Number(binary, NumberSystem.BINARY, type)
+		val kind = NumberKind(binary, NumberSystem.BINARY, type)
 		return PzlToken(kind, start span position)
 	}
 	
@@ -178,7 +178,6 @@ object NumberRecognition : TokenRecognition {
 					else -> false
 				}
 			}
-			println("$is8Byte $decimal")
 			when {
 				!is8Byte -> NumberLiteralType.get(isDecimal = false, isUnsigned = isUnsigned, is8Byte = false)
 				isUnsigned && (decimal.length > DECIMAL_ULONG_MAX.length || (decimal.length == DECIMAL_ULONG_MAX.length && decimal > DECIMAL_ULONG_MAX)) -> {
@@ -192,7 +191,7 @@ object NumberRecognition : TokenRecognition {
 				else -> NumberLiteralType.get(isDecimal = false, isUnsigned = isUnsigned, is8Byte = true)
 			}
 		}
-		val kind = LiteralKind.Number(decimal, NumberSystem.DECIMAL, type)
+		val kind = NumberKind(decimal, NumberSystem.DECIMAL, type)
 		return PzlToken(kind, start span position)
 	}
 	
@@ -246,7 +245,7 @@ object NumberRecognition : TokenRecognition {
 			numberValueIsOutOfRangeError(start)
 		}
 		val type = NumberLiteralType.get(isDecimal = false, isUnsigned = isUnsigned, is8Byte = is8Byte)
-		val kind = LiteralKind.Number(hex, NumberSystem.HEX, type)
+		val kind = NumberKind(hex, NumberSystem.HEX, type)
 		return PzlToken(kind, start span position)
 	}
 	

@@ -1,14 +1,15 @@
 package puzzle.core.parser.parser.declaration
 
 import puzzle.core.model.PzlContext
+import puzzle.core.model.SourceLocation
+import puzzle.core.model.span
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.declaration.UniqueDeclaration
 import puzzle.core.parser.matcher.declaration.DeclarationHeader
 import puzzle.core.parser.parser.expression.IdentifierTarget
 import puzzle.core.parser.parser.expression.parseIdentifierExpression
-import puzzle.core.model.SourceLocation
-import puzzle.core.token.kinds.BracketKind
-import puzzle.core.model.span
+import puzzle.core.token.kinds.BracketKind.End.RBRACE
+import puzzle.core.token.kinds.BracketKind.Start.LBRACE
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseUniqueDeclaration(
@@ -19,9 +20,9 @@ fun parseUniqueDeclaration(
 	val name = parseIdentifierExpression(
 		target = if (isMember) IdentifierTarget.MEMBER_UNIQUE else IdentifierTarget.UNIQUE
 	)
-	val members = if (cursor.match(BracketKind.Start.LBRACE)) {
+	val members = if (cursor.match(LBRACE)) {
 		buildList {
-			while (!cursor.match(BracketKind.End.RBRACE)) {
+			while (!cursor.match(RBRACE)) {
 				this += parseMemberDeclaration()
 			}
 		}

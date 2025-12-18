@@ -8,6 +8,7 @@ import puzzle.core.parser.parser.modifier.ModifierTarget
 import puzzle.core.parser.parser.parameter.type.TypeTarget
 import puzzle.core.model.SourceLocation
 import puzzle.core.token.kinds.DeclarationKind
+import puzzle.core.token.kinds.DeclarationKind.ENUM
 
 object EnumDeclarationMatcher : DeclarationMatcher<EnumDeclaration> {
 	
@@ -19,7 +20,7 @@ object EnumDeclarationMatcher : DeclarationMatcher<EnumDeclaration> {
 	
 	context(cursor: PzlTokenCursor)
 	override fun match(): Boolean {
-		return cursor.match(DeclarationKind.ENUM)
+		return cursor.match(ENUM)
 	}
 	
 	context(_: PzlContext, cursor: PzlTokenCursor)

@@ -1,11 +1,12 @@
 package puzzle.core.parser.ast.parameter
 
 import kotlinx.serialization.Serializable
+import puzzle.core.model.SourceLocation
 import puzzle.core.parser.ast.AstNode
 import puzzle.core.parser.ast.TypeReference
 import puzzle.core.parser.ast.expression.IdentifierExpression
-import puzzle.core.model.SourceLocation
 import puzzle.core.token.kinds.VarianceKind
+import puzzle.core.util.VarianceKindSerializer
 
 @Serializable
 class TypeParameter(
@@ -25,6 +26,7 @@ class TypeSpec(
 
 @Serializable
 class Variance(
+	@Serializable(with = VarianceKindSerializer::class)
 	val kind: VarianceKind,
 	override val location: SourceLocation,
 ) : AstNode

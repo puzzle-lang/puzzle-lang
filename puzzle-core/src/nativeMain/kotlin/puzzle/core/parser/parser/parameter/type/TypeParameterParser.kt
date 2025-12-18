@@ -2,6 +2,7 @@ package puzzle.core.parser.parser.parameter.type
 
 import puzzle.core.exception.syntaxError
 import puzzle.core.model.PzlContext
+import puzzle.core.model.SourceLocation
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.NamedType
 import puzzle.core.parser.ast.TypeReference
@@ -10,18 +11,23 @@ import puzzle.core.parser.ast.parameter.Variance
 import puzzle.core.parser.parser.expression.IdentifierTarget
 import puzzle.core.parser.parser.expression.parseIdentifierExpression
 import puzzle.core.parser.parser.parseTypeReference
-import puzzle.core.model.SourceLocation
-import puzzle.core.token.kinds.*
+import puzzle.core.token.kinds.AssignmentKind.ASSIGN
+import puzzle.core.token.kinds.OperatorKind.BIT_AND
+import puzzle.core.token.kinds.OperatorKind.GT
+import puzzle.core.token.kinds.SeparatorKind.COMMA
+import puzzle.core.token.kinds.SymbolKind.COLON
+import puzzle.core.token.kinds.VarianceKind.IN
+import puzzle.core.token.kinds.VarianceKind.OUT
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseTypeParameters(): List<TypeParameter> {
 	val parameters = mutableListOf<TypeParameter>()
 	do {
 		parameters += parseTypeParameter()
-		if (!cursor.check(OperatorKind.GT)) {
-			cursor.expect(SeparatorKind.COMMA, "缺少 ','")
+		if (!cursor.check(GT)) {
+			cursor.expect(COMMA, "缺少 ','")
 		}
-	} while (!cursor.match(OperatorKind.GT))
+	} while (!cursor.match(GT))
 	return parameters
 }
 
@@ -30,7 +36,7 @@ private fun parseTypeParameter(): TypeParameter {
 	val start = cursor.position
 	val variance = parseVariance()
 	val name = parseIdentifierExpression(IdentifierTarget.TYPE_PARAMETER)
-	val bounds = if (cursor.match(SymbolKind.COLON)) {
+	val bounds = if (cursor.match(COLON)) {
 		buildList<TypeReference> {
 			do {
 				val type = parseTypeReference(isSupportedNullable = true)
@@ -47,10 +53,10 @@ private fun parseTypeParameter(): TypeParameter {
 					}
 				}
 				this += type
-			} while (cursor.match(OperatorKind.BIT_AND))
+			} while (cursor.match(BIT_AND))
 		}
 	} else emptyList()
-	val defaultType = if (cursor.match(AssignmentKind.ASSIGN)) {
+	val defaultType = if (cursor.match(ASSIGN)) {
 		parseTypeReference(isSupportedNullable = bounds.isEmpty() || bounds.first().isNullable)
 	} else null
 	val end = cursor.position
@@ -66,8 +72,8 @@ private fun parseTypeParameter(): TypeParameter {
 context(cursor: PzlTokenCursor)
 private fun parseVariance(): Variance? {
 	return when {
-		cursor.match(VarianceKind.IN) -> Variance(VarianceKind.IN, cursor.previous.location)
-		cursor.match(VarianceKind.OUT) -> Variance(VarianceKind.OUT, cursor.previous.location)
+		cursor.match(IN) -> Variance(IN, cursor.previous.location)
+		cursor.match(OUT) -> Variance(OUT, cursor.previous.location)
 		else -> null
 	}
 }

@@ -27,15 +27,24 @@ fun main() {
         else -> "else"
     }
     val result2 = match {
-        value is String && value == "1" -> {
+        value2 is String && valu2 == "1" -> {
             "1 is String"
         }
 
-        value == "2" -> "2"
+        value2 == "2" -> "2"
 
         else -> {
             println("else")
             "else"
         }
     }
+
+    var count = 0
+    while (count < 100) {
+        count++
+    }
+
+    do {
+        ++count
+    } while (count < 200)
 }

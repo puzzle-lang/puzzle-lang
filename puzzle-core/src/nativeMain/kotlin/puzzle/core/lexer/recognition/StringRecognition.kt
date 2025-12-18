@@ -2,9 +2,9 @@ package puzzle.core.lexer.recognition
 
 import puzzle.core.exception.syntaxError
 import puzzle.core.model.PzlContext
-import puzzle.core.token.PzlToken
-import puzzle.core.token.kinds.LiteralKind
 import puzzle.core.model.span
+import puzzle.core.token.PzlToken
+import puzzle.core.token.kinds.LiteralKind.StringKind
 import puzzle.core.util.EscapeType
 import puzzle.core.util.isHex
 
@@ -55,7 +55,7 @@ object StringRecognition : TokenRecognition {
 		if (!close) {
 			syntaxError("字符串未闭合", start + 1)
 		}
-		val kind = LiteralKind.String(sb.toString())
+		val kind = StringKind(sb.toString())
 		return PzlToken(kind, start span position)
 	}
 }

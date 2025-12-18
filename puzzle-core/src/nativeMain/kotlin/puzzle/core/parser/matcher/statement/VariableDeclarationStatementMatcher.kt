@@ -4,13 +4,16 @@ import puzzle.core.model.PzlContext
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.statement.VariableDeclarationStatement
 import puzzle.core.parser.parser.statement.parseVariableDeclarationStatement
-import puzzle.core.token.kinds.ModifierKind
+import puzzle.core.token.kinds.ModifierKind.VAL
+import puzzle.core.token.kinds.ModifierKind.VAR
 
 object VariableDeclarationStatementMatcher : StatementMatcher<VariableDeclarationStatement> {
 	
+	private val kinds = arrayOf(VAR, VAL)
+	
 	context(cursor: PzlTokenCursor)
 	override fun match(): Boolean {
-		return cursor.match(ModifierKind.VAR) || cursor.match(ModifierKind.VAL)
+		return kinds.any { cursor.match(it) }
 	}
 	
 	context(_: PzlContext, cursor: PzlTokenCursor)

@@ -10,12 +10,13 @@ import puzzle.core.parser.parser.declaration.parsePackageDeclaration
 import puzzle.core.parser.parser.declaration.parseTopLevelDeclaration
 import puzzle.core.token.kinds.NamespaceKind
 import puzzle.core.model.span
+import puzzle.core.token.kinds.NamespaceKind.IMPORT
 
 context(context: PzlContext, cursor: PzlTokenCursor)
 fun parseSourceFileNode(): SourceFileNode {
 	val packageDeclaration = parsePackageDeclaration()
 	val importDeclarations = mutableListOf<ImportDeclaration>()
-	while (cursor.match(NamespaceKind.IMPORT::class)) {
+	while (cursor.match(IMPORT::class)) {
 		importDeclarations += parseImportDeclaration()
 	}
 	val declarations = mutableListOf<Declaration>()

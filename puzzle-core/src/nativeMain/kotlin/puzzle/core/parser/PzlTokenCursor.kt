@@ -3,7 +3,7 @@ package puzzle.core.parser
 import puzzle.core.exception.syntaxError
 import puzzle.core.model.PzlContext
 import puzzle.core.token.PzlToken
-import puzzle.core.token.kinds.MetaKind
+import puzzle.core.token.kinds.MetaKind.EOF
 import puzzle.core.token.kinds.PzlTokenKind
 import kotlin.reflect.KClass
 
@@ -117,7 +117,7 @@ class PzlTokenCursor(
 	}
 	
 	fun isAtEnd(): Boolean {
-		return position >= tokens.size || current.kind == MetaKind.EOF
+		return position >= tokens.size || current.kind == EOF
 	}
 	
 	operator fun get(index: Int): PzlToken {

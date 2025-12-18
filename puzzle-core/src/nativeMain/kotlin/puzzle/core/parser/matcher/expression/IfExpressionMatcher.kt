@@ -6,12 +6,13 @@ import puzzle.core.parser.ast.expression.Expression
 import puzzle.core.parser.ast.expression.IfExpression
 import puzzle.core.parser.parser.expression.parseIfExpression
 import puzzle.core.token.kinds.ControlFlowKind
+import puzzle.core.token.kinds.ControlFlowKind.IF
 
 object IfExpressionMatcher : ExpressionMatcher<IfExpression> {
 	
 	context(cursor: PzlTokenCursor)
 	override fun match(left: Expression?): Boolean {
-		return left == null && cursor.match(ControlFlowKind.IF)
+		return left == null && cursor.match(IF)
 	}
 	
 	context(_: PzlContext, cursor: PzlTokenCursor)

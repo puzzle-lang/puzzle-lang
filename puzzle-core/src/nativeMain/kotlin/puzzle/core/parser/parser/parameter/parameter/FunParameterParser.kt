@@ -7,20 +7,21 @@ import puzzle.core.parser.parser.modifier.ModifierTarget
 import puzzle.core.parser.parser.modifier.check
 import puzzle.core.parser.parser.modifier.parseModifiers
 import puzzle.core.parser.parser.parseAnnotationCalls
-import puzzle.core.token.kinds.BracketKind
-import puzzle.core.token.kinds.SeparatorKind
+import puzzle.core.token.kinds.BracketKind.End.RPAREN
+import puzzle.core.token.kinds.BracketKind.Start.LPAREN
+import puzzle.core.token.kinds.SeparatorKind.COMMA
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseFunParameters(): List<Parameter> {
-	cursor.expect(BracketKind.Start.LPAREN, "函数缺少 '('")
-	if (cursor.match(BracketKind.End.RPAREN)) {
+	cursor.expect(LPAREN, "函数缺少 '('")
+	if (cursor.match(RPAREN)) {
 		return emptyList()
 	}
 	val parameters = mutableListOf<Parameter>()
-	while (!cursor.match(BracketKind.End.RPAREN)) {
+	while (!cursor.match(RPAREN)) {
 		parameters += parseFunParameter()
-		if (!cursor.check(BracketKind.End.RPAREN)) {
-			cursor.expect(SeparatorKind.COMMA, "参数缺少 ','")
+		if (!cursor.check(RPAREN)) {
+			cursor.expect(COMMA, "参数缺少 ','")
 		}
 	}
 	return parameters

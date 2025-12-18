@@ -1,23 +1,24 @@
 package puzzle.core.parser.parser.declaration
 
 import puzzle.core.model.PzlContext
+import puzzle.core.model.SourceLocation
+import puzzle.core.model.span
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.declaration.ExtensionDeclaration
 import puzzle.core.parser.ast.declaration.SuperTrait
 import puzzle.core.parser.matcher.declaration.DeclarationHeader
 import puzzle.core.parser.parser.parseTypeReference
-import puzzle.core.model.SourceLocation
-import puzzle.core.token.kinds.BracketKind
-import puzzle.core.model.span
+import puzzle.core.token.kinds.BracketKind.End.RBRACE
+import puzzle.core.token.kinds.BracketKind.Start.LBRACE
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseExtensionDeclaration(header: DeclarationHeader, start: SourceLocation): ExtensionDeclaration {
 	val extendedType = parseTypeReference()
 	val superTraits = parseSuperTypes(isSupportedClass = false)
 		.filterIsInstance<SuperTrait>()
-	val members = if (cursor.match(BracketKind.Start.LBRACE)) {
+	val members = if (cursor.match(LBRACE)) {
 		buildList {
-			while (!cursor.match(BracketKind.End.RBRACE)) {
+			while (!cursor.match(RBRACE)) {
 				this += parseMemberDeclaration()
 			}
 		}

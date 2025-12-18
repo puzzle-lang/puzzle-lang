@@ -1,13 +1,13 @@
 package puzzle.core.parser.matcher.declaration
 
 import puzzle.core.model.PzlContext
+import puzzle.core.model.SourceLocation
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.declaration.TraitDeclaration
 import puzzle.core.parser.parser.declaration.parseTraitDeclaration
 import puzzle.core.parser.parser.modifier.ModifierTarget
 import puzzle.core.parser.parser.parameter.type.TypeTarget
-import puzzle.core.model.SourceLocation
-import puzzle.core.token.kinds.DeclarationKind
+import puzzle.core.token.kinds.DeclarationKind.TRAIT
 
 object TraitDeclarationMatcher : DeclarationMatcher<TraitDeclaration> {
 	
@@ -19,7 +19,7 @@ object TraitDeclarationMatcher : DeclarationMatcher<TraitDeclaration> {
 	
 	context(cursor: PzlTokenCursor)
 	override fun match(): Boolean {
-		return cursor.match(DeclarationKind.TRAIT)
+		return cursor.match(TRAIT)
 	}
 	
 	context(_: PzlContext, cursor: PzlTokenCursor)

@@ -8,6 +8,7 @@ import puzzle.core.parser.parser.modifier.ModifierTarget
 import puzzle.core.parser.parser.parameter.type.TypeTarget
 import puzzle.core.model.SourceLocation
 import puzzle.core.token.kinds.DeclarationKind
+import puzzle.core.token.kinds.DeclarationKind.ANNOTATION
 
 object AnnotationDeclarationMatcher : DeclarationMatcher<AnnotationDeclaration> {
 	
@@ -19,7 +20,7 @@ object AnnotationDeclarationMatcher : DeclarationMatcher<AnnotationDeclaration> 
 	
 	context(cursor: PzlTokenCursor)
 	override fun match(): Boolean {
-		return cursor.match(DeclarationKind.ANNOTATION)
+		return cursor.match(ANNOTATION)
 	}
 	
 	context(_: PzlContext, cursor: PzlTokenCursor)

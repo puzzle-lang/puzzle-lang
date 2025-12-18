@@ -8,20 +8,21 @@ import puzzle.core.parser.parser.modifier.ModifierTarget
 import puzzle.core.parser.parser.modifier.check
 import puzzle.core.parser.parser.modifier.parseModifiers
 import puzzle.core.parser.parser.parseAnnotationCalls
-import puzzle.core.token.kinds.BracketKind
-import puzzle.core.token.kinds.ModifierKind
-import puzzle.core.token.kinds.SeparatorKind
+import puzzle.core.token.kinds.BracketKind.End.RPAREN
+import puzzle.core.token.kinds.BracketKind.Start.LPAREN
+import puzzle.core.token.kinds.ModifierKind.VAL
+import puzzle.core.token.kinds.SeparatorKind.COMMA
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseAnnotationParameters(): List<Parameter> {
-	if (!cursor.match(BracketKind.Start.LPAREN)) {
+	if (!cursor.match(LPAREN)) {
 		return emptyList()
 	}
 	val parameters = mutableListOf<Parameter>()
-	while (!cursor.match(BracketKind.End.RPAREN)) {
+	while (!cursor.match(RPAREN)) {
 		parameters += parseAnnotationParameter()
-		if (!cursor.check(BracketKind.End.RPAREN)) {
-			cursor.expect(SeparatorKind.COMMA, "参数缺少 ','")
+		if (!cursor.check(RPAREN)) {
+			cursor.expect(COMMA, "参数缺少 ','")
 		}
 	}
 	return parameters
@@ -32,7 +33,7 @@ private fun parseAnnotationParameter(): Parameter {
 	val annotationCalls = parseAnnotationCalls()
 	val modifiers = parseModifiers()
 	modifiers.check(ModifierTarget.ANNOTATION_PARAMETER)
-	if (modifiers.all { it.kind != ModifierKind.VAL }) {
+	if (modifiers.all { it.kind != VAL }) {
 		syntaxError("注解参数必须添加 'val' 修饰符", cursor.current)
 	}
 	return parseParameter(modifiers, annotationCalls)
