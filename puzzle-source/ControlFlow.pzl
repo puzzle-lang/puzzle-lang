@@ -53,6 +53,16 @@ fun main() {
             continue
         }
     } while (count < 200)
+
+    val result = loop {
+        val x = readInt()
+        if (x >= 0) {
+            break x
+        }
+        println("negative, try again")
+    }
+
+    println(result)
 }
 
 fun add(num1: Int, num2: Int): Int {

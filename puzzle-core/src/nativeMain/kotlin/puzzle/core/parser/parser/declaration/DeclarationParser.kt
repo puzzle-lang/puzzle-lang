@@ -2,18 +2,18 @@ package puzzle.core.parser.parser.declaration
 
 import puzzle.core.exception.syntaxError
 import puzzle.core.model.PzlContext
+import puzzle.core.model.SourceLocation
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.declaration.Declaration
 import puzzle.core.parser.matcher.declaration.DeclarationHeader
 import puzzle.core.parser.matcher.declaration.DeclarationMatcher
-import puzzle.core.parser.parser.modifier.check
-import puzzle.core.parser.parser.modifier.parseModifiers
+import puzzle.core.parser.parser.check
 import puzzle.core.parser.parser.parameter.context.parseContextSpec
 import puzzle.core.parser.parser.parameter.type.check
 import puzzle.core.parser.parser.parameter.type.parseTypeSpec
 import puzzle.core.parser.parser.parseAnnotationCalls
 import puzzle.core.parser.parser.parseDocComment
-import puzzle.core.model.SourceLocation
+import puzzle.core.parser.parser.parseModifiers
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseTopLevelDeclaration(): Declaration {

@@ -6,12 +6,12 @@ import puzzle.core.model.span
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.declaration.ClassDeclaration
 import puzzle.core.parser.matcher.declaration.DeclarationHeader
+import puzzle.core.parser.parser.ModifierTarget
+import puzzle.core.parser.parser.check
 import puzzle.core.parser.parser.expression.IdentifierTarget
 import puzzle.core.parser.parser.expression.parseIdentifierExpression
-import puzzle.core.parser.parser.modifier.ModifierTarget
-import puzzle.core.parser.parser.modifier.check
-import puzzle.core.parser.parser.modifier.parseModifiers
 import puzzle.core.parser.parser.parameter.parameter.parseClassParameters
+import puzzle.core.parser.parser.parseModifiers
 import puzzle.core.token.kinds.BracketKind.End.RBRACE
 import puzzle.core.token.kinds.BracketKind.Start.LBRACE
 

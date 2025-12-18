@@ -4,10 +4,10 @@ import puzzle.core.exception.syntaxError
 import puzzle.core.model.PzlContext
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.parameter.Parameter
-import puzzle.core.parser.parser.modifier.ModifierTarget
-import puzzle.core.parser.parser.modifier.check
-import puzzle.core.parser.parser.modifier.parseModifiers
+import puzzle.core.parser.parser.ModifierTarget
+import puzzle.core.parser.parser.check
 import puzzle.core.parser.parser.parseAnnotationCalls
+import puzzle.core.parser.parser.parseModifiers
 import puzzle.core.token.kinds.BracketKind.End.RPAREN
 import puzzle.core.token.kinds.BracketKind.Start.LPAREN
 import puzzle.core.token.kinds.ModifierKind.VAL

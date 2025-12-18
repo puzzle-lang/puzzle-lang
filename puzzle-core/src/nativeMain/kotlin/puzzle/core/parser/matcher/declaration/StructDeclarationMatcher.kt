@@ -4,10 +4,9 @@ import puzzle.core.model.PzlContext
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.declaration.StructDeclaration
 import puzzle.core.parser.parser.declaration.parseStructDeclaration
-import puzzle.core.parser.parser.modifier.ModifierTarget
+import puzzle.core.parser.parser.ModifierTarget
 import puzzle.core.parser.parser.parameter.type.TypeTarget
 import puzzle.core.model.SourceLocation
-import puzzle.core.token.kinds.DeclarationKind
 import puzzle.core.token.kinds.DeclarationKind.STRUCT
 
 object StructDeclarationMatcher : DeclarationMatcher<StructDeclaration> {

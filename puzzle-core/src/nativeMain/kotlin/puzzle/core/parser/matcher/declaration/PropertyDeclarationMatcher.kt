@@ -5,7 +5,7 @@ import puzzle.core.model.SourceLocation
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.declaration.PropertyDeclaration
 import puzzle.core.parser.parser.declaration.parsePropertyDeclaration
-import puzzle.core.parser.parser.modifier.ModifierTarget
+import puzzle.core.parser.parser.ModifierTarget
 import puzzle.core.parser.parser.parameter.type.TypeTarget
 import puzzle.core.token.kinds.ModifierKind.VAL
 import puzzle.core.token.kinds.ModifierKind.VAR
