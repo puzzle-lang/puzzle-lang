@@ -6,12 +6,10 @@ import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.expression.Expression
 import puzzle.core.parser.matcher.expression.ExpressionMatcher
 import puzzle.core.token.kinds.BracketKind
-import puzzle.core.token.kinds.ControlFlowKind.ELSE
-import puzzle.core.token.kinds.ControlFlowKind.IF
+import puzzle.core.token.kinds.ControlFlowKind.*
 import puzzle.core.token.kinds.MetaKind.EOF
 import puzzle.core.token.kinds.OperatorKind.AND
 import puzzle.core.token.kinds.OperatorKind.OR
-import puzzle.core.token.kinds.PzlTokenKind
 import puzzle.core.token.kinds.SeparatorKind.COMMA
 import puzzle.core.token.kinds.SeparatorKind.SEMICOLON
 import puzzle.core.token.kinds.SymbolKind.ARROW
@@ -42,20 +40,24 @@ fun tryParseExpressionChain(): Expression? {
 	return expression
 }
 
-private val nonConsumableEndTokenTypes = arrayOf<PzlTokenKind>(
+private val endSymbols = arrayOf(
 	COLON,
 	COMMA,
+	ARROW
+)
+
+private val endKeywords = arrayOf(
+	IF,
 	ELSE,
-	ARROW,
-	IF
+	WHILE
 )
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 private fun isAtExpressionEnd(): Boolean {
 	val kind = cursor.current.kind
-	if (kind == EOF || kind is BracketKind.End || nonConsumableEndTokenTypes.any { kind == it }) {
-		return true
-	}
+	if (kind == EOF || kind is BracketKind.End) return true
+	if (endSymbols.any { kind == it }) return true
+	if (endKeywords.any { kind == it }) return true
 	if (kind == SEMICOLON) {
 		cursor.advance()
 		return true

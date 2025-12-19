@@ -31,7 +31,7 @@ inline infix fun Int.span(end: Int): SourceLocation {
 
 @Suppress("NOTHING_TO_INLINE")
 inline infix fun SourceLocation.span(other: SourceLocation): SourceLocation {
-	return SourceLocation(this.start, other.start)
+	return SourceLocation(this.start, other.end)
 }
 
 fun SourceLocation.copy(

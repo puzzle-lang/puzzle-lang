@@ -1,7 +1,7 @@
 package puzzle.core.collections
 
 class FastSet<T>(
-	val elements: Array<T>
+	val elements: Array<T>,
 ) : Set<T> {
 	
 	override val size = elements.size
@@ -54,7 +54,7 @@ inline fun <reified T> List<T>.toFastSet(): FastSet<T> {
 inline fun <reified T> mergeFastSets(
 	set1: FastSet<out T>,
 	set2: FastSet<out T>,
-	vararg sets: FastSet<out T>
+	vararg sets: FastSet<out T>,
 ): FastSet<T> {
 	val tokenKinds = buildSet<T> {
 		this += set1.elements

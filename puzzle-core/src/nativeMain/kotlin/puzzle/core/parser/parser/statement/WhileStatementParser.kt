@@ -24,9 +24,11 @@ fun parseWhileStatement(): WhileStatement {
 		condition = parseExpressionChain()
 		cursor.expect(RPAREN, "while 语句缺少 ')'")
 	}
-	val type = if (kind == WhileKind.WHILE) "while" else "do"
-	cursor.expect(LBRACE, "$type 语句缺少 '{'")
-	val body = parseStatements()
+	val body = if (cursor.match(LBRACE)) {
+		parseStatements()
+	} else {
+		listOf(parseStatement())
+	}
 	if (kind == WhileKind.DO_WHILE) {
 		cursor.expect(WHILE, "do 语句缺少 while")
 		cursor.expect(LPAREN, "while 语句缺少 '('")

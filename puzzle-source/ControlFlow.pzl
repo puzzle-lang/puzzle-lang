@@ -69,6 +69,8 @@ fun main() {
         }
     }
 
+    loop if (randomInt() % 100 == 0) break
+
     val items = listOf("1", "3", "5")
     for (item : items) {
         println(item)
@@ -77,6 +79,11 @@ fun main() {
         println("index: " + index + ", item: " + item)
     }
     for (item : items) println(item)
+
+    var i = 0
+    while (i < 10) i++
+
+    do i++ while (i < 10)
 }
 
 fun add(num1: Int, num2: Int): Int {
