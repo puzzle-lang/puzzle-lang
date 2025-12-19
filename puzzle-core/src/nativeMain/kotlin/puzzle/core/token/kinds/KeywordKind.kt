@@ -176,7 +176,7 @@ sealed class ContextualKind(
 	
 	companion object {
 		
-		val kinds = fastSetOf<ContextualKind>(TYPE, REIFIED, CONTEXT, INIT, DELETE, THIS, SUPER)
+		val kinds = fastSetOf<ContextualKind>(TYPE, REIFIED, CONTEXT, INIT, THIS, SUPER)
 	}
 	
 	object TYPE : ContextualKind("type")
@@ -186,8 +186,6 @@ sealed class ContextualKind(
 	object CONTEXT : ContextualKind("context")
 	
 	object INIT : ContextualKind("init")
-	
-	object DELETE : ContextualKind("delete")
 	
 	object THIS : ContextualKind("this")
 	
