@@ -22,7 +22,7 @@ private val softKeywords = arrayOf<KeywordKind>(
 	GET, SET,
 	TYPE, REIFIED,
 	CONTEXT,
-	INIT, DELETE,
+	INIT,
 	PACKAGE, IMPORT
 )
 
