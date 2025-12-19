@@ -9,7 +9,7 @@ import puzzle.core.parser.ast.parameter.ContextSpec
 import puzzle.core.model.SourceLocation
 
 @Serializable
-class UniqueDeclaration(
+class ObjectDeclaration(
 	val name: Identifier,
 	val docComment: DocComment?,
 	val modifiers: List<Modifier>,

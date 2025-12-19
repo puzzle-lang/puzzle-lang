@@ -14,12 +14,12 @@ context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseContextSpec(): ContextSpec? {
 	if (!cursor.match(CONTEXT)) return null
 	val start = cursor.previous.location
-	cursor.expect(LPAREN, "上下文缺少 '('")
+	cursor.expect(LPAREN, "context 缺少 '('")
 	val receivers = buildList {
 		do {
 			this += parseContextReceiver()
 			if (!cursor.check(RPAREN)) {
-				cursor.expect(COMMA, "上下文参数缺少 ','")
+				cursor.expect(COMMA, "context 参数缺少 ','")
 			}
 		} while (!cursor.match(RPAREN))
 	}

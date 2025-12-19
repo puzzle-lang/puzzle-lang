@@ -20,7 +20,7 @@ enum class TypeTarget(
         isSupportedType = true,
         isSupportedVariance = true
     ),
-    UNIQUE(
+    OBJECT(
         displayName = "单例类",
         isSupportedType = false,
         isSupportedVariance = false

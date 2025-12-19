@@ -10,7 +10,7 @@ import puzzle.core.token.kinds.BracketKind.Start.LBRACE
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseLoopExpression(): LoopExpression {
 	val start = cursor.previous.location
-	cursor.expect(LBRACE, "loop 后缺少 '{'")
+	cursor.expect(LBRACE, "loop 表达式缺少 '{'")
 	val body = parseStatements()
 	val end = cursor.previous.location
 	return LoopExpression(body, start span end)

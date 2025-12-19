@@ -14,7 +14,7 @@ object ContinueStatementMatcher : StatementMatcher<ContinueStatement> {
 	}
 	
 	context(_: PzlContext, cursor: PzlTokenCursor)
-	override fun parse(): ContinueStatement
+	override fun parse(): ContinueStatement {
 		return parseContinueStatement()
 	}
 }

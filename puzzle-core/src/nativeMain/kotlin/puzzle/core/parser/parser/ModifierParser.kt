@@ -93,7 +93,7 @@ enum class ModifierTarget(
 		displayName = "类",
 		supportedModifiers = TopLevelAccessModifiers + setOf(OPEN, ABSTRACT, SEALED)
 	),
-	TOP_LEVEL_UNIQUE(
+	TOP_LEVEL_OBJECT(
 		displayName = "单例类",
 		supportedModifiers = TopLevelAccessModifiers
 	),
@@ -133,7 +133,7 @@ enum class ModifierTarget(
 		displayName = "成员类",
 		supportedModifiers = MemberAccessModifiers + setOf(INNER, OPEN, ABSTRACT)
 	),
-	MEMBER_UNIQUE(
+	MEMBER_OBJECT(
 		displayName = "成员单例类",
 		supportedModifiers = MemberAccessModifiers
 	),
@@ -178,7 +178,7 @@ enum class ModifierTarget(
 		supportedModifiers = setOf(VAL)
 	),
 	LAMBDA_PARAMETER(
-		displayName = "Lambda 参数",
+		displayName = "lambda 参数",
 		supportedModifiers = emptySet()
 	),
 }

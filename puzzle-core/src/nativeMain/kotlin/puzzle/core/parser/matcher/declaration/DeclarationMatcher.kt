@@ -20,7 +20,7 @@ sealed interface DeclarationMatcher<out D : Declaration> {
 			FunDeclarationMatcher,
 			PropertyDeclarationMatcher,
 			ClassDeclarationMatcher,
-			UniqueDeclarationMatcher,
+			ObjectDeclarationMatcher,
 			TraitDeclarationMatcher,
 			StructDeclarationMatcher,
 			EnumDeclarationMatcher,

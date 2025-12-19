@@ -138,20 +138,20 @@ class RunnableImpl : Runnable2 {
 
 class Test2 {
 
-    unique _ {            // Test2.xxx
+    object _ {            // Test2.xxx
 
     }
 
-    unique Name {       // Test2.Name.xxx
+    object Name {       // Test2.Name.xxx
 
     }
 }
 
-unique Unique1 {
+object Object1 {
 
-    unique Unique2 {
+    object Object2 {
 
-        unique Unique3
+        object Object3
     }
 }
 

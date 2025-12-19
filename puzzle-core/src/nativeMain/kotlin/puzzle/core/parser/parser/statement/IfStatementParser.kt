@@ -16,9 +16,9 @@ import puzzle.core.token.kinds.ControlFlowKind.ELSE
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseIfStatement(): Statement {
 	val start = cursor.previous.location
-	cursor.expect(LPAREN, "if 缺少 '('")
+	cursor.expect(LPAREN, "if 语句缺少 '('")
 	val condition = parseExpressionChain()
-	cursor.expect(RPAREN, "if 缺少 ')'")
+	cursor.expect(RPAREN, "if 语句缺少 ')'")
 	val thenStatements = if (cursor.match(LBRACE)) {
 		parseStatements()
 	} else {

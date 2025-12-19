@@ -121,6 +121,6 @@ private fun parseElseStatements(): List<Statement> {
 	} else {
 		listOf(parseStatement())
 	}
-	cursor.expect(RBRACE, "match 结尾缺少 '}'")
+	cursor.expect(RBRACE, "match 表达式缺少 '}'")
 	return elseStatements
 }

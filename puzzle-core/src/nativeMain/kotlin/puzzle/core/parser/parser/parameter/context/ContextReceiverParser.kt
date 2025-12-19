@@ -11,7 +11,7 @@ import puzzle.core.token.kinds.SymbolKind.COLON
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseContextReceiver(): ContextReceiver {
 	val name = parseIdentifier(IdentifierTarget.CONTEXT_RECEIVER)
-	cursor.expect(COLON, "上下文参数缺少 ':'")
+	cursor.expect(COLON, "context 参数缺少 ':'")
 	val type = parseTypeReference()
 	return ContextReceiver(name, type)
 }

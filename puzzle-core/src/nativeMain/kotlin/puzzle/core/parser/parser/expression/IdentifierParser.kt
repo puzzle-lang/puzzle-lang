@@ -29,7 +29,7 @@ private val softKeywords = arrayOf<KeywordKind>(
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseIdentifier(target: IdentifierTarget): Identifier {
 	return tryParseIdentifier(target)
-		?: syntaxError(target.notFoundMessage, cursor.current)
+		?: syntaxError(target.missingIdentifierMessage, cursor.current)
 }
 
 context(_: PzlContext, cursor: PzlTokenCursor)
@@ -42,15 +42,15 @@ fun tryParseIdentifier(target: IdentifierTarget): Identifier? {
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseIdentifierString(target: IdentifierTarget): String {
 	return tryParseIdentifierString(target)
-		?: syntaxError(target.notFoundMessage, cursor.current)
+		?: syntaxError(target.missingIdentifierMessage, cursor.current)
 }
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun tryParseIdentifierString(target: IdentifierTarget): String? {
 	if (cursor.match<IdentifierKind>()) {
 		val value = cursor.previous.value
-		if (value == "_" && !target.isSupportedAnonymity) {
-			syntaxError(target.notSupportedAnonymityMessage, cursor.previous)
+		if (value == "_" && !target.allowsAnonymousBinding) {
+			syntaxError(target.anonymousNotAllowedMessage, cursor.previous)
 		}
 		return value
 	}
@@ -72,130 +72,134 @@ fun matchIdentifier(): Boolean {
 }
 
 enum class IdentifierTarget(
-	val isSupportedAnonymity: Boolean,
-	val notFoundMessage: String,
-	val notSupportedAnonymityMessage: String = "",
+	val allowsAnonymousBinding: Boolean,
+	val missingIdentifierMessage: String,
+	val anonymousNotAllowedMessage: String = "",
 ) {
 	FUN(
-		isSupportedAnonymity = false,
-		notFoundMessage = "函数缺少名称",
-		notSupportedAnonymityMessage = "函数不支持匿名"
+		allowsAnonymousBinding = false,
+		missingIdentifierMessage = "函数声明缺少名称",
+		anonymousNotAllowedMessage = "函数不支持匿名声明"
 	),
 	PROPERTY(
-		isSupportedAnonymity = false,
-		notFoundMessage = "属性缺少名称",
-		notSupportedAnonymityMessage = "属性不支持匿名"
+		allowsAnonymousBinding = false,
+		missingIdentifierMessage = "属性声明缺少名称",
+		anonymousNotAllowedMessage = "属性不支持匿名声明"
 	),
 	CLASS(
-		isSupportedAnonymity = false,
-		notFoundMessage = "类缺少名称",
-		notSupportedAnonymityMessage = "类不支持匿名"
+		allowsAnonymousBinding = false,
+		missingIdentifierMessage = "类声明缺少名称",
+		anonymousNotAllowedMessage = "类不支持匿名声明"
 	),
 	TRAIT(
-		isSupportedAnonymity = false,
-		notFoundMessage = "特征缺少名称",
-		notSupportedAnonymityMessage = "特征不支持匿名"
+		allowsAnonymousBinding = false,
+		missingIdentifierMessage = "特征声明缺少名称",
+		anonymousNotAllowedMessage = "特征不支持匿名声明"
 	),
 	STRUCT(
-		isSupportedAnonymity = false,
-		notFoundMessage = "结构体缺少名称",
-		notSupportedAnonymityMessage = "结构体不支持匿名"
+		allowsAnonymousBinding = false,
+		missingIdentifierMessage = "结构体声明缺少名称",
+		anonymousNotAllowedMessage = "结构体不支持匿名声明"
 	),
-	UNIQUE(
-		isSupportedAnonymity = false,
-		notFoundMessage = "单例类缺少名称",
-		notSupportedAnonymityMessage = "单例类不支持匿名"
+	OBJECT(
+		allowsAnonymousBinding = false,
+		missingIdentifierMessage = "单例声明缺少名称",
+		anonymousNotAllowedMessage = "单例不支持匿名声明"
 	),
-	MEMBER_UNIQUE(
-		isSupportedAnonymity = true,
-		notFoundMessage = "单例类缺少名称"
+	MEMBER_OBJECT(
+		allowsAnonymousBinding = true,
+		missingIdentifierMessage = "成员单例缺少名称"
 	),
 	ANNOTATION(
-		isSupportedAnonymity = false,
-		notFoundMessage = "注解缺少名称",
-		notSupportedAnonymityMessage = "注解不支持匿名"
+		allowsAnonymousBinding = false,
+		missingIdentifierMessage = "注解声明缺少名称",
+		anonymousNotAllowedMessage = "注解不支持匿名声明"
 	),
 	ENUM(
-		isSupportedAnonymity = false,
-		notFoundMessage = "枚举缺少名称",
-		notSupportedAnonymityMessage = "枚举不支持匿名"
+		allowsAnonymousBinding = false,
+		missingIdentifierMessage = "枚举声明缺少名称",
+		anonymousNotAllowedMessage = "枚举不支持匿名声明"
 	),
 	ENUM_ENTRY(
-		isSupportedAnonymity = false,
-		notFoundMessage = "枚举常量缺少名称",
-		notSupportedAnonymityMessage = "枚举常量不支持匿名"
+		allowsAnonymousBinding = false,
+		missingIdentifierMessage = "枚举成员缺少名称",
+		anonymousNotAllowedMessage = "枚举成员不支持匿名"
 	),
 	CONTEXT_RECEIVER(
-		isSupportedAnonymity = true,
-		notFoundMessage = "上下文参数缺少名称",
+		allowsAnonymousBinding = true,
+		missingIdentifierMessage = "上下文参数缺少名称"
 	),
 	TYPE_PARAMETER(
-		isSupportedAnonymity = false,
-		notFoundMessage = "泛型参数缺少名称",
-		notSupportedAnonymityMessage = "泛型参数不支持匿名"
+		allowsAnonymousBinding = false,
+		missingIdentifierMessage = "泛型参数缺少名称",
+		anonymousNotAllowedMessage = "泛型参数不支持匿名"
 	),
 	PARAMETER(
-		isSupportedAnonymity = false,
-		notFoundMessage = "参数缺少名称",
-		notSupportedAnonymityMessage = "参数不支持匿名"
+		allowsAnonymousBinding = false,
+		missingIdentifierMessage = "参数缺少名称",
+		anonymousNotAllowedMessage = "参数不支持匿名"
 	),
 	VARIABLE(
-		isSupportedAnonymity = false,
-		notFoundMessage = "变量缺少名称",
-		notSupportedAnonymityMessage = "变量不支持匿名"
+		allowsAnonymousBinding = false,
+		missingIdentifierMessage = "变量声明缺少名称",
+		anonymousNotAllowedMessage = "变量不支持匿名"
 	),
 	TYPE_REFERENCE(
-		isSupportedAnonymity = false,
-		notFoundMessage = "无法识别标识符",
-		notSupportedAnonymityMessage = "不支持匿名标识符"
+		allowsAnonymousBinding = false,
+		missingIdentifierMessage = "缺少类型名称",
+		anonymousNotAllowedMessage = "类型位置不支持匿名标识"
 	),
 	SUFFIX_UNARY(
-		isSupportedAnonymity = false,
-		notFoundMessage = "一元运算符前必须跟标识符",
-		notSupportedAnonymityMessage = "一元运算符前不允许使用匿名标识符"
+		allowsAnonymousBinding = false,
+		missingIdentifierMessage = "一元运算符前缺少操作数",
+		anonymousNotAllowedMessage = "一元运算符不支持匿名操作数"
 	),
 	PREFIX_UNARY(
-		isSupportedAnonymity = false,
-		notFoundMessage = "一元运算符后必须跟标识符"
+		allowsAnonymousBinding = false,
+		missingIdentifierMessage = "一元运算符后缺少操作数"
 	),
 	PACKAGE(
-		isSupportedAnonymity = false,
-		notFoundMessage = "package 后缺少包名",
-		notSupportedAnonymityMessage = "package 后不允许使用匿名标识符"
+		allowsAnonymousBinding = false,
+		missingIdentifierMessage = "package 声明缺少包名",
+		anonymousNotAllowedMessage = "package 声明不支持匿名"
 	),
 	PACKAGE_DOT(
-		isSupportedAnonymity = false,
-		notFoundMessage = "'.' 后缺少标识符",
-		notSupportedAnonymityMessage = "'.' 后不允许使用匿名标识符"
+		allowsAnonymousBinding = false,
+		missingIdentifierMessage = "包路径中缺少名称",
+		anonymousNotAllowedMessage = "包路径不支持匿名"
 	),
 	IMPORT(
-		isSupportedAnonymity = false,
-		notFoundMessage = "import 后缺少包名",
-		notSupportedAnonymityMessage = "import 后不允许使用匿名标识符"
+		allowsAnonymousBinding = false,
+		missingIdentifierMessage = "import 语句缺少目标名称",
+		anonymousNotAllowedMessage = "import 不支持匿名"
 	),
 	IMPORT_AS(
-		isSupportedAnonymity = false,
-		notFoundMessage = "as 后缺少名称",
-		notSupportedAnonymityMessage = "别名不支持匿名"
+		allowsAnonymousBinding = false,
+		missingIdentifierMessage = "import 别名缺少名称",
+		anonymousNotAllowedMessage = "import 别名不支持匿名"
 	),
 	ACCESS_OPERATOR(
-		isSupportedAnonymity = false,
-		notFoundMessage = "访问操作符后必须跟标识符",
-		notSupportedAnonymityMessage = "访问操作符后不支持匿名标识符"
+		allowsAnonymousBinding = false,
+		missingIdentifierMessage = "成员访问缺少名称",
+		anonymousNotAllowedMessage = "成员访问不支持匿名"
 	),
 	ARGUMENT(
-		isSupportedAnonymity = false,
-		notFoundMessage = "参数名称必须为标识符",
-		notSupportedAnonymityMessage = "参数不支持匿名"
+		allowsAnonymousBinding = false,
+		missingIdentifierMessage = "参数名称必须为有效标识",
+		anonymousNotAllowedMessage = "参数名称不支持匿名"
 	),
 	TYPE_ARGUMENT(
-		isSupportedAnonymity = false,
-		notFoundMessage = "泛型参数名称必须为标识符",
-		notSupportedAnonymityMessage = "泛型参数不支持匿名"
+		allowsAnonymousBinding = false,
+		missingIdentifierMessage = "泛型参数名称必须为有效标识",
+		anonymousNotAllowedMessage = "泛型参数名称不支持匿名"
 	),
 	LABEL(
-		isSupportedAnonymity = false,
-		notFoundMessage = "标签必须为标识符",
-		notSupportedAnonymityMessage = "标签不支持匿名"
+		allowsAnonymousBinding = false,
+		missingIdentifierMessage = "标签缺少名称",
+		anonymousNotAllowedMessage = "标签不支持匿名"
+	),
+	FOR_VARIABLE(
+		allowsAnonymousBinding = true,
+		missingIdentifierMessage = "for 语句缺少循环变量"
 	)
 }

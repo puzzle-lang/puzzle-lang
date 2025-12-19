@@ -41,21 +41,21 @@ private fun parseLambdaType(
 	val parameters = parseLambdaParameters()
 	if (cursor.match(ARROW)) {
 		if (!isSupportedLambdaType) {
-			syntaxError("不支持 Lambda 类型", cursor.previous)
+			syntaxError("不支持 lambda 类型", cursor.previous)
 		}
 		val returnTypes = mutableListOf<TypeReference>()
 		if (cursor.match(LBRACKET)) {
 			while (!cursor.match(RBRACKET)) {
 				returnTypes += parseTypeReference(isSupportedLambdaType = true)
 				if (!cursor.check(RBRACKET)) {
-					cursor.expect(COMMA, "Lambda 缺少 ','")
+					cursor.expect(COMMA, "lambda 缺少 ','")
 				}
 			}
 			if (returnTypes.isEmpty()) {
-				syntaxError("Lambda 多返回值类型语法错误", cursor.previous)
+				syntaxError("lambda 多返回值类型语法错误", cursor.previous)
 			}
 			if (returnTypes.size == 1) {
-				syntaxError("Lambda 多返回值类型至少需要2个", cursor.previous)
+				syntaxError("lambda 多返回值类型至少需要2个", cursor.previous)
 			}
 		} else {
 			returnTypes += parseTypeReference(isSupportedLambdaType = true)
@@ -72,7 +72,7 @@ private fun parseLambdaType(
 			}
 			val token = cursor.offset(offset = -2)
 			if (token.kind != RPAREN) {
-				syntaxError("Lambda 表示可空前必须加 ')'", token)
+				syntaxError("lambda 表示可空前必须加 ')'", token)
 			}
 		}
 		val location = start span cursor.previous.location
@@ -80,9 +80,9 @@ private fun parseLambdaType(
 	} else {
 		if (parameters.size != 1) {
 			if (isSupportedLambdaType) {
-				syntaxError("Lambda 缺少 '->'", cursor.current)
+				syntaxError("lambda 缺少 '->'", cursor.current)
 			} else {
-				syntaxError("不支持 Lambda 类型", cursor.offset(offset = -2))
+				syntaxError("不支持 lambda 类型", cursor.offset(offset = -2))
 			}
 		}
 		val parameter = parameters.single()

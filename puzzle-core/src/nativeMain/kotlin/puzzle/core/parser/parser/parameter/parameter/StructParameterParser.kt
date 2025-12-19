@@ -13,7 +13,7 @@ import puzzle.core.token.kinds.SeparatorKind.COMMA
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseStructParameters(): List<Parameter> {
-	cursor.expect(LPAREN, "结构体缺少 '('")
+	cursor.expect(LPAREN, "struct 缺少 '('")
 	val parameters = mutableListOf<Parameter>()
 	while (!cursor.match(RPAREN)) {
 		parameters += parseStructParameter()

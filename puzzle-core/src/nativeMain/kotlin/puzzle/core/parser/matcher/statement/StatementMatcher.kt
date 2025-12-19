@@ -14,6 +14,7 @@ sealed interface StatementMatcher<S : Statement> {
 			BreakStatementMatcher,
 			ContinueStatementMatcher,
 			IfStatementMatcher,
+			ForStatementMatcher,
 			WhileStatementMatcher,
 			ExpressionStatementMatcher
 		)

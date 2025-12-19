@@ -22,7 +22,7 @@ fun parseIfExpression(): IfExpression {
 	} else {
 		listOf(parseStatement())
 	}
-	cursor.expect(ELSE, "if 表达式后缺少 else")
+	cursor.expect(ELSE, "if 表达式缺少 else")
 	val elseStatements = if (cursor.match(LBRACE)) {
 		parseStatements()
 	} else {

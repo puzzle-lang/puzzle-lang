@@ -1,22 +1,16 @@
 package puzzle.core.parser.parser.statement
 
-import puzzle.core.exception.syntaxError
 import puzzle.core.model.PzlContext
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.statement.Statement
 import puzzle.core.parser.matcher.statement.StatementMatcher
 import puzzle.core.token.kinds.BracketKind.End.RBRACE
-import puzzle.core.token.kinds.MetaKind
-import puzzle.core.token.kinds.MetaKind.EOF
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseStatement(): Statement {
-	val matcher = StatementMatcher.matchers.find { it.match() }
-		?: syntaxError(
-			message = if (cursor.current.kind == EOF) "结尾缺少 '}'" else "不支持的语句",
-			token = cursor.current
-		)
-	return matcher.parse()
+	return StatementMatcher.matchers
+		.first { it.match() }
+		.parse()
 }
 
 context(_: PzlContext, cursor: PzlTokenCursor)
