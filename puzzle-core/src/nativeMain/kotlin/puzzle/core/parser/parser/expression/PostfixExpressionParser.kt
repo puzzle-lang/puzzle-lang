@@ -24,7 +24,7 @@ fun parsePostfixExpression(left: Expression?): Expression {
 	receiver = parseExpression(receiver)
 	while (isAccessOperator()) {
 		val operator = cursor.previous.kind as AccessKind
-		var expression: Expression = parseIdentifierExpression(IdentifierTarget.ACCESS_OPERATOR)
+		var expression: Expression = parseIdentifier(IdentifierTarget.ACCESS_OPERATOR)
 		expression = parseExpression(expression)
 		receiver = PropertyAccessExpression(
 			receiver = receiver,
@@ -61,7 +61,7 @@ private fun parseInitialExpression(receiver: Expression?): Expression {
 			}
 		}
 		
-		token.isIdentifier() -> IdentifierExpression(token.value, token.location)
+		token.isIdentifier() -> Identifier(token.value, token.location)
 		else -> syntaxError("不支持的基础表达式", token)
 	}
 }

@@ -26,7 +26,7 @@ fun parseWhileStatement(): WhileStatement {
 	}
 	val name = if (kind == WhileKind.WHILE) "while" else "do"
 	cursor.expect(LBRACE, "$name 后缺少 '{'")
-	val statements = parseStatements()
+	val body = parseStatements()
 	if (kind == WhileKind.DO_WHILE) {
 		cursor.expect(WHILE, "do 后缺少 while")
 		cursor.expect(LPAREN, "while 后缺少 '('")
@@ -34,5 +34,5 @@ fun parseWhileStatement(): WhileStatement {
 		cursor.expect(RPAREN, "while 表达式后缺少 ')'")
 	}
 	val end = cursor.previous.location
-	return WhileStatement(condition!!, statements, kind, start span end)
+	return WhileStatement(condition!!, kind, body, start span end)
 }

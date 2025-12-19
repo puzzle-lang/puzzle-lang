@@ -3,7 +3,7 @@ package puzzle.core.parser.ast.parameter
 import kotlinx.serialization.Serializable
 import puzzle.core.parser.ast.AstNode
 import puzzle.core.parser.ast.TypeReference
-import puzzle.core.parser.ast.expression.IdentifierExpression
+import puzzle.core.parser.ast.expression.Identifier
 import puzzle.core.model.SourceLocation
 import puzzle.core.model.span
 
@@ -16,7 +16,7 @@ class ContextSpec(
 
 @Serializable
 class ContextReceiver(
-	val name: IdentifierExpression,
+	val name: Identifier,
 	val type: TypeReference,
 	override val location: SourceLocation = name.location span type.location,
 ) : AstNode

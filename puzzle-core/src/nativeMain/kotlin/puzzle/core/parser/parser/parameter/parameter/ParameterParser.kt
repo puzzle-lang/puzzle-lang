@@ -8,9 +8,8 @@ import puzzle.core.parser.ast.Modifier
 import puzzle.core.parser.ast.parameter.Parameter
 import puzzle.core.parser.parser.expression.IdentifierTarget
 import puzzle.core.parser.parser.expression.parseExpressionChain
-import puzzle.core.parser.parser.expression.parseIdentifierExpression
+import puzzle.core.parser.parser.expression.parseIdentifier
 import puzzle.core.parser.parser.parseTypeReference
-import puzzle.core.token.kinds.AssignmentKind
 import puzzle.core.token.kinds.AssignmentKind.ASSIGN
 import puzzle.core.token.kinds.SymbolKind.COLON
 
@@ -28,7 +27,7 @@ fun parseParameter(
 	}
 	val name = when {
 		isSupportedUnnameable && cursor.offsetOrNull(offset = 1)?.kind != COLON -> null
-		else -> parseIdentifierExpression(IdentifierTarget.PARAMETER).also {
+		else -> parseIdentifier(IdentifierTarget.PARAMETER).also {
 			cursor.expect(COLON, "参数缺少 ':'")
 		}
 	}

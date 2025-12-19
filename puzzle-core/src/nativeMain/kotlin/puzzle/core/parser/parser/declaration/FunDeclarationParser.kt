@@ -12,10 +12,10 @@ import puzzle.core.parser.ast.declaration.FunDeclaration
 import puzzle.core.parser.ast.declaration.FunName
 import puzzle.core.parser.ast.declaration.IdentifierFunName
 import puzzle.core.parser.ast.declaration.SymbolFunName
-import puzzle.core.parser.ast.expression.IdentifierExpression
+import puzzle.core.parser.ast.expression.Identifier
 import puzzle.core.parser.matcher.declaration.DeclarationHeader
 import puzzle.core.parser.parser.expression.IdentifierTarget
-import puzzle.core.parser.parser.expression.tryParseIdentifierExpression
+import puzzle.core.parser.parser.expression.tryParseIdentifier
 import puzzle.core.parser.parser.expression.tryParseIdentifierString
 import puzzle.core.parser.parser.parameter.parameter.parseFunParameters
 import puzzle.core.parser.parser.parseTypeReference
@@ -53,14 +53,14 @@ fun parseFunDeclaration(header: DeclarationHeader, start: SourceLocation): FunDe
 		typeSpec = header.typeSpec,
 		contextSpec = header.contextSpec,
 		annotationCalls = header.annotationCalls,
-		statements = expressions,
+		body = expressions,
 		location = start span end
 	)
 }
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 private fun parseExtensionAndFunName(): Pair<TypeReference?, FunName> {
-	val name = tryParseIdentifierExpression(IdentifierTarget.FUN)
+	val name = tryParseIdentifier(IdentifierTarget.FUN)
 		?: return null to (tryParseOperatorFunName() ?: syntaxError("函数缺少名称", cursor.current))
 	val start = name.location
 	if (!cursor.check(DOT)) {
@@ -81,7 +81,7 @@ private fun parseExtensionAndFunName(): Pair<TypeReference?, FunName> {
 			?: syntaxError("无法识别标识符", cursor.current)
 		if (type != null) {
 			return type to when (name) {
-				is String -> IdentifierFunName(IdentifierExpression(name, cursor.previous.location))
+				is String -> IdentifierFunName(Identifier(name, cursor.previous.location))
 				else -> name as SymbolFunName
 			}
 		}
@@ -92,7 +92,7 @@ private fun parseExtensionAndFunName(): Pair<TypeReference?, FunName> {
 		}
 		segments += name as String
 	} while (cursor.match(DOT))
-	val funName = IdentifierFunName(IdentifierExpression(segments.removeLast(), cursor.previous.location))
+	val funName = IdentifierFunName(Identifier(segments.removeLast(), cursor.previous.location))
 	val location = start span cursor.previous.location
 	val type = TypeReference(NamedType(segments, location), location)
 	return type to funName

@@ -4,7 +4,7 @@ import puzzle.core.model.PzlContext
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.TypeArgument
 import puzzle.core.parser.parser.expression.IdentifierTarget
-import puzzle.core.parser.parser.expression.parseIdentifierExpression
+import puzzle.core.parser.parser.expression.parseIdentifier
 import puzzle.core.parser.parser.parseTypeReference
 import puzzle.core.token.kinds.AssignmentKind.ASSIGN
 import puzzle.core.token.kinds.OperatorKind.GT
@@ -29,7 +29,7 @@ fun parseTypeArguments(): List<TypeArgument> {
 context(_: PzlContext, cursor: PzlTokenCursor)
 private fun parseTypeArgument(): TypeArgument {
 	val name = if (cursor.offsetOrNull(offset = 1)?.kind == ASSIGN) {
-		parseIdentifierExpression(IdentifierTarget.TYPE_ARGUMENT).also {
+		parseIdentifier(IdentifierTarget.TYPE_ARGUMENT).also {
 			cursor.advance()
 		}
 	} else null

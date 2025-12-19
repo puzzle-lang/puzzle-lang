@@ -6,12 +6,12 @@ import puzzle.core.parser.ast.AstNode
 import puzzle.core.parser.ast.Modifier
 import puzzle.core.parser.ast.TypeReference
 import puzzle.core.parser.ast.expression.Expression
-import puzzle.core.parser.ast.expression.IdentifierExpression
+import puzzle.core.parser.ast.expression.Identifier
 import puzzle.core.model.SourceLocation
 
 @Serializable
 class Parameter(
-	val name: IdentifierExpression?,
+	val name: Identifier?,
 	val modifiers: List<Modifier>,
 	val type: TypeReference,
 	val annotationCalls: List<AnnotationCall>,

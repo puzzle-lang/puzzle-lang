@@ -7,7 +7,7 @@ import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.declaration.UniqueDeclaration
 import puzzle.core.parser.matcher.declaration.DeclarationHeader
 import puzzle.core.parser.parser.expression.IdentifierTarget
-import puzzle.core.parser.parser.expression.parseIdentifierExpression
+import puzzle.core.parser.parser.expression.parseIdentifier
 import puzzle.core.token.kinds.BracketKind.End.RBRACE
 import puzzle.core.token.kinds.BracketKind.Start.LBRACE
 
@@ -17,7 +17,7 @@ fun parseUniqueDeclaration(
 	start: SourceLocation,
 	isMember: Boolean,
 ): UniqueDeclaration {
-	val name = parseIdentifierExpression(
+	val name = parseIdentifier(
 		target = if (isMember) IdentifierTarget.MEMBER_UNIQUE else IdentifierTarget.UNIQUE
 	)
 	val members = if (cursor.match(LBRACE)) {

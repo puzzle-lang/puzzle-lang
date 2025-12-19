@@ -9,7 +9,7 @@ import puzzle.core.parser.matcher.declaration.DeclarationHeader
 import puzzle.core.parser.parser.ModifierTarget
 import puzzle.core.parser.parser.check
 import puzzle.core.parser.parser.expression.IdentifierTarget
-import puzzle.core.parser.parser.expression.parseIdentifierExpression
+import puzzle.core.parser.parser.expression.parseIdentifier
 import puzzle.core.parser.parser.parameter.parameter.parseClassParameters
 import puzzle.core.parser.parser.parseModifiers
 import puzzle.core.token.kinds.BracketKind.End.RBRACE
@@ -17,7 +17,7 @@ import puzzle.core.token.kinds.BracketKind.Start.LBRACE
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseClassDeclaration(header: DeclarationHeader, start: SourceLocation): ClassDeclaration {
-	val name = parseIdentifierExpression(IdentifierTarget.CLASS)
+	val name = parseIdentifier(IdentifierTarget.CLASS)
 	val constructorModifiers = parseModifiers()
 	constructorModifiers.check(ModifierTarget.CONSTRUCTOR_FUN)
 	val parameters = parseClassParameters()

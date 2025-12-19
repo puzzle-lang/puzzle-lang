@@ -6,6 +6,6 @@ import puzzle.core.parser.ast.statement.Statement
 
 @Serializable
 class LoopExpression(
-	val statements: List<Statement>,
+	val body: List<Statement>,
 	override val location: SourceLocation,
 ) : Expression

@@ -4,14 +4,11 @@ import puzzle.core.model.PzlContext
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.declaration.ImportDeclaration
 import puzzle.core.parser.ast.declaration.ImportScope
-import puzzle.core.parser.ast.expression.IdentifierExpression
+import puzzle.core.parser.ast.expression.Identifier
 import puzzle.core.parser.parser.expression.IdentifierTarget
 import puzzle.core.parser.parser.expression.matchIdentifier
-import puzzle.core.parser.parser.expression.parseIdentifierExpression
+import puzzle.core.parser.parser.expression.parseIdentifier
 import puzzle.core.parser.parser.expression.parseIdentifierString
-import puzzle.core.token.kinds.AccessKind
-import puzzle.core.token.kinds.OperatorKind
-import puzzle.core.token.kinds.TypeOperatorKind
 import puzzle.core.model.span
 import puzzle.core.token.kinds.AccessKind.DOT
 import puzzle.core.token.kinds.OperatorKind.DOUBLE_STAR
@@ -24,13 +21,13 @@ fun parseImportDeclaration(): ImportDeclaration {
 	val name = parseIdentifierString(IdentifierTarget.IMPORT)
 	val segments = mutableListOf(name)
 	var scope = ImportScope.SINGLE
-	var alias: IdentifierExpression? = null
+	var alias: Identifier? = null
 	while (cursor.match(DOT)) {
 		when {
 			matchIdentifier() -> {
 				segments += cursor.previous.value
 				if (cursor.match(AS)) {
-					alias = parseIdentifierExpression(IdentifierTarget.IMPORT_AS)
+					alias = parseIdentifier(IdentifierTarget.IMPORT_AS)
 					break
 				}
 			}

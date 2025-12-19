@@ -70,13 +70,13 @@ private fun parseMatchPatternExpression(): MatchPatternExpression {
 				}
 			} while (!cursor.match(ARROW))
 		}
-		val statements = if (cursor.match(LBRACE)) {
+		val body = if (cursor.match(LBRACE)) {
 			parseStatements()
 		} else {
 			listOf(parseStatement())
 		}
 		val end = cursor.previous.location
-		arms += MatchArm(patterns, guard, statements, start span end)
+		arms += MatchArm(patterns, guard, body, start span end)
 	}
 	if (arms.isEmpty()) {
 		syntaxError("match 不允许没有匹配分支", cursor.previous)
@@ -98,13 +98,13 @@ private fun parseMatchConditionExpression(): MatchConditionExpression {
 		val condition = parseExpressionChain()
 		val start = condition.location
 		cursor.expect(ARROW, "match 条件分支缺少 '->'")
-		val statements = if (cursor.match(LBRACE)) {
+		val body = if (cursor.match(LBRACE)) {
 			parseStatements()
 		} else {
 			listOf(parseStatement())
 		}
 		val end = cursor.previous.location
-		cases += MatchCase(condition, statements, start span end)
+		cases += MatchCase(condition, body, start span end)
 	}
 	if (cases.isEmpty()) {
 		syntaxError("match 不允许没有条件分支", cursor.previous)

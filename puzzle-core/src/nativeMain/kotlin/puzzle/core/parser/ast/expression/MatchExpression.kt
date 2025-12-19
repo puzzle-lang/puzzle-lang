@@ -19,7 +19,7 @@ class MatchConditionExpression(
 @Serializable
 class MatchCase(
 	val condition: Expression,
-	val statements: List<Statement>,
+	val body: List<Statement>,
 	override val location: SourceLocation,
 ) : AstNode
 
@@ -35,7 +35,7 @@ class MatchPatternExpression(
 class MatchArm(
 	val patterns: List<MatchPattern>,
 	val guard: Expression?,
-	val statements: List<Statement>,
+	val body: List<Statement>,
 	override val location: SourceLocation,
 ) : AstNode
 

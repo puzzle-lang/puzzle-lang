@@ -2,7 +2,7 @@ package puzzle.core.parser.ast.declaration
 
 import kotlinx.serialization.Serializable
 import puzzle.core.parser.ast.*
-import puzzle.core.parser.ast.expression.IdentifierExpression
+import puzzle.core.parser.ast.expression.Identifier
 import puzzle.core.parser.ast.parameter.ContextSpec
 import puzzle.core.parser.ast.parameter.Parameter
 import puzzle.core.parser.ast.parameter.TypeSpec
@@ -20,7 +20,7 @@ class FunDeclaration(
 	val typeSpec: TypeSpec?,
 	val contextSpec: ContextSpec?,
 	val annotationCalls: List<AnnotationCall>,
-	val statements: List<Statement>,
+	val body: List<Statement>,
 	override val location: SourceLocation,
 ) : Declaration
 
@@ -29,7 +29,7 @@ sealed interface FunName
 
 @Serializable
 class IdentifierFunName(
-	val name: IdentifierExpression,
+	val name: Identifier,
 ) : FunName
 
 @Serializable

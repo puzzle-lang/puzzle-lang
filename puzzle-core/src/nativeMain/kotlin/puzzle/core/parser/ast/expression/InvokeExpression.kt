@@ -27,7 +27,7 @@ class IndexAccessExpression(
 
 @Serializable
 class Argument(
-	val name: IdentifierExpression?,
+	val name: Identifier?,
 	val expression: Expression,
 	override val location: SourceLocation,
 ) : AstNode

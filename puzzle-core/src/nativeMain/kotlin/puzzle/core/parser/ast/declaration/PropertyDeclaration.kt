@@ -5,14 +5,14 @@ import puzzle.core.parser.ast.AnnotationCall
 import puzzle.core.parser.ast.Modifier
 import puzzle.core.parser.ast.TypeReference
 import puzzle.core.parser.ast.expression.Expression
-import puzzle.core.parser.ast.expression.IdentifierExpression
+import puzzle.core.parser.ast.expression.Identifier
 import puzzle.core.parser.ast.parameter.ContextSpec
 import puzzle.core.parser.ast.parameter.TypeSpec
 import puzzle.core.model.SourceLocation
 
 @Serializable
 class PropertyDeclaration(
-	val name: IdentifierExpression,
+	val name: Identifier,
 	val type: TypeReference?,
 	val modifiers: List<Modifier>,
 	val extension: TypeReference?,

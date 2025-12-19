@@ -8,7 +8,7 @@ import puzzle.core.token.kinds.OperatorKind
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseSuffixUnaryExpression(): SuffixUnaryExpression {
-	val name = parseIdentifierExpression(IdentifierTarget.SUFFIX_UNARY)
+	val name = parseIdentifier(IdentifierTarget.SUFFIX_UNARY)
 	val token = cursor.current
 	val operator = Operator(token.kind as OperatorKind, token.location)
 	cursor.advance()

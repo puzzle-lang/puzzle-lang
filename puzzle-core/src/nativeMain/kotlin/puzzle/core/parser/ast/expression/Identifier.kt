@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 import puzzle.core.model.SourceLocation
 
 @Serializable
-class IdentifierExpression(
+class Identifier(
 	val name: String,
 	override val location: SourceLocation,
 ) : Expression

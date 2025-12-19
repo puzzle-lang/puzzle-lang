@@ -8,13 +8,13 @@ import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.declaration.AnnotationDeclaration
 import puzzle.core.parser.matcher.declaration.DeclarationHeader
 import puzzle.core.parser.parser.expression.IdentifierTarget
-import puzzle.core.parser.parser.expression.parseIdentifierExpression
+import puzzle.core.parser.parser.expression.parseIdentifier
 import puzzle.core.parser.parser.parameter.parameter.parseAnnotationParameters
 import puzzle.core.token.kinds.BracketKind.Start.LBRACE
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseAnnotationDeclaration(header: DeclarationHeader, start: SourceLocation): AnnotationDeclaration {
-	val name = parseIdentifierExpression(IdentifierTarget.ANNOTATION)
+	val name = parseIdentifier(IdentifierTarget.ANNOTATION)
 	val parameters = parseAnnotationParameters()
 	if (cursor.match(LBRACE)) {
 		syntaxError("注解不支持 '{'", cursor.previous)

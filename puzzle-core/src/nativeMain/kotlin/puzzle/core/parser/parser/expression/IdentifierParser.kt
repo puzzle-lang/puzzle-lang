@@ -3,7 +3,7 @@ package puzzle.core.parser.parser.expression
 import puzzle.core.exception.syntaxError
 import puzzle.core.model.PzlContext
 import puzzle.core.parser.PzlTokenCursor
-import puzzle.core.parser.ast.expression.IdentifierExpression
+import puzzle.core.parser.ast.expression.Identifier
 import puzzle.core.token.PzlToken
 import puzzle.core.token.kinds.AccessorKind.GET
 import puzzle.core.token.kinds.AccessorKind.SET
@@ -27,15 +27,15 @@ private val softKeywords = arrayOf<KeywordKind>(
 )
 
 context(_: PzlContext, cursor: PzlTokenCursor)
-fun parseIdentifierExpression(target: IdentifierTarget): IdentifierExpression {
-	return tryParseIdentifierExpression(target)
+fun parseIdentifier(target: IdentifierTarget): Identifier {
+	return tryParseIdentifier(target)
 		?: syntaxError(target.notFoundMessage, cursor.current)
 }
 
 context(_: PzlContext, cursor: PzlTokenCursor)
-fun tryParseIdentifierExpression(target: IdentifierTarget): IdentifierExpression? {
+fun tryParseIdentifier(target: IdentifierTarget): Identifier? {
 	return tryParseIdentifierString(target)?.let {
-		IdentifierExpression(it, cursor.previous.location)
+		Identifier(it, cursor.previous.location)
 	}
 }
 

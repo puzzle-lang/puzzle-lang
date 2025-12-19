@@ -28,7 +28,7 @@ fun parseArguments(endKind: BracketKind.End): List<Argument> {
 context(_: PzlContext, cursor: PzlTokenCursor)
 private fun parseCallArgument(endKind: BracketKind.End): Argument {
 	val name = if (cursor.offsetOrNull(offset = 1)?.kind == ASSIGN) {
-		parseIdentifierExpression(IdentifierTarget.ARGUMENT).also {
+		parseIdentifier(IdentifierTarget.ARGUMENT).also {
 			cursor.advance()
 		}
 	} else null

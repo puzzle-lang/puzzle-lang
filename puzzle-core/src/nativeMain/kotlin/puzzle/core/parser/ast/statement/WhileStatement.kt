@@ -7,8 +7,8 @@ import puzzle.core.parser.ast.expression.Expression
 @Serializable
 class WhileStatement(
 	val condition: Expression,
-	val statements: List<Statement>,
 	val kind: WhileKind,
+	val body: List<Statement>,
 	override val location: SourceLocation,
 ) : Statement
 

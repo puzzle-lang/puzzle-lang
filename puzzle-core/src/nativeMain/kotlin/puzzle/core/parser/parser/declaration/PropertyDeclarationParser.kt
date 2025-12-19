@@ -8,13 +8,12 @@ import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.NamedType
 import puzzle.core.parser.ast.TypeReference
 import puzzle.core.parser.ast.declaration.PropertyDeclaration
-import puzzle.core.parser.ast.expression.IdentifierExpression
+import puzzle.core.parser.ast.expression.Identifier
 import puzzle.core.parser.matcher.declaration.DeclarationHeader
 import puzzle.core.parser.parser.expression.IdentifierTarget
 import puzzle.core.parser.parser.expression.parseExpressionChain
-import puzzle.core.parser.parser.expression.parseIdentifierExpression
+import puzzle.core.parser.parser.expression.parseIdentifier
 import puzzle.core.parser.parser.parseTypeReference
-import puzzle.core.token.kinds.AccessKind
 import puzzle.core.token.kinds.AccessKind.DOT
 import puzzle.core.token.kinds.AssignmentKind.ASSIGN
 import puzzle.core.token.kinds.SymbolKind.COLON
@@ -39,18 +38,18 @@ fun parsePropertyDeclaration(header: DeclarationHeader, start: SourceLocation): 
 }
 
 context(_: PzlContext, cursor: PzlTokenCursor)
-private fun parseExtensionAndPropertyName(): Pair<TypeReference?, IdentifierExpression> {
-	val name = parseIdentifierExpression(IdentifierTarget.PROPERTY)
+private fun parseExtensionAndPropertyName(): Pair<TypeReference?, Identifier> {
+	val name = parseIdentifier(IdentifierTarget.PROPERTY)
 	return if (cursor.check(DOT)) {
 		cursor.retreat()
 		val type = parseTypeReference()
 		if (type.isNullable) {
 			cursor.expect(DOT, "属性缺少 '.'")
-			val name = parseIdentifierExpression(IdentifierTarget.FUN)
+			val name = parseIdentifier(IdentifierTarget.FUN)
 			type to name
 		} else {
 			val segments = (type.type as NamedType).segments.toMutableList()
-			val name = IdentifierExpression(
+			val name = Identifier(
 				name = segments.removeLast(),
 				location = type.type.location.copy(start = { it.end - 1 })
 			)

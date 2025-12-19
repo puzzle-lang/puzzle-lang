@@ -9,7 +9,7 @@ import puzzle.core.parser.ast.TypeReference
 import puzzle.core.parser.ast.parameter.TypeParameter
 import puzzle.core.parser.ast.parameter.Variance
 import puzzle.core.parser.parser.expression.IdentifierTarget
-import puzzle.core.parser.parser.expression.parseIdentifierExpression
+import puzzle.core.parser.parser.expression.parseIdentifier
 import puzzle.core.parser.parser.parseTypeReference
 import puzzle.core.token.kinds.AssignmentKind.ASSIGN
 import puzzle.core.token.kinds.OperatorKind.BIT_AND
@@ -35,7 +35,7 @@ context(_: PzlContext, cursor: PzlTokenCursor)
 private fun parseTypeParameter(): TypeParameter {
 	val start = cursor.position
 	val variance = parseVariance()
-	val name = parseIdentifierExpression(IdentifierTarget.TYPE_PARAMETER)
+	val name = parseIdentifier(IdentifierTarget.TYPE_PARAMETER)
 	val bounds = if (cursor.match(COLON)) {
 		buildList<TypeReference> {
 			do {

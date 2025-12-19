@@ -1,7 +1,7 @@
 package puzzle.core.parser.ast.declaration
 
 import kotlinx.serialization.Serializable
-import puzzle.core.parser.ast.expression.IdentifierExpression
+import puzzle.core.parser.ast.expression.Identifier
 import puzzle.core.model.SourceLocation
 import puzzle.core.util.DotStringListSerializer
 
@@ -9,7 +9,7 @@ import puzzle.core.util.DotStringListSerializer
 class ImportDeclaration(
 	@Serializable(with = DotStringListSerializer::class)
 	val segments: List<String>,
-	val alias: IdentifierExpression?,
+	val alias: Identifier?,
 	val scope: ImportScope,
 	override val location: SourceLocation,
 ) : Declaration

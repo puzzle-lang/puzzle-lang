@@ -11,7 +11,7 @@ context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseLoopExpression(): LoopExpression {
 	val start = cursor.previous.location
 	cursor.expect(LBRACE, "loop 后缺少 '{'")
-	val statements = parseStatements()
+	val body = parseStatements()
 	val end = cursor.previous.location
-	return LoopExpression(statements, start span end)
+	return LoopExpression(body, start span end)
 }
