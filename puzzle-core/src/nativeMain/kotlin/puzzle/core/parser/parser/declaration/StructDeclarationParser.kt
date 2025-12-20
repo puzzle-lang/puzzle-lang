@@ -9,20 +9,13 @@ import puzzle.core.parser.matcher.declaration.DeclarationHeader
 import puzzle.core.parser.parser.expression.IdentifierTarget
 import puzzle.core.parser.parser.expression.parseIdentifier
 import puzzle.core.parser.parser.parameter.parameter.parseStructParameters
-import puzzle.core.token.kinds.BracketKind.End.RBRACE
 import puzzle.core.token.kinds.BracketKind.Start.LBRACE
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseStructDeclaration(header: DeclarationHeader, start: SourceLocation): StructDeclaration {
 	val name = parseIdentifier(IdentifierTarget.STRUCT)
 	val parameters = parseStructParameters()
-	val members = if (cursor.match(LBRACE)) {
-		buildList {
-			while (!cursor.match(RBRACE)) {
-				this += parseMemberDeclaration()
-			}
-		}
-	} else emptyList()
+	val members = if (cursor.match(LBRACE)) parseMemberDeclarations() else emptyList()
 	val end = cursor.previous.location
 	return StructDeclaration(
 		name = name,

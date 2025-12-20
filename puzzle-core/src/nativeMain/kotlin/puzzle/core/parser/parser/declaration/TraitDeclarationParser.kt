@@ -8,19 +8,12 @@ import puzzle.core.parser.ast.declaration.TraitDeclaration
 import puzzle.core.parser.matcher.declaration.DeclarationHeader
 import puzzle.core.parser.parser.expression.IdentifierTarget
 import puzzle.core.parser.parser.expression.parseIdentifier
-import puzzle.core.token.kinds.BracketKind.End.RBRACE
 import puzzle.core.token.kinds.BracketKind.Start.LBRACE
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseTraitDeclaration(header: DeclarationHeader, start: SourceLocation): TraitDeclaration {
 	val name = parseIdentifier(IdentifierTarget.TRAIT)
-	val members = if (cursor.match(LBRACE)) {
-		buildList {
-			while (!cursor.match(RBRACE)) {
-				this += parseMemberDeclaration()
-			}
-		}
-	} else emptyList()
+	val members = if (cursor.match(LBRACE)) parseMemberDeclarations() else emptyList()
 	val end = cursor.previous.location
 	return TraitDeclaration(
 		name = name,

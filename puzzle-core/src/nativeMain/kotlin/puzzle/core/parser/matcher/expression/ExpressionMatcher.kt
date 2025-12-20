@@ -9,10 +9,16 @@ sealed interface ExpressionMatcher<out E : Expression> {
 	companion object {
 		
 		val matchers = arrayOf(
+			InvokeExpressionMatcher,
 			GroupingExpressionMatcher,
+			NonNullAssertionExpressionMatcher,
+			MemberAccessExpressionMatcher,
+			MemberReferenceExpressionMatcher,
 			PrefixUnaryExpressionMatcher,
 			SuffixUnaryExpressionMatcher,
-			PostfixExpressionMatcher,
+			LiteralExpressionMatcher,
+			IdentifierMatcher,
+			ContextualExpressionMatcher,
 			BinaryExpressionMatcher,
 			ElvisExpressionMatcher,
 			TernaryExpressionMatcher,

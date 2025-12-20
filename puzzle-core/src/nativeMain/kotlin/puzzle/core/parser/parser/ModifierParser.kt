@@ -81,49 +81,49 @@ enum class ModifierTarget(
 	val displayName: String,
 	val supportedModifiers: Set<ModifierKind>,
 ) {
-	TOP_LEVEL_FUN(
+	FUN(
 		displayName = "函数",
 		supportedModifiers = TopLevelAccessModifiers + setOf(CONST)
 	),
-	TOP_LEVEL_PROPERTY(
+	PROPERTY(
 		displayName = "属性",
 		supportedModifiers = TopLevelAccessModifiers + setOf(CONST, LATE, LAZY, VAR, VAL)
 	),
-	TOP_LEVEL_CLASS(
+	CLASS(
 		displayName = "类",
 		supportedModifiers = TopLevelAccessModifiers + setOf(OPEN, ABSTRACT, SEALED)
 	),
-	TOP_LEVEL_OBJECT(
+	OBJECT(
 		displayName = "单例类",
 		supportedModifiers = TopLevelAccessModifiers
 	),
-	TOP_LEVEL_TRAIT(
+	TRAIT(
 		displayName = "特征",
 		supportedModifiers = TopLevelAccessModifiers + setOf(SEALED)
 	),
-	TOP_LEVEL_STRUCT(
+	STRUCT(
 		displayName = "结构体",
 		supportedModifiers = TopLevelAccessModifiers
 	),
-	TOP_LEVEL_ENUM(
+	ENUM(
 		displayName = "枚举",
 		supportedModifiers = TopLevelAccessModifiers
 	),
-	TOP_LEVEL_ANNOTATION(
+	ANNOTATION(
 		displayName = "注解",
 		supportedModifiers = TopLevelAccessModifiers
 	),
-	TOP_LEVEL_EXTENSION(
+	EXTENSION(
 		displayName = "扩展",
 		supportedModifiers = TopLevelAccessModifiers
-	),
-	CONSTRUCTOR_FUN(
-		displayName = "构造函数",
-		supportedModifiers = TopLevelAccessModifiers + setOf(FILE)
 	),
 	MEMBER_FUN(
 		displayName = "成员函数",
 		supportedModifiers = MemberAccessModifiers + setOf(FINAL, OVERRIDE, OPEN, ABSTRACT)
+	),
+	MEMBER_CTOR(
+		displayName = "构造函数",
+		supportedModifiers = TopLevelAccessModifiers + setOf(FILE)
 	),
 	MEMBER_PROPERTY(
 		displayName = "属性",

@@ -96,7 +96,7 @@ sealed class DeclarationKind(
 	
 	companion object {
 		
-		val kinds = fastSetOf<DeclarationKind>(FUN, CLASS, OBJECT, TRAIT, STRUCT, ENUM, EXTENSION, ANNOTATION)
+		val kinds = fastSetOf<DeclarationKind>(FUN, CLASS, OBJECT, TRAIT, STRUCT, ENUM, EXTENSION, ANNOTATION, CTOR)
 	}
 	
 	object FUN : DeclarationKind("fun")
@@ -114,6 +114,8 @@ sealed class DeclarationKind(
 	object EXTENSION : DeclarationKind("extension")
 	
 	object ANNOTATION : DeclarationKind("annotation")
+	
+	object CTOR : DeclarationKind("ctor")
 }
 
 sealed class AccessorKind(

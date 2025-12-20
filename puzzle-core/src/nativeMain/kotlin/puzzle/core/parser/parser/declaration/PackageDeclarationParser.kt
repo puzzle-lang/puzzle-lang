@@ -19,7 +19,7 @@ fun parsePackageDeclaration(): PackageDeclaration {
 	val packages = mutableListOf<String>()
 	packages += parseIdentifierString(IdentifierTarget.PACKAGE)
 	while (cursor.match(DOT)) {
-		packages += parseIdentifierString(IdentifierTarget.PACKAGE_DOT)
+		packages += parseIdentifierString(IdentifierTarget.PACKAGE)
 	}
 	val end = cursor.previous.location
 	return PackageDeclaration(packages, start span end)

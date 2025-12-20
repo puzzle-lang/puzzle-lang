@@ -2,6 +2,7 @@ package puzzle.core.parser.parser.expression
 
 import puzzle.core.exception.syntaxError
 import puzzle.core.model.PzlContext
+import puzzle.core.model.span
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.expression.Argument
 import puzzle.core.token.kinds.AssignmentKind.ASSIGN
@@ -10,7 +11,6 @@ import puzzle.core.token.kinds.BracketKind.End.RBRACKET
 import puzzle.core.token.kinds.BracketKind.End.RPAREN
 import puzzle.core.token.kinds.SeparatorKind.COMMA
 import puzzle.core.token.kinds.SeparatorKind.SEMICOLON
-import puzzle.core.model.span
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseArguments(endKind: BracketKind.End): List<Argument> {

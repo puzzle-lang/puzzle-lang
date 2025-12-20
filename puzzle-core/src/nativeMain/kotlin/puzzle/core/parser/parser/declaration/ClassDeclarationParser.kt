@@ -12,29 +12,22 @@ import puzzle.core.parser.parser.expression.IdentifierTarget
 import puzzle.core.parser.parser.expression.parseIdentifier
 import puzzle.core.parser.parser.parameter.parameter.parseClassParameters
 import puzzle.core.parser.parser.parseModifiers
-import puzzle.core.token.kinds.BracketKind.End.RBRACE
 import puzzle.core.token.kinds.BracketKind.Start.LBRACE
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseClassDeclaration(header: DeclarationHeader, start: SourceLocation): ClassDeclaration {
 	val name = parseIdentifier(IdentifierTarget.CLASS)
-	val constructorModifiers = parseModifiers()
-	constructorModifiers.check(ModifierTarget.CONSTRUCTOR_FUN)
+	val primaryCtorModifiers = parseModifiers()
+	primaryCtorModifiers.check(ModifierTarget.MEMBER_CTOR)
 	val parameters = parseClassParameters()
 	val superTypes = parseSuperTypes()
-	val members = if (cursor.match(LBRACE)) {
-		buildList {
-			while (!cursor.match(RBRACE)) {
-				this += parseMemberDeclaration()
-			}
-		}
-	} else emptyList()
+	val members = if (cursor.match(LBRACE)) parseMemberDeclarations() else emptyList()
 	val end = cursor.previous.location
 	return ClassDeclaration(
 		name = name,
 		docComment = header.docComment,
 		modifiers = header.modifiers,
-		constructorModifiers = constructorModifiers,
+		primaryCtorModifiers = primaryCtorModifiers,
 		parameters = parameters,
 		superTypes = superTypes,
 		typeSpec = header.typeSpec,

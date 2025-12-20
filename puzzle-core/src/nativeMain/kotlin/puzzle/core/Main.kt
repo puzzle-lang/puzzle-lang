@@ -12,11 +12,10 @@ import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.PzlProgram
 import puzzle.core.parser.parser.parseSourceFileNode
 import puzzle.core.util.currentMemoryUsage
-import kotlin.time.measureTime
 import kotlin.time.measureTimedValue
 
 fun main(vararg args: String) {
-	val duration = measureTime {
+	val value = measureTimedValue {
 		val command = args.firstOrNull() ?: run {
 			help()
 			return
@@ -31,12 +30,21 @@ fun main(vararg args: String) {
 				compile(args.drop(1))
 			}
 			
-			"-h", "--help" -> help()
-			else -> unknown()
+			"-h", "--help" -> {
+				help()
+				return
+			}
+			
+			else -> {
+				unknown()
+				return
+			}
 		}
 	}
-	println("执行耗时: $duration")
-	println("内存使用: ${currentMemoryUsage()}")
+	val usage = currentMemoryUsage()
+	value.value.alsoLog()
+	println("执行耗时: ${value.duration}")
+	println("内存使用: $usage")
 }
 
 private fun compile(paths: List<String>) = runBlocking {
@@ -60,7 +68,7 @@ private fun compile(paths: List<String>) = runBlocking {
 		}
 	}
 	val sourceFileNodes = jobs.awaitAll()
-	PzlProgram(sourceFileNodes).alsoLog()
+	PzlProgram(sourceFileNodes)
 }
 
 private fun CharArray.getLineStarts(): IntArray {
@@ -89,7 +97,7 @@ inline fun <reified T> T.alsoLog(): T {
 private fun help() {
 	val help = """
 		使用方式:
-            puzzle -c --compile <Main.pzl> [Puzzle1.pzl, Puzzle2.pzl, ...]  编译 Puzzle (.pzl) 程序文件
+            puzzle -c --compile <File1.pzl> [File2.pzl, File3.pzl, ...]     编译 Puzzle (.pzl) 程序文件
             puzzle -h --help                                                查看使用手册
 	""".trimIndent()
 	println(help)

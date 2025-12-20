@@ -14,15 +14,15 @@ sealed interface InvokeExpression : Expression {
 @Serializable
 class CallExpression(
 	override val callee: Expression,
+	override val arguments: List<Argument>,
 	override val location: SourceLocation,
-	override val arguments: List<Argument> = emptyList(),
 ) : InvokeExpression
 
 @Serializable
 class IndexAccessExpression(
 	override val callee: Expression,
+	override val arguments: List<Argument>,
 	override val location: SourceLocation,
-	override val arguments: List<Argument> = emptyList(),
 ) : InvokeExpression
 
 @Serializable

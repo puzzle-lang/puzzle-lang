@@ -1,16 +1,12 @@
-package puzzle.core.parser.matcher.declaration
+package puzzle.core.parser.matcher.declaration.toplevel
 
 import puzzle.core.model.PzlContext
+import puzzle.core.model.SourceLocation
 import puzzle.core.parser.PzlTokenCursor
-import puzzle.core.parser.ast.AnnotationCall
-import puzzle.core.parser.ast.DocComment
-import puzzle.core.parser.ast.Modifier
 import puzzle.core.parser.ast.declaration.Declaration
-import puzzle.core.parser.ast.parameter.ContextSpec
-import puzzle.core.parser.ast.parameter.TypeSpec
+import puzzle.core.parser.matcher.declaration.DeclarationHeader
 import puzzle.core.parser.parser.ModifierTarget
 import puzzle.core.parser.parser.parameter.type.TypeTarget
-import puzzle.core.model.SourceLocation
 
 sealed interface DeclarationMatcher<out D : Declaration> {
 	
@@ -31,9 +27,7 @@ sealed interface DeclarationMatcher<out D : Declaration> {
 	
 	val typeTarget: TypeTarget
 	
-	val memberModifierTarget: ModifierTarget
-	
-	val topLevelModifierTarget: ModifierTarget
+	val modifierTarget: ModifierTarget
 	
 	context(cursor: PzlTokenCursor)
 	fun match(): Boolean
@@ -42,14 +36,5 @@ sealed interface DeclarationMatcher<out D : Declaration> {
 	fun parse(
 		header: DeclarationHeader,
 		start: SourceLocation,
-		isMember: Boolean,
 	): D
 }
-
-class DeclarationHeader(
-	val docComment: DocComment?,
-	val annotationCalls: List<AnnotationCall>,
-	val typeSpec: TypeSpec?,
-	val contextSpec: ContextSpec?,
-	val modifiers: List<Modifier>,
-)

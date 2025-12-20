@@ -9,6 +9,7 @@ sealed interface StatementMatcher<S : Statement> {
 	companion object {
 		
 		val matchers = arrayOf(
+			ContextualStatementMatcher,
 			VariableDeclarationStatementMatcher,
 			ReturnStatementMatcher,
 			BreakStatementMatcher,

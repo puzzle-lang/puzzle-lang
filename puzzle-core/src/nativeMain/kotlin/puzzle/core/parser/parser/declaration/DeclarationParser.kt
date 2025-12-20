@@ -6,7 +6,8 @@ import puzzle.core.model.SourceLocation
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.declaration.Declaration
 import puzzle.core.parser.matcher.declaration.DeclarationHeader
-import puzzle.core.parser.matcher.declaration.DeclarationMatcher
+import puzzle.core.parser.matcher.declaration.member.MemberDeclarationMatcher
+import puzzle.core.parser.matcher.declaration.toplevel.DeclarationMatcher
 import puzzle.core.parser.parser.check
 import puzzle.core.parser.parser.parameter.context.parseContextSpec
 import puzzle.core.parser.parser.parameter.type.check
@@ -14,9 +15,19 @@ import puzzle.core.parser.parser.parameter.type.parseTypeSpec
 import puzzle.core.parser.parser.parseAnnotationCalls
 import puzzle.core.parser.parser.parseDocComment
 import puzzle.core.parser.parser.parseModifiers
+import puzzle.core.token.kinds.BracketKind.End.RBRACE
 
 context(_: PzlContext, cursor: PzlTokenCursor)
-fun parseTopLevelDeclaration(): Declaration {
+fun parseDeclarations(): List<Declaration> {
+	return buildList {
+		while (!cursor.isAtEnd()) {
+			this += parseDeclaration()
+		}
+	}
+}
+
+context(_: PzlContext, cursor: PzlTokenCursor)
+private fun parseDeclaration(): Declaration {
 	val docComment = parseDocComment()
 	val annotationCalls = parseAnnotationCalls()
 	val typeSpec = parseTypeSpec()
@@ -27,10 +38,21 @@ fun parseTopLevelDeclaration(): Declaration {
 		token = cursor.current
 	)
 	typeSpec?.check(matcher.typeTarget)
-	modifiers.check(matcher.topLevelModifierTarget)
+	modifiers.check(matcher.modifierTarget)
 	val header = DeclarationHeader(docComment, annotationCalls, typeSpec, contextSpec, modifiers)
 	val start = header.start
-	return matcher.parse(header, start, isMember = false)
+	return matcher.parse(header, start)
+}
+
+context(_: PzlContext, cursor: PzlTokenCursor)
+fun parseMemberDeclarations(): List<Declaration> {
+	return if (cursor.match(RBRACE)) emptyList() else {
+		buildList {
+			do {
+				this += parseMemberDeclaration()
+			} while (!cursor.match(RBRACE))
+		}
+	}
 }
 
 context(_: PzlContext, cursor: PzlTokenCursor)
@@ -40,15 +62,15 @@ fun parseMemberDeclaration(): Declaration {
 	val typeSpec = parseTypeSpec()
 	val contextSpec = parseContextSpec()
 	val modifiers = parseModifiers()
-	val matcher = DeclarationMatcher.matchers.find { it.match() } ?: syntaxError(
+	val matcher = MemberDeclarationMatcher.matchers.find { it.match() } ?: syntaxError(
 		message = if (cursor.isAtEnd()) "结尾缺少 '}'" else "未知的成员声明",
 		token = cursor.current
 	)
 	typeSpec?.check(matcher.typeTarget)
-	modifiers.check(matcher.memberModifierTarget)
+	modifiers.check(matcher.modifierTarget)
 	val header = DeclarationHeader(docComment, annotationCalls, typeSpec, contextSpec, modifiers)
 	val start = header.start
-	return matcher.parse(header, start, isMember = true)
+	return matcher.parse(header, start)
 }
 
 context(cursor: PzlTokenCursor)

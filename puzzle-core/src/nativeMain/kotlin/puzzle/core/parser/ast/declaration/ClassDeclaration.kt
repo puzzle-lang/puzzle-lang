@@ -15,7 +15,7 @@ class ClassDeclaration(
 	val name: Identifier,
 	val docComment: DocComment?,
 	val modifiers: List<Modifier>,
-	val constructorModifiers: List<Modifier>,
+	val primaryCtorModifiers: List<Modifier>,
 	val parameters: List<Parameter>,
 	val superTypes: List<SuperType>,
 	val typeSpec: TypeSpec?,
