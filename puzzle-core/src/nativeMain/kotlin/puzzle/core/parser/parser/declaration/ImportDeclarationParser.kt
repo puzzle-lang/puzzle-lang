@@ -1,6 +1,7 @@
 package puzzle.core.parser.parser.declaration
 
 import puzzle.core.model.PzlContext
+import puzzle.core.model.span
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.declaration.ImportDeclaration
 import puzzle.core.parser.ast.declaration.ImportScope
@@ -9,7 +10,6 @@ import puzzle.core.parser.parser.expression.IdentifierTarget
 import puzzle.core.parser.parser.expression.matchIdentifier
 import puzzle.core.parser.parser.expression.parseIdentifier
 import puzzle.core.parser.parser.expression.parseIdentifierString
-import puzzle.core.model.span
 import puzzle.core.token.kinds.AccessKind.DOT
 import puzzle.core.token.kinds.OperatorKind.DOUBLE_STAR
 import puzzle.core.token.kinds.OperatorKind.STAR
@@ -24,7 +24,7 @@ fun parseImportDeclaration(): ImportDeclaration {
 	var alias: Identifier? = null
 	while (cursor.match(DOT)) {
 		when {
-			matchIdentifier() -> {
+			cursor.matchIdentifier() -> {
 				segments += cursor.previous.value
 				if (cursor.match(AS)) {
 					alias = parseIdentifier(IdentifierTarget.IMPORT_AS)

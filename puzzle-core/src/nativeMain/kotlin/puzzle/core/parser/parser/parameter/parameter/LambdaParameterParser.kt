@@ -4,10 +4,8 @@ import puzzle.core.exception.syntaxError
 import puzzle.core.model.PzlContext
 import puzzle.core.model.span
 import puzzle.core.parser.PzlTokenCursor
-import puzzle.core.parser.ast.parameter.Parameter
-import puzzle.core.parser.parser.check
+import puzzle.core.parser.ast.parameter.LambdaParameter
 import puzzle.core.parser.parser.expression.IdentifierTarget
-import puzzle.core.parser.parser.expression.parseExpressionChain
 import puzzle.core.parser.parser.expression.parseIdentifier
 import puzzle.core.parser.parser.parseAnnotationCalls
 import puzzle.core.parser.parser.parseModifiers
@@ -19,15 +17,14 @@ import puzzle.core.token.kinds.SeparatorKind.COMMA
 import puzzle.core.token.kinds.SymbolKind.COLON
 
 context(_: PzlContext, cursor: PzlTokenCursor)
-fun parseParameters(target: ParameterTarget): List<Parameter> {
+fun parseLambdaParameters(): List<LambdaParameter> {
 	if (!cursor.match(LPAREN)) {
-		if (target.allowWithoutParen) return emptyList()
-		syntaxError("${target.modifierTarget.displayName} 缺少 '('", cursor.current)
+		syntaxError("lambda 型参缺少 '('", cursor.current)
 	}
 	if (cursor.match(RPAREN)) return emptyList()
 	return buildList {
 		do {
-			this += parseParameter(target)
+			this += parseLambdaParameter()
 			if (!cursor.check(RPAREN)) {
 				cursor.expect(COMMA, "型参缺少 ','")
 			}
@@ -36,22 +33,29 @@ fun parseParameters(target: ParameterTarget): List<Parameter> {
 }
 
 context(_: PzlContext, cursor: PzlTokenCursor)
-private fun parseParameter(target: ParameterTarget): Parameter {
-	val start = cursor.current.location
+private fun parseLambdaParameter(): LambdaParameter {
+	val start = cursor.previous.location
 	val annotationCalls = parseAnnotationCalls()
+	if (annotationCalls.isNotEmpty()) {
+		syntaxError("lambda 型参不支持注解", annotationCalls.first().location.start)
+	}
 	val modifiers = parseModifiers()
-	modifiers.check(target.modifierTarget)
-	val name = parseIdentifier(IdentifierTarget.PARAMETER)
-	cursor.expect(COLON, "型参缺少 ':'")
-	val type = parseTypeReference(allowLambdaType = target.allowLambdaType)
-	val defaultExpression = if (cursor.match(ASSIGN)) parseExpressionChain() else null
+	if (modifiers.isNotEmpty()) {
+		syntaxError("lambda 型参不支持修饰符", modifiers.first().location.start)
+	}
+	val name = if (cursor.offsetOrNull(1)?.kind == COLON) {
+		parseIdentifier(IdentifierTarget.PARAMETER).also {
+			cursor.advance()
+		}
+	} else null
+	val type = parseTypeReference(allowLambdaType = true)
+	if (cursor.match(ASSIGN)) {
+		syntaxError("lambda 型参不支持默认值", cursor.previous)
+	}
 	val end = cursor.previous.location
-	return Parameter(
+	return LambdaParameter(
 		name = name,
-		modifiers = modifiers,
 		type = type,
-		annotationCalls = annotationCalls,
-		defaultExpression = defaultExpression,
 		location = start span end
 	)
 }

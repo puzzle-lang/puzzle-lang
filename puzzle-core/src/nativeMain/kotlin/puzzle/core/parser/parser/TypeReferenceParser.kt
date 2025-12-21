@@ -10,8 +10,7 @@ import puzzle.core.parser.ast.TypeReference
 import puzzle.core.parser.parser.argument.parseTypeArguments
 import puzzle.core.parser.parser.expression.IdentifierTarget
 import puzzle.core.parser.parser.expression.parseIdentifierString
-import puzzle.core.parser.parser.parameter.parameter.ParameterTarget
-import puzzle.core.parser.parser.parameter.parameter.parseParameters
+import puzzle.core.parser.parser.parameter.parameter.parseLambdaParameters
 import puzzle.core.token.kinds.AccessKind.DOT
 import puzzle.core.token.kinds.BracketKind.End.RBRACKET
 import puzzle.core.token.kinds.BracketKind.End.RPAREN
@@ -39,7 +38,7 @@ private fun parseLambdaType(
 	allowNullable: Boolean,
 ): TypeReference {
 	val start = cursor.current.location
-	val parameters = parseParameters(ParameterTarget.LAMBDA)
+	val parameters = parseLambdaParameters()
 	if (cursor.match(ARROW)) {
 		if (!allowLambdaType) {
 			syntaxError("不支持 lambda 类型", cursor.previous)

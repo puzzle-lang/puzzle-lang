@@ -6,7 +6,7 @@ import puzzle.core.token.kinds.CommentKind.Doc
 
 context(cursor: PzlTokenCursor)
 fun parseDocComment(): DocComment? {
-	return if (cursor.match<Doc>()) {
+	return if (cursor.matchIsInstance<Doc>()) {
 		val token = cursor.previous
 		DocComment(token.value, token.location)
 	} else null

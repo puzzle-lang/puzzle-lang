@@ -13,7 +13,7 @@ object WhileStatementMatcher : StatementMatcher<WhileStatement> {
 	
 	context(cursor: PzlTokenCursor)
 	override fun match(): Boolean {
-		return kinds.any { cursor.match(it) }
+		return cursor.match { it == DO || it == WHILE }
 	}
 	
 	context(_: PzlContext, cursor: PzlTokenCursor)

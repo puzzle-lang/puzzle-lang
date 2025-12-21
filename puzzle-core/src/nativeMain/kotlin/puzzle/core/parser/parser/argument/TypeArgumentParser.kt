@@ -2,7 +2,7 @@ package puzzle.core.parser.parser.argument
 
 import puzzle.core.model.PzlContext
 import puzzle.core.parser.PzlTokenCursor
-import puzzle.core.parser.ast.TypeArgument
+import puzzle.core.parser.ast.argument.TypeArgument
 import puzzle.core.parser.parser.expression.IdentifierTarget
 import puzzle.core.parser.parser.expression.parseIdentifier
 import puzzle.core.parser.parser.parseTypeReference

@@ -5,7 +5,6 @@ import puzzle.core.model.PzlContext
 import puzzle.core.token.PzlToken
 import puzzle.core.token.kinds.MetaKind.EOF
 import puzzle.core.token.kinds.PzlTokenKind
-import kotlin.reflect.KClass
 
 class PzlTokenCursor(
 	private val tokens: List<PzlToken>,
@@ -34,52 +33,36 @@ class PzlTokenCursor(
 		return tokens.getOrNull(position + offset)
 	}
 	
-	fun advance(): PzlToken {
+	fun advance() {
 		if (position < tokens.size - 1) {
-			return current.also { position++ }
+			position++
+		} else {
+			error("position 超出 tokens 的范围")
 		}
-		error("position 超出 tokens 的范围")
 	}
 	
-	fun retreat(): PzlToken {
+	fun retreat() {
 		if (position > 0) {
-			return current.also { position-- }
+			position--
+		} else {
+			error("position 超出 tokens 的范围")
 		}
-		error("position 超出 tokens 的范围")
 	}
 	
-	inline fun <reified K : PzlTokenKind> match(): Boolean = match(K::class)
-	
-	fun match(clazz: KClass<out PzlTokenKind>): Boolean {
-		if (!check(clazz)) return false
-		position++
+	inline fun <reified K : PzlTokenKind> matchIsInstance(): Boolean {
+		if (current.kind !is K) return false
+		advance()
 		return true
 	}
 	
 	fun match(kind: PzlTokenKind): Boolean {
-		if (!check(kind)) return false
+		if (current.kind != kind) return false
 		position++
 		return true
 	}
 	
-	fun match(vararg classes: KClass<out PzlTokenKind>): Boolean {
-		if (classes.isEmpty()) {
-			error("classes can't be empty.")
-		}
-		classes.forEachIndexed { index, clazz ->
-			val token = offsetOrNull(offset = index) ?: return false
-			if (token.kind::class != clazz::class) {
-				return false
-			}
-		}
-		position += classes.size
-		return true
-	}
-	
-	fun match(vararg kinds: PzlTokenKind): Boolean {
-		if (kinds.isEmpty()) {
-			error("classes can't be empty.")
-		}
+	fun match(kind1: PzlTokenKind, kind2: PzlTokenKind, vararg kinds: PzlTokenKind): Boolean {
+		val kinds = arrayOf(kind1, kind2) + kinds
 		kinds.forEachIndexed { index, kind ->
 			val token = offsetOrNull(offset = index) ?: return false
 			if (token.kind != kind) {
@@ -90,27 +73,24 @@ class PzlTokenCursor(
 		return true
 	}
 	
-	fun check(clazz: KClass<out PzlTokenKind>): Boolean {
-		return current.kind::class == clazz
+	fun match(predicate: (PzlTokenKind) -> Boolean): Boolean {
+		if (!predicate(current.kind)) return false
+		position++
+		return true
 	}
 	
 	fun check(kind: PzlTokenKind): Boolean {
 		return current.kind == kind
 	}
 	
-	context(_: PzlContext)
-	fun expect(clazz: KClass<out PzlTokenKind>, errorMessage: String) {
-		if (check(clazz)) {
-			advance()
-			return
-		}
-		syntaxError(errorMessage, current)
+	fun check(check: (PzlTokenKind) -> Boolean): Boolean {
+		return check(current.kind)
 	}
 	
 	context(_: PzlContext)
 	fun expect(kind: PzlTokenKind, errorMessage: String) {
-		if (check(kind)) {
-			advance()
+		if (current.kind == kind) {
+			position++
 			return
 		}
 		syntaxError(errorMessage, current)

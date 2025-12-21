@@ -9,11 +9,9 @@ import puzzle.core.token.kinds.ModifierKind.VAR
 
 object VariableDeclarationStatementMatcher : StatementMatcher<VariableDeclarationStatement> {
 	
-	private val kinds = arrayOf(VAR, VAL)
-	
 	context(cursor: PzlTokenCursor)
 	override fun match(): Boolean {
-		return kinds.any { cursor.match(it) }
+		return cursor.match { it == VAR || it == VAL }
 	}
 	
 	context(_: PzlContext, cursor: PzlTokenCursor)

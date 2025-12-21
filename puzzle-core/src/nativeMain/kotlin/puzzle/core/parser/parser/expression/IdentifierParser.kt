@@ -4,17 +4,15 @@ import puzzle.core.exception.syntaxError
 import puzzle.core.model.PzlContext
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.expression.Identifier
-import puzzle.core.token.PzlToken
 import puzzle.core.token.kinds.AccessorKind.GET
 import puzzle.core.token.kinds.AccessorKind.SET
 import puzzle.core.token.kinds.ContextualKind.*
 import puzzle.core.token.kinds.IdentifierKind
-import puzzle.core.token.kinds.KeywordKind
 import puzzle.core.token.kinds.ModifierKind.*
 import puzzle.core.token.kinds.NamespaceKind.IMPORT
 import puzzle.core.token.kinds.NamespaceKind.PACKAGE
 
-private val softKeywords = arrayOf<KeywordKind>(
+private val softKeywords = setOf(
 	PRIVATE, PROTECTED, FILE, INTERNAL, MODULE, PUBLIC,
 	FINAL,
 	OPEN, ABSTRACT, SEALED, OVERRIDE,
@@ -47,28 +45,29 @@ fun parseIdentifierString(target: IdentifierTarget): String {
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun tryParseIdentifierString(target: IdentifierTarget): String? {
-	if (cursor.match<IdentifierKind>()) {
+	if (cursor.matchIsInstance<IdentifierKind>()) {
 		val value = cursor.previous.value
 		if (value == "_" && !target.allowAnonymousBinding) {
 			syntaxError("${target.displayName}不支持匿名绑定", cursor.previous)
 		}
 		return value
 	}
-	softKeywords.forEach {
-		if (cursor.match(it)) {
-			return cursor.previous.value
-		}
+	if (cursor.match { it in softKeywords }) {
+		return cursor.previous.value
 	}
 	return null
 }
 
-fun PzlToken.isIdentifier(): Boolean {
-	return this.kind is IdentifierKind || softKeywords.any { this.kind == it }
+fun PzlTokenCursor.checkIdentifier(): Boolean {
+	return this.check { kind ->
+		kind is IdentifierKind || softKeywords.any { kind == it }
+	}
 }
 
-context(cursor: PzlTokenCursor)
-fun matchIdentifier(): Boolean {
-	return cursor.match<IdentifierKind>() || softKeywords.any { cursor.match(it) }
+fun PzlTokenCursor.matchIdentifier(): Boolean {
+	return this.match { kind ->
+		kind is IdentifierKind || softKeywords.any { kind == it }
+	}
 }
 
 enum class IdentifierTarget(
@@ -127,9 +126,17 @@ enum class IdentifierTarget(
 		displayName = "型参",
 		allowAnonymousBinding = false,
 	),
+	LAMBDA_PARAMETER(
+		displayName = "lambda 型参",
+		allowAnonymousBinding = true,
+	),
+	LAMBDA_IDENTIFIER(
+		displayName = "lambda 参数",
+		allowAnonymousBinding = true,
+	),
 	VARIABLE(
 		displayName = "变量",
-		allowAnonymousBinding = false
+		allowAnonymousBinding = true
 	),
 	TYPE_REFERENCE(
 		displayName = "类型",

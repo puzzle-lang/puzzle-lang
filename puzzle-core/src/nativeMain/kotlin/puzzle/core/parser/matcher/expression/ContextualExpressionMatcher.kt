@@ -13,7 +13,7 @@ object ContextualExpressionMatcher : ExpressionMatcher, NoPrefixExpressionParser
 	
 	context(cursor: PzlTokenCursor)
 	override fun match(left: Expression?): Boolean {
-		return cursor.match(THIS) || cursor.match(SUPER)
+		return cursor.match { it == THIS || it == SUPER }
 	}
 	
 	context(_: PzlContext, cursor: PzlTokenCursor)

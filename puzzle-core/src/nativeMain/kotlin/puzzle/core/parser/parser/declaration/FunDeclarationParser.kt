@@ -98,7 +98,7 @@ private fun parseExtensionAndFunName(): Pair<TypeReference?, FunName> {
 	return type to funName
 }
 
-private val overloadableOperators = arrayOf<SymbolKind>(
+private val overloadableOperators = setOf(
 	PLUS, MINUS, NOT, BIT_NOT, DOUBLE_PLUS, DOUBLE_MINUS,
 	STAR, SLASH, PERCENT, DOUBLE_STAR,
 	EQUALS, NOT_EQUALS, GT, GT_EQUALS, LT, LT_EQUALS,
@@ -108,20 +108,20 @@ private val overloadableOperators = arrayOf<SymbolKind>(
 	INDEX_GET, INDEX_SET, RANGE_TO, RANGE_UNTIL
 )
 
-private val notOverloadableOperators = arrayOf<SymbolKind>(
+private val notOverloadableOperators = setOf(
 	TRIPLE_EQUALS, TRIPLE_NOT_EQUALS,
 	AND, OR
 )
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 private fun tryParseOperatorFunName(): SymbolFunName? {
-	var kind = overloadableOperators.find { cursor.match(it) }
-	if (kind != null) {
-		return SymbolFunName(Symbol(kind, cursor.previous.location))
+	if (cursor.match { it in overloadableOperators }) {
+		val token = cursor.previous
+		return SymbolFunName(Symbol(token.kind as SymbolKind, token.location))
 	}
-	kind = notOverloadableOperators.find { cursor.match(it) }
-	if (kind != null) {
-		syntaxError("'${kind.value}' 运算符不支持被重载", cursor.previous)
+	if (cursor.match { it in notOverloadableOperators }) {
+		val token = cursor.previous
+		syntaxError("'${token.value}' 运算符不支持被重载", cursor.previous)
 	}
 	return null
 }

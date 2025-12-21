@@ -11,7 +11,7 @@ object IdentifierMatcher : ExpressionMatcher, NoPrefixExpressionParser<Identifie
 	
 	context(cursor: PzlTokenCursor)
 	override fun match(left: Expression?): Boolean {
-		return matchIdentifier()
+		return cursor.matchIdentifier()
 	}
 	
 	context(_: PzlContext, cursor: PzlTokenCursor)

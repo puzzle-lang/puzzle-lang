@@ -26,8 +26,8 @@ context(cursor: PzlTokenCursor)
 private fun parseModifier(): Modifier? {
 	ModifierKind.kinds.fastForEach { kind ->
 		if (cursor.current.kind == kind && cursor.nextOrNull?.kind != COLON) {
-			val token = cursor.advance()
-			return Modifier(kind, token.location)
+			cursor.advance()
+			return Modifier(kind, cursor.previous.location)
 		}
 	}
 	return null
@@ -188,10 +188,6 @@ enum class ModifierTarget(
 	ANNOTATION_PARAMETER(
 		displayName = "注解参数",
 		supportedModifiers = setOf(VAL)
-	),
-	LAMBDA_PARAMETER(
-		displayName = "lambda 参数",
-		supportedModifiers = emptySet()
 	)
 }
 

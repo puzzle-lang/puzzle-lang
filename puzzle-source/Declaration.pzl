@@ -84,7 +84,7 @@ private fun returns1(): ((fun1: () -> String) -> Unit)? {
 
 }
 
-private fun returns2(): (String = "", age: Int = 10, String) -> [Int?, String?], String {
+private fun returns2(): (String, age: Int, String) -> [Int?, String?], String {
 
 }
 
@@ -100,8 +100,12 @@ fun lambda1(param1: (() -> Unit) -> Unit, param2: () -> (Int) -> [String, () -> 
 
 }
 
-fun lambda2(callback: () -> String???) {
+fun lambda2(callback: () -> String?) {
+    val add = { n1: Int, n2: Int ->
+        n1 + n2
+    }
 
+    lambda2(callback = { null })
 }
 
 private class Hello(

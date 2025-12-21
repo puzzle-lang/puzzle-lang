@@ -12,11 +12,9 @@ import puzzle.core.token.kinds.AccessKind.QUESTION_DOT
 
 object MemberAccessExpressionMatcher : ExpressionMatcher, RequirePrefixExpressionParser<MemberAccessExpression> {
 	
-	private val kinds = arrayOf(DOT, QUESTION_DOT)
-	
 	context(cursor: PzlTokenCursor)
 	override fun match(left: Expression?): Boolean {
-		return kinds.any { cursor.match(it) }
+		return cursor.match { it == DOT || it == QUESTION_DOT }
 	}
 	
 	context(_: PzlContext, cursor: PzlTokenCursor)

@@ -21,13 +21,8 @@ object PrefixUnaryExpressionMatcher : ExpressionMatcher, NoPrefixExpressionParse
 	
 	context(cursor: PzlTokenCursor)
 	override fun match(left: Expression?): Boolean {
-		val kind = cursor.current.kind
-		if (kind !in kinds) return false
-		return if (left != null && (kind == PLUS || kind == MINUS)) {
-			false
-		} else {
-			cursor.advance()
-			true
+		return cursor.match {
+			it in kinds && (left == null || (it != PLUS && it != MINUS))
 		}
 	}
 	

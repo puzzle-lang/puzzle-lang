@@ -34,5 +34,5 @@ class IdentifierFunName(
 
 @Serializable
 class SymbolFunName(
-	val kind: Symbol,
+	val symbol: Symbol,
 ) : FunName

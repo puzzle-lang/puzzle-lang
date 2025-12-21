@@ -1,9 +1,9 @@
 package puzzle.core.exception
 
 import puzzle.core.model.PzlContext
-import puzzle.core.token.PzlToken
 import puzzle.core.model.SourcePosition
 import puzzle.core.model.calcPosition
+import puzzle.core.token.PzlToken
 
 private class SyntaxException(
 	message: String,

@@ -5,7 +5,7 @@ import puzzle.core.model.PzlContext
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.expression.Expression
 import puzzle.core.parser.ast.expression.SuffixUnaryExpression
-import puzzle.core.parser.parser.expression.isIdentifier
+import puzzle.core.parser.parser.expression.checkIdentifier
 import puzzle.core.parser.parser.expression.parseSuffixUnaryExpression
 import puzzle.core.token.kinds.OperatorKind.DOUBLE_MINUS
 import puzzle.core.token.kinds.OperatorKind.DOUBLE_PLUS
@@ -16,7 +16,7 @@ object SuffixUnaryExpressionMatcher : ExpressionMatcher, NoPrefixExpressionParse
 	override fun match(left: Expression?): Boolean {
 		val nextKind = cursor.nextOrNull?.kind ?: return false
 		if (nextKind != DOUBLE_PLUS && nextKind != DOUBLE_MINUS) return false
-		return cursor.current.isIdentifier()
+		return cursor.checkIdentifier()
 	}
 	
 	context(_: PzlContext, cursor: PzlTokenCursor)

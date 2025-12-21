@@ -11,12 +11,10 @@ import puzzle.core.token.kinds.BracketKind.Start.LPAREN
 
 object InvokeExpressionMatcher : ExpressionMatcher, RequirePrefixExpressionParser<InvokeExpression> {
 	
-	private val kinds = arrayOf(LPAREN, LBRACKET)
-	
 	context(cursor: PzlTokenCursor)
 	override fun match(left: Expression?): Boolean {
 		if (left == null) return false
-		return kinds.any { cursor.match(it) }
+		return cursor.match { it == LPAREN || it == LBRACKET }
 	}
 	
 	context(_: PzlContext, cursor: PzlTokenCursor)

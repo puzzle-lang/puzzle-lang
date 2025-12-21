@@ -1,8 +1,9 @@
 package puzzle.core.parser.ast
 
 import kotlinx.serialization.Serializable
-import puzzle.core.parser.ast.parameter.Parameter
 import puzzle.core.model.SourceLocation
+import puzzle.core.parser.ast.argument.TypeArgument
+import puzzle.core.parser.ast.parameter.LambdaParameter
 import puzzle.core.util.DotStringListSerializer
 
 @Serializable
@@ -25,7 +26,7 @@ class NamedType(
 
 @Serializable
 class LambdaType(
-	val parameters: List<Parameter>,
+	val parameters: List<LambdaParameter>,
 	val returnTypes: List<TypeReference>,
 	override val location: SourceLocation,
 ) : Type

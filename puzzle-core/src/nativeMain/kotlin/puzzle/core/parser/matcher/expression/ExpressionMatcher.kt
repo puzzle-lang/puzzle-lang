@@ -27,6 +27,7 @@ sealed interface ExpressionMatcher {
 			IfExpressionMatcher,
 			MatchExpressionMatcher,
 			LoopExpressionMatcher,
+			LambdaExpressionMatcher
 		)
 	}
 	

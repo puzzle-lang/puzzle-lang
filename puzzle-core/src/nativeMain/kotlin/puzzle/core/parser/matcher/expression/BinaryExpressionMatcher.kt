@@ -10,7 +10,7 @@ import puzzle.core.token.kinds.OperatorKind.*
 
 object BinaryExpressionMatcher : ExpressionMatcher, RequirePrefixExpressionParser<BinaryExpression> {
 	
-	private val operators = arrayOf(
+	private val operators = setOf(
 		PLUS, MINUS, STAR, SLASH, PERCENT, DOUBLE_STAR,
 		EQUALS, NOT_EQUALS, GT, GT_EQUALS, LT, LT_EQUALS, TRIPLE_EQUALS, TRIPLE_NOT_EQUALS,
 		BIT_AND, BIT_OR, BIT_XOR,
@@ -26,7 +26,7 @@ object BinaryExpressionMatcher : ExpressionMatcher, RequirePrefixExpressionParse
 	
 	context(cursor: PzlTokenCursor)
 	override fun match(left: Expression?): Boolean {
-		return operators.any { cursor.match(it) }
+		return cursor.match { it in operators }
 	}
 	
 	context(_: PzlContext, cursor: PzlTokenCursor)
