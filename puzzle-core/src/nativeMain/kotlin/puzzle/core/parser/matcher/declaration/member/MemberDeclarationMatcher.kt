@@ -23,6 +23,7 @@ sealed interface MemberDeclarationMatcher<out D : Declaration> {
 			MemberAnnotationDeclarationMatcher,
 			MemberExtensionDeclarationMatcher,
 			MemberCtorDeclarationMatcher,
+			MemberInitDeclarationMatcher
 		)
 	}
 	
@@ -34,8 +35,5 @@ sealed interface MemberDeclarationMatcher<out D : Declaration> {
 	fun match(): Boolean
 	
 	context(_: PzlContext, cursor: PzlTokenCursor)
-	fun parse(
-		header: DeclarationHeader,
-		start: SourceLocation,
-	): D
+	fun parse(header: DeclarationHeader, start: SourceLocation): D
 }

@@ -33,8 +33,5 @@ sealed interface DeclarationMatcher<out D : Declaration> {
 	fun match(): Boolean
 	
 	context(_: PzlContext, cursor: PzlTokenCursor)
-	fun parse(
-		header: DeclarationHeader,
-		start: SourceLocation,
-	): D
+	fun parse(header: DeclarationHeader, start: SourceLocation): D
 }

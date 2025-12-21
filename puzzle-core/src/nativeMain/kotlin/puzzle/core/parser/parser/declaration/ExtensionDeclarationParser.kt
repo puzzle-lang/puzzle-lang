@@ -1,5 +1,6 @@
 package puzzle.core.parser.parser.declaration
 
+import puzzle.core.exception.syntaxError
 import puzzle.core.model.PzlContext
 import puzzle.core.model.SourceLocation
 import puzzle.core.model.span
@@ -15,7 +16,15 @@ fun parseExtensionDeclaration(header: DeclarationHeader, start: SourceLocation):
 	val extendedType = parseTypeReference()
 	val superTraits = parseSuperTypes(allowClass = false)
 		.filterIsInstance<SuperTrait>()
-	val members = if (cursor.match(LBRACE)) parseMemberDeclarations() else emptyList()
+	val info = if (cursor.match(LBRACE)) {
+		parseMemberDeclarationInfo()
+	} else MemberDeclarationInfo.Empty
+	if (info.inits.isNotEmpty()) {
+		syntaxError("扩展不允许有初始化块", info.inits.first().location.start)
+	}
+	if (info.ctors.isNotEmpty()) {
+		syntaxError("扩展不允许有次构造函数", info.ctors.first().location.start)
+	}
 	val end = cursor.previous.location
 	return ExtensionDeclaration(
 		extendedType = extendedType,
@@ -24,7 +33,7 @@ fun parseExtensionDeclaration(header: DeclarationHeader, start: SourceLocation):
 		typeSpec = header.typeSpec,
 		contextSpec = header.contextSpec,
 		annotationCalls = header.annotationCalls,
-		members = members,
+		members = info.members,
 		location = start span end
 	)
 }

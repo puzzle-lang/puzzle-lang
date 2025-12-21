@@ -15,9 +15,10 @@ fun parseStatement(): Statement {
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseStatements(): List<Statement> {
+	if (cursor.match(RBRACE)) return emptyList()
 	return buildList {
-		while (!cursor.match(RBRACE)) {
+		do {
 			this += parseStatement()
-		}
+		} while (!cursor.match(RBRACE))
 	}
 }

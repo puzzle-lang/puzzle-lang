@@ -1,5 +1,6 @@
 package puzzle.core.parser.parser.declaration
 
+import puzzle.core.exception.syntaxError
 import puzzle.core.model.PzlContext
 import puzzle.core.model.SourceLocation
 import puzzle.core.model.span
@@ -13,7 +14,15 @@ import puzzle.core.token.kinds.BracketKind.Start.LBRACE
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseTraitDeclaration(header: DeclarationHeader, start: SourceLocation): TraitDeclaration {
 	val name = parseIdentifier(IdentifierTarget.TRAIT)
-	val members = if (cursor.match(LBRACE)) parseMemberDeclarations() else emptyList()
+	val info = if (cursor.match(LBRACE)) {
+		parseMemberDeclarationInfo()
+	} else MemberDeclarationInfo.Empty
+	if (info.inits.isNotEmpty()) {
+		syntaxError("特征不允许有初始化块", info.inits.first().location.start)
+	}
+	if (info.ctors.isNotEmpty()) {
+		syntaxError("特征不允许有次构造函数", info.ctors.first().location.start)
+	}
 	val end = cursor.previous.location
 	return TraitDeclaration(
 		name = name,
@@ -22,7 +31,7 @@ fun parseTraitDeclaration(header: DeclarationHeader, start: SourceLocation): Tra
 		typeSpec = header.typeSpec,
 		contextSpec = header.contextSpec,
 		annotationCalls = header.annotationCalls,
-		members = members,
+		members = info.members,
 		location = start span end
 	)
 }

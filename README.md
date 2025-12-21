@@ -23,7 +23,7 @@ trait Food {
 }
 
 /**
- * 单例类 - 鱼
+ * 单例对象 - 鱼
  */
 object Fish : Food {
 
@@ -32,7 +32,7 @@ object Fish : Food {
 }
 
 /**
- * 单例类 - 肉
+ * 单例对象 - 肉
  */
 object Meat : Food {
 

@@ -1,5 +1,6 @@
 package puzzle.core.parser.matcher.expression
 
+import puzzle.core.exception.syntaxError
 import puzzle.core.model.PzlContext
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.expression.Expression
@@ -7,7 +8,7 @@ import puzzle.core.parser.ast.expression.PrefixUnaryExpression
 import puzzle.core.parser.parser.expression.parsePrefixUnaryExpression
 import puzzle.core.token.kinds.OperatorKind.*
 
-object PrefixUnaryExpressionMatcher : ExpressionMatcher<PrefixUnaryExpression> {
+object PrefixUnaryExpressionMatcher : ExpressionMatcher, NoPrefixExpressionParser<PrefixUnaryExpression> {
 	
 	private val kinds = setOf(
 		PLUS,
@@ -22,14 +23,21 @@ object PrefixUnaryExpressionMatcher : ExpressionMatcher<PrefixUnaryExpression> {
 	override fun match(left: Expression?): Boolean {
 		val kind = cursor.current.kind
 		if (kind !in kinds) return false
-		return if (left == null || kind != PLUS && kind != MINUS) {
+		return if (left != null && (kind == PLUS || kind == MINUS)) {
+			false
+		} else {
 			cursor.advance()
 			true
-		} else false
+		}
 	}
 	
 	context(_: PzlContext, cursor: PzlTokenCursor)
-	override fun parse(left: Expression?): PrefixUnaryExpression {
+	override fun prefixError(): Nothing {
+		syntaxError("'${cursor.previous.value}' 前不允许有表达式", cursor.previous)
+	}
+	
+	context(_: PzlContext, cursor: PzlTokenCursor)
+	override fun parse(): PrefixUnaryExpression {
 		return parsePrefixUnaryExpression()
 	}
 }

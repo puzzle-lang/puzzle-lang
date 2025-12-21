@@ -27,7 +27,7 @@ fun parseCtorDeclaration(
 	val body = buildList<Statement> {
 		if (cursor.match(COLON)) {
 			this += with(ContextualStatementMatcher) {
-				if (match()) parse() else syntaxError("构造函数的 ':' 后只允许跟 this 或 super", cursor.current)
+				if (match()) parse() else syntaxError("次构造函数的 ':' 后只允许跟 this 或 super", cursor.current)
 			}
 		}
 		if (cursor.match(LBRACE)) {

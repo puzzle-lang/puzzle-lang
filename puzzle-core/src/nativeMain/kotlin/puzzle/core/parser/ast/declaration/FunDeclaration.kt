@@ -1,13 +1,13 @@
 package puzzle.core.parser.ast.declaration
 
 import kotlinx.serialization.Serializable
+import puzzle.core.model.SourceLocation
 import puzzle.core.parser.ast.*
 import puzzle.core.parser.ast.expression.Identifier
 import puzzle.core.parser.ast.parameter.ContextSpec
 import puzzle.core.parser.ast.parameter.Parameter
 import puzzle.core.parser.ast.parameter.TypeSpec
 import puzzle.core.parser.ast.statement.Statement
-import puzzle.core.model.SourceLocation
 
 @Serializable
 class FunDeclaration(
@@ -22,7 +22,7 @@ class FunDeclaration(
 	val annotationCalls: List<AnnotationCall>,
 	val body: List<Statement>,
 	override val location: SourceLocation,
-) : Declaration
+) : TopLevelAllowedDeclaration
 
 @Serializable
 sealed interface FunName

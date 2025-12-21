@@ -21,7 +21,7 @@ enum class TypeTarget(
         allowsVariance = true
     ),
     OBJECT(
-        displayName = "单例类",
+        displayName = "单例对象",
         allowsType = false,
         allowsVariance = false
     ),
@@ -51,7 +51,12 @@ enum class TypeTarget(
         allowsVariance = true
     ),
 	CTOR(
-		displayName = "构造函数",
+		displayName = "次构造函数",
+		allowsType = false,
+		allowsVariance = false
+	),
+	INIT(
+		displayName = "初始化块",
 		allowsType = false,
 		allowsVariance = false
 	)

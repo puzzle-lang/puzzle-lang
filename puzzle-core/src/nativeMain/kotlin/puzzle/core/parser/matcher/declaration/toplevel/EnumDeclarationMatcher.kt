@@ -17,11 +17,12 @@ object EnumDeclarationMatcher : DeclarationMatcher<EnumDeclaration> {
 	override val modifierTarget = ModifierTarget.ENUM
 	
 	context(cursor: PzlTokenCursor)
-	override fun match(): Boolean = cursor.match(ENUM)
+	override fun match(): Boolean {
+		return cursor.match(ENUM)
+	}
 	
 	context(_: PzlContext, cursor: PzlTokenCursor)
-	override fun parse(
-		header: DeclarationHeader,
-		start: SourceLocation,
-	): EnumDeclaration = parseEnumDeclaration(header, start)
+	override fun parse(header: DeclarationHeader, start: SourceLocation): EnumDeclaration {
+		return parseEnumDeclaration(header, start)
+	}
 }

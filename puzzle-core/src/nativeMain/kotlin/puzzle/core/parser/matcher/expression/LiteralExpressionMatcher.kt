@@ -1,28 +1,31 @@
 package puzzle.core.parser.matcher.expression
 
+import puzzle.core.exception.syntaxError
 import puzzle.core.model.PzlContext
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.expression.Expression
 import puzzle.core.parser.ast.expression.LiteralExpression
 import puzzle.core.parser.parser.expression.parseLiteralExpression
-import puzzle.core.token.kinds.LiteralKind.*
-import puzzle.core.token.kinds.LiteralKind.BooleanKind.FALSE
-import puzzle.core.token.kinds.LiteralKind.BooleanKind.TRUE
+import puzzle.core.token.kinds.LiteralKind
 
-object LiteralExpressionMatcher : ExpressionMatcher<LiteralExpression> {
-	
-	private val kinds = arrayOf(TRUE, FALSE, NULL)
+object LiteralExpressionMatcher : ExpressionMatcher, NoPrefixExpressionParser<LiteralExpression> {
 	
 	context(cursor: PzlTokenCursor)
 	override fun match(left: Expression?): Boolean {
-		return kinds.any { cursor.match(it) } ||
-				cursor.match<StringKind>() ||
-				cursor.match<CharKind>() ||
-				cursor.match<NumberKind>()
+		val kind = cursor.current.kind
+		return if (kind is LiteralKind) {
+			cursor.advance()
+			true
+		} else false
 	}
 	
 	context(_: PzlContext, cursor: PzlTokenCursor)
-	override fun parse(
-		left: Expression?,
-	): LiteralExpression = parseLiteralExpression()
+	override fun prefixError(): Nothing {
+		syntaxError("字面量前不允许有表达式", cursor.previous)
+	}
+	
+	context(_: PzlContext, cursor: PzlTokenCursor)
+	override fun parse(): LiteralExpression {
+		return parseLiteralExpression()
+	}
 }

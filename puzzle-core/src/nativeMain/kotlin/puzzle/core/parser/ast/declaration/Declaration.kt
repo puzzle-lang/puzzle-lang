@@ -5,3 +5,6 @@ import puzzle.core.parser.ast.AstNode
 
 @Serializable
 sealed interface Declaration : AstNode
+
+@Serializable
+sealed interface TopLevelAllowedDeclaration : Declaration

@@ -17,11 +17,12 @@ object MemberFunDeclarationMatcher : MemberDeclarationMatcher<FunDeclaration> {
 	override val modifierTarget = ModifierTarget.MEMBER_FUN
 	
 	context(cursor: PzlTokenCursor)
-	override fun match(): Boolean = cursor.match(FUN)
+	override fun match(): Boolean {
+		return cursor.match(FUN)
+	}
 	
 	context(_: PzlContext, cursor: PzlTokenCursor)
-	override fun parse(
-		header: DeclarationHeader,
-		start: SourceLocation,
-	): FunDeclaration = parseFunDeclaration(header, start)
+	override fun parse(header: DeclarationHeader, start: SourceLocation): FunDeclaration {
+		return parseFunDeclaration(header, start)
+	}
 }

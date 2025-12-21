@@ -17,11 +17,12 @@ object MemberExtensionDeclarationMatcher : MemberDeclarationMatcher<ExtensionDec
 	override val modifierTarget = ModifierTarget.MEMBER_EXTENSION
 	
 	context(cursor: PzlTokenCursor)
-	override fun match(): Boolean = cursor.match(EXTENSION)
+	override fun match(): Boolean {
+		return cursor.match(EXTENSION)
+	}
 	
 	context(_: PzlContext, cursor: PzlTokenCursor)
-	override fun parse(
-		header: DeclarationHeader,
-		start: SourceLocation,
-	): ExtensionDeclaration = parseExtensionDeclaration(header, start)
+	override fun parse(header: DeclarationHeader, start: SourceLocation): ExtensionDeclaration {
+		return parseExtensionDeclaration(header, start)
+	}
 }

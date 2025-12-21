@@ -5,6 +5,9 @@ import puzzle.core.model.PzlContext
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.expression.Expression
 import puzzle.core.parser.matcher.expression.ExpressionMatcher
+import puzzle.core.parser.matcher.expression.NoPrefixExpressionParser
+import puzzle.core.parser.matcher.expression.OptionalPrefixExpressionParser
+import puzzle.core.parser.matcher.expression.RequirePrefixExpressionParser
 import puzzle.core.token.kinds.BracketKind.End.*
 import puzzle.core.token.kinds.ControlFlowKind.*
 import puzzle.core.token.kinds.MetaKind.EOF
@@ -19,7 +22,19 @@ context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseExpression(left: Expression? = null): Expression {
 	val matcher = ExpressionMatcher.matchers.find { it.match(left) }
 		?: syntaxError("不支持的表达式", cursor.current)
-	return matcher.parse(left)
+	return when (matcher) {
+		is RequirePrefixExpressionParser<*> -> {
+			if (left == null) matcher.prefixError()
+			matcher.parse(left)
+		}
+		
+		is NoPrefixExpressionParser<*> -> {
+			if (left != null) matcher.prefixError()
+			matcher.parse()
+		}
+		
+		is OptionalPrefixExpressionParser<*> -> matcher.parse(left)
+	}
 }
 
 context(_: PzlContext, _: PzlTokenCursor)

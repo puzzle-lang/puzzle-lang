@@ -17,11 +17,12 @@ object AnnotationDeclarationMatcher : DeclarationMatcher<AnnotationDeclaration> 
 	override val modifierTarget = ModifierTarget.ANNOTATION
 	
 	context(cursor: PzlTokenCursor)
-	override fun match(): Boolean = cursor.match(ANNOTATION)
+	override fun match(): Boolean {
+		return cursor.match(ANNOTATION)
+	}
 	
 	context(_: PzlContext, cursor: PzlTokenCursor)
-	override fun parse(
-		header: DeclarationHeader,
-		start: SourceLocation,
-	): AnnotationDeclaration = parseAnnotationDeclaration(header, start)
+	override fun parse(header: DeclarationHeader, start: SourceLocation): AnnotationDeclaration {
+		return parseAnnotationDeclaration(header, start)
+	}
 }

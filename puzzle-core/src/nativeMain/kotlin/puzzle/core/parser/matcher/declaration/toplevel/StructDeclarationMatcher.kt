@@ -17,11 +17,12 @@ object StructDeclarationMatcher : DeclarationMatcher<StructDeclaration> {
 	override val modifierTarget = ModifierTarget.STRUCT
 	
 	context(cursor: PzlTokenCursor)
-	override fun match(): Boolean = cursor.match(STRUCT)
+	override fun match(): Boolean {
+		return cursor.match(STRUCT)
+	}
 	
 	context(_: PzlContext, cursor: PzlTokenCursor)
-	override fun parse(
-		header: DeclarationHeader,
-		start: SourceLocation,
-	): StructDeclaration = parseStructDeclaration(header, start)
+	override fun parse(header: DeclarationHeader, start: SourceLocation): StructDeclaration {
+		return parseStructDeclaration(header, start)
+	}
 }

@@ -8,7 +8,7 @@ import puzzle.core.parser.ast.expression.Expression
 import puzzle.core.parser.parser.expression.parseBinaryExpression
 import puzzle.core.token.kinds.OperatorKind.*
 
-object BinaryExpressionMatcher : ExpressionMatcher<BinaryExpression> {
+object BinaryExpressionMatcher : ExpressionMatcher, RequirePrefixExpressionParser<BinaryExpression> {
 	
 	private val operators = arrayOf(
 		PLUS, MINUS, STAR, SLASH, PERCENT, DOUBLE_STAR,
@@ -19,16 +19,18 @@ object BinaryExpressionMatcher : ExpressionMatcher<BinaryExpression> {
 		AND, OR
 	)
 	
+	context(_: PzlContext, cursor: PzlTokenCursor)
+	override fun prefixError(): Nothing {
+		syntaxError("'${cursor.previous.value}' 前未解析到表达式", cursor.previous)
+	}
+	
 	context(cursor: PzlTokenCursor)
 	override fun match(left: Expression?): Boolean {
 		return operators.any { cursor.match(it) }
 	}
 	
 	context(_: PzlContext, cursor: PzlTokenCursor)
-	override fun parse(left: Expression?): BinaryExpression {
-		if (left == null) {
-			syntaxError("二元运算符左侧未解析到表达式", cursor.previous)
-		}
+	override fun parse(left: Expression): BinaryExpression {
 		return parseBinaryExpression(left)
 	}
 }

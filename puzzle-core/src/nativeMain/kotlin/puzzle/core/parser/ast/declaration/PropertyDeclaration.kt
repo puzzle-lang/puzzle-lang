@@ -1,6 +1,7 @@
 package puzzle.core.parser.ast.declaration
 
 import kotlinx.serialization.Serializable
+import puzzle.core.model.SourceLocation
 import puzzle.core.parser.ast.AnnotationCall
 import puzzle.core.parser.ast.Modifier
 import puzzle.core.parser.ast.TypeReference
@@ -8,7 +9,6 @@ import puzzle.core.parser.ast.expression.Expression
 import puzzle.core.parser.ast.expression.Identifier
 import puzzle.core.parser.ast.parameter.ContextSpec
 import puzzle.core.parser.ast.parameter.TypeSpec
-import puzzle.core.model.SourceLocation
 
 @Serializable
 class PropertyDeclaration(
@@ -21,4 +21,4 @@ class PropertyDeclaration(
 	val annotationCalls: List<AnnotationCall>,
 	val initializer: Expression?,
 	override val location: SourceLocation,
-) : Declaration
+) : TopLevelAllowedDeclaration

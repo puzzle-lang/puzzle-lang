@@ -14,14 +14,15 @@ object MemberCtorDeclarationMatcher : MemberDeclarationMatcher<CtorDeclaration> 
 	
 	override val typeTarget = TypeTarget.CTOR
 	
-	override val modifierTarget = ModifierTarget.MEMBER_CTOR
+	override val modifierTarget = ModifierTarget.CTOR
 	
 	context(cursor: PzlTokenCursor)
-	override fun match(): Boolean = cursor.match(DeclarationKind.CTOR)
+	override fun match(): Boolean {
+		return cursor.match(DeclarationKind.CTOR)
+	}
 	
 	context(_: PzlContext, cursor: PzlTokenCursor)
-	override fun parse(
-		header: DeclarationHeader,
-		start: SourceLocation,
-	): CtorDeclaration = parseCtorDeclaration(header, start)
+	override fun parse(header: DeclarationHeader, start: SourceLocation): CtorDeclaration {
+		return parseCtorDeclaration(header, start)
+	}
 }

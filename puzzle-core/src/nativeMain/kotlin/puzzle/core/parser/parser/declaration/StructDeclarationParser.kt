@@ -1,5 +1,6 @@
 package puzzle.core.parser.parser.declaration
 
+import puzzle.core.exception.syntaxError
 import puzzle.core.model.PzlContext
 import puzzle.core.model.SourceLocation
 import puzzle.core.model.span
@@ -10,23 +11,35 @@ import puzzle.core.parser.parser.expression.IdentifierTarget
 import puzzle.core.parser.parser.expression.parseIdentifier
 import puzzle.core.parser.parser.parameter.parameter.ParameterTarget
 import puzzle.core.parser.parser.parameter.parameter.parseParameters
+import puzzle.core.parser.parser.parseAnnotationCalls
+import puzzle.core.parser.parser.parseModifiers
 import puzzle.core.token.kinds.BracketKind.Start.LBRACE
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseStructDeclaration(header: DeclarationHeader, start: SourceLocation): StructDeclaration {
 	val name = parseIdentifier(IdentifierTarget.STRUCT)
+	val primaryAnnotationCalls = parseAnnotationCalls()
+	val primaryCtorModifiers = parseModifiers()
 	val parameters = parseParameters(ParameterTarget.STRUCT)
-	val members = if (cursor.match(LBRACE)) parseMemberDeclarations() else emptyList()
+	val info = if (cursor.match(LBRACE)) {
+		parseMemberDeclarationInfo()
+	} else MemberDeclarationInfo.Empty
+	if (info.ctors.isNotEmpty()) {
+		syntaxError("结构体不允许有次构造函数", info.ctors.first().location.start)
+	}
 	val end = cursor.previous.location
 	return StructDeclaration(
 		name = name,
 		docComment = header.docComment,
 		modifiers = header.modifiers,
+		primaryAnnotationCalls = primaryAnnotationCalls,
+		primaryCtorModifiers = primaryCtorModifiers,
 		parameters = parameters,
 		typeSpec = header.typeSpec,
 		contextSpec = header.contextSpec,
 		annotationCalls = header.annotationCalls,
-		members = members,
+		inits = info.inits,
+		members = info.members,
 		location = start span end
 	)
 }

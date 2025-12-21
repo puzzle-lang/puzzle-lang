@@ -9,19 +9,24 @@ import puzzle.core.parser.parser.expression.parseAsExpression
 import puzzle.core.token.kinds.SymbolKind.QUESTION
 import puzzle.core.token.kinds.TypeOperatorKind.AS
 
-object AsExpressionMatcher : ExpressionMatcher<AsExpression> {
+object AsExpressionMatcher : ExpressionMatcher, RequirePrefixExpressionParser<AsExpression> {
 	
 	context(cursor: PzlTokenCursor)
 	override fun match(left: Expression?): Boolean {
-		return cursor.match(AS, QUESTION) || cursor.match(AS)
+		return cursor.match(AS)
 	}
 	
 	context(_: PzlContext, cursor: PzlTokenCursor)
-	override fun parse(left: Expression?): AsExpression {
-		val isSafe = cursor.previous == QUESTION
-		if (left == null) {
-			syntaxError("${if (isSafe) "as?" else "as"} 操作符左侧未解析到表达式", cursor.current)
-		}
-		return parseAsExpression(left, isSafe)
+	override fun prefixError(): Nothing {
+		val isSafe = cursor.check(QUESTION)
+		syntaxError(
+			"${if (isSafe) "as?" else "as"} 前未解析到表达式",
+			cursor.offset(if (isSafe) -2 else -1)
+		)
+	}
+	
+	context(_: PzlContext, cursor: PzlTokenCursor)
+	override fun parse(left: Expression): AsExpression {
+		return parseAsExpression(left)
 	}
 }

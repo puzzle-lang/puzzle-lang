@@ -96,12 +96,8 @@ enum class IdentifierTarget(
 		allowAnonymousBinding = false,
 	),
 	OBJECT(
-		displayName = "单例类声明",
+		displayName = "单例对象声明",
 		allowAnonymousBinding = false
-	),
-	MEMBER_OBJECT(
-		displayName = "成员单例类声明",
-		allowAnonymousBinding = true
 	),
 	ANNOTATION(
 		displayName = "注解声明",
@@ -116,7 +112,7 @@ enum class IdentifierTarget(
 		allowAnonymousBinding = false,
 	),
 	CTOR(
-		displayName = "构造函数声明",
+		displayName = "次构造函数声明",
 		allowAnonymousBinding = false
 	),
 	CONTEXT_RECEIVER(

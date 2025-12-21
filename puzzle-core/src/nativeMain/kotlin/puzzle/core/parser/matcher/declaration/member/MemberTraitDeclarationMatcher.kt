@@ -17,11 +17,12 @@ object MemberTraitDeclarationMatcher : MemberDeclarationMatcher<TraitDeclaration
 	override val modifierTarget = ModifierTarget.MEMBER_TRAIT
 	
 	context(cursor: PzlTokenCursor)
-	override fun match(): Boolean = cursor.match(TRAIT)
+	override fun match(): Boolean {
+		return cursor.match(TRAIT)
+	}
 	
 	context(_: PzlContext, cursor: PzlTokenCursor)
-	override fun parse(
-		header: DeclarationHeader,
-		start: SourceLocation,
-	): TraitDeclaration = parseTraitDeclaration(header, start)
+	override fun parse(header: DeclarationHeader, start: SourceLocation): TraitDeclaration {
+		return parseTraitDeclaration(header, start)
+	}
 }

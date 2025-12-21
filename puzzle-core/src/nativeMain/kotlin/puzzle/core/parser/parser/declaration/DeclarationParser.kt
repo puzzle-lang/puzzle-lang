@@ -4,7 +4,10 @@ import puzzle.core.exception.syntaxError
 import puzzle.core.model.PzlContext
 import puzzle.core.model.SourceLocation
 import puzzle.core.parser.PzlTokenCursor
+import puzzle.core.parser.ast.declaration.CtorDeclaration
 import puzzle.core.parser.ast.declaration.Declaration
+import puzzle.core.parser.ast.declaration.InitDeclaration
+import puzzle.core.parser.ast.declaration.TopLevelAllowedDeclaration
 import puzzle.core.parser.matcher.declaration.DeclarationHeader
 import puzzle.core.parser.matcher.declaration.member.MemberDeclarationMatcher
 import puzzle.core.parser.matcher.declaration.toplevel.DeclarationMatcher
@@ -45,18 +48,35 @@ private fun parseDeclaration(): Declaration {
 }
 
 context(_: PzlContext, cursor: PzlTokenCursor)
-fun parseMemberDeclarations(): List<Declaration> {
-	return if (cursor.match(RBRACE)) emptyList() else {
+fun parseMemberDeclarationInfo(): MemberDeclarationInfo {
+	val declarations = if (cursor.match(RBRACE)) emptyList() else {
 		buildList {
 			do {
 				this += parseMemberDeclaration()
 			} while (!cursor.match(RBRACE))
 		}
 	}
+	return MemberDeclarationInfo(
+		ctors = declarations.filterIsInstance<CtorDeclaration>(),
+		inits = declarations.filterIsInstance<InitDeclaration>(),
+		members = declarations.filterIsInstance<TopLevelAllowedDeclaration>()
+	)
+}
+
+class MemberDeclarationInfo(
+	val ctors: List<CtorDeclaration>,
+	val inits: List<InitDeclaration>,
+	val members: List<TopLevelAllowedDeclaration>,
+) {
+	
+	companion object {
+		
+		val Empty = MemberDeclarationInfo(emptyList(), emptyList(), emptyList())
+	}
 }
 
 context(_: PzlContext, cursor: PzlTokenCursor)
-fun parseMemberDeclaration(): Declaration {
+private fun parseMemberDeclaration(): Declaration {
 	val docComment = parseDocComment()
 	val annotationCalls = parseAnnotationCalls()
 	val typeSpec = parseTypeSpec()

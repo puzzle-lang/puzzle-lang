@@ -24,8 +24,7 @@ object MemberPropertyDeclarationMatcher : MemberDeclarationMatcher<PropertyDecla
 	}
 	
 	context(_: PzlContext, cursor: PzlTokenCursor)
-	override fun parse(
-		header: DeclarationHeader,
-		start: SourceLocation,
-	): PropertyDeclaration = parsePropertyDeclaration(header, start)
+	override fun parse(header: DeclarationHeader, start: SourceLocation): PropertyDeclaration {
+		return parsePropertyDeclaration(header, start)
+	}
 }

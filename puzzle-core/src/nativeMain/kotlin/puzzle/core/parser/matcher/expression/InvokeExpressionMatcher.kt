@@ -1,5 +1,6 @@
 package puzzle.core.parser.matcher.expression
 
+import puzzle.core.exception.syntaxError
 import puzzle.core.model.PzlContext
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.expression.Expression
@@ -8,7 +9,7 @@ import puzzle.core.parser.parser.expression.parseInvokeExpression
 import puzzle.core.token.kinds.BracketKind.Start.LBRACKET
 import puzzle.core.token.kinds.BracketKind.Start.LPAREN
 
-object InvokeExpressionMatcher : ExpressionMatcher<InvokeExpression> {
+object InvokeExpressionMatcher : ExpressionMatcher, RequirePrefixExpressionParser<InvokeExpression> {
 	
 	private val kinds = arrayOf(LPAREN, LBRACKET)
 	
@@ -19,7 +20,12 @@ object InvokeExpressionMatcher : ExpressionMatcher<InvokeExpression> {
 	}
 	
 	context(_: PzlContext, cursor: PzlTokenCursor)
-	override fun parse(left: Expression?): InvokeExpression {
-		return parseInvokeExpression(left!!)
+	override fun prefixError(): Nothing {
+		syntaxError("${cursor.previous.value} 前未解析到表达式", cursor.previous)
+	}
+	
+	context(_: PzlContext, cursor: PzlTokenCursor)
+	override fun parse(left: Expression): InvokeExpression {
+		return parseInvokeExpression(left)
 	}
 }

@@ -9,7 +9,7 @@ import puzzle.core.parser.parser.expression.parseIsExpression
 import puzzle.core.token.kinds.OperatorKind.NOT
 import puzzle.core.token.kinds.TypeOperatorKind.IS
 
-object IsExpressionMatcher : ExpressionMatcher<IsExpression> {
+object IsExpressionMatcher : ExpressionMatcher, RequirePrefixExpressionParser<IsExpression> {
 	
 	context(cursor: PzlTokenCursor)
 	override fun match(left: Expression?): Boolean {
@@ -17,11 +17,16 @@ object IsExpressionMatcher : ExpressionMatcher<IsExpression> {
 	}
 	
 	context(_: PzlContext, cursor: PzlTokenCursor)
-	override fun parse(left: Expression?): IsExpression {
-		val negated = cursor.offset(offset = -2) == NOT
-		if (left == null) {
-			syntaxError("${if (negated) "!is" else "is"} 操作符左侧未解析到表达式", cursor.current)
-		}
-		return parseIsExpression(left, negated)
+	override fun prefixError(): Nothing {
+		val negated = cursor.offset(-2).kind == NOT
+		syntaxError(
+			"${if (negated) "!is" else "is"} 前未解析到表达式",
+			cursor.offset(if (negated) -2 else -1)
+		)
+	}
+	
+	context(_: PzlContext, cursor: PzlTokenCursor)
+	override fun parse(left: Expression): IsExpression {
+		return parseIsExpression(left)
 	}
 }

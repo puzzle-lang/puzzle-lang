@@ -143,7 +143,7 @@ class RunnableImpl : Runnable2 {
 
 class Test2 {
 
-    object _ {            // Test2.xxx
+    object {            // Test2.xxx
 
     }
 
@@ -325,4 +325,31 @@ class User(
     }
 
     ctor(): this(null, null)
+
+    init {
+        println("这是第一个初始化块")
+    }
+
+    init {
+        println("这是第二个初始化块")
+    }
+}
+
+object LocalContext(
+    private val context: Context
+) {
+
+    init {
+        println("Single 初始化了")
+    }
+
+    fun run() {
+
+    }
+}
+
+fun initLocalContext(context: Context) {
+    // LocalContext.run()           // 不允许在有参单例对象初始化前执行 run 函数
+    init? LocalContext(context)     // 这里执行了初始化，不允许重复初始化，这里允许安全初始化 init?
+    LocalContext.run()              // 这里就可以运行了，因为上方初始化了
 }

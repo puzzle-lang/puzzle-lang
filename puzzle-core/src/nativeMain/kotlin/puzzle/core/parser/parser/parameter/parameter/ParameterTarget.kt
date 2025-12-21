@@ -20,6 +20,12 @@ enum class ParameterTarget(
 		allowLambdaType = true,
 		allowWithoutParen = true
 	),
+	OBJECT(
+		modifierTarget = ModifierTarget.OBJECT_PARAMETER,
+		allowUnnamed = false,
+		allowLambdaType = true,
+		allowWithoutParen = true
+	),
 	ANNOTATION(
 		modifierTarget = ModifierTarget.ANNOTATION_PARAMETER,
 		allowUnnamed = false,

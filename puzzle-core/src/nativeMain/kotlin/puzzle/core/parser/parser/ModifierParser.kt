@@ -94,7 +94,7 @@ enum class ModifierTarget(
 		supportedModifiers = TopLevelAccessModifiers + setOf(OPEN, ABSTRACT, SEALED)
 	),
 	OBJECT(
-		displayName = "单例类",
+		displayName = "单例对象",
 		supportedModifiers = TopLevelAccessModifiers
 	),
 	TRAIT(
@@ -121,10 +121,6 @@ enum class ModifierTarget(
 		displayName = "成员函数",
 		supportedModifiers = MemberAccessModifiers + setOf(FINAL, OVERRIDE, OPEN, ABSTRACT)
 	),
-	MEMBER_CTOR(
-		displayName = "构造函数",
-		supportedModifiers = TopLevelAccessModifiers + setOf(FILE)
-	),
 	MEMBER_PROPERTY(
 		displayName = "属性",
 		supportedModifiers = TopLevelAccessModifiers + setOf(CONST, LATE, LAZY, VAR, VAL)
@@ -134,7 +130,7 @@ enum class ModifierTarget(
 		supportedModifiers = MemberAccessModifiers + setOf(INNER, OPEN, ABSTRACT)
 	),
 	MEMBER_OBJECT(
-		displayName = "成员单例类",
+		displayName = "成员单例对象",
 		supportedModifiers = MemberAccessModifiers
 	),
 	MEMBER_TRAIT(
@@ -157,17 +153,29 @@ enum class ModifierTarget(
 		displayName = "成员扩展",
 		supportedModifiers = MemberAccessModifiers
 	),
+	CTOR(
+		displayName = "次构造函数",
+		supportedModifiers = TopLevelAccessModifiers + setOf(FILE)
+	),
+	INIT(
+		displayName = "初始化块",
+		supportedModifiers = emptySet()
+	),
 	FUN_PARAMETER(
 		displayName = "函数参数",
 		supportedModifiers = setOf(VAR, ARGS)
 	),
 	CTOR_PARAMETER(
-		displayName = "构造函数参数",
+		displayName = "次构造函数参数",
 		supportedModifiers = setOf(VAR, ARGS)
 	),
 	CLASS_PARAMETER(
 		displayName = "类参数",
 		supportedModifiers = MemberAccessModifiers + setOf(OPEN, ABSTRACT, VAR, VAL, ARGS),
+	),
+	OBJECT_PARAMETER(
+		displayName = "单例对象参数",
+		supportedModifiers = MemberAccessModifiers + setOf(VAR, VAL, ARGS),
 	),
 	STRUCT_PARAMETER(
 		displayName = "结构体参数",

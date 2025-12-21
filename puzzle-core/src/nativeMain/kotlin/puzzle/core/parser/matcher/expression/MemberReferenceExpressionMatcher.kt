@@ -5,11 +5,9 @@ import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.expression.Expression
 import puzzle.core.parser.ast.expression.MemberReferenceExpression
 import puzzle.core.parser.parser.statement.parseMemberReferenceExpression
-import puzzle.core.token.kinds.AccessKind.*
+import puzzle.core.token.kinds.AccessKind.DOUBLE_COLON
 
-object MemberReferenceExpressionMatcher : ExpressionMatcher<MemberReferenceExpression> {
-	
-	private val kinds = arrayOf(DOT, QUESTION_DOT)
+object MemberReferenceExpressionMatcher : ExpressionMatcher, OptionalPrefixExpressionParser<MemberReferenceExpression> {
 	
 	context(cursor: PzlTokenCursor)
 	override fun match(left: Expression?): Boolean {

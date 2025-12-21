@@ -34,14 +34,13 @@ fun parseEnumDeclaration(header: DeclarationHeader, start: SourceLocation): Enum
 			typeSpec = header.typeSpec,
 			contextSpec = header.contextSpec,
 			annotationCalls = header.annotationCalls,
-			members = emptyList(),
 			location = location
 		)
 	}
 	val entries = parseEnumEntries()
-	val members = when {
-		cursor.match(RBRACE) -> emptyList()
-		cursor.match(SEMICOLON) -> parseMemberDeclarations()
+	val info = when {
+		cursor.match(RBRACE) -> MemberDeclarationInfo.Empty
+		cursor.match(SEMICOLON) -> parseMemberDeclarationInfo()
 		else -> syntaxError("enum 缺少 ';'", cursor.current)
 	}
 	val location = start span cursor.previous.location
@@ -54,8 +53,10 @@ fun parseEnumDeclaration(header: DeclarationHeader, start: SourceLocation): Enum
 		typeSpec = header.typeSpec,
 		contextSpec = header.contextSpec,
 		annotationCalls = header.annotationCalls,
-		members = members,
-		location = location
+		location = location,
+		inits = info.inits,
+		ctors = info.ctors,
+		members = info.members,
 	)
 }
 
@@ -77,11 +78,17 @@ private fun parseEnumEntry(): EnumEntry {
 			cursor.advance()
 		}
 	}
-	val members = if (cursor.match(LBRACE)) parseMemberDeclarations() else emptyList()
+	val info = if (cursor.match(LBRACE)) {
+		parseMemberDeclarationInfo()
+	} else MemberDeclarationInfo.Empty
 	val end = cursor.previous.location
+	if (info.ctors.isNotEmpty()) {
+		syntaxError("枚举成员不允许有次构造函数", info.ctors.first().location.start)
+	}
 	return EnumEntry(
 		name = name,
-		members = members,
+		members = info.members,
+		inits = info.inits,
 		location = start span end
 	)
 }

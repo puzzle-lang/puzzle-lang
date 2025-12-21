@@ -6,10 +6,9 @@ import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.expression.ElvisExpression
 import puzzle.core.parser.ast.expression.Expression
 import puzzle.core.parser.parser.expression.parseElvisExpression
-import puzzle.core.token.kinds.SymbolKind
 import puzzle.core.token.kinds.SymbolKind.ELVIS
 
-object ElvisExpressionMatcher : ExpressionMatcher<ElvisExpression> {
+object ElvisExpressionMatcher : ExpressionMatcher, RequirePrefixExpressionParser<ElvisExpression> {
 	
 	context(cursor: PzlTokenCursor)
 	override fun match(left: Expression?): Boolean {
@@ -17,10 +16,12 @@ object ElvisExpressionMatcher : ExpressionMatcher<ElvisExpression> {
 	}
 	
 	context(_: PzlContext, cursor: PzlTokenCursor)
-	override fun parse(left: Expression?): ElvisExpression {
-		if (left == null) {
-			syntaxError("'?:' 操作符前未解析到表达式", cursor.previous)
-		}
+	override fun prefixError(): Nothing {
+		syntaxError("'?:' 前未解析到表达式", cursor.previous)
+	}
+	
+	context(_: PzlContext, cursor: PzlTokenCursor)
+	override fun parse(left: Expression): ElvisExpression {
 		return parseElvisExpression(left)
 	}
 }

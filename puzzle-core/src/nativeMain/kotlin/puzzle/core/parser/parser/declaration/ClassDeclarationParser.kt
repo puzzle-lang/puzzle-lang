@@ -12,29 +12,36 @@ import puzzle.core.parser.parser.expression.IdentifierTarget
 import puzzle.core.parser.parser.expression.parseIdentifier
 import puzzle.core.parser.parser.parameter.parameter.ParameterTarget
 import puzzle.core.parser.parser.parameter.parameter.parseParameters
+import puzzle.core.parser.parser.parseAnnotationCalls
 import puzzle.core.parser.parser.parseModifiers
 import puzzle.core.token.kinds.BracketKind.Start.LBRACE
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseClassDeclaration(header: DeclarationHeader, start: SourceLocation): ClassDeclaration {
 	val name = parseIdentifier(IdentifierTarget.CLASS)
+	val primaryAnnotationCalls = parseAnnotationCalls()
 	val primaryCtorModifiers = parseModifiers()
-	primaryCtorModifiers.check(ModifierTarget.MEMBER_CTOR)
+	primaryCtorModifiers.check(ModifierTarget.CTOR)
 	val parameters = parseParameters(ParameterTarget.CLASS)
 	val superTypes = parseSuperTypes()
-	val members = if (cursor.match(LBRACE)) parseMemberDeclarations() else emptyList()
+	val info = if (cursor.match(LBRACE)) {
+		parseMemberDeclarationInfo()
+	} else MemberDeclarationInfo.Empty
 	val end = cursor.previous.location
 	return ClassDeclaration(
 		name = name,
 		docComment = header.docComment,
 		modifiers = header.modifiers,
+		primaryAnnotationCalls = primaryAnnotationCalls,
 		primaryCtorModifiers = primaryCtorModifiers,
 		parameters = parameters,
 		superTypes = superTypes,
 		typeSpec = header.typeSpec,
 		contextSpec = header.contextSpec,
 		annotationCalls = header.annotationCalls,
-		members = members,
+		ctors = info.ctors,
+		inits = info.inits,
+		members = info.members,
 		location = start span end
 	)
 }
