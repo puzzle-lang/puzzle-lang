@@ -13,7 +13,7 @@ import puzzle.core.token.kinds.BracketKind.Start.LBRACE
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseExtensionDeclaration(header: DeclarationHeader, start: SourceLocation): ExtensionDeclaration {
 	val extendedType = parseTypeReference()
-	val superTraits = parseSuperTypes(isSupportedClass = false)
+	val superTraits = parseSuperTypes(allowClass = false)
 		.filterIsInstance<SuperTrait>()
 	val members = if (cursor.match(LBRACE)) parseMemberDeclarations() else emptyList()
 	val end = cursor.previous.location

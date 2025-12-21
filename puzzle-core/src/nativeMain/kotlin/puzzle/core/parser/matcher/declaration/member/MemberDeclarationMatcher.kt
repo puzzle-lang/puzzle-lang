@@ -21,7 +21,8 @@ sealed interface MemberDeclarationMatcher<out D : Declaration> {
 			MemberStructDeclarationMatcher,
 			MemberEnumDeclarationMatcher,
 			MemberAnnotationDeclarationMatcher,
-			MemberExtensionDeclarationMatcher
+			MemberExtensionDeclarationMatcher,
+			MemberCtorDeclarationMatcher,
 		)
 	}
 	

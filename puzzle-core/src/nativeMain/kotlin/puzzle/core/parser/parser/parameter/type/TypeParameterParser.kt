@@ -39,7 +39,7 @@ private fun parseTypeParameter(): TypeParameter {
 	val bounds = if (cursor.match(COLON)) {
 		buildList<TypeReference> {
 			do {
-				val type = parseTypeReference(isSupportedNullable = true)
+				val type = parseTypeReference(allowNullable = true)
 				if (this.isNotEmpty()) {
 					val last = this.last()
 					if (last.isNullable != type.isNullable) {
@@ -57,7 +57,7 @@ private fun parseTypeParameter(): TypeParameter {
 		}
 	} else emptyList()
 	val defaultType = if (cursor.match(ASSIGN)) {
-		parseTypeReference(isSupportedNullable = bounds.isEmpty() || bounds.first().isNullable)
+		parseTypeReference(allowNullable = bounds.isEmpty() || bounds.first().isNullable)
 	} else null
 	val end = cursor.position
 	return TypeParameter(

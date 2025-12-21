@@ -115,6 +115,10 @@ enum class IdentifierTarget(
 		displayName = "枚举成员声明",
 		allowAnonymousBinding = false,
 	),
+	CTOR(
+		displayName = "构造函数声明",
+		allowAnonymousBinding = false
+	),
 	CONTEXT_RECEIVER(
 		displayName = "上下文型参",
 		allowAnonymousBinding = true
@@ -174,5 +178,5 @@ enum class IdentifierTarget(
 	FOR_VARIABLE(
 		displayName = "for 语句循环变量",
 		allowAnonymousBinding = true,
-	)
+	),
 }

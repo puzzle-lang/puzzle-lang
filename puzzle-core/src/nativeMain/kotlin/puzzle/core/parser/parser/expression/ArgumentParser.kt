@@ -15,14 +15,14 @@ import puzzle.core.token.kinds.SeparatorKind.SEMICOLON
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseArguments(endKind: BracketKind.End): List<Argument> {
 	if (cursor.match(endKind)) return emptyList()
-	val arguments = mutableListOf<Argument>()
-	do {
-		arguments += parseCallArgument(endKind)
-		if (!cursor.check(endKind)) {
-			cursor.expect(COMMA, "参数缺少 ','")
-		}
-	} while (!cursor.match(endKind))
-	return arguments
+	return buildList {
+		do {
+			this += parseCallArgument(endKind)
+			if (!cursor.check(endKind)) {
+				cursor.expect(COMMA, "参数缺少 ','")
+			}
+		} while (!cursor.match(endKind))
+	}
 }
 
 context(_: PzlContext, cursor: PzlTokenCursor)
@@ -34,23 +34,22 @@ private fun parseCallArgument(endKind: BracketKind.End): Argument {
 	} else null
 	val expression = parseExpressionChain()
 	val start = name?.location ?: expression.location
-	
 	if (cursor.previous.kind == SEMICOLON) {
 		syntaxError("参数不支持使用 ';' 结束表达式", cursor.previous)
 	}
 	val end = cursor.previous.location
-	val currentType = cursor.current.kind
-	if (currentType == COMMA) {
+	val currentKind = cursor.current.kind
+	if (currentKind == COMMA) {
 		return Argument(name, expression, start span end)
 	}
 	return when (endKind) {
-		RPAREN if currentType == RBRACKET -> syntaxError(
-			message = "函数参数表达式后只允许根 ')' 和 ','",
+		RPAREN if currentKind == RBRACKET -> syntaxError(
+			message = "参数表达式后只允许根 ')' 或 ','",
 			token = cursor.current
 		)
 		
-		RBRACKET if currentType == RPAREN -> syntaxError(
-			message = "索引访问参数表达式后只允许根 ']' 和 ','",
+		RBRACKET if currentKind == RPAREN -> syntaxError(
+			message = "索引访问参数表达式后只允许根 ']' 或 ','",
 			token = cursor.current
 		)
 		

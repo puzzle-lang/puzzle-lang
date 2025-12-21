@@ -9,7 +9,7 @@ import puzzle.core.token.kinds.OperatorKind.*
 
 object PrefixUnaryExpressionMatcher : ExpressionMatcher<PrefixUnaryExpression> {
 	
-	private val tokenTypes = setOf(
+	private val kinds = setOf(
 		PLUS,
 		MINUS,
 		NOT,
@@ -20,9 +20,9 @@ object PrefixUnaryExpressionMatcher : ExpressionMatcher<PrefixUnaryExpression> {
 	
 	context(cursor: PzlTokenCursor)
 	override fun match(left: Expression?): Boolean {
-		val type = cursor.current.kind
-		if (type !in tokenTypes) return false
-		return if (left == null || type != PLUS && type != MINUS) {
+		val kind = cursor.current.kind
+		if (kind !in kinds) return false
+		return if (left == null || kind != PLUS && kind != MINUS) {
 			cursor.advance()
 			true
 		} else false

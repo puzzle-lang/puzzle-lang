@@ -21,7 +21,7 @@ import puzzle.core.token.kinds.SymbolKind.COLON
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parsePropertyDeclaration(header: DeclarationHeader, start: SourceLocation): PropertyDeclaration {
 	val (extension, name) = parseExtensionAndPropertyName()
-	val type = if (cursor.match(COLON)) parseTypeReference(isSupportedLambdaType = true) else null
+	val type = if (cursor.match(COLON)) parseTypeReference(allowLambdaType = true) else null
 	val initialize = if (cursor.match(ASSIGN)) parseExpressionChain() else null
 	val end = cursor.previous.location
 	return PropertyDeclaration(

@@ -309,5 +309,20 @@ class List {
 fun param(
     @Param name: String = ""
 ) {
+    test(1, "1", 1.0, true, 1 + 2, name, age)
+}
 
+class User(
+    private val name: String?,
+    private val age: Int?
+) {
+
+    ctor only(
+        name: String? = null,
+        age: Int? = null
+    ) : this(name, age) {
+        println("Created by only")
+    }
+
+    ctor(): this(null, null)
 }

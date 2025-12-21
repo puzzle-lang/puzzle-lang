@@ -17,7 +17,8 @@ import puzzle.core.parser.matcher.declaration.DeclarationHeader
 import puzzle.core.parser.parser.expression.IdentifierTarget
 import puzzle.core.parser.parser.expression.tryParseIdentifier
 import puzzle.core.parser.parser.expression.tryParseIdentifierString
-import puzzle.core.parser.parser.parameter.parameter.parseFunParameters
+import puzzle.core.parser.parser.parameter.parameter.ParameterTarget
+import puzzle.core.parser.parser.parameter.parameter.parseParameters
 import puzzle.core.parser.parser.parseTypeReference
 import puzzle.core.parser.parser.statement.parseStatements
 import puzzle.core.token.kinds.AccessKind.DOT
@@ -34,11 +35,10 @@ import puzzle.core.token.kinds.SymbolKind.COLON
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseFunDeclaration(header: DeclarationHeader, start: SourceLocation): FunDeclaration {
 	val (extension, funName) = parseExtensionAndFunName()
-	val parameters = parseFunParameters()
-	val returnTypes = mutableListOf<TypeReference>()
-	if (cursor.match(COLON)) {
+	val parameters = parseParameters(ParameterTarget.FUN)
+	val returnTypes = if (!cursor.match(COLON)) emptyList() else buildList {
 		do {
-			returnTypes += parseTypeReference(isSupportedLambdaType = true)
+			this += parseTypeReference(allowLambdaType = true)
 		} while (cursor.match(COMMA))
 	}
 	val expressions = if (cursor.match(LBRACE)) parseStatements() else emptyList()

@@ -10,7 +10,8 @@ import puzzle.core.parser.parser.ModifierTarget
 import puzzle.core.parser.parser.check
 import puzzle.core.parser.parser.expression.IdentifierTarget
 import puzzle.core.parser.parser.expression.parseIdentifier
-import puzzle.core.parser.parser.parameter.parameter.parseClassParameters
+import puzzle.core.parser.parser.parameter.parameter.ParameterTarget
+import puzzle.core.parser.parser.parameter.parameter.parseParameters
 import puzzle.core.parser.parser.parseModifiers
 import puzzle.core.token.kinds.BracketKind.Start.LBRACE
 
@@ -19,7 +20,7 @@ fun parseClassDeclaration(header: DeclarationHeader, start: SourceLocation): Cla
 	val name = parseIdentifier(IdentifierTarget.CLASS)
 	val primaryCtorModifiers = parseModifiers()
 	primaryCtorModifiers.check(ModifierTarget.MEMBER_CTOR)
-	val parameters = parseClassParameters()
+	val parameters = parseParameters(ParameterTarget.CLASS)
 	val superTypes = parseSuperTypes()
 	val members = if (cursor.match(LBRACE)) parseMemberDeclarations() else emptyList()
 	val end = cursor.previous.location

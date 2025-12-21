@@ -18,7 +18,7 @@ fun parseVariableDeclarationStatement(): VariableDeclarationStatement {
 	val isMutable = cursor.previous.kind == VAR
 	val name = parseIdentifier(IdentifierTarget.VARIABLE)
 	val type = if (cursor.match(COLON)) {
-		parseTypeReference(isSupportedLambdaType = true)
+		parseTypeReference(allowLambdaType = true)
 	} else null
 	val initializer = if (cursor.match(ASSIGN)) {
 		parseExpressionChain()

@@ -10,7 +10,8 @@ import puzzle.core.parser.ast.declaration.EnumEntry
 import puzzle.core.parser.matcher.declaration.DeclarationHeader
 import puzzle.core.parser.parser.expression.IdentifierTarget
 import puzzle.core.parser.parser.expression.parseIdentifier
-import puzzle.core.parser.parser.parameter.parameter.parseEnumParameters
+import puzzle.core.parser.parser.parameter.parameter.ParameterTarget
+import puzzle.core.parser.parser.parameter.parameter.parseParameters
 import puzzle.core.token.kinds.BracketKind.End.RBRACE
 import puzzle.core.token.kinds.BracketKind.End.RPAREN
 import puzzle.core.token.kinds.BracketKind.Start.LBRACE
@@ -21,7 +22,7 @@ import puzzle.core.token.kinds.SeparatorKind.SEMICOLON
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseEnumDeclaration(header: DeclarationHeader, start: SourceLocation): EnumDeclaration {
 	val name = parseIdentifier(IdentifierTarget.ENUM)
-	val parameters = parseEnumParameters()
+	val parameters = parseParameters(ParameterTarget.ENUM)
 	if (!cursor.match(LBRACE)) {
 		val location = start span cursor.previous.location
 		return EnumDeclaration(

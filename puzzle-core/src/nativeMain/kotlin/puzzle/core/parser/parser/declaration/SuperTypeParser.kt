@@ -12,13 +12,12 @@ import puzzle.core.parser.parser.expression.parseArguments
 import puzzle.core.parser.parser.parseTypeReference
 import puzzle.core.token.kinds.BracketKind.End.RPAREN
 import puzzle.core.token.kinds.BracketKind.Start.LPAREN
-import puzzle.core.token.kinds.SeparatorKind
 import puzzle.core.token.kinds.SeparatorKind.COMMA
 import puzzle.core.token.kinds.SymbolKind.COLON
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseSuperTypes(
-	isSupportedClass: Boolean = true,
+	allowClass: Boolean = true,
 ): List<SuperType> {
 	if (!cursor.match(COLON)) {
 		return emptyList()
@@ -26,7 +25,7 @@ fun parseSuperTypes(
 	val superTypes = mutableListOf<SuperType>()
 	do {
 		superTypes += parseSuperType(
-			isSupportedClass = isSupportedClass,
+			allowClass = allowClass,
 			hasSuperClass = superTypes.any { it is SuperClass }
 		)
 	} while (cursor.match(COMMA))
@@ -35,15 +34,15 @@ fun parseSuperTypes(
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 private fun parseSuperType(
-	isSupportedClass: Boolean,
+	allowClass: Boolean,
 	hasSuperClass: Boolean,
 ): SuperType {
-	val type = parseTypeReference(isSupportedNullable = false)
+	val type = parseTypeReference(allowNullable = false)
 	if (!cursor.match(LPAREN)) {
 		return SuperTrait(type, type.location)
 	}
 	val offset = -1 - ((type.type as NamedType).segments.size - 1) * 2
-	if (!isSupportedClass) {
+	if (!allowClass) {
 		syntaxError("不支持继承类", cursor.offset(offset))
 	}
 	if (hasSuperClass) {

@@ -5,7 +5,7 @@ import puzzle.core.model.PzlContext
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.expression.Expression
 import puzzle.core.parser.matcher.expression.ExpressionMatcher
-import puzzle.core.token.kinds.BracketKind
+import puzzle.core.token.kinds.BracketKind.End.*
 import puzzle.core.token.kinds.ControlFlowKind.*
 import puzzle.core.token.kinds.MetaKind.EOF
 import puzzle.core.token.kinds.OperatorKind.AND
@@ -40,13 +40,14 @@ fun tryParseExpressionChain(): Expression? {
 	return expression
 }
 
-private val endSymbols = arrayOf(
+private val endKinds = setOf(
+	EOF,
+	RPAREN,
+	RBRACE,
+	RBRACKET,
 	COLON,
 	COMMA,
-	ARROW
-)
-
-private val endKeywords = arrayOf(
+	ARROW,
 	IF,
 	ELSE,
 	WHILE
@@ -55,9 +56,7 @@ private val endKeywords = arrayOf(
 context(_: PzlContext, cursor: PzlTokenCursor)
 private fun isAtExpressionEnd(): Boolean {
 	val kind = cursor.current.kind
-	if (kind == EOF || kind is BracketKind.End) return true
-	if (endSymbols.any { kind == it }) return true
-	if (endKeywords.any { kind == it }) return true
+	if (kind in endKinds) return true
 	if (kind == SEMICOLON) {
 		cursor.advance()
 		return true

@@ -161,6 +161,10 @@ enum class ModifierTarget(
 		displayName = "函数参数",
 		supportedModifiers = setOf(VAR, ARGS)
 	),
+	CTOR_PARAMETER(
+		displayName = "构造函数参数",
+		supportedModifiers = setOf(VAR, ARGS)
+	),
 	CLASS_PARAMETER(
 		displayName = "类参数",
 		supportedModifiers = MemberAccessModifiers + setOf(OPEN, ABSTRACT, VAR, VAL, ARGS),
@@ -180,7 +184,7 @@ enum class ModifierTarget(
 	LAMBDA_PARAMETER(
 		displayName = "lambda 参数",
 		supportedModifiers = emptySet()
-	),
+	)
 }
 
 private val MemberAccessModifiers = setOf<ModifierKind>(PRIVATE, PROTECTED, FILE, INTERNAL, MODULE, PUBLIC)

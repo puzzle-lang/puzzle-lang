@@ -33,6 +33,6 @@ private fun parseTypeArgument(): TypeArgument {
 			cursor.advance()
 		}
 	} else null
-	val type = parseTypeReference(isSupportedLambdaType = true)
+	val type = parseTypeReference(allowLambdaType = true)
 	return TypeArgument(name, type)
 }
