@@ -7,6 +7,7 @@ import puzzle.core.parser.ast.statement.Statement
 
 @Serializable
 class LambdaExpression(
+	val label: Identifier?,
 	val references: List<LambdaParameterReference>,
 	val body: List<Statement>,
 	override val location: SourceLocation,

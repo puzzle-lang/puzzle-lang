@@ -5,13 +5,17 @@ import puzzle.core.model.PzlContext
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.expression.Expression
 import puzzle.core.parser.ast.expression.Identifier
-import puzzle.core.parser.parser.expression.matchIdentifier
+import puzzle.core.parser.parser.expression.checkIdentifier
+import puzzle.core.token.kinds.SymbolKind.HASH
 
 object IdentifierMatcher : ExpressionMatcher, NoPrefixExpressionParser<Identifier> {
 	
 	context(cursor: PzlTokenCursor)
 	override fun match(left: Expression?): Boolean {
-		return cursor.matchIdentifier()
+		return if (cursor.checkIdentifier() && cursor.offset(1).kind != HASH) {
+			cursor.advance()
+			true
+		} else false
 	}
 	
 	context(_: PzlContext, cursor: PzlTokenCursor)

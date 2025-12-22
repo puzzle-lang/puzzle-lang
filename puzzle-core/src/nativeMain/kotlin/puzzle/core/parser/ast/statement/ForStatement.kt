@@ -7,6 +7,7 @@ import puzzle.core.parser.ast.expression.Identifier
 
 @Serializable
 class ForStatement(
+	val label: Identifier?,
 	val pattern: ForPattern,
 	val iterable: Expression,
 	val body: List<Statement>,

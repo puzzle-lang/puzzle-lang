@@ -9,15 +9,19 @@ import puzzle.core.parser.ast.statement.ValuePattern
 import puzzle.core.parser.parser.expression.IdentifierTarget
 import puzzle.core.parser.parser.expression.parseExpressionChain
 import puzzle.core.parser.parser.expression.parseIdentifier
+import puzzle.core.parser.parser.expression.toIdentifier
 import puzzle.core.token.kinds.BracketKind.End.RPAREN
 import puzzle.core.token.kinds.BracketKind.Start.LBRACE
 import puzzle.core.token.kinds.BracketKind.Start.LPAREN
 import puzzle.core.token.kinds.SeparatorKind.COMMA
 import puzzle.core.token.kinds.SymbolKind.COLON
+import puzzle.core.token.kinds.SymbolKind.HASH
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseForStatement(): ForStatement {
-	val start = cursor.previous.location
+	val containLabel = cursor.offset(-2).kind == HASH
+	val start = if (containLabel) cursor.offset(-3).location else cursor.previous.location
+	val label = if (containLabel) cursor.offset(-3).toIdentifier() else null
 	cursor.expect(LPAREN, "for 语句缺少 '{'")
 	val value = parseIdentifier(IdentifierTarget.FOR_VARIABLE)
 	val pattern = if (cursor.match(COMMA)) {
@@ -36,5 +40,5 @@ fun parseForStatement(): ForStatement {
 		listOf(parseStatement())
 	}
 	val end = cursor.previous.location
-	return ForStatement(pattern, iterable, body, start span end)
+	return ForStatement(label, pattern, iterable, body, start span end)
 }

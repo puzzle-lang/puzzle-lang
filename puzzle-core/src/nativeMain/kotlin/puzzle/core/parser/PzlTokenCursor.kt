@@ -33,17 +33,17 @@ class PzlTokenCursor(
 		return tokens.getOrNull(position + offset)
 	}
 	
-	fun advance() {
-		if (position < tokens.size - 1) {
-			position++
+	fun advance(count: Int = 1) {
+		if (position < tokens.size - count) {
+			position += count
 		} else {
 			error("position 超出 tokens 的范围")
 		}
 	}
 	
-	fun retreat() {
-		if (position > 0) {
-			position--
+	fun retreat(count: Int = 1) {
+		if (position > count - 1) {
+			position -= count
 		} else {
 			error("position 超出 tokens 的范围")
 		}
@@ -63,8 +63,8 @@ class PzlTokenCursor(
 	
 	fun match(kind1: PzlTokenKind, kind2: PzlTokenKind, vararg kinds: PzlTokenKind): Boolean {
 		val kinds = arrayOf(kind1, kind2) + kinds
-		kinds.forEachIndexed { index, kind ->
-			val token = offsetOrNull(offset = index) ?: return false
+		kinds.forEachIndexed { offset, kind ->
+			val token = offsetOrNull(offset = offset) ?: return false
 			if (token.kind != kind) {
 				return false
 			}

@@ -21,7 +21,8 @@ sealed class SymbolKind(
 			fastSetOf(
 				COLON, QUESTION, ELVIS,
 				AT,
-				ARROW
+				ARROW,
+				HASH
 			)
 		)
 	}
@@ -35,6 +36,8 @@ sealed class SymbolKind(
 	object AT : SymbolKind("@")
 	
 	object ARROW : SymbolKind("->")
+	
+	object HASH : SymbolKind("#")
 }
 
 sealed class OperatorKind(

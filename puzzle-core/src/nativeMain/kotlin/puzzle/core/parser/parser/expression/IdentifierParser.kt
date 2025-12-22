@@ -4,6 +4,7 @@ import puzzle.core.exception.syntaxError
 import puzzle.core.model.PzlContext
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.expression.Identifier
+import puzzle.core.token.PzlToken
 import puzzle.core.token.kinds.AccessorKind.GET
 import puzzle.core.token.kinds.AccessorKind.SET
 import puzzle.core.token.kinds.ContextualKind.*
@@ -58,15 +59,22 @@ fun tryParseIdentifierString(target: IdentifierTarget): String? {
 	return null
 }
 
-fun PzlTokenCursor.checkIdentifier(): Boolean {
+fun PzlToken.toIdentifier(allowAnonymousBinding: Boolean = false): Identifier {
+	if (kind is IdentifierKind || kind in softKeywords || (kind.value == "_" && allowAnonymousBinding)) {
+		return Identifier(kind.value, this.location)
+	}
+	error("不支持转换为标识符")
+}
+
+fun PzlTokenCursor.checkIdentifier(allowAnonymousBinding: Boolean = false): Boolean {
 	return this.check { kind ->
-		kind is IdentifierKind || softKeywords.any { kind == it }
+		kind is IdentifierKind || kind in softKeywords || (kind.value == "_" && allowAnonymousBinding)
 	}
 }
 
-fun PzlTokenCursor.matchIdentifier(): Boolean {
+fun PzlTokenCursor.matchIdentifier(allowAnonymousBinding: Boolean = false): Boolean {
 	return this.match { kind ->
-		kind is IdentifierKind || softKeywords.any { kind == it }
+		kind is IdentifierKind || kind in softKeywords || (kind.value == "_" && allowAnonymousBinding)
 	}
 }
 
