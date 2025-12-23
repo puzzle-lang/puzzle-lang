@@ -3,7 +3,10 @@ package puzzle.core.lexer
 import puzzle.core.exception.syntaxError
 import puzzle.core.lexer.recognition.*
 import puzzle.core.model.PzlContext
+import puzzle.core.model.span
 import puzzle.core.token.PzlToken
+import puzzle.core.token.kinds.BracketKind.End.RBRACE
+import puzzle.core.token.kinds.BracketKind.Start.LBRACE
 import puzzle.core.token.kinds.CommentKind.MultiLine
 import puzzle.core.token.kinds.CommentKind.SingleLine
 import puzzle.core.token.kinds.MetaKind.EOF
@@ -11,9 +14,20 @@ import puzzle.core.token.kinds.WhiteSpaceKind
 
 class PzlLexer(
 	private val input: CharArray,
+	private var position: Int,
+	private val isTemplateExpression: Boolean,
 ) {
 	
-	private var position = 0
+	companion object {
+		
+		fun default(input: CharArray): PzlLexer {
+			return PzlLexer(input, 0, false)
+		}
+		
+		fun templateExpression(input: CharArray, position: Int): PzlLexer {
+			return PzlLexer(input, position, true)
+		}
+	}
 	
 	private val recognitions = arrayOf(
 		EOFRecognition,
@@ -30,12 +44,28 @@ class PzlLexer(
 	)
 	
 	context(_: PzlContext)
-	fun lex(): List<PzlToken> {
+	fun scan(): List<PzlToken> {
 		return buildList {
-			while (true) {
-				val token = nextToken()
-				this += token
-				if (token.kind == EOF) break
+			if (isTemplateExpression) {
+				var depth = 1
+				while (true) {
+					val token = nextToken()
+					if (token.kind == LBRACE) {
+						depth++
+					} else if (token.kind == RBRACE && --depth == 0) {
+						val lastLocation = this.last().location
+						this += PzlToken(EOF, lastLocation.end span lastLocation.end + 1)
+						break
+					}
+					this += token
+					if (token.kind == EOF) break
+				}
+			} else {
+				while (true) {
+					val token = nextToken()
+					this += token
+					if (token.kind == EOF) break
+				}
 			}
 		}
 	}

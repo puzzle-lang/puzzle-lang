@@ -2,7 +2,8 @@ package puzzle.core.token.kinds
 
 import puzzle.core.collections.fastSetOf
 import puzzle.core.collections.mergeFastSets
-import kotlin.String as KString
+import puzzle.core.model.SourceLocation
+import puzzle.core.token.PzlToken
 
 sealed interface LiteralKind : PzlTokenKind {
 	
@@ -10,42 +11,39 @@ sealed interface LiteralKind : PzlTokenKind {
 		
 		val keywordKinds = mergeFastSets<KeywordKind>(
 			BooleanKind.kinds,
-			fastSetOf<KeywordKind>(NULL)
+			fastSetOf(NULL)
 		)
 	}
 	
-	sealed class BooleanKind(
-		override val value: KString,
-	) : LiteralKind, KeywordKind {
-		
-		companion object {
-			
-			val kinds = fastSetOf<BooleanKind>(TRUE, FALSE)
-		}
-		
-		object TRUE : BooleanKind("true")
-		
-		object FALSE : BooleanKind("false")
-	}
-	
 	object NULL : LiteralKind, KeywordKind {
+		
 		override val value = "null"
 	}
-	
-	class StringKind(
-		override val value: KString,
-	) : LiteralKind
-	
-	class CharKind(
-		override val value: KString,
-	) : LiteralKind
-	
-	class NumberKind(
-		override val value: KString,
-		val system: NumberSystem,
-		val type: NumberLiteralType,
-	) : LiteralKind
 }
+
+sealed class BooleanKind(
+	override val value: String,
+) : LiteralKind, KeywordKind {
+	
+	companion object {
+		
+		val kinds = fastSetOf<BooleanKind>(TRUE, FALSE)
+	}
+	
+	object TRUE : BooleanKind("true")
+	
+	object FALSE : BooleanKind("false")
+}
+
+class CharKind(
+	override val value: String,
+) : LiteralKind
+
+class NumberKind(
+	override val value: String,
+	val system: NumberSystem,
+	val type: NumberLiteralType,
+) : LiteralKind
 
 enum class NumberSystem {
 	BINARY,
@@ -71,10 +69,37 @@ enum class NumberLiteralType(
 			isDecimal: Boolean,
 			isUnsigned: Boolean,
 			is8Byte: Boolean,
-		): NumberLiteralType {
-			return entries.first {
-				it.isDecimal == isDecimal && it.isUnsigned == isUnsigned && it.is8Byte == is8Byte
-			}
+		): NumberLiteralType = entries.first {
+			it.isDecimal == isDecimal && it.isUnsigned == isUnsigned && it.is8Byte == is8Byte
+		}
+	}
+}
+
+sealed interface StringKind : LiteralKind {
+	
+	class Text(
+		override val value: String,
+	) : StringKind
+	
+	class Template(
+		val parts: List<Part>,
+	) : StringKind {
+		
+		override val value = "[STRING TEMPLATE]"
+		
+		sealed interface Part {
+			
+			val location: SourceLocation
+			
+			class Text(
+				val value: String,
+				override val location: SourceLocation,
+			) : Part
+			
+			class Expression(
+				val tokens: List<PzlToken>,
+				override val location: SourceLocation,
+			) : Part
 		}
 	}
 }

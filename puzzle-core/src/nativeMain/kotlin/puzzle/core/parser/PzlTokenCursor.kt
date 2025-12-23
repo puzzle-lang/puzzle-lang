@@ -19,6 +19,9 @@ class PzlTokenCursor(
 	val previous: PzlToken
 		get() = this.tokens[position - 1]
 	
+	val previousOrNull: PzlToken?
+		get() = this.tokens.getOrNull(position - 1)
+	
 	val next: PzlToken
 		get() = this.tokens[position + 1]
 	
@@ -34,18 +37,18 @@ class PzlTokenCursor(
 	}
 	
 	fun advance(count: Int = 1) {
-		if (position < tokens.size - count) {
+		if (position <= tokens.size - count) {
 			position += count
 		} else {
-			error("position 超出 tokens 的范围")
+			error("position: $position, tokenSize: ${tokens.size}")
 		}
 	}
 	
 	fun retreat(count: Int = 1) {
-		if (position > count - 1) {
+		if (position >= count) {
 			position -= count
 		} else {
-			error("position 超出 tokens 的范围")
+			error("position: $position, tokenSize: ${tokens.size}")
 		}
 	}
 	

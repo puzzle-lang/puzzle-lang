@@ -72,6 +72,8 @@ private const fun add(num1: Int, num2: Int?): Int {
 
 }
 
+const val PI = 3.1415926
+
 private fun callback(callback: ((Int) -> [String, Int])?) {
 
 }

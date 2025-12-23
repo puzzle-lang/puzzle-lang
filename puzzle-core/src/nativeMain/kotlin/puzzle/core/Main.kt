@@ -56,7 +56,7 @@ private fun compile(paths: List<String>) = runBlocking {
 			val lineStarts = source.value.getLineStarts()
 			val context = PzlContext(file.absolutePath, lineStarts)
 			context(context) {
-				val tokens = measureTimedValue { PzlLexer(source.value).lex() }
+				val tokens = measureTimedValue { PzlLexer.default(source.value).scan() }
 				println("${file.absolutePath} -> 词法分析: ${tokens.duration}")
 				val cursor = PzlTokenCursor(tokens.value)
 				context(cursor) {

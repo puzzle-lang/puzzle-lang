@@ -1,0 +1,15 @@
+package puzzle.example
+
+fun main() {
+
+	val str1 = "Hello World!"
+
+	val str2 = """
+	    {
+	        "code": 404,
+	        "msg": "Not Found"
+	    }
+	"""
+
+	val str3 = $"name: $name, age: ${age + 1}"
+}

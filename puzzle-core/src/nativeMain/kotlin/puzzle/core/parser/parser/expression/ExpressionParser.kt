@@ -80,7 +80,8 @@ private fun isAtExpressionEnd(): Boolean {
 		cursor.advance()
 		return true
 	}
-	val previousLine = cursor.previous.location.startPosition.line
+	val previous = cursor.previousOrNull ?: return false
+	val previousLine = previous.location.startPosition.line
 	val current = cursor.current
 	val currentLine = current.location.startPosition.line
 	if (previousLine == currentLine) return false

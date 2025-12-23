@@ -23,3 +23,17 @@ fun String.isBinary(): Boolean {
 }
 
 fun Char.isBinary(): Boolean = this in binaryChars
+
+fun Char.isIdentifierStart(): Boolean {
+	return this in 'a'..'z' || this in 'A'..'Z' || this == '_'
+}
+
+fun Char.isIdentifierPart(): Boolean {
+	return this in 'a'..'z' || this in 'A'..'Z' || this == '_' || this in '0'..'9'
+}
+
+fun CharArray.safeString(start: Int, length: Int): String? {
+	if (start < 0 || length <= 0 || start >= size) return null
+	val end = minOf(start + length, size)
+	return this.concatToString(start, end)
+}

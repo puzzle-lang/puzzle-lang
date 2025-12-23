@@ -5,15 +5,16 @@ import puzzle.core.model.PzlContext
 import puzzle.core.model.span
 import puzzle.core.token.PzlToken
 import puzzle.core.token.kinds.IdentifierKind
+import puzzle.core.util.isIdentifierPart
+import puzzle.core.util.isIdentifierStart
 
 object IdentifierRecognition : TokenRecognition {
 	
 	context(_: PzlContext)
 	override fun tryParse(input: CharArray, start: Int): PzlToken? {
-		val char = input[start]
-		if (!char.isEnglishLetter() && char != '_') return null
+		if (!input[start].isIdentifierStart()) return null
 		var position = start + 1
-		while (position < input.size && (input[position] == '_' || input[position].isEnglishLetter() || input[position].isDigit())) {
+		while (position < input.size && input[position].isIdentifierPart()) {
 			position++
 		}
 		val identifier = input.concatToString(start, position)

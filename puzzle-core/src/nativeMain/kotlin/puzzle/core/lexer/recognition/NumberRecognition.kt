@@ -4,7 +4,7 @@ import puzzle.core.exception.syntaxError
 import puzzle.core.model.PzlContext
 import puzzle.core.model.span
 import puzzle.core.token.PzlToken
-import puzzle.core.token.kinds.LiteralKind.NumberKind
+import puzzle.core.token.kinds.NumberKind
 import puzzle.core.token.kinds.NumberLiteralType
 import puzzle.core.token.kinds.NumberSystem
 import puzzle.core.util.isBinary

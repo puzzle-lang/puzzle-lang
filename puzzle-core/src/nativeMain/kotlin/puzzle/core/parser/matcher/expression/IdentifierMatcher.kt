@@ -12,7 +12,7 @@ object IdentifierMatcher : ExpressionMatcher, NoPrefixExpressionParser<Identifie
 	
 	context(cursor: PzlTokenCursor)
 	override fun match(left: Expression?): Boolean {
-		return if (cursor.checkIdentifier() && cursor.offset(1).kind != HASH) {
+		return if (cursor.checkIdentifier() && cursor.offsetOrNull(1)?.kind != HASH) {
 			cursor.advance()
 			true
 		} else false
