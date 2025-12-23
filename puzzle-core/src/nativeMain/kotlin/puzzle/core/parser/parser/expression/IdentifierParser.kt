@@ -190,4 +190,12 @@ enum class IdentifierTarget(
 		displayName = "for 语句循环变量",
 		allowAnonymousBinding = true,
 	),
+	GETTER_PARAMETER(
+		displayName = "属性访问器参数",
+		allowAnonymousBinding = false,
+	),
+	SETTER_PARAMETER(
+		displayName = "属性赋值器参数",
+		allowAnonymousBinding = false,
+	)
 }

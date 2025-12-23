@@ -20,10 +20,10 @@ fun parseExtensionDeclaration(header: DeclarationHeader, start: SourceLocation):
 		parseMemberDeclarationInfo()
 	} else MemberDeclarationInfo.Empty
 	if (info.inits.isNotEmpty()) {
-		syntaxError("扩展不允许有初始化块", info.inits.first().location.start)
+		syntaxError("扩展不允许有初始化块", info.inits.first())
 	}
 	if (info.ctors.isNotEmpty()) {
-		syntaxError("扩展不允许有次构造函数", info.ctors.first().location.start)
+		syntaxError("扩展不允许有次构造函数", info.ctors.first())
 	}
 	val end = cursor.previous.location
 	return ExtensionDeclaration(

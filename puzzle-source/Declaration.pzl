@@ -357,3 +357,24 @@ fun initLocalContext(context: Context) {
     init? LocalContext(context)     // 这里执行了初始化，不允许重复初始化，这里允许安全初始化 init?
     LocalContext.run()              // 这里就可以运行了，因为上方初始化了
 }
+
+val property1 = 10
+
+val property2: Int = 10
+
+val property3: Int {
+
+}
+
+lazy val property4: Int { 1 + 2 }
+
+val property5: Int
+    get() = 1 + 2
+
+var property6 = 0
+
+var property7: Int
+    get() { property6 }
+    set(newValue) {
+        property6 = newValue
+    }

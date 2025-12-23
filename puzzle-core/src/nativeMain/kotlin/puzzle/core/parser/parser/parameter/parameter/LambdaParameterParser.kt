@@ -37,11 +37,11 @@ private fun parseLambdaParameter(): LambdaParameter {
 	val start = cursor.previous.location
 	val annotationCalls = parseAnnotationCalls()
 	if (annotationCalls.isNotEmpty()) {
-		syntaxError("lambda 型参不支持注解", annotationCalls.first().location.start)
+		syntaxError("lambda 型参不支持注解", annotationCalls.first())
 	}
 	val modifiers = parseModifiers()
 	if (modifiers.isNotEmpty()) {
-		syntaxError("lambda 型参不支持修饰符", modifiers.first().location.start)
+		syntaxError("lambda 型参不支持修饰符", modifiers.first())
 	}
 	val name = if (cursor.offsetOrNull(1)?.kind == COLON) {
 		parseIdentifier(IdentifierTarget.PARAMETER).also {

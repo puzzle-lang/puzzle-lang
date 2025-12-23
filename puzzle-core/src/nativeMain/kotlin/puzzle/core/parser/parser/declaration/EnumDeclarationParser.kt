@@ -83,7 +83,7 @@ private fun parseEnumEntry(): EnumEntry {
 	} else MemberDeclarationInfo.Empty
 	val end = cursor.previous.location
 	if (info.ctors.isNotEmpty()) {
-		syntaxError("枚举成员不允许有次构造函数", info.ctors.first().location.start)
+		syntaxError("枚举成员不允许有次构造函数", info.ctors.first())
 	}
 	return EnumEntry(
 		name = name,

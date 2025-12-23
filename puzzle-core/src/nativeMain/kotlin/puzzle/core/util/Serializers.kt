@@ -107,3 +107,20 @@ object VarianceKindSerializer : KSerializer<VarianceKind> {
 		return VarianceKind.kinds.first { it.value == symbol }
 	}
 }
+
+object AssignmentKindSerializer : KSerializer<AssignmentKind> {
+	
+	override val descriptor = PrimitiveSerialDescriptor(
+		AssignmentKindSerializer::class.qualifiedName!!,
+		PrimitiveKind.STRING
+	)
+	
+	override fun serialize(encoder: Encoder, value: AssignmentKind) {
+		encoder.encodeString(value.value)
+	}
+	
+	override fun deserialize(decoder: Decoder): AssignmentKind {
+		val symbol = decoder.decodeString()
+		return AssignmentKind.kinds.first { it.value == symbol }
+	}
+}

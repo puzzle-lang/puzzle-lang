@@ -8,6 +8,8 @@ import puzzle.core.parser.matcher.expression.ExpressionMatcher
 import puzzle.core.parser.matcher.expression.NoPrefixExpressionParser
 import puzzle.core.parser.matcher.expression.OptionalPrefixExpressionParser
 import puzzle.core.parser.matcher.expression.RequirePrefixExpressionParser
+import puzzle.core.token.kinds.AccessorKind.GET
+import puzzle.core.token.kinds.AccessorKind.SET
 import puzzle.core.token.kinds.BracketKind.End.*
 import puzzle.core.token.kinds.ControlFlowKind.*
 import puzzle.core.token.kinds.MetaKind.EOF
@@ -65,7 +67,9 @@ private val endKinds = setOf(
 	ARROW,
 	IF,
 	ELSE,
-	WHILE
+	WHILE,
+	GET,
+	SET
 )
 
 context(_: PzlContext, cursor: PzlTokenCursor)

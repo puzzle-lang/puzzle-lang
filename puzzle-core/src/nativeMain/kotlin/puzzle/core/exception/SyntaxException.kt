@@ -3,6 +3,7 @@ package puzzle.core.exception
 import puzzle.core.model.PzlContext
 import puzzle.core.model.SourcePosition
 import puzzle.core.model.calcPosition
+import puzzle.core.parser.ast.AstNode
 import puzzle.core.token.PzlToken
 
 private class SyntaxException(
@@ -27,4 +28,10 @@ context(context: PzlContext)
 fun syntaxError(message: String, token: PzlToken): Nothing {
 	val position = token.location.startPosition
 	throw SyntaxException(message, context.sourcePath, position, token)
+}
+
+context(context: PzlContext)
+fun syntaxError(message: String, node: AstNode): Nothing {
+	val position = node.location.startPosition
+	throw SyntaxException(message, context.sourcePath, position, null)
 }

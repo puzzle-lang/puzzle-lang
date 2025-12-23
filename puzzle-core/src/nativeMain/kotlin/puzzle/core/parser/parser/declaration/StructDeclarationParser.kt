@@ -25,7 +25,7 @@ fun parseStructDeclaration(header: DeclarationHeader, start: SourceLocation): St
 		parseMemberDeclarationInfo()
 	} else MemberDeclarationInfo.Empty
 	if (info.ctors.isNotEmpty()) {
-		syntaxError("结构体不允许有次构造函数", info.ctors.first().location.start)
+		syntaxError("结构体不允许有次构造函数", info.ctors.first())
 	}
 	val end = cursor.previous.location
 	return StructDeclaration(
