@@ -19,7 +19,6 @@ kotlin {
 	jvm("desktop") {
 		compilerOptions {
 			jvmTarget = JvmTarget.JVM_25
-			
 		}
 	}
 	

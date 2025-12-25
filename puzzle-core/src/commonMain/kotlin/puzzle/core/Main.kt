@@ -1,8 +1,5 @@
-@file:OptIn(ExperimentalSerializationApi::class)
-
 package puzzle.core
 
-import kotlinx.serialization.ExperimentalSerializationApi
 import puzzle.core.util.alsoLog
 import puzzle.core.util.getCurrentMemoryUsage
 import kotlin.time.measureTimedValue

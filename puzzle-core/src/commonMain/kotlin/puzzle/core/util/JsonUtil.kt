@@ -1,6 +1,7 @@
 package puzzle.core.util
 
 import kotlinx.serialization.json.Json
+import kotlin.time.measureTimedValue
 
 val json = Json {
 	prettyPrint = true
@@ -12,6 +13,11 @@ val json = Json {
 
 inline fun <reified T> T.alsoLog(): T {
 	if (this == null) return this
-	println(json.encodeToString(this))
+	
+	val value = measureTimedValue {
+		json.encodeToString(this)
+	}
+	println(value.value)
+	println("序列化耗时: ${value.duration}")
 	return this
 }
