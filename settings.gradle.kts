@@ -1,4 +1,4 @@
-rootProject.name = "PuzzleLang"
+rootProject.name = "puzzle-lang"
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {

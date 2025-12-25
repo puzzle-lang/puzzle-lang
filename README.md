@@ -1,184 +1,81 @@
-# PuzzleLang v0.0.0
+# 🧩 Puzzle Programming Language
 
-## 示例
+**Version:** `0.1.0`
 
-```puzzle
-/**
- * 特征 - 消费者
- */
-trait Consumable {
+**Puzzle** 是一门正在设计与实现中的通用编程语言，目标是提供**清晰的抽象能力**与**可预测的性能表现**
+，在保持语言表达力的同时，直接编译为高效的原生二进制程序。
 
-    type<T : Food>
-	fun eat(food: T)
-	
-	fun drink(milliliter: Int)
-}
+> 把复杂问题拆解成可以拼合的“拼图”，这是 Puzzle 的名字来源，也是它的设计理念。
 
-/**
- * 特征 - 食物
- */
-trait Food {
-	
-	fun getName(): String
-}
+---
 
-/**
- * 单例对象 - 鱼
- */
-object Fish : Food {
+## ✨ 语言特性（设计目标）
 
-	override fun getName(): String { "鱼" }
-	
-}
+Puzzle 结合了面向对象与面向过程编程范式，并在语言层面提供现代化特性支持：
 
-/**
- * 单例对象 - 肉
- */
-object Meat : Food {
+### 编程范式
 
-	override fun getName(): String { "肉" }
-}
+- **面向对象**：类、对象、封装与抽象
+- **面向过程**：清晰、可控的执行流程
+- **上下文（Context）模型**：用于表达作用域与语义边界
 
-/**
- * 特征 - 信息提供者
- */
-trait InfoProvider {
-	
-	fun getInfo(): String, Int
-}
+### 类型系统
 
-/**
- * 类 - 动物
- */
-class Animal(
-	protected val name: String,
-	protected val age: Int
-)
+- **泛型（Generics）**：支持类型参数化，提高代码复用能力
+- **属性（Property）语法**：原生支持 `get` / `set`
 
-/**
- * 扩展 - 为 Animal 扩展 Consumable 特征
- */
-extension Animal : Consumable {
+### 初始化与生命周期
 
-    type<T : Food>
-    override fun eat(food: T) {
-        println("$name 吃了 ${food.getName()}")
-    }
-    
-    override fun drink(milliliter: Int) {
-        println("$name 喝了 $milliliter 毫升水")
-    }
-}
+- **`late var`**：语言级延迟初始化的可变变量
+- **`lazy val`**：语言级惰性求值的不可变变量
 
-/**
- * 扩展函数
- */
-fun Int.toString(): String {
-    this    // 获取 Int
-}
+- **`object` 单例**：语言层面支持的单例对象定义
+    - 支持 **带参数的单例对象**
+    - 使用 `init ObjectName(args...)` 显式初始化单例
+    - 使用 `init? ObjectName(args...)` 进行**安全初始化**
+        - 若单例已初始化，不会抛出错误或重复构造
 
-fun test() {
-    // 使用 Int.toString()
-    10.toString()
-    
-    // 使用 (Parent1, Parent2).run()
-    val parent1 = Parent1()
-    val parent2 = Parent2()
-    
-    // 显示调用
-    (parent1, parent2).run()
-    
-    // 隐式调用
-    (parent1, parent2) {
-        run()   // 你可以不需要指定，因为上下文已经被锁定了
-        run()   // 多次调用
-    }
-}
+### 字符串能力
 
-type<T : Food>
-fun apply(
-    animal: Animal?,
-    food: T, 
-    milliliter: Int, 
-    onFinished: (name: String, age: Int) -> Unit
-) {
-	animal.eat(food)
-	animal.drink(milliliter)
-	// 自动解构多返回值，当你不需要某个参数的时候，也可以使用匿名 _
-	val name, age = animal.getInfo()
-	// 没错 lambda 也支持指定名称传递参数
-	onFinished(name = name, age = age)
-}
+- **字符串模板（String Template）**
+- **多行字符串模板（Multi-line String Template）**
 
-/**
- * 结构体
- */
-struct Info(
-    val name: String,
-    val age: String
-)
+---
 
-/**
- * 编译期计算常量函数
- *
- * 入参和返回值必须为结构体，且必须有返回类型
- * 可以在编译期计算，无运行时性能
- * 被普通函数调用，和普通函数行为相同
- */
-const fun getNextYearInfo(name: String, age: Int): Info {
-    Info(name, age + 1)
-}
+## 🏗 编译目标与架构
 
-/*
- * 当入参在编译期确定且为结构体，可在编译期计算结果
- */
-private const val FishInfo = getInfo("鱼", 1)
+- **编译目标**
+    - 直接编译为 **原生二进制文件**
 
-fun main() {
-	val dot = Animal("猫咪")
-	val cat = Animal("小狗")
-	apply(dot, Meat, 2) { // name, age ->           // 名称根据函数定义，可以不写
-	    println("$name 今年 $age 岁了，吃完了生日餐")
-	}
-	apply(cat, Fish, 3) { catName, _ ->             // 当然你也可以手动指定，不需要的时候，也可以使用匿名
-	    println("catName 的饭吃好了")
-	}
-}
+- **编译器架构**
+    - 前端：**完全自研**
+        - 词法分析（Lexer）
+        - 语法分析（Parser）
+    - 后端：基于 **LLVM IR**
+        - 利用 LLVM 的成熟优化与多平台支持能力
 
-reified type<T>                  // reified 关键字表示泛型具体化，运行时支持获取泛型类型
-class Generic1(
-    private val type: T
-) {
-    
-    init {
-        println(T::type == String::type)        // 支持运行时获取泛型类型信息
-        println(T::type < Object::type)         // 支持是否是某个类型的子类型
-    }
-}
+---
 
-type<T>
-class Generic2(
-    private val type: T
-) {
+## 🚧 项目当前进度
 
-    init {
-        // println(T::type)                     // error! 泛型为具体化，不支持判断类型
-    }
-}
+> 当前处于语言与编译器的早期阶段
 
-@Annotation1
-@Annotation2(name = "Hi")
-reified type<T>
-fun generic3(type: T) {
-    println(type is Int)
-}
+- ✅ 词法分析器（Lexer）完成
+- ✅ 语法分析器（Parser）完成
+- ⏳ 语义分析、类型检查、IR 生成正在设计中
 
-fun useGeneric() {
-    val generic1 = Generic1(1)  // 对已经泛型具体化的类，直接调用即可，会对所有调用者生成具体化的类
-    
-    val generic2 = reified Generic2(2)  // 对于未泛型具体化的类，需要泛型信息时，可以使用 reified 关键字定义，会为调用类型生成具体化类
-    println(generic2 is Generic2<Int>)  // 这里可以为运行时提供泛型判断功能，但是未具体化的类不行
-    
-    generic3("Hello")                   // 对泛型具体化的函数正常调用即可，编译器会自动生成所有调用点类型的具体化类实现
-}
-```
+---
+
+## 📌 项目状态说明
+
+Puzzle 目前仍处于**实验性阶段**，语言语法与特性可能会发生调整，适合：
+
+- 编程语言设计与实现研究
+- 编译器前端 / LLVM 学习
+- 新语言特性探索与原型验证
+
+---
+
+## 📜 License
+
+（待定）
