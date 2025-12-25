@@ -8,6 +8,7 @@ import puzzle.core.parser.matcher.expression.ExpressionMatcher
 import puzzle.core.parser.matcher.expression.NoPrefixExpressionParser
 import puzzle.core.parser.matcher.expression.OptionalPrefixExpressionParser
 import puzzle.core.parser.matcher.expression.RequirePrefixExpressionParser
+import puzzle.core.token.kinds.AccessKind
 import puzzle.core.token.kinds.AccessorKind.GET
 import puzzle.core.token.kinds.AccessorKind.SET
 import puzzle.core.token.kinds.BracketKind.End.*
@@ -74,18 +75,14 @@ private val endKinds = setOf(
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 private fun isAtExpressionEnd(): Boolean {
-	val kind = cursor.current.kind
-	if (kind in endKinds) return true
-	if (kind == SEMICOLON) {
+	val current = cursor.current
+	if (current.kind in endKinds) return true
+	if (current == SEMICOLON) {
 		cursor.advance()
 		return true
 	}
-	val previous = cursor.previousOrNull ?: return false
-	val previousLine = previous.location.startPosition.line
-	val current = cursor.current
+	if (current.kind is AccessKind || current.kind == AND || current.kind == OR) return false
+	val previousLine = cursor.previousOrNull?.location?.startPosition?.line ?: return false
 	val currentLine = current.location.startPosition.line
-	if (previousLine == currentLine) return false
-	return previousLine < currentLine &&
-			current.kind != AND &&
-			current.kind != OR
+	return previousLine < currentLine
 }

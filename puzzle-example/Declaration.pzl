@@ -40,6 +40,10 @@ fun accessTest() {
     val value10 = b ? c ?: (d + 1) * 10 : e ?: f
     val value11 = b.c ~> d && e.f() !~> g.h[0]
     val value12 = getLambda()()
+    value11.toString()
+        .test1()
+        .test2()
+        .test3()
 }
 
 /**
