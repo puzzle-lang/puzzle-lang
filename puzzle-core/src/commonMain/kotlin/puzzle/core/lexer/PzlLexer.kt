@@ -3,7 +3,6 @@ package puzzle.core.lexer
 import puzzle.core.exception.syntaxError
 import puzzle.core.lexer.recognition.*
 import puzzle.core.model.PzlContext
-import puzzle.core.model.span
 import puzzle.core.token.PzlToken
 import puzzle.core.token.kinds.BracketKind.End.RBRACE
 import puzzle.core.token.kinds.BracketKind.Start.LBRACE
@@ -53,8 +52,7 @@ class PzlLexer(
 					if (token.kind == LBRACE) {
 						depth++
 					} else if (token.kind == RBRACE && --depth == 0) {
-						val lastLocation = this.last().location
-						this += PzlToken(EOF, lastLocation.end span lastLocation.end + 1)
+						this += PzlToken(EOF, token.location)
 						break
 					}
 					this += token

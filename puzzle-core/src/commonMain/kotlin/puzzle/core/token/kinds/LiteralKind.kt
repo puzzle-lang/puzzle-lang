@@ -85,7 +85,14 @@ sealed interface StringKind : LiteralKind {
 		val parts: List<Part>,
 	) : StringKind {
 		
-		override val value = "[STRING TEMPLATE]"
+		override val value by lazy {
+			parts.joinToString("") { part ->
+				when (part) {
+					is Part.Expression -> "[EXPRESSION]"
+					is Part.Text -> part.value
+				}
+			}
+		}
 		
 		sealed interface Part {
 			

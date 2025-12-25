@@ -8,9 +8,8 @@ import puzzle.core.model.span
 import puzzle.core.token.PzlToken
 import puzzle.core.token.kinds.MetaKind
 import puzzle.core.token.kinds.StringKind
-import puzzle.core.util.isHex
-import puzzle.core.util.isIdentifierStart
-import puzzle.core.util.safeString
+import puzzle.core.token.kinds.StringKind.Template.Part
+import puzzle.core.util.*
 
 object StringRecognition : TokenRecognition {
 	
@@ -39,53 +38,40 @@ object StringRecognition : TokenRecognition {
 			else -> return null
 		}
 		val isMultiLine = input.safeString(start + dollarCount, 3) == TRIPLE_QUOTATION
-		val isText = dollarCount == 0
-		return when {
-			isText && isMultiLine -> parseMultiLineText(input, start)
-			isText -> parseSingleLineText(input, start)
-			isMultiLine -> parseMultiLineTemplate(input, start, dollarCount)
-			else -> parseSingleLineTemplate(input, start, dollarCount)
+		return if (dollarCount == 0) {
+			parseText(input, start, isMultiLine)
+		} else {
+			parseTemplate(input, start, isMultiLine, dollarCount)
 		}
 	}
 	
 	context(_: PzlContext)
-	private fun parseSingleLineText(input: CharArray, start: Int): PzlToken {
-		var position = start + 1
-		while (position < input.size) {
-			position += when (parseCharType(input, position, false)) {
-				NORMAL -> 1
-				ESCAPE -> 2
-				UNICODE -> 6
-				else -> break
-			}
-		}
-		val kind = StringKind.Text(input.concatToString(start + 1, position))
-		return PzlToken(kind, start span position + 1)
-	}
-	
-	context(_: PzlContext)
-	private fun parseMultiLineText(input: CharArray, start: Int): PzlToken {
-		var position = start + 3
-		while (position < input.size) {
-			position += when (parseCharType(input, position, true)) {
-				NORMAL -> 1
-				ESCAPE -> 2
-				UNICODE -> 6
-				else -> break
-			}
-		}
-		val value = input.concatToString(start + 3, position).trimIndent()
-		val kind = StringKind.Text(value)
-		return PzlToken(kind, start span position + 3)
-	}
-	
-	context(_: PzlContext)
-	private fun parseSingleLineTemplate(input: CharArray, start: Int, dollarCount: Int): PzlToken {
-		var textStart = start + dollarCount + 1
+	private fun parseText(input: CharArray, start: Int, isMultiLine: Boolean): PzlToken {
+		val offset = if (isMultiLine) 3 else 1
+		val textStart = start + offset
 		var position = textStart
-		val parts = mutableListOf<StringKind.Template.Part>()
 		while (position < input.size) {
-			val type = parseCharType(input, position, false, dollarCount)
+			position += when (parseCharType(input, position, isMultiLine)) {
+				NORMAL -> 1
+				ESCAPE -> 2
+				UNICODE -> 6
+				NEWLINE -> if (isMultiLine) 1 else syntaxError("请使用多行字符串", position)
+				else -> break
+			}
+		}
+		val raw = input.concatToString(textStart, position)
+		val kind = StringKind.Text(if (isMultiLine) raw.trimIndent() else raw)
+		return PzlToken(kind, start span position + offset)
+	}
+	
+	context(_: PzlContext)
+	private fun parseTemplate(input: CharArray, start: Int, isMultiLine: Boolean, dollarCount: Int): PzlToken {
+		val offset = if (isMultiLine) 3 else 1
+		var textStart = start + dollarCount + offset
+		var position = textStart
+		val rawParts = mutableListOf<Part>()
+		while (position < input.size) {
+			val type = parseCharType(input, position, isMultiLine, dollarCount)
 			position += when (type) {
 				NORMAL -> 1
 				ESCAPE -> 2
@@ -93,60 +79,86 @@ object StringRecognition : TokenRecognition {
 				END -> {
 					if (textStart < position) {
 						val value = input.concatToString(textStart, position)
-						parts += StringKind.Template.Part.Text(value, textStart span position)
+						rawParts += Part.Text(value, textStart span position)
 					}
 					break
 				}
 				
+				NEWLINE -> if (isMultiLine) 1 else syntaxError("请使用多行字符串模版", position)
+				
 				else -> {
 					if (textStart < position) {
 						val value = input.concatToString(textStart, position)
-						parts += StringKind.Template.Part.Text(value, textStart span position)
+						rawParts += Part.Text(value, textStart span position)
 					}
-					when (type) {
+					val start = position
+					val tokens = when (type) {
 						SIMPLE_INTERPOLATION -> {
-							val start = position
 							position += dollarCount
 							val token = IdentifierRecognition.tryParse(input, position)!!
-							position += token.value.length
-							val tokens = listOf(token, PzlToken(MetaKind.EOF, token.location.end span token.location.end + 1))
-							parts += StringKind.Template.Part.Expression(tokens, start span position)
-							textStart = position
+							position = token.location.end
+							listOf(token, PzlToken(MetaKind.EOF, token.location.end span token.location.end + 1))
 						}
 						
 						EXPRESSION_INTERPOLATION -> {
-							val start = position
 							position += dollarCount + 1
 							val tokens = PzlLexer.templateExpression(input, position).scan()
 							if (tokens.isEmpty()) {
 								syntaxError("字符串插值缺少表达式", position)
 							}
-							val tokensEnd = tokens.last().location.end
-							position = tokensEnd
-							parts += StringKind.Template.Part.Expression(tokens, start span position)
-							textStart = position
+							position = tokens.last().location.end
+							tokens
 						}
 					}
+					rawParts += Part.Expression(tokens, start span position)
+					textStart = position
 					continue
 				}
 			}
 		}
+		val parts = if (isMultiLine) rawParts.trimIndent() else rawParts
 		val kind = StringKind.Template(parts)
-		return PzlToken(kind, start span position + 1)
+		return PzlToken(kind, start span position + offset)
+	}
+	
+	private fun MutableList<Part>.trimIndent(): List<Part> {
+		if (this.isEmpty()) return emptyList()
+		val first = this.first()
+		if (first is Part.Text) {
+			val value = first.value.trimStart(' ', '\t')
+			if (value.first() == '\n') {
+				this[0] = Part.Text(value.removePrefix("\n"), first.location)
+			}
+		}
+		val last = this.last()
+		if (last is Part.Text) {
+			val value = last.value.trimEnd(' ', '\t')
+			if (value.last() == '\n') {
+				this[this.lastIndex] = Part.Text(value.removeSuffix("\n"), last.location)
+			}
+		}
+		var indentWidth = Int.MAX_VALUE
+		val formattedIndices = mutableListOf<Int>()
+		this.forEachIndexed { index, part ->
+			if (part !is Part.Text || '\n' !in part.value) return@forEachIndexed
+			val current = part.value.getIndentWidth(ignoreFirstLine = index > 0)!!
+			formattedIndices += index
+			if (current < indentWidth) {
+				indentWidth = current
+			}
+		}
+		if (indentWidth == Int.MAX_VALUE) return this
+		formattedIndices.forEach { index ->
+			val part = this[index] as Part.Text
+			val value = part.value.removeIndent(indentWidth, ignoreFirstLine = index > 0)
+			this[index] = Part.Text(value, part.location)
+		}
+		return this
 	}
 	
 	context(_: PzlContext)
-	private fun parseMultiLineTemplate(input: CharArray, start: Int, dollarCount: Int): PzlToken {
-		error("暂不支持多行字符串模版")
-	}
 	
-	context(_: PzlContext)
-	private fun parseCharType(
-		input: CharArray,
-		position: Int,
-		isMultiLine: Boolean,
-		dollarCount: Int = 0,
-	): CharType {
+	private fun parseCharType(input: CharArray, position: Int, isMultiLine: Boolean, dollarCount: Int = 0): CharType {
 		return when (input[position]) {
 			'\\' -> {
 				if (position + 1 >= input.size) {
@@ -168,12 +180,12 @@ object StringRecognition : TokenRecognition {
 				}
 			}
 			
-			'\n' if !isMultiLine -> syntaxError("请使用多行字符串", position)
+			'\n' -> NEWLINE
 			
 			QUOTATION if (!isMultiLine || (input.safeString(position, 3) == TRIPLE_QUOTATION && input.getOrNull(position + 3) != QUOTATION)) -> END
 			DOLLAR if dollarCount > 0 -> {
 				val dollars = input.safeString(position, dollarCount) ?: return NORMAL
-				if (dollars.any { it == DOLLAR }) {
+				if (dollars.all { it == DOLLAR }) {
 					val char = input.getOrNull(position + dollarCount) ?: return NORMAL
 					when {
 						char == '{' -> EXPRESSION_INTERPOLATION
@@ -193,6 +205,7 @@ object StringRecognition : TokenRecognition {
 		UNICODE,
 		SIMPLE_INTERPOLATION,
 		EXPRESSION_INTERPOLATION,
+		NEWLINE,
 		END
 	}
 }

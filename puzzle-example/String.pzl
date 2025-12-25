@@ -11,5 +11,13 @@ fun main() {
 	    }
 	"""
 
-	val str3 = $"name: $name, age: ${age + 1}"
+	val str3 = $"name: $name, age: ${age + 1}, height: 100"
+	val str4 = $"""  Hello  """
+	val str5 = $$"""
+	    {
+	        "code": $$code,
+	        "data": null,
+	        "msg": $${ $"Message content is: $msg" }
+        }
+	"""
 }
