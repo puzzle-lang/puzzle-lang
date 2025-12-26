@@ -17,7 +17,7 @@ object LambdaExpressionMatcher : ExpressionMatcher, NoPrefixExpressionParser<Lam
 	
 	context(_: PzlContext, cursor: PzlTokenCursor)
 	override fun prefixError(): Nothing {
-		syntaxError("lambda 语句前不允许有表达式", cursor.previous)
+		syntaxError("lambda 前不允许有表达式", cursor.previous)
 	}
 	
 	context(_: PzlContext, cursor: PzlTokenCursor)

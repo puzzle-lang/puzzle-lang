@@ -14,10 +14,11 @@ import puzzle.core.token.kinds.SeparatorKind.COMMA
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseNamedType(): NamedType {
 	val start = cursor.current.location
-	val segments = mutableListOf<String>()
-	do {
-		segments += parseIdentifierString(IdentifierTarget.TYPE_REFERENCE)
-	} while (cursor.match(DOT))
+	val segments = buildList {
+		do {
+			this += parseIdentifierString(IdentifierTarget.TYPE_REFERENCE)
+		} while (cursor.match(DOT))
+	}
 	val typeArguments = parseTypeArguments()
 	val location = start span cursor.previous.location
 	return NamedType(segments, location, typeArguments)

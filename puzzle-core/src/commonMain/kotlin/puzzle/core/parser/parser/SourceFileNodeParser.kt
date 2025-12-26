@@ -12,13 +12,14 @@ import puzzle.core.token.kinds.NamespaceKind.IMPORT
 
 context(context: PzlContext, cursor: PzlTokenCursor)
 fun parseSourceFileNode(): SourceFileNode {
+	val start = cursor.current.location
 	val packageDeclaration = parsePackageDeclaration()
 	val importDeclarations = mutableListOf<ImportDeclaration>()
 	while (cursor.match(IMPORT)) {
 		importDeclarations += parseImportDeclaration()
 	}
 	val declarations = parseDeclarations()
-	val location = packageDeclaration.location span cursor.previous.location
+	val location = start span cursor.previous.location
 	return SourceFileNode(
 		path = context.sourcePath,
 		packageDeclaration = packageDeclaration,
