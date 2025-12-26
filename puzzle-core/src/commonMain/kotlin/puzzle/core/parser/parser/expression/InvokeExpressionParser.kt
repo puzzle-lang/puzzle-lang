@@ -7,8 +7,6 @@ import puzzle.core.parser.ast.expression.CallExpression
 import puzzle.core.parser.ast.expression.Expression
 import puzzle.core.parser.ast.expression.IndexAccessExpression
 import puzzle.core.parser.ast.expression.InvokeExpression
-import puzzle.core.token.kinds.BracketKind.End.RBRACKET
-import puzzle.core.token.kinds.BracketKind.End.RPAREN
 import puzzle.core.token.kinds.BracketKind.Start.LPAREN
 
 context(_: PzlContext, cursor: PzlTokenCursor)
@@ -23,7 +21,7 @@ fun parseInvokeExpression(callee: Expression): InvokeExpression {
 context(_: PzlContext, cursor: PzlTokenCursor)
 private fun parseCallExpression(callee: Expression): CallExpression {
 	val start = callee.location
-	val arguments = parseArguments(RPAREN)
+	val arguments = parseArguments()
 	val end = cursor.previous.location
 	return CallExpression(callee, arguments, start span end)
 }
@@ -31,7 +29,7 @@ private fun parseCallExpression(callee: Expression): CallExpression {
 context(_: PzlContext, cursor: PzlTokenCursor)
 private fun parseIndexAccessExpression(callee: Expression): IndexAccessExpression {
 	val start = callee.location
-	val arguments = parseArguments(RBRACKET)
+	val arguments = parseArguments(isParen = false)
 	val end = cursor.previous.location
 	return IndexAccessExpression(callee, arguments, start span end)
 }

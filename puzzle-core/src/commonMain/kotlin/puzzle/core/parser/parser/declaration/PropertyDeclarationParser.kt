@@ -6,8 +6,8 @@ import puzzle.core.model.SourceLocation
 import puzzle.core.model.copy
 import puzzle.core.model.span
 import puzzle.core.parser.PzlTokenCursor
-import puzzle.core.parser.ast.NamedType
-import puzzle.core.parser.ast.TypeReference
+import puzzle.core.parser.ast.type.NamedType
+import puzzle.core.parser.ast.type.TypeReference
 import puzzle.core.parser.ast.declaration.PropertyDeclaration
 import puzzle.core.parser.ast.declaration.PropertyGetter
 import puzzle.core.parser.ast.declaration.PropertySetter
@@ -16,7 +16,7 @@ import puzzle.core.parser.matcher.declaration.DeclarationHeader
 import puzzle.core.parser.parser.expression.IdentifierTarget
 import puzzle.core.parser.parser.expression.parseExpressionChain
 import puzzle.core.parser.parser.expression.parseIdentifier
-import puzzle.core.parser.parser.parseTypeReference
+import puzzle.core.parser.parser.type.parseTypeReference
 import puzzle.core.parser.parser.statement.parseStatement
 import puzzle.core.parser.parser.statement.parseStatements
 import puzzle.core.token.kinds.AccessKind.DOT

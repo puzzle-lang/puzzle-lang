@@ -96,7 +96,7 @@ sealed class DeclarationKind(
 	
 	companion object {
 		
-		val kinds = fastSetOf<DeclarationKind>(FUN, CLASS, OBJECT, TRAIT, STRUCT, ENUM, EXTENSION, ANNOTATION, CTOR)
+		val kinds = fastSetOf<DeclarationKind>(FUN, CLASS, OBJECT, TRAIT, STRUCT, ENUM, EXTENSION, MIXIN, ANNOTATION, CTOR)
 	}
 	
 	object FUN : DeclarationKind("fun")
@@ -112,6 +112,8 @@ sealed class DeclarationKind(
 	object ENUM : DeclarationKind("enum")
 	
 	object EXTENSION : DeclarationKind("extension")
+	
+	object MIXIN : DeclarationKind("mixin")
 	
 	object ANNOTATION : DeclarationKind("annotation")
 	
@@ -178,7 +180,7 @@ sealed class ContextualKind(
 	
 	companion object {
 		
-		val kinds = fastSetOf<ContextualKind>(TYPE, REIFIED, CONTEXT, INIT, THIS, SUPER)
+		val kinds = fastSetOf<ContextualKind>(TYPE, REIFIED, CONTEXT, INIT, WITH, THIS, SUPER)
 	}
 	
 	object TYPE : ContextualKind("type")
@@ -188,6 +190,8 @@ sealed class ContextualKind(
 	object CONTEXT : ContextualKind("context")
 	
 	object INIT : ContextualKind("init")
+	
+	object WITH : ContextualKind("with")
 	
 	object THIS : ContextualKind("this")
 	

@@ -11,7 +11,7 @@ import puzzle.core.parser.parser.expression.parseExpressionChain
 import puzzle.core.parser.parser.expression.parseIdentifier
 import puzzle.core.parser.parser.parseAnnotationCalls
 import puzzle.core.parser.parser.parseModifiers
-import puzzle.core.parser.parser.parseTypeReference
+import puzzle.core.parser.parser.type.parseTypeReference
 import puzzle.core.token.kinds.AssignmentKind.ASSIGN
 import puzzle.core.token.kinds.BracketKind.End.RPAREN
 import puzzle.core.token.kinds.BracketKind.Start.LPAREN

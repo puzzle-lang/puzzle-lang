@@ -32,7 +32,7 @@ fun parseObjectDeclaration(
 	val primaryCtorModifiers = parseModifiers()
 	primaryCtorModifiers.check(ModifierTarget.CTOR)
 	val parameters = parseParameters(ParameterTarget.OBJECT)
-	val superTypes = parseSuperTypes()
+	val superTypeSpecifiers = parseSuperTypeSpecifiers(SuperTypeSpecifierTarget.OBJECT)
 	val info = if (cursor.match(LBRACE)) {
 		parseMemberDeclarationInfo()
 	} else MemberDeclarationInfo.Empty
@@ -44,7 +44,7 @@ fun parseObjectDeclaration(
 		primaryAnnotationCalls = primaryAnnotationCalls,
 		primaryCtorModifiers = primaryCtorModifiers,
 		parameters = parameters,
-		superTypes = superTypes,
+		superTypeSpecifiers = superTypeSpecifiers,
 		contextSpec = header.contextSpec,
 		annotationCalls = header.annotationCalls,
 		inits = info.inits,

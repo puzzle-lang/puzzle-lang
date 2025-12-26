@@ -5,7 +5,7 @@ import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.parameter.LambdaParameterReference
 import puzzle.core.parser.parser.expression.IdentifierTarget
 import puzzle.core.parser.parser.expression.tryParseIdentifier
-import puzzle.core.parser.parser.parseTypeReference
+import puzzle.core.parser.parser.type.parseTypeReference
 import puzzle.core.token.kinds.SeparatorKind.COMMA
 import puzzle.core.token.kinds.SymbolKind.ARROW
 import puzzle.core.token.kinds.SymbolKind.COLON

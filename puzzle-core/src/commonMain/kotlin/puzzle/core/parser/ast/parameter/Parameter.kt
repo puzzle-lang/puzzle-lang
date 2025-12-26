@@ -5,7 +5,7 @@ import puzzle.core.model.SourceLocation
 import puzzle.core.parser.ast.AnnotationCall
 import puzzle.core.parser.ast.AstNode
 import puzzle.core.parser.ast.Modifier
-import puzzle.core.parser.ast.TypeReference
+import puzzle.core.parser.ast.type.TypeReference
 import puzzle.core.parser.ast.expression.Expression
 import puzzle.core.parser.ast.expression.Identifier
 

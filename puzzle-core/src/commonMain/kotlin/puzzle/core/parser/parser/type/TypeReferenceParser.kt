@@ -1,12 +1,12 @@
-package puzzle.core.parser.parser
+package puzzle.core.parser.parser.type
 
 import puzzle.core.exception.syntaxError
 import puzzle.core.model.PzlContext
 import puzzle.core.model.span
 import puzzle.core.parser.PzlTokenCursor
-import puzzle.core.parser.ast.LambdaType
-import puzzle.core.parser.ast.NamedType
-import puzzle.core.parser.ast.TypeReference
+import puzzle.core.parser.ast.type.LambdaType
+import puzzle.core.parser.ast.type.NamedType
+import puzzle.core.parser.ast.type.TypeReference
 import puzzle.core.parser.parser.argument.parseTypeArguments
 import puzzle.core.parser.parser.expression.IdentifierTarget
 import puzzle.core.parser.parser.expression.parseIdentifierString
@@ -26,14 +26,14 @@ fun parseTypeReference(
 	allowNullable: Boolean = true,
 ): TypeReference {
 	return if (cursor.check(LPAREN)) {
-		parseLambdaType(allowLambdaType, allowNullable)
+		parseLambdaTypeReference(allowLambdaType, allowNullable)
 	} else {
-		parseNamedType(allowNullable)
+		parseNamedTypeReference(allowNullable)
 	}
 }
 
 context(_: PzlContext, cursor: PzlTokenCursor)
-private fun parseLambdaType(
+private fun parseLambdaTypeReference(
 	allowLambdaType: Boolean,
 	allowNullable: Boolean,
 ): TypeReference {
@@ -106,15 +106,8 @@ private fun parseLambdaType(
 }
 
 context(_: PzlContext, cursor: PzlTokenCursor)
-private fun parseNamedType(allowNullable: Boolean): TypeReference {
-	val start = cursor.current.location
-	val segments = mutableListOf<String>()
-	do {
-		segments += parseIdentifierString(IdentifierTarget.TYPE_REFERENCE)
-	} while (cursor.match(DOT))
-	val typeArguments = parseTypeArguments()
-	val location = start span cursor.previous.location
-	val type = NamedType(segments, location, typeArguments)
+private fun parseNamedTypeReference(allowNullable: Boolean): TypeReference {
+	val type = parseNamedType()
 	var isNullable = false
 	while (cursor.match(QUESTION)) {
 		isNullable = true
@@ -123,5 +116,17 @@ private fun parseNamedType(allowNullable: Boolean): TypeReference {
 		syntaxError("不支持可空类型", cursor.previous)
 	}
 	val end = cursor.previous.location
-	return TypeReference(type, start span end, isNullable)
+	return TypeReference(type, type.location span end, isNullable)
+}
+
+context(_: PzlContext, cursor: PzlTokenCursor)
+fun parseNamedType(): NamedType {
+	val start = cursor.current.location
+	val segments = mutableListOf<String>()
+	do {
+		segments += parseIdentifierString(IdentifierTarget.TYPE_REFERENCE)
+	} while (cursor.match(DOT))
+	val typeArguments = parseTypeArguments()
+	val location = start span cursor.previous.location
+	return NamedType(segments, location, typeArguments)
 }

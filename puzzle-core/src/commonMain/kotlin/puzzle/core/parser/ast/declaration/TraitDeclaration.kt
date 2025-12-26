@@ -17,6 +17,7 @@ class TraitDeclaration(
 	val typeSpec: TypeSpec?,
 	val contextSpec: ContextSpec?,
 	val annotationCalls: List<AnnotationCall>,
+	val superTypeReferences: List<SuperTypeReference>,
 	val members: List<TopLevelAllowedDeclaration>,
 	override val location: SourceLocation,
 ) : TopLevelAllowedDeclaration

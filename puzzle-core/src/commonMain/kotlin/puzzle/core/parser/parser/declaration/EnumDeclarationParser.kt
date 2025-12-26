@@ -7,6 +7,7 @@ import puzzle.core.model.span
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.declaration.EnumDeclaration
 import puzzle.core.parser.ast.declaration.EnumEntry
+import puzzle.core.parser.ast.declaration.SuperTypeReference
 import puzzle.core.parser.matcher.declaration.DeclarationHeader
 import puzzle.core.parser.parser.expression.IdentifierTarget
 import puzzle.core.parser.parser.expression.parseIdentifier
@@ -23,6 +24,8 @@ context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseEnumDeclaration(header: DeclarationHeader, start: SourceLocation): EnumDeclaration {
 	val name = parseIdentifier(IdentifierTarget.ENUM)
 	val parameters = parseParameters(ParameterTarget.ENUM)
+	val superTypeReferences = parseSuperTypeSpecifiers(SuperTypeSpecifierTarget.ENUM)
+		.safeAsSuperTypeReferences()
 	if (!cursor.match(LBRACE)) {
 		val location = start span cursor.previous.location
 		return EnumDeclaration(

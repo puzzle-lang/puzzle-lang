@@ -21,6 +21,8 @@ fun parseStructDeclaration(header: DeclarationHeader, start: SourceLocation): St
 	val primaryAnnotationCalls = parseAnnotationCalls()
 	val primaryCtorModifiers = parseModifiers()
 	val parameters = parseParameters(ParameterTarget.STRUCT)
+	val superTypeReferences = parseSuperTypeSpecifiers(SuperTypeSpecifierTarget.STRUCT)
+		.safeAsSuperTypeReferences()
 	val info = if (cursor.match(LBRACE)) {
 		parseMemberDeclarationInfo()
 	} else MemberDeclarationInfo.Empty
@@ -35,6 +37,7 @@ fun parseStructDeclaration(header: DeclarationHeader, start: SourceLocation): St
 		primaryAnnotationCalls = primaryAnnotationCalls,
 		primaryCtorModifiers = primaryCtorModifiers,
 		parameters = parameters,
+		superTypeReferences = superTypeReferences,
 		typeSpec = header.typeSpec,
 		contextSpec = header.contextSpec,
 		annotationCalls = header.annotationCalls,

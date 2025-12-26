@@ -5,7 +5,7 @@ import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.argument.TypeArgument
 import puzzle.core.parser.parser.expression.IdentifierTarget
 import puzzle.core.parser.parser.expression.parseIdentifier
-import puzzle.core.parser.parser.parseTypeReference
+import puzzle.core.parser.parser.type.parseTypeReference
 import puzzle.core.token.kinds.AssignmentKind.ASSIGN
 import puzzle.core.token.kinds.OperatorKind.GT
 import puzzle.core.token.kinds.OperatorKind.LT

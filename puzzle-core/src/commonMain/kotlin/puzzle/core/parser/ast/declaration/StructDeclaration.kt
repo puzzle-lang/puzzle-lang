@@ -18,6 +18,7 @@ class StructDeclaration(
 	val primaryAnnotationCalls: List<AnnotationCall>,
 	val primaryCtorModifiers: List<Modifier>,
 	val parameters: List<Parameter>,
+	val superTypeReferences: List<SuperTypeReference>,
 	val typeSpec: TypeSpec?,
 	val contextSpec: ContextSpec?,
 	val annotationCalls: List<AnnotationCall>,

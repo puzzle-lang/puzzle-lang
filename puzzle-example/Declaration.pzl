@@ -139,6 +139,13 @@ trait Runnable {
     fun run()
 }
 
+mixin RunnableMixin : Runnable {
+
+    override fun run() {
+        println("Run")
+    }
+}
+
 trait Runnable2 {
 
     fun run2()

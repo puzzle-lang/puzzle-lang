@@ -3,7 +3,7 @@ package puzzle.core.parser.ast.parameter
 import kotlinx.serialization.Serializable
 import puzzle.core.model.SourceLocation
 import puzzle.core.parser.ast.AstNode
-import puzzle.core.parser.ast.TypeReference
+import puzzle.core.parser.ast.type.TypeReference
 import puzzle.core.parser.ast.expression.Identifier
 import puzzle.core.token.kinds.VarianceKind
 import puzzle.core.util.VarianceKindSerializer

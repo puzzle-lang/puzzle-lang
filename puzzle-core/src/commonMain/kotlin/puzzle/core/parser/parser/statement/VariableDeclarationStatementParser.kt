@@ -7,7 +7,7 @@ import puzzle.core.parser.ast.statement.VariableDeclarationStatement
 import puzzle.core.parser.parser.expression.IdentifierTarget
 import puzzle.core.parser.parser.expression.parseExpressionChain
 import puzzle.core.parser.parser.expression.parseIdentifier
-import puzzle.core.parser.parser.parseTypeReference
+import puzzle.core.parser.parser.type.parseTypeReference
 import puzzle.core.token.kinds.AssignmentKind.ASSIGN
 import puzzle.core.token.kinds.ModifierKind.VAR
 import puzzle.core.token.kinds.SymbolKind.COLON

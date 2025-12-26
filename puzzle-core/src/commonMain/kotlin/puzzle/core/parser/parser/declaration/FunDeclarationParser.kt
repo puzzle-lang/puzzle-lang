@@ -5,9 +5,9 @@ import puzzle.core.model.PzlContext
 import puzzle.core.model.SourceLocation
 import puzzle.core.model.span
 import puzzle.core.parser.PzlTokenCursor
-import puzzle.core.parser.ast.NamedType
+import puzzle.core.parser.ast.type.NamedType
 import puzzle.core.parser.ast.Symbol
-import puzzle.core.parser.ast.TypeReference
+import puzzle.core.parser.ast.type.TypeReference
 import puzzle.core.parser.ast.declaration.FunDeclaration
 import puzzle.core.parser.ast.declaration.FunName
 import puzzle.core.parser.ast.declaration.IdentifierFunName
@@ -19,7 +19,7 @@ import puzzle.core.parser.parser.expression.tryParseIdentifier
 import puzzle.core.parser.parser.expression.tryParseIdentifierString
 import puzzle.core.parser.parser.parameter.parameter.ParameterTarget
 import puzzle.core.parser.parser.parameter.parameter.parseParameters
-import puzzle.core.parser.parser.parseTypeReference
+import puzzle.core.parser.parser.type.parseTypeReference
 import puzzle.core.parser.parser.statement.parseStatements
 import puzzle.core.token.kinds.AccessKind.DOT
 import puzzle.core.token.kinds.AccessKind.QUESTION_DOT

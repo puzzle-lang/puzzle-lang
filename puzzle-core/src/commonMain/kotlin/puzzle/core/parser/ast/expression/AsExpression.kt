@@ -1,7 +1,7 @@
 package puzzle.core.parser.ast.expression
 
 import kotlinx.serialization.Serializable
-import puzzle.core.parser.ast.TypeReference
+import puzzle.core.parser.ast.type.TypeReference
 import puzzle.core.model.SourceLocation
 import puzzle.core.model.span
 

@@ -5,7 +5,7 @@ import puzzle.core.model.span
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.AnnotationCall
 import puzzle.core.parser.parser.expression.parseArguments
-import puzzle.core.token.kinds.BracketKind.End.RPAREN
+import puzzle.core.parser.parser.type.parseTypeReference
 import puzzle.core.token.kinds.BracketKind.Start.LPAREN
 import puzzle.core.token.kinds.SymbolKind.AT
 
@@ -29,7 +29,7 @@ private fun parseAnnotationCall(): AnnotationCall {
 		val location = start span cursor.previous.location
 		return AnnotationCall(type, location)
 	}
-	val arguments = parseArguments(RPAREN)
+	val arguments = parseArguments()
 	val location = start span cursor.previous.location
 	return AnnotationCall(type, location, arguments)
 }

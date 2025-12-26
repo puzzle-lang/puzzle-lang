@@ -18,6 +18,7 @@ sealed interface DeclarationMatcher<out D : Declaration> {
 			ClassDeclarationMatcher,
 			ObjectDeclarationMatcher,
 			TraitDeclarationMatcher,
+			MixinDeclarationMatcher,
 			StructDeclarationMatcher,
 			EnumDeclarationMatcher,
 			AnnotationDeclarationMatcher,

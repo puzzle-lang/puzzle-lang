@@ -8,6 +8,7 @@ import puzzle.core.parser.ast.parameter.ContextSpec
 import puzzle.core.parser.ast.parameter.Parameter
 import puzzle.core.parser.ast.parameter.TypeSpec
 import puzzle.core.parser.ast.statement.Statement
+import puzzle.core.parser.ast.type.TypeReference
 
 @Serializable
 class FunDeclaration(

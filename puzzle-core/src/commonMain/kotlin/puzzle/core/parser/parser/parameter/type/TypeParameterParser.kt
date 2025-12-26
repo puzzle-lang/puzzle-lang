@@ -4,13 +4,13 @@ import puzzle.core.exception.syntaxError
 import puzzle.core.model.PzlContext
 import puzzle.core.model.SourceLocation
 import puzzle.core.parser.PzlTokenCursor
-import puzzle.core.parser.ast.NamedType
-import puzzle.core.parser.ast.TypeReference
+import puzzle.core.parser.ast.type.NamedType
+import puzzle.core.parser.ast.type.TypeReference
 import puzzle.core.parser.ast.parameter.TypeParameter
 import puzzle.core.parser.ast.parameter.Variance
 import puzzle.core.parser.parser.expression.IdentifierTarget
 import puzzle.core.parser.parser.expression.parseIdentifier
-import puzzle.core.parser.parser.parseTypeReference
+import puzzle.core.parser.parser.type.parseTypeReference
 import puzzle.core.token.kinds.AssignmentKind.ASSIGN
 import puzzle.core.token.kinds.OperatorKind.BIT_AND
 import puzzle.core.token.kinds.OperatorKind.GT

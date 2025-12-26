@@ -17,7 +17,7 @@ class ObjectDeclaration(
 	val primaryAnnotationCalls: List<AnnotationCall>,
 	val primaryCtorModifiers: List<Modifier>,
 	val parameters: List<Parameter>,
-	val superTypes: List<SuperType>,
+	val superTypeSpecifiers: List<SuperTypeSpecifier>,
 	val contextSpec: ContextSpec?,
 	val annotationCalls: List<AnnotationCall>,
 	val inits: List<InitDeclaration>,

@@ -4,7 +4,7 @@ import puzzle.core.model.PzlContext
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.expression.AsExpression
 import puzzle.core.parser.ast.expression.Expression
-import puzzle.core.parser.parser.parseTypeReference
+import puzzle.core.parser.parser.type.parseTypeReference
 import puzzle.core.token.kinds.SymbolKind.QUESTION
 
 context(_: PzlContext, cursor: PzlTokenCursor)

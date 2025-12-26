@@ -19,9 +19,7 @@ private val softKeywords = setOf(
 	OPEN, ABSTRACT, SEALED, OVERRIDE,
 	CONST, INNER, IGNORE, LATE, LAZY, ARGS,
 	GET, SET,
-	TYPE, REIFIED,
-	CONTEXT,
-	INIT,
+	TYPE, REIFIED, CONTEXT, INIT, WITH,
 	PACKAGE, IMPORT
 )
 
@@ -97,6 +95,10 @@ enum class IdentifierTarget(
 	TRAIT(
 		displayName = "特征声明",
 		allowAnonymousBinding = false,
+	),
+	MIXIN(
+		displayName = "混入",
+		allowAnonymousBinding = false
 	),
 	STRUCT(
 		displayName = "结构体声明",

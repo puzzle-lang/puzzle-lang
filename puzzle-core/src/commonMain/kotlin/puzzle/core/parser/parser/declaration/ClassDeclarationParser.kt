@@ -23,7 +23,7 @@ fun parseClassDeclaration(header: DeclarationHeader, start: SourceLocation): Cla
 	val primaryCtorModifiers = parseModifiers()
 	primaryCtorModifiers.check(ModifierTarget.CTOR)
 	val parameters = parseParameters(ParameterTarget.CLASS)
-	val superTypes = parseSuperTypes()
+	val superTypeSpecifiers = parseSuperTypeSpecifiers(SuperTypeSpecifierTarget.CLASS)
 	val info = if (cursor.match(LBRACE)) {
 		parseMemberDeclarationInfo()
 	} else MemberDeclarationInfo.Empty
@@ -35,10 +35,10 @@ fun parseClassDeclaration(header: DeclarationHeader, start: SourceLocation): Cla
 		primaryAnnotationCalls = primaryAnnotationCalls,
 		primaryCtorModifiers = primaryCtorModifiers,
 		parameters = parameters,
-		superTypes = superTypes,
 		typeSpec = header.typeSpec,
 		contextSpec = header.contextSpec,
 		annotationCalls = header.annotationCalls,
+		superTypeSpecifiers = superTypeSpecifiers,
 		ctors = info.ctors,
 		inits = info.inits,
 		members = info.members,

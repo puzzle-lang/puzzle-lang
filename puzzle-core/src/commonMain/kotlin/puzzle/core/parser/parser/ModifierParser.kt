@@ -101,6 +101,10 @@ enum class ModifierTarget(
 		displayName = "特征",
 		supportedModifiers = TopLevelAccessModifiers + setOf(SEALED)
 	),
+	MIXIN(
+		displayName = "混入",
+		supportedModifiers = TopLevelAccessModifiers
+	),
 	STRUCT(
 		displayName = "结构体",
 		supportedModifiers = TopLevelAccessModifiers
@@ -136,6 +140,10 @@ enum class ModifierTarget(
 	MEMBER_TRAIT(
 		displayName = "成员特征",
 		supportedModifiers = MemberAccessModifiers
+	),
+	MEMBER_MIXIN(
+		displayName = "成员混入",
+		supportedModifiers = TopLevelAccessModifiers
 	),
 	MEMBER_STRUCT(
 		displayName = "成员结构体",

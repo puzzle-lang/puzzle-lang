@@ -18,6 +18,7 @@ sealed interface MemberDeclarationMatcher<out D : Declaration> {
 			MemberClassDeclarationMatcher,
 			MemberObjectDeclarationMatcher,
 			MemberTraitDeclarationMatcher,
+			MemberMixinDeclarationMatcher,
 			MemberStructDeclarationMatcher,
 			MemberEnumDeclarationMatcher,
 			MemberAnnotationDeclarationMatcher,

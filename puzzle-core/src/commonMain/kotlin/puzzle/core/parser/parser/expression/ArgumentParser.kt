@@ -6,18 +6,18 @@ import puzzle.core.model.span
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.expression.Argument
 import puzzle.core.token.kinds.AssignmentKind.ASSIGN
-import puzzle.core.token.kinds.BracketKind
 import puzzle.core.token.kinds.BracketKind.End.RBRACKET
 import puzzle.core.token.kinds.BracketKind.End.RPAREN
 import puzzle.core.token.kinds.SeparatorKind.COMMA
 import puzzle.core.token.kinds.SeparatorKind.SEMICOLON
 
 context(_: PzlContext, cursor: PzlTokenCursor)
-fun parseArguments(endKind: BracketKind.End): List<Argument> {
+fun parseArguments(isParen: Boolean = true): List<Argument> {
+	val endKind = if (isParen) RPAREN else RBRACKET
 	if (cursor.match(endKind)) return emptyList()
 	return buildList {
 		do {
-			this += parseCallArgument(endKind)
+			this += parseCallArgument(isParen)
 			if (!cursor.check(endKind)) {
 				cursor.expect(COMMA, "参数缺少 ','")
 			}
@@ -26,7 +26,7 @@ fun parseArguments(endKind: BracketKind.End): List<Argument> {
 }
 
 context(_: PzlContext, cursor: PzlTokenCursor)
-private fun parseCallArgument(endKind: BracketKind.End): Argument {
+private fun parseCallArgument(isParen: Boolean): Argument {
 	val name = if (cursor.offsetOrNull(offset = 1)?.kind == ASSIGN) {
 		parseIdentifier(IdentifierTarget.ARGUMENT).also {
 			cursor.advance()
@@ -42,17 +42,16 @@ private fun parseCallArgument(endKind: BracketKind.End): Argument {
 	if (currentKind == COMMA) {
 		return Argument(name, expression, start span end)
 	}
-	return when (endKind) {
-		RPAREN if currentKind == RBRACKET -> syntaxError(
+	when {
+		isParen && currentKind == RBRACKET -> syntaxError(
 			message = "参数表达式后只允许根 ')' 或 ','",
 			token = cursor.current
 		)
 		
-		RBRACKET if currentKind == RPAREN -> syntaxError(
+		!isParen && currentKind == RPAREN -> syntaxError(
 			message = "索引访问参数表达式后只允许根 ']' 或 ','",
 			token = cursor.current
 		)
-		
-		else -> Argument(name, expression, start span end)
 	}
+	return Argument(name, expression, start span end)
 }
