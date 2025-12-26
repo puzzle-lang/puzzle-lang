@@ -9,6 +9,7 @@ import puzzle.core.parser.ast.expression.Identifier
 import puzzle.core.parser.ast.parameter.ContextSpec
 import puzzle.core.parser.ast.parameter.Parameter
 import puzzle.core.parser.ast.parameter.TypeSpec
+import puzzle.core.parser.ast.type.SuperTypeReference
 
 @Serializable
 class StructDeclaration(
@@ -18,7 +19,7 @@ class StructDeclaration(
 	val primaryAnnotationCalls: List<AnnotationCall>,
 	val primaryCtorModifiers: List<Modifier>,
 	val parameters: List<Parameter>,
-	val superTypeReferences: List<SuperTypeReference>,
+	val superTypes: List<SuperTypeReference>,
 	val typeSpec: TypeSpec?,
 	val contextSpec: ContextSpec?,
 	val annotationCalls: List<AnnotationCall>,

@@ -5,13 +5,8 @@ import puzzle.core.model.PzlContext
 import puzzle.core.model.span
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.type.LambdaType
-import puzzle.core.parser.ast.type.NamedType
 import puzzle.core.parser.ast.type.TypeReference
-import puzzle.core.parser.parser.argument.parseTypeArguments
-import puzzle.core.parser.parser.expression.IdentifierTarget
-import puzzle.core.parser.parser.expression.parseIdentifierString
 import puzzle.core.parser.parser.parameter.parameter.parseLambdaParameters
-import puzzle.core.token.kinds.AccessKind.DOT
 import puzzle.core.token.kinds.BracketKind.End.RBRACKET
 import puzzle.core.token.kinds.BracketKind.End.RPAREN
 import puzzle.core.token.kinds.BracketKind.Start.LBRACKET
@@ -117,16 +112,4 @@ private fun parseNamedTypeReference(allowNullable: Boolean): TypeReference {
 	}
 	val end = cursor.previous.location
 	return TypeReference(type, type.location span end, isNullable)
-}
-
-context(_: PzlContext, cursor: PzlTokenCursor)
-fun parseNamedType(): NamedType {
-	val start = cursor.current.location
-	val segments = mutableListOf<String>()
-	do {
-		segments += parseIdentifierString(IdentifierTarget.TYPE_REFERENCE)
-	} while (cursor.match(DOT))
-	val typeArguments = parseTypeArguments()
-	val location = start span cursor.previous.location
-	return NamedType(segments, location, typeArguments)
 }

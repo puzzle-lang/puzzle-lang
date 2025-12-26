@@ -12,11 +12,19 @@ import puzzle.core.parser.parser.expression.parseIdentifier
 import puzzle.core.parser.parser.parameter.parameter.ParameterTarget
 import puzzle.core.parser.parser.parameter.parameter.parseParameters
 import puzzle.core.token.kinds.BracketKind.Start.LBRACE
+import puzzle.core.token.kinds.ContextualKind.WITH
+import puzzle.core.token.kinds.SymbolKind.COLON
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseAnnotationDeclaration(header: DeclarationHeader, start: SourceLocation): AnnotationDeclaration {
 	val name = parseIdentifier(IdentifierTarget.ANNOTATION)
 	val parameters = parseParameters(ParameterTarget.ANNOTATION)
+	if (cursor.match(COLON)) {
+		syntaxError("注解不支持 ':'", cursor.previous)
+	}
+	if (cursor.match(WITH)) {
+		syntaxError("注解不支持 with", cursor.previous)
+	}
 	if (cursor.match(LBRACE)) {
 		syntaxError("注解不支持 '{'", cursor.previous)
 	}

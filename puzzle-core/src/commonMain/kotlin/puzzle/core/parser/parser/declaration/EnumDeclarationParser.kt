@@ -7,12 +7,15 @@ import puzzle.core.model.span
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.declaration.EnumDeclaration
 import puzzle.core.parser.ast.declaration.EnumEntry
-import puzzle.core.parser.ast.declaration.SuperTypeReference
 import puzzle.core.parser.matcher.declaration.DeclarationHeader
 import puzzle.core.parser.parser.expression.IdentifierTarget
 import puzzle.core.parser.parser.expression.parseIdentifier
 import puzzle.core.parser.parser.parameter.parameter.ParameterTarget
 import puzzle.core.parser.parser.parameter.parameter.parseParameters
+import puzzle.core.parser.parser.type.SuperTypeTarget
+import puzzle.core.parser.parser.type.parseSuperTypes
+import puzzle.core.parser.parser.type.parseWithTypes
+import puzzle.core.parser.parser.type.safeAsSuperTypeReferences
 import puzzle.core.token.kinds.BracketKind.End.RBRACE
 import puzzle.core.token.kinds.BracketKind.End.RPAREN
 import puzzle.core.token.kinds.BracketKind.Start.LBRACE
@@ -24,8 +27,9 @@ context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseEnumDeclaration(header: DeclarationHeader, start: SourceLocation): EnumDeclaration {
 	val name = parseIdentifier(IdentifierTarget.ENUM)
 	val parameters = parseParameters(ParameterTarget.ENUM)
-	val superTypeReferences = parseSuperTypeSpecifiers(SuperTypeSpecifierTarget.ENUM)
+	val superTypes = parseSuperTypes(SuperTypeTarget.ENUM)
 		.safeAsSuperTypeReferences()
+	val withTypes = parseWithTypes()
 	if (!cursor.match(LBRACE)) {
 		val location = start span cursor.previous.location
 		return EnumDeclaration(
@@ -34,6 +38,8 @@ fun parseEnumDeclaration(header: DeclarationHeader, start: SourceLocation): Enum
 			modifiers = header.modifiers,
 			parameters = parameters,
 			entries = emptyList(),
+			superTypes = superTypes,
+			withTypes = withTypes,
 			typeSpec = header.typeSpec,
 			contextSpec = header.contextSpec,
 			annotationCalls = header.annotationCalls,
@@ -53,6 +59,8 @@ fun parseEnumDeclaration(header: DeclarationHeader, start: SourceLocation): Enum
 		modifiers = header.modifiers,
 		parameters = parameters,
 		entries = entries,
+		superTypes = superTypes,
+		withTypes = withTypes,
 		typeSpec = header.typeSpec,
 		contextSpec = header.contextSpec,
 		annotationCalls = header.annotationCalls,

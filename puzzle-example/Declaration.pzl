@@ -134,24 +134,35 @@ private class Hello(
     }
 }
 
-trait Runnable {
-
-    fun run()
+fun log(args: String*) {
+    println(args.joinToString())
 }
 
-mixin RunnableMixin : Runnable {
+trait Logger {
 
-    override fun run() {
-        println("Run")
+    fun log(args: String+)
+}
+
+mixin LoggerMixin on Logger {
+
+    override fun log(args: String+) {
+        println($"[LoggerMixin]: ${args.joinToString()}")
     }
 }
 
-trait Runnable2 {
+class Player : Logger with LoggerMixin {
+
+    fun start() {
+        println("Start")
+    }
+}
+
+trait Runnable {
 
     fun run2()
 }
 
-class RunnableImpl : Runnable2 {
+class RunnableImpl : Runnable {
 
     final override fun run2() {
 

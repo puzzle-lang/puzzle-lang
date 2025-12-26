@@ -10,6 +10,8 @@ import puzzle.core.parser.ast.expression.Identifier
 import puzzle.core.parser.ast.parameter.ContextSpec
 import puzzle.core.parser.ast.parameter.Parameter
 import puzzle.core.parser.ast.parameter.TypeSpec
+import puzzle.core.parser.ast.type.NamedType
+import puzzle.core.parser.ast.type.SuperTypeReference
 
 @Serializable
 class EnumDeclaration(
@@ -18,6 +20,8 @@ class EnumDeclaration(
 	val modifiers: List<Modifier>,
 	val parameters: List<Parameter>,
 	val entries: List<EnumEntry>,
+	val superTypes: List<SuperTypeReference>,
+	val withTypes: List<NamedType>,
 	val typeSpec: TypeSpec?,
 	val contextSpec: ContextSpec?,
 	val annotationCalls: List<AnnotationCall>,

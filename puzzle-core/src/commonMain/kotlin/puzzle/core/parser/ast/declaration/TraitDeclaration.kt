@@ -8,6 +8,7 @@ import puzzle.core.parser.ast.Modifier
 import puzzle.core.parser.ast.expression.Identifier
 import puzzle.core.parser.ast.parameter.ContextSpec
 import puzzle.core.parser.ast.parameter.TypeSpec
+import puzzle.core.parser.ast.type.SuperTypeReference
 
 @Serializable
 class TraitDeclaration(
@@ -17,7 +18,7 @@ class TraitDeclaration(
 	val typeSpec: TypeSpec?,
 	val contextSpec: ContextSpec?,
 	val annotationCalls: List<AnnotationCall>,
-	val superTypeReferences: List<SuperTypeReference>,
+	val superTypes: List<SuperTypeReference>,
 	val members: List<TopLevelAllowedDeclaration>,
 	override val location: SourceLocation,
 ) : TopLevelAllowedDeclaration

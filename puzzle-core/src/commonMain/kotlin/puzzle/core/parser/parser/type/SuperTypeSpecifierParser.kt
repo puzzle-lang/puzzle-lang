@@ -1,38 +1,37 @@
-package puzzle.core.parser.parser.declaration
+package puzzle.core.parser.parser.type
 
 import puzzle.core.exception.syntaxError
 import puzzle.core.model.PzlContext
 import puzzle.core.model.span
 import puzzle.core.parser.PzlTokenCursor
-import puzzle.core.parser.ast.declaration.SuperConstructorCall
-import puzzle.core.parser.ast.declaration.SuperTypeReference
-import puzzle.core.parser.ast.declaration.SuperTypeSpecifier
+import puzzle.core.parser.ast.type.SuperConstructorCall
+import puzzle.core.parser.ast.type.SuperTypeReference
+import puzzle.core.parser.ast.type.SuperType
 import puzzle.core.parser.parser.expression.parseArguments
-import puzzle.core.parser.parser.type.parseNamedType
 import puzzle.core.token.kinds.BracketKind.Start.LPAREN
 import puzzle.core.token.kinds.SeparatorKind.COMMA
 import puzzle.core.token.kinds.SymbolKind.COLON
 
 context(_: PzlContext, cursor: PzlTokenCursor)
-fun parseSuperTypeSpecifiers(target: SuperTypeSpecifierTarget): List<SuperTypeSpecifier> {
+fun parseSuperTypes(target: SuperTypeTarget): List<SuperType> {
 	if (!cursor.match(COLON)) {
 		return emptyList()
 	}
-	val superTypeSpecifiers = mutableListOf<SuperTypeSpecifier>()
+	val superTypes = mutableListOf<SuperType>()
 	do {
-		superTypeSpecifiers += parseSuperTypeSpecifier(target)
+		superTypes += parseSuperType(target)
 	} while (cursor.match(COMMA))
-	superTypeSpecifiers.check()
-	return superTypeSpecifiers
+	superTypes.check()
+	return superTypes
 }
 
 @Suppress("UNCHECKED_CAST")
-fun List<SuperTypeSpecifier>.safeAsSuperTypeReferences(): List<SuperTypeReference> {
+fun List<SuperType>.safeAsSuperTypeReferences(): List<SuperTypeReference> {
 	return this as List<SuperTypeReference>
 }
 
 context(_: PzlContext, cursor: PzlTokenCursor)
-private fun parseSuperTypeSpecifier(target: SuperTypeSpecifierTarget): SuperTypeSpecifier {
+private fun parseSuperType(target: SuperTypeTarget): SuperType {
 	val type = parseNamedType()
 	if (!cursor.match(LPAREN)) {
 		return SuperTypeReference(type, type.location)
@@ -46,7 +45,7 @@ private fun parseSuperTypeSpecifier(target: SuperTypeSpecifierTarget): SuperType
 }
 
 context(_: PzlContext)
-private fun List<SuperTypeSpecifier>.check() {
+private fun List<SuperType>.check() {
 	var isUsedConstructorCall = false
 	this.forEach { it ->
 		if (it is SuperConstructorCall) {
@@ -58,7 +57,7 @@ private fun List<SuperTypeSpecifier>.check() {
 	}
 }
 
-enum class SuperTypeSpecifierTarget(
+enum class SuperTypeTarget(
 	val label: String,
 	val allowConstructorCall: Boolean,
 ) {

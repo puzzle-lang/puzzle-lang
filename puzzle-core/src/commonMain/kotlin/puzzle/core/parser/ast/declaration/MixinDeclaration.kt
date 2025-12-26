@@ -19,6 +19,7 @@ class MixinDeclaration(
 	val contextSpec: ContextSpec?,
 	val annotationCalls: List<AnnotationCall>,
 	val mixinConstraints: List<NamedType>,
+	val withTypes: List<NamedType>,
 	val members: List<TopLevelAllowedDeclaration>,
 	override val location: SourceLocation,
 ) : TopLevelAllowedDeclaration

@@ -13,7 +13,11 @@ import puzzle.core.parser.parser.parameter.parameter.ParameterTarget
 import puzzle.core.parser.parser.parameter.parameter.parseParameters
 import puzzle.core.parser.parser.parseAnnotationCalls
 import puzzle.core.parser.parser.parseModifiers
+import puzzle.core.parser.parser.type.SuperTypeTarget
+import puzzle.core.parser.parser.type.parseSuperTypes
+import puzzle.core.parser.parser.type.safeAsSuperTypeReferences
 import puzzle.core.token.kinds.BracketKind.Start.LBRACE
+import puzzle.core.token.kinds.ContextualKind.WITH
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseStructDeclaration(header: DeclarationHeader, start: SourceLocation): StructDeclaration {
@@ -21,8 +25,11 @@ fun parseStructDeclaration(header: DeclarationHeader, start: SourceLocation): St
 	val primaryAnnotationCalls = parseAnnotationCalls()
 	val primaryCtorModifiers = parseModifiers()
 	val parameters = parseParameters(ParameterTarget.STRUCT)
-	val superTypeReferences = parseSuperTypeSpecifiers(SuperTypeSpecifierTarget.STRUCT)
+	val superTypes = parseSuperTypes(SuperTypeTarget.STRUCT)
 		.safeAsSuperTypeReferences()
+	if (cursor.match(WITH)) {
+		syntaxError("结构体不支持 with", cursor.previous)
+	}
 	val info = if (cursor.match(LBRACE)) {
 		parseMemberDeclarationInfo()
 	} else MemberDeclarationInfo.Empty
@@ -37,7 +44,7 @@ fun parseStructDeclaration(header: DeclarationHeader, start: SourceLocation): St
 		primaryAnnotationCalls = primaryAnnotationCalls,
 		primaryCtorModifiers = primaryCtorModifiers,
 		parameters = parameters,
-		superTypeReferences = superTypeReferences,
+		superTypes = superTypes,
 		typeSpec = header.typeSpec,
 		contextSpec = header.contextSpec,
 		annotationCalls = header.annotationCalls,

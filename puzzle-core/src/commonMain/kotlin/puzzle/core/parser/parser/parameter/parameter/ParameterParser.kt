@@ -5,6 +5,7 @@ import puzzle.core.model.PzlContext
 import puzzle.core.model.span
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.parameter.Parameter
+import puzzle.core.parser.ast.parameter.VarargKind
 import puzzle.core.parser.parser.check
 import puzzle.core.parser.parser.expression.IdentifierTarget
 import puzzle.core.parser.parser.expression.parseExpressionChain
@@ -15,6 +16,8 @@ import puzzle.core.parser.parser.type.parseTypeReference
 import puzzle.core.token.kinds.AssignmentKind.ASSIGN
 import puzzle.core.token.kinds.BracketKind.End.RPAREN
 import puzzle.core.token.kinds.BracketKind.Start.LPAREN
+import puzzle.core.token.kinds.OperatorKind.PLUS
+import puzzle.core.token.kinds.OperatorKind.STAR
 import puzzle.core.token.kinds.SeparatorKind.COMMA
 import puzzle.core.token.kinds.SymbolKind.COLON
 
@@ -22,7 +25,7 @@ context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseParameters(target: ParameterTarget): List<Parameter> {
 	if (!cursor.match(LPAREN)) {
 		if (target.allowWithoutParen) return emptyList()
-		syntaxError("${target.modifierTarget.displayName} 缺少 '('", cursor.current)
+		syntaxError("${target.label} 缺少 '('", cursor.current)
 	}
 	if (cursor.match(RPAREN)) return emptyList()
 	return buildList {
@@ -44,13 +47,27 @@ private fun parseParameter(target: ParameterTarget): Parameter {
 	val name = parseIdentifier(IdentifierTarget.PARAMETER)
 	cursor.expect(COLON, "型参缺少 ':'")
 	val type = parseTypeReference(allowLambdaType = target.allowLambdaType)
-	val defaultExpression = if (cursor.match(ASSIGN)) parseExpressionChain() else null
+	val varargKind = when {
+		cursor.match(STAR) -> VarargKind.STAR
+		cursor.match(PLUS) -> VarargKind.PLUS
+		else -> VarargKind.NONE
+	}
+	if (varargKind != VarargKind.NONE && !target.allowVarargQuantifier) {
+		syntaxError("${target.label} 参数不支持可变量词", cursor.previous)
+	}
+	val defaultExpression = if (cursor.match(ASSIGN)) {
+		if (varargKind != VarargKind.NONE) {
+			syntaxError("${target.label} 可变参数不允许设置默认值", cursor.previous)
+		}
+		parseExpressionChain()
+	} else null
 	val end = cursor.previous.location
 	return Parameter(
 		name = name,
 		modifiers = modifiers,
 		type = type,
 		annotationCalls = annotationCalls,
+		varargKind = varargKind,
 		defaultExpression = defaultExpression,
 		location = start span end
 	)

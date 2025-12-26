@@ -9,6 +9,8 @@ import puzzle.core.parser.ast.expression.Identifier
 import puzzle.core.parser.ast.parameter.ContextSpec
 import puzzle.core.parser.ast.parameter.Parameter
 import puzzle.core.parser.ast.parameter.TypeSpec
+import puzzle.core.parser.ast.type.NamedType
+import puzzle.core.parser.ast.type.SuperType
 
 @Serializable
 class ClassDeclaration(
@@ -21,7 +23,8 @@ class ClassDeclaration(
 	val typeSpec: TypeSpec?,
 	val contextSpec: ContextSpec?,
 	val annotationCalls: List<AnnotationCall>,
-	val superTypeSpecifiers: List<SuperTypeSpecifier>,
+	val superTypes: List<SuperType>,
+	val withTypes: List<NamedType>,
 	val ctors: List<CtorDeclaration>,
 	val inits: List<InitDeclaration>,
 	val members: List<TopLevelAllowedDeclaration>,

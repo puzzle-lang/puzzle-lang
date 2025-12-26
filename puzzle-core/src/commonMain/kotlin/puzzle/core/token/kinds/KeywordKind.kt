@@ -32,7 +32,7 @@ sealed class ModifierKind(
 			PRIVATE, PROTECTED, FILE, INTERNAL, MODULE, PUBLIC,
 			FINAL,
 			OPEN, ABSTRACT, SEALED, OVERRIDE,
-			CONST, INNER, IGNORE, LATE, LAZY, ARGS,
+			CONST, INNER, IGNORE, LATE, LAZY,
 			VAR, VAL
 		)
 	}
@@ -68,8 +68,6 @@ sealed class ModifierKind(
 	object LATE : ModifierKind("late", 3)
 	
 	object LAZY : ModifierKind("lazy", 3)
-	
-	object ARGS : ModifierKind("args", 3)
 	
 	object VAR : ModifierKind("var", 4)
 	
@@ -180,7 +178,7 @@ sealed class ContextualKind(
 	
 	companion object {
 		
-		val kinds = fastSetOf<ContextualKind>(TYPE, REIFIED, CONTEXT, INIT, WITH, THIS, SUPER)
+		val kinds = fastSetOf<ContextualKind>(TYPE, REIFIED, CONTEXT, INIT, ON, WITH, THIS, SUPER)
 	}
 	
 	object TYPE : ContextualKind("type")
@@ -190,6 +188,8 @@ sealed class ContextualKind(
 	object CONTEXT : ContextualKind("context")
 	
 	object INIT : ContextualKind("init")
+	
+	object ON : ContextualKind("on")
 	
 	object WITH : ContextualKind("with")
 	

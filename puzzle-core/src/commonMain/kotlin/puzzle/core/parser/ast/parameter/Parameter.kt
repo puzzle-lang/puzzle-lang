@@ -5,9 +5,9 @@ import puzzle.core.model.SourceLocation
 import puzzle.core.parser.ast.AnnotationCall
 import puzzle.core.parser.ast.AstNode
 import puzzle.core.parser.ast.Modifier
-import puzzle.core.parser.ast.type.TypeReference
 import puzzle.core.parser.ast.expression.Expression
 import puzzle.core.parser.ast.expression.Identifier
+import puzzle.core.parser.ast.type.TypeReference
 
 @Serializable
 class Parameter(
@@ -15,6 +15,14 @@ class Parameter(
 	val modifiers: List<Modifier>,
 	val type: TypeReference,
 	val annotationCalls: List<AnnotationCall>,
+	val varargKind: VarargKind,
 	val defaultExpression: Expression?,
 	override val location: SourceLocation,
 ) : AstNode
+
+@Serializable
+enum class VarargKind {
+	NONE,
+	STAR,
+	PLUS
+}

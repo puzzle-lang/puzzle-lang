@@ -9,13 +9,20 @@ import puzzle.core.parser.ast.declaration.TraitDeclaration
 import puzzle.core.parser.matcher.declaration.DeclarationHeader
 import puzzle.core.parser.parser.expression.IdentifierTarget
 import puzzle.core.parser.parser.expression.parseIdentifier
+import puzzle.core.parser.parser.type.SuperTypeTarget
+import puzzle.core.parser.parser.type.parseSuperTypes
+import puzzle.core.parser.parser.type.safeAsSuperTypeReferences
 import puzzle.core.token.kinds.BracketKind.Start.LBRACE
+import puzzle.core.token.kinds.ContextualKind.WITH
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseTraitDeclaration(header: DeclarationHeader, start: SourceLocation): TraitDeclaration {
 	val name = parseIdentifier(IdentifierTarget.TRAIT)
-	val superTypeReferences = parseSuperTypeSpecifiers(SuperTypeSpecifierTarget.TRAIT)
+	val superTypes = parseSuperTypes(SuperTypeTarget.TRAIT)
 		.safeAsSuperTypeReferences()
+	if (cursor.match(WITH)) {
+		syntaxError("结构体不支持 with", cursor.previous)
+	}
 	val info = if (cursor.match(LBRACE)) {
 		parseMemberDeclarationInfo()
 	} else MemberDeclarationInfo.Empty
@@ -33,7 +40,7 @@ fun parseTraitDeclaration(header: DeclarationHeader, start: SourceLocation): Tra
 		typeSpec = header.typeSpec,
 		contextSpec = header.contextSpec,
 		annotationCalls = header.annotationCalls,
-		superTypeReferences = superTypeReferences,
+		superTypes = superTypes,
 		members = info.members,
 		location = start span end
 	)

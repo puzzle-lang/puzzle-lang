@@ -63,7 +63,7 @@ fun List<Modifier>.check(target: ModifierTarget) {
 	this.forEachIndexed { index, modifier ->
 		if (modifier.kind !in target.supportedModifiers) {
 			syntaxError(
-				message = "${target.displayName}不支持 '${modifier.kind.value}' 修饰符",
+				message = "${target.label}不支持 '${modifier.kind.value}' 修饰符",
 				token = cursor.offset(offset = -this.size + index - 1)
 			)
 		}
@@ -78,123 +78,123 @@ fun List<Modifier>.check(target: ModifierTarget) {
 }
 
 enum class ModifierTarget(
-	val displayName: String,
+	val label: String,
 	val supportedModifiers: Set<ModifierKind>,
 ) {
 	FUN(
-		displayName = "函数",
+		label = "函数",
 		supportedModifiers = TopLevelAccessModifiers + setOf(CONST)
 	),
 	PROPERTY(
-		displayName = "属性",
+		label = "属性",
 		supportedModifiers = TopLevelAccessModifiers + setOf(CONST, LATE, LAZY, VAR, VAL)
 	),
 	CLASS(
-		displayName = "类",
+		label = "类",
 		supportedModifiers = TopLevelAccessModifiers + setOf(OPEN, ABSTRACT, SEALED)
 	),
 	OBJECT(
-		displayName = "单例对象",
+		label = "单例对象",
 		supportedModifiers = TopLevelAccessModifiers
 	),
 	TRAIT(
-		displayName = "特征",
+		label = "特征",
 		supportedModifiers = TopLevelAccessModifiers + setOf(SEALED)
 	),
 	MIXIN(
-		displayName = "混入",
+		label = "混入",
 		supportedModifiers = TopLevelAccessModifiers
 	),
 	STRUCT(
-		displayName = "结构体",
+		label = "结构体",
 		supportedModifiers = TopLevelAccessModifiers
 	),
 	ENUM(
-		displayName = "枚举",
+		label = "枚举",
 		supportedModifiers = TopLevelAccessModifiers
 	),
 	ANNOTATION(
-		displayName = "注解",
+		label = "注解",
 		supportedModifiers = TopLevelAccessModifiers
 	),
 	EXTENSION(
-		displayName = "扩展",
+		label = "扩展",
 		supportedModifiers = TopLevelAccessModifiers
 	),
 	MEMBER_FUN(
-		displayName = "成员函数",
+		label = "成员函数",
 		supportedModifiers = MemberAccessModifiers + setOf(FINAL, OVERRIDE, OPEN, ABSTRACT)
 	),
 	MEMBER_PROPERTY(
-		displayName = "属性",
+		label = "属性",
 		supportedModifiers = TopLevelAccessModifiers + setOf(CONST, LATE, LAZY, VAR, VAL)
 	),
 	MEMBER_CLASS(
-		displayName = "成员类",
+		label = "成员类",
 		supportedModifiers = MemberAccessModifiers + setOf(INNER, OPEN, ABSTRACT)
 	),
 	MEMBER_OBJECT(
-		displayName = "成员单例对象",
+		label = "成员单例对象",
 		supportedModifiers = MemberAccessModifiers
 	),
 	MEMBER_TRAIT(
-		displayName = "成员特征",
+		label = "成员特征",
 		supportedModifiers = MemberAccessModifiers
 	),
 	MEMBER_MIXIN(
-		displayName = "成员混入",
+		label = "成员混入",
 		supportedModifiers = TopLevelAccessModifiers
 	),
 	MEMBER_STRUCT(
-		displayName = "成员结构体",
+		label = "成员结构体",
 		supportedModifiers = MemberAccessModifiers
 	),
 	MEMBER_ENUM(
-		displayName = "成员枚举",
+		label = "成员枚举",
 		supportedModifiers = MemberAccessModifiers
 	),
 	MEMBER_ANNOTATION(
-		displayName = "成员注解",
+		label = "成员注解",
 		supportedModifiers = MemberAccessModifiers
 	),
 	MEMBER_EXTENSION(
-		displayName = "成员扩展",
+		label = "成员扩展",
 		supportedModifiers = MemberAccessModifiers
 	),
 	CTOR(
-		displayName = "次构造函数",
+		label = "次构造函数",
 		supportedModifiers = TopLevelAccessModifiers + setOf(FILE)
 	),
 	INIT(
-		displayName = "初始化块",
+		label = "初始化块",
 		supportedModifiers = emptySet()
 	),
 	FUN_PARAMETER(
-		displayName = "函数参数",
-		supportedModifiers = setOf(VAR, ARGS)
+		label = "函数参数",
+		supportedModifiers = setOf(VAR)
 	),
 	CTOR_PARAMETER(
-		displayName = "次构造函数参数",
-		supportedModifiers = setOf(VAR, ARGS)
+		label = "次构造函数参数",
+		supportedModifiers = setOf(VAR)
 	),
 	CLASS_PARAMETER(
-		displayName = "类参数",
-		supportedModifiers = MemberAccessModifiers + setOf(OPEN, ABSTRACT, VAR, VAL, ARGS),
+		label = "类参数",
+		supportedModifiers = MemberAccessModifiers + setOf(OPEN, ABSTRACT, VAR, VAL),
 	),
 	OBJECT_PARAMETER(
-		displayName = "单例对象参数",
-		supportedModifiers = MemberAccessModifiers + setOf(VAR, VAL, ARGS),
+		label = "单例对象参数",
+		supportedModifiers = MemberAccessModifiers + setOf(VAR, VAL),
 	),
 	STRUCT_PARAMETER(
-		displayName = "结构体参数",
+		label = "结构体参数",
 		supportedModifiers = MemberAccessModifiers + setOf(VAR, VAL, IGNORE)
 	),
 	ENUM_PARAMETER(
-		displayName = "枚举参数",
-		supportedModifiers = MemberAccessModifiers + setOf(VAR, VAL, ARGS)
+		label = "枚举参数",
+		supportedModifiers = MemberAccessModifiers + setOf(VAR, VAL)
 	),
 	ANNOTATION_PARAMETER(
-		displayName = "注解参数",
+		label = "注解参数",
 		supportedModifiers = setOf(VAL)
 	)
 }

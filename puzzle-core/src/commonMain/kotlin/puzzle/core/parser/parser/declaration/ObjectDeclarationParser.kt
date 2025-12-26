@@ -15,6 +15,9 @@ import puzzle.core.parser.parser.parameter.parameter.ParameterTarget
 import puzzle.core.parser.parser.parameter.parameter.parseParameters
 import puzzle.core.parser.parser.parseAnnotationCalls
 import puzzle.core.parser.parser.parseModifiers
+import puzzle.core.parser.parser.type.SuperTypeTarget
+import puzzle.core.parser.parser.type.parseSuperTypes
+import puzzle.core.parser.parser.type.parseWithTypes
 import puzzle.core.token.kinds.BracketKind.Start.LBRACE
 
 context(_: PzlContext, cursor: PzlTokenCursor)
@@ -32,7 +35,8 @@ fun parseObjectDeclaration(
 	val primaryCtorModifiers = parseModifiers()
 	primaryCtorModifiers.check(ModifierTarget.CTOR)
 	val parameters = parseParameters(ParameterTarget.OBJECT)
-	val superTypeSpecifiers = parseSuperTypeSpecifiers(SuperTypeSpecifierTarget.OBJECT)
+	val superTypes = parseSuperTypes(SuperTypeTarget.OBJECT)
+	val withTypes = parseWithTypes()
 	val info = if (cursor.match(LBRACE)) {
 		parseMemberDeclarationInfo()
 	} else MemberDeclarationInfo.Empty
@@ -44,7 +48,8 @@ fun parseObjectDeclaration(
 		primaryAnnotationCalls = primaryAnnotationCalls,
 		primaryCtorModifiers = primaryCtorModifiers,
 		parameters = parameters,
-		superTypeSpecifiers = superTypeSpecifiers,
+		superTypes = superTypes,
+		withTypes = withTypes,
 		contextSpec = header.contextSpec,
 		annotationCalls = header.annotationCalls,
 		inits = info.inits,

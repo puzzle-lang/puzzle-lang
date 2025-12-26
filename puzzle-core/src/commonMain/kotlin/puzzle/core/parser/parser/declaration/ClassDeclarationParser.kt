@@ -14,6 +14,9 @@ import puzzle.core.parser.parser.parameter.parameter.ParameterTarget
 import puzzle.core.parser.parser.parameter.parameter.parseParameters
 import puzzle.core.parser.parser.parseAnnotationCalls
 import puzzle.core.parser.parser.parseModifiers
+import puzzle.core.parser.parser.type.SuperTypeTarget
+import puzzle.core.parser.parser.type.parseSuperTypes
+import puzzle.core.parser.parser.type.parseWithTypes
 import puzzle.core.token.kinds.BracketKind.Start.LBRACE
 
 context(_: PzlContext, cursor: PzlTokenCursor)
@@ -23,7 +26,8 @@ fun parseClassDeclaration(header: DeclarationHeader, start: SourceLocation): Cla
 	val primaryCtorModifiers = parseModifiers()
 	primaryCtorModifiers.check(ModifierTarget.CTOR)
 	val parameters = parseParameters(ParameterTarget.CLASS)
-	val superTypeSpecifiers = parseSuperTypeSpecifiers(SuperTypeSpecifierTarget.CLASS)
+	val superTypes = parseSuperTypes(SuperTypeTarget.CLASS)
+	val withTypes = parseWithTypes()
 	val info = if (cursor.match(LBRACE)) {
 		parseMemberDeclarationInfo()
 	} else MemberDeclarationInfo.Empty
@@ -38,7 +42,8 @@ fun parseClassDeclaration(header: DeclarationHeader, start: SourceLocation): Cla
 		typeSpec = header.typeSpec,
 		contextSpec = header.contextSpec,
 		annotationCalls = header.annotationCalls,
-		superTypeSpecifiers = superTypeSpecifiers,
+		superTypes = superTypes,
+		withTypes = withTypes,
 		ctors = info.ctors,
 		inits = info.inits,
 		members = info.members,
