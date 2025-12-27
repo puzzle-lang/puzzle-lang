@@ -17,7 +17,7 @@ fun parseLambdaParameterReferences(): List<LambdaParameterReference> {
 			val name = tryParseIdentifier(IdentifierTarget.LAMBDA_IDENTIFIER) ?: break
 			when {
 				cursor.match(COLON) -> {
-					val type = parseTypeReference(allowLambdaType = true)
+					val type = parseTypeReference(allowLambda = true)
 					this += LambdaParameterReference(name, type)
 					if (!cursor.check(ARROW)) {
 						cursor.expect(COMMA, "lambda 参数缺少 ','")

@@ -26,7 +26,7 @@ private val softKeywords = setOf(
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseIdentifier(target: IdentifierTarget): Identifier {
 	return tryParseIdentifier(target)
-		?: syntaxError("${target.displayName}缺少名称", cursor.current)
+		?: syntaxError("${target.label}缺少名称", cursor.current)
 }
 
 context(_: PzlContext, cursor: PzlTokenCursor)
@@ -39,7 +39,7 @@ fun tryParseIdentifier(target: IdentifierTarget): Identifier? {
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseIdentifierString(target: IdentifierTarget): String {
 	return tryParseIdentifierString(target)
-		?: syntaxError("${target.displayName}缺少名称", cursor.current)
+		?: syntaxError("${target.label}缺少名称", cursor.current)
 }
 
 context(_: PzlContext, cursor: PzlTokenCursor)
@@ -47,7 +47,7 @@ fun tryParseIdentifierString(target: IdentifierTarget): String? {
 	if (cursor.matchIsInstance<IdentifierKind>()) {
 		val value = cursor.previous.value
 		if (value == "_" && !target.allowAnonymousBinding) {
-			syntaxError("${target.displayName}不支持匿名绑定", cursor.previous)
+			syntaxError("${target.label}不支持匿名绑定", cursor.previous)
 		}
 		return value
 	}
@@ -77,127 +77,127 @@ fun PzlTokenCursor.matchIdentifier(allowAnonymousBinding: Boolean = false): Bool
 }
 
 enum class IdentifierTarget(
-	val displayName: String,
+	val label: String,
 	val allowAnonymousBinding: Boolean,
 ) {
 	FUN(
-		displayName = "函数声明",
+		label = "函数声明",
 		allowAnonymousBinding = false,
 	),
 	PROPERTY(
-		displayName = "属性声明",
+		label = "属性声明",
 		allowAnonymousBinding = false,
 	),
 	CLASS(
-		displayName = "类声明",
+		label = "类声明",
 		allowAnonymousBinding = false,
 	),
 	TRAIT(
-		displayName = "特征声明",
+		label = "特征声明",
 		allowAnonymousBinding = false,
 	),
 	MIXIN(
-		displayName = "混入",
+		label = "混入",
 		allowAnonymousBinding = false
 	),
 	STRUCT(
-		displayName = "结构体声明",
+		label = "结构体声明",
 		allowAnonymousBinding = false,
 	),
 	OBJECT(
-		displayName = "单例对象声明",
+		label = "单例对象声明",
 		allowAnonymousBinding = false
 	),
 	ANNOTATION(
-		displayName = "注解声明",
+		label = "注解声明",
 		allowAnonymousBinding = false
 	),
 	ENUM(
-		displayName = "枚举声明",
+		label = "枚举声明",
 		allowAnonymousBinding = false
 	),
 	ENUM_ENTRY(
-		displayName = "枚举成员声明",
+		label = "枚举成员声明",
 		allowAnonymousBinding = false,
 	),
 	CTOR(
-		displayName = "次构造函数声明",
+		label = "次构造函数声明",
 		allowAnonymousBinding = false
 	),
 	CONTEXT_RECEIVER(
-		displayName = "上下文型参",
+		label = "上下文型参",
 		allowAnonymousBinding = true
 	),
 	TYPE_PARAMETER(
-		displayName = "泛型型参",
+		label = "泛型型参",
 		allowAnonymousBinding = false
 	),
 	PARAMETER(
-		displayName = "型参",
+		label = "型参",
 		allowAnonymousBinding = false,
 	),
 	LAMBDA_PARAMETER(
-		displayName = "lambda 型参",
+		label = "lambda 型参",
 		allowAnonymousBinding = true,
 	),
 	LAMBDA_IDENTIFIER(
-		displayName = "lambda 参数",
+		label = "lambda 参数",
 		allowAnonymousBinding = true,
 	),
 	VARIABLE(
-		displayName = "变量",
+		label = "变量",
 		allowAnonymousBinding = true
 	),
 	TYPE_REFERENCE(
-		displayName = "类型",
+		label = "类型",
 		allowAnonymousBinding = false
 	),
 	SUFFIX_UNARY(
-		displayName = "一元运算符前",
+		label = "一元运算符前",
 		allowAnonymousBinding = false
 	),
 	PREFIX_UNARY(
-		displayName = "一元运算符后",
+		label = "一元运算符后",
 		allowAnonymousBinding = false,
 	),
 	PACKAGE(
-		displayName = "包",
+		label = "包",
 		allowAnonymousBinding = false,
 	),
 	IMPORT(
-		displayName = "导入",
+		label = "导入",
 		allowAnonymousBinding = false,
 	),
 	IMPORT_AS(
-		displayName = "导入别名",
+		label = "导入别名",
 		allowAnonymousBinding = false,
 	),
 	ACCESS_OPERATOR(
-		displayName = "成员访问",
+		label = "成员访问",
 		allowAnonymousBinding = false,
 	),
 	ARGUMENT(
-		displayName = "实参",
+		label = "实参",
 		allowAnonymousBinding = false,
 	),
 	TYPE_ARGUMENT(
-		displayName = "泛型实参",
+		label = "泛型实参",
 		allowAnonymousBinding = false
 	),
 	LABEL(
-		displayName = "标签",
+		label = "标签",
 		allowAnonymousBinding = false
 	),
 	FOR_VARIABLE(
-		displayName = "for 语句循环变量",
+		label = "for 语句循环变量",
 		allowAnonymousBinding = true,
 	),
 	GETTER_PARAMETER(
-		displayName = "属性访问器参数",
+		label = "属性访问器参数",
 		allowAnonymousBinding = false,
 	),
 	SETTER_PARAMETER(
-		displayName = "属性赋值器参数",
+		label = "属性赋值器参数",
 		allowAnonymousBinding = false,
 	)
 }

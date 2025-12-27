@@ -59,7 +59,7 @@ private fun parseParameter(target: ParameterTarget): Parameter {
 	modifiers.check(target.modifierTarget)
 	val name = parseIdentifier(IdentifierTarget.PARAMETER)
 	cursor.expect(COLON, "型参缺少 ':'")
-	val type = parseTypeReference(allowLambdaType = target.allowLambdaType)
+	val type = parseTypeReference(allowLambda = target.allowLambda)
 	val vararg = when {
 		cursor.match(STAR) -> Vararg(VarargKind.STAR, cursor.previous.location)
 		cursor.match(PLUS) -> Vararg(VarargKind.PLUS, cursor.previous.location)

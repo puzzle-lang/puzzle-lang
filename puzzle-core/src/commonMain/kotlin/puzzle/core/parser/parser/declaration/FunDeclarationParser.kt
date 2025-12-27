@@ -38,7 +38,7 @@ fun parseFunDeclaration(header: DeclarationHeader, start: SourceLocation): FunDe
 	val parameters = parseParameters(ParameterTarget.FUN)
 	val returnTypes = if (!cursor.match(COLON)) emptyList() else buildList {
 		do {
-			this += parseTypeReference(allowLambdaType = true)
+			this += parseTypeReference(allowLambda = true)
 		} while (cursor.match(COMMA))
 	}
 	val expressions = if (cursor.match(LBRACE)) parseStatements() else emptyList()
@@ -87,14 +87,14 @@ private fun parseExtensionAndFunName(): Pair<TypeReference?, FunName> {
 		}
 		if (name is SymbolFunName) {
 			val location = start span cursor.previous.location
-			val type = TypeReference(NamedType(segments, location), location)
+			val type = TypeReference(NamedType(segments, location), false, location)
 			return type to name
 		}
 		segments += name as String
 	} while (cursor.match(DOT))
 	val funName = IdentifierFunName(Identifier(segments.removeLast(), cursor.previous.location))
 	val location = start span cursor.previous.location
-	val type = TypeReference(NamedType(segments, location), location)
+	val type = TypeReference(NamedType(segments, location), false, location)
 	return type to funName
 }
 

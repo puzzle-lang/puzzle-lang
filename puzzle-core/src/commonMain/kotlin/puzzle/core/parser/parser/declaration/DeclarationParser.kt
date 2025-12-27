@@ -12,7 +12,7 @@ import puzzle.core.parser.matcher.declaration.DeclarationHeader
 import puzzle.core.parser.matcher.declaration.member.MemberDeclarationMatcher
 import puzzle.core.parser.matcher.declaration.toplevel.DeclarationMatcher
 import puzzle.core.parser.parser.check
-import puzzle.core.parser.parser.parameter.context.parseContextSpec
+import puzzle.core.parser.parser.parameter.context.parseDeclarationContextSpec
 import puzzle.core.parser.parser.parameter.type.check
 import puzzle.core.parser.parser.parameter.type.parseTypeSpec
 import puzzle.core.parser.parser.parseAnnotationCalls
@@ -34,7 +34,7 @@ private fun parseDeclaration(): Declaration {
 	val docComment = parseDocComment()
 	val annotationCalls = parseAnnotationCalls()
 	val typeSpec = parseTypeSpec()
-	val contextSpec = parseContextSpec()
+	val contextSpec = parseDeclarationContextSpec()
 	val modifiers = parseModifiers()
 	val matcher = DeclarationMatcher.matchers.find { it.match() } ?: syntaxError(
 		message = if (cursor.isAtEnd()) "结尾缺少 '}'" else "未知的顶层声明",
@@ -80,7 +80,7 @@ private fun parseMemberDeclaration(): Declaration {
 	val docComment = parseDocComment()
 	val annotationCalls = parseAnnotationCalls()
 	val typeSpec = parseTypeSpec()
-	val contextSpec = parseContextSpec()
+	val contextSpec = parseDeclarationContextSpec()
 	val modifiers = parseModifiers()
 	val matcher = MemberDeclarationMatcher.matchers.find { it.match() } ?: syntaxError(
 		message = if (cursor.isAtEnd()) "结尾缺少 '}'" else "未知的成员声明",

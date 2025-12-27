@@ -21,12 +21,12 @@ fun parseTypeSpec(): TypeSpec? {
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun TypeSpec.check(target: TypeTarget) {
 	if (!target.allowsType) {
-		syntaxError("${target.displayName}声明不支持泛型", cursor[this.location.start])
+		syntaxError("${target.label}声明不支持泛型", cursor[this.location.start])
 	}
 	if (!target.allowsVariance) {
 		this.parameters.forEach {
 			if (it.variance != null) {
-				syntaxError("${target.displayName}声明不支持使用 '${it.variance.kind.value}'", cursor[it.location.start])
+				syntaxError("${target.label}声明不支持使用 '${it.variance.kind.value}'", cursor[it.location.start])
 			}
 		}
 	}

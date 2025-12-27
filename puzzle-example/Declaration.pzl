@@ -278,12 +278,6 @@ fun type(type: type) {
 
 }
 
-reified type<T : Any1 & Any2>
-context(_: T, name: String)
-fun context() {
-
-}
-
 context(_: Type)
 fun context2() {
 

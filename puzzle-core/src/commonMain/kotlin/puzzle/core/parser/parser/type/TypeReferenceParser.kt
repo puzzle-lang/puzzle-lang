@@ -2,70 +2,121 @@ package puzzle.core.parser.parser.type
 
 import puzzle.core.exception.syntaxError
 import puzzle.core.model.PzlContext
+import puzzle.core.model.SourceLocation
 import puzzle.core.model.span
 import puzzle.core.parser.PzlTokenCursor
+import puzzle.core.parser.ast.parameter.LambdaContextSpec
+import puzzle.core.parser.ast.parameter.LambdaParameter
 import puzzle.core.parser.ast.type.LambdaType
+import puzzle.core.parser.ast.type.NamedType
+import puzzle.core.parser.ast.type.Type
 import puzzle.core.parser.ast.type.TypeReference
+import puzzle.core.parser.parser.expression.checkIdentifier
+import puzzle.core.parser.parser.parameter.context.parseLambdaContextSpec
 import puzzle.core.parser.parser.parameter.parameter.parseLambdaParameters
+import puzzle.core.token.kinds.AccessKind.DOT
+import puzzle.core.token.kinds.AccessKind.QUESTION_DOT
 import puzzle.core.token.kinds.BracketKind.End.RBRACKET
 import puzzle.core.token.kinds.BracketKind.Start.LBRACKET
 import puzzle.core.token.kinds.BracketKind.Start.LPAREN
-import puzzle.core.token.kinds.SeparatorKind.COMMA
+import puzzle.core.token.kinds.SeparatorKind
 import puzzle.core.token.kinds.SymbolKind.ARROW
 import puzzle.core.token.kinds.SymbolKind.QUESTION
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseTypeReference(
-	allowLambdaType: Boolean = false,
+	allowLambda: Boolean = false,
 	allowNullable: Boolean = true,
 ): TypeReference {
 	val start = cursor.current.location
-	if (!cursor.check(LPAREN)) {
-		val type = parseNamedType()
-		val isNullable = isNullable(allowNullable)
-		val end = cursor.previous.location
-		return TypeReference(type, start span end, isNullable)
-	}
-	val parameters = parseLambdaParameters()
-	if (!cursor.match(ARROW)) {
-		if (parameters.size != 1 || parameters.first().name != null) {
-			syntaxError("lambda 表达式缺少 '->'", cursor.current)
+	val contextSpec = parseLambdaContextSpec()
+	var extension = when {
+		cursor.checkIdentifier() && cursor.offsetOrNull(1)?.kind != LPAREN -> {
+			parseNamedType()
 		}
-		val parameter = parameters.single()
-		val isNullable = isNullable(allowNullable) || parameter.type.isNullable
-		val end = cursor.previous.location
-		return TypeReference(parameter.type.type, start span end, isNullable)
-	}
-	if (!allowLambdaType) {
-		syntaxError("不支持 lambda 表达式", cursor.previous)
-	}
-	val returnTypes = buildList {
-		if (cursor.match(LBRACKET)) {
-			while (!cursor.match(RBRACKET)) {
-				this += parseTypeReference(allowLambdaType, allowNullable)
-				if (!cursor.check(RBRACKET)) {
-					cursor.expect(COMMA, "lambda 表达式缺少 ','")
+		
+		cursor.check(LPAREN) -> {
+			val parameters = parseLambdaParameters()
+			if (cursor.match(ARROW)) {
+				if (!allowLambda) {
+					syntaxError("不支持 lambda 表达式", cursor.previous)
+				}
+				parseLambdaType(start, contextSpec, null, parameters)
+			} else {
+				if (parameters.size != 1) {
+					syntaxError("lambda 表达式缺少 '->'", cursor.current)
+				}
+				val parameter = parameters.single()
+				val type = parameter.type.type
+				if (!cursor.match { it == DOT || it == QUESTION_DOT }) {
+					val isNullable = parseNullable(allowNullable) || parameter.type.isNullable
+					val end = cursor.previous.location
+					return TypeReference(type, isNullable, start span end)
+				} else {
+					val isNullable = cursor.previous.kind == QUESTION_DOT || parameter.type.isNullable
+					val end = cursor.previous.location
+					TypeReference(type, isNullable, start span end)
 				}
 			}
-			if (this.isEmpty()) {
-				syntaxError("lambda 表达式的多返回值类型缺失", cursor.previous)
-			}
-			if (this.size == 1) {
-				syntaxError("lambda 表达式的多返回值类型至少需要2个", cursor.previous)
-			}
-		} else {
-			this += parseTypeReference(allowLambdaType, allowNullable)
 		}
+		
+		else -> syntaxError("语法错误", cursor.current)
 	}
+	
+	extension = when (extension) {
+		is TypeReference -> extension
+		is Type -> {
+			if (!cursor.match { it == DOT || it == QUESTION_DOT }) {
+				if (extension is NamedType && contextSpec != null) {
+					syntaxError("不能为类型指定 context 上下文参数", extension)
+				}
+				val isNullable = parseNullable(allowNullable)
+				val end = cursor.previous.location
+				return TypeReference(extension, isNullable, start span end)
+			}
+			val isNullable = cursor.previous.kind == QUESTION_DOT
+			val end = cursor.previous.location
+			TypeReference(extension, isNullable, start span end)
+		}
+		
+		else -> syntaxError("未知的类型", extension)
+	}
+	val parameters = parseLambdaParameters()
+	cursor.expect(ARROW, "lambda 表达式缺少 '->'")
+	val type = parseLambdaType(start, contextSpec, extension, parameters)
+	val isNullable = parseNullable(allowNullable)
 	val end = cursor.previous.location
-	val type = LambdaType(parameters, returnTypes, start span end)
-	val isNullable = isNullable(allowNullable)
-	val location = start span cursor.previous.location
-	return TypeReference(type, location, isNullable)
+	return TypeReference(type, isNullable, start span end)
 }
 
 context(_: PzlContext, cursor: PzlTokenCursor)
-private fun isNullable(allowNullable: Boolean): Boolean {
+private fun parseLambdaType(
+	start: SourceLocation,
+	contextSpec: LambdaContextSpec?,
+	extension: TypeReference?,
+	parameters: List<LambdaParameter>,
+): LambdaType {
+	val returnTypes = if (cursor.match(LBRACKET)) {
+		buildList {
+			do {
+				this += parseTypeReference(true)
+				if (!cursor.check(RBRACKET)) {
+					cursor.expect(SeparatorKind.COMMA, "lambda 表达式返回值缺少 ','")
+				}
+			} while (!cursor.match(RBRACKET))
+			if (cursor.match(QUESTION)) {
+				syntaxError("请为 lambda 加上 '(' 和 ')'", cursor.previous)
+			}
+		}
+	} else {
+		listOf(parseTypeReference(true))
+	}
+	val end = cursor.previous.location
+	return LambdaType(extension, contextSpec, parameters, returnTypes, start span end)
+}
+
+context(_: PzlContext, cursor: PzlTokenCursor)
+private fun parseNullable(allowNullable: Boolean): Boolean {
 	var isNullable = false
 	while (cursor.match(QUESTION)) {
 		isNullable = true

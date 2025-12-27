@@ -9,5 +9,5 @@ import puzzle.core.util.DotStringListSerializer
 class PackageDeclaration(
 	@Serializable(with = DotStringListSerializer::class)
 	val segments: List<String>,
-	override val location: SourceLocation
+	override val location: SourceLocation,
 ) : AstNode

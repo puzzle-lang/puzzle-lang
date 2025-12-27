@@ -6,7 +6,7 @@ import puzzle.core.parser.ast.AnnotationCall
 import puzzle.core.parser.ast.DocComment
 import puzzle.core.parser.ast.Modifier
 import puzzle.core.parser.ast.expression.Identifier
-import puzzle.core.parser.ast.parameter.ContextSpec
+import puzzle.core.parser.ast.parameter.DeclarationContextSpec
 import puzzle.core.parser.ast.parameter.Parameter
 import puzzle.core.parser.ast.parameter.TypeSpec
 import puzzle.core.parser.ast.type.NamedType
@@ -21,7 +21,7 @@ class ClassDeclaration(
 	val primaryCtorModifiers: List<Modifier>,
 	val parameters: List<Parameter>,
 	val typeSpec: TypeSpec?,
-	val contextSpec: ContextSpec?,
+	val contextSpec: DeclarationContextSpec?,
 	val annotationCalls: List<AnnotationCall>,
 	val superTypes: List<SuperType>,
 	val withTypes: List<NamedType>,

@@ -17,7 +17,6 @@ sealed interface ExpressionMatcher {
 			PrefixUnaryExpressionMatcher,
 			SuffixUnaryExpressionMatcher,
 			LiteralExpressionMatcher,
-			IdentifierMatcher,
 			ContextualExpressionMatcher,
 			BinaryExpressionMatcher,
 			ElvisExpressionMatcher,
@@ -27,7 +26,8 @@ sealed interface ExpressionMatcher {
 			IfExpressionMatcher,
 			MatchExpressionMatcher,
 			LoopExpressionMatcher,
-			LambdaExpressionMatcher
+			LambdaExpressionMatcher,
+			IdentifierMatcher,
 		)
 	}
 	

@@ -6,19 +6,19 @@ import puzzle.core.model.SourceLocation
 import puzzle.core.model.copy
 import puzzle.core.model.span
 import puzzle.core.parser.PzlTokenCursor
-import puzzle.core.parser.ast.type.NamedType
-import puzzle.core.parser.ast.type.TypeReference
 import puzzle.core.parser.ast.declaration.PropertyDeclaration
 import puzzle.core.parser.ast.declaration.PropertyGetter
 import puzzle.core.parser.ast.declaration.PropertySetter
 import puzzle.core.parser.ast.expression.Identifier
+import puzzle.core.parser.ast.type.NamedType
+import puzzle.core.parser.ast.type.TypeReference
 import puzzle.core.parser.matcher.declaration.DeclarationHeader
 import puzzle.core.parser.parser.expression.IdentifierTarget
 import puzzle.core.parser.parser.expression.parseExpressionChain
 import puzzle.core.parser.parser.expression.parseIdentifier
-import puzzle.core.parser.parser.type.parseTypeReference
 import puzzle.core.parser.parser.statement.parseStatement
 import puzzle.core.parser.parser.statement.parseStatements
+import puzzle.core.parser.parser.type.parseTypeReference
 import puzzle.core.token.kinds.AccessKind.DOT
 import puzzle.core.token.kinds.AccessorKind.GET
 import puzzle.core.token.kinds.AccessorKind.SET
@@ -34,7 +34,7 @@ import puzzle.core.util.isIn
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parsePropertyDeclaration(header: DeclarationHeader, start: SourceLocation): PropertyDeclaration {
 	val (extension, name) = parseExtensionAndPropertyName()
-	val type = if (cursor.match(COLON)) parseTypeReference(allowLambdaType = true) else null
+	val type = if (cursor.match(COLON)) parseTypeReference(allowLambda = true) else null
 	val initializer = if (cursor.match(ASSIGN)) parseExpressionChain() else null
 	val isVal = VAL isIn header.modifiers
 	val isLazy = LAZY isIn header.modifiers
@@ -219,7 +219,7 @@ private fun parseExtensionAndPropertyName(): Pair<TypeReference?, Identifier> {
 				location = type.type.location.copy(start = { it.end - 1 })
 			)
 			val location = type.location.copy(end = { it.end - 2 })
-			val type = TypeReference(NamedType(segments, location), location)
+			val type = TypeReference(NamedType(segments, location), false, location)
 			type to name
 		}
 	} else {

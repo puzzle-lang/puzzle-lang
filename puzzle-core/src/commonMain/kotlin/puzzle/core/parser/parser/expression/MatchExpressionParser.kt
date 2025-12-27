@@ -6,9 +6,9 @@ import puzzle.core.model.span
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.expression.*
 import puzzle.core.parser.ast.statement.Statement
-import puzzle.core.parser.parser.type.parseTypeReference
 import puzzle.core.parser.parser.statement.parseStatement
 import puzzle.core.parser.parser.statement.parseStatements
+import puzzle.core.parser.parser.type.parseTypeReference
 import puzzle.core.token.kinds.BracketKind.End.RBRACE
 import puzzle.core.token.kinds.BracketKind.End.RPAREN
 import puzzle.core.token.kinds.BracketKind.Start.LBRACE

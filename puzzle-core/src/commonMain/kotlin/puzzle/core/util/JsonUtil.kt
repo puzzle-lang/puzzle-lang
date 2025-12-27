@@ -4,14 +4,17 @@ import kotlinx.serialization.json.Json
 import kotlin.time.measureTimedValue
 
 val json = Json {
-	prettyPrint = false
+	prettyPrint = true
 	encodeDefaults = true
 	classDiscriminator = "class"
 	ignoreUnknownKeys = true
 }
 
 inline fun <reified T> T.alsoLog(): T {
-	if (this == null) return this
+	if (this == null) {
+		println(null)
+		return this
+	}
 	
 	val value = measureTimedValue {
 		json.encodeToString(this)

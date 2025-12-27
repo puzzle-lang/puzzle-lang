@@ -7,6 +7,6 @@ import puzzle.core.parser.ast.AstNode
 @Serializable
 class TypeReference(
 	val type: Type,
+	val isNullable: Boolean,
 	override val location: SourceLocation,
-	val isNullable: Boolean = false,
 ) : AstNode

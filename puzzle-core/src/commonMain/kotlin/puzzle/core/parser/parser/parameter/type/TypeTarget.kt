@@ -1,67 +1,67 @@
 package puzzle.core.parser.parser.parameter.type
 
 enum class TypeTarget(
-	val displayName: String,
+	val label: String,
 	val allowsType: Boolean,
 	val allowsVariance: Boolean,
 ) {
 	FUN(
-		displayName = "函数",
+		label = "函数",
 		allowsType = true,
 		allowsVariance = false
 	),
 	PROPERTY(
-		displayName = "属性",
+		label = "属性",
 		allowsType = true,
 		allowsVariance = false
 	),
 	CLASS(
-		displayName = "类",
+		label = "类",
 		allowsType = true,
 		allowsVariance = true
 	),
 	OBJECT(
-		displayName = "单例对象",
+		label = "单例对象",
 		allowsType = false,
 		allowsVariance = false
 	),
 	TRAIT(
-		displayName = "特征",
+		label = "特征",
 		allowsType = true,
 		allowsVariance = true
 	),
 	MIXIN(
-		displayName = "混入",
+		label = "混入",
 		allowsType = true,
 		allowsVariance = true
 	),
 	STRUCT(
-		displayName = "结构体",
+		label = "结构体",
 		allowsType = true,
 		allowsVariance = true
 	),
 	ENUM(
-		displayName = "枚举",
+		label = "枚举",
 		allowsType = true,
 		allowsVariance = true
 	),
 	ANNOTATION(
-		displayName = "注解",
+		label = "注解",
 		allowsType = true,
 		allowsVariance = false
 	),
 	EXTENSION(
-		displayName = "扩展",
+		label = "扩展",
 		allowsType = true,
 		allowsVariance = true
 	),
 	CTOR(
-		displayName = "次构造函数",
+		label = "次构造函数",
 		allowsType = false,
 		allowsVariance = false
 	),
 	INIT(
-		displayName = "初始化块",
+		label = "初始化块",
 		allowsType = false,
 		allowsVariance = false
 	)

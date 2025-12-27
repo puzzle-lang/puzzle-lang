@@ -5,12 +5,12 @@ import puzzle.core.model.SourceLocation
 import puzzle.core.parser.ast.AnnotationCall
 import puzzle.core.parser.ast.AstNode
 import puzzle.core.parser.ast.Modifier
-import puzzle.core.parser.ast.type.TypeReference
 import puzzle.core.parser.ast.expression.Expression
 import puzzle.core.parser.ast.expression.Identifier
-import puzzle.core.parser.ast.parameter.ContextSpec
+import puzzle.core.parser.ast.parameter.DeclarationContextSpec
 import puzzle.core.parser.ast.parameter.TypeSpec
 import puzzle.core.parser.ast.statement.Statement
+import puzzle.core.parser.ast.type.TypeReference
 
 @Serializable
 class PropertyDeclaration(
@@ -18,7 +18,7 @@ class PropertyDeclaration(
 	val type: TypeReference?,
 	val modifiers: List<Modifier>,
 	val typeSpec: TypeSpec?,
-	val contextSpec: ContextSpec?,
+	val contextSpec: DeclarationContextSpec?,
 	val annotationCalls: List<AnnotationCall>,
 	val extension: TypeReference?,
 	override val location: SourceLocation,

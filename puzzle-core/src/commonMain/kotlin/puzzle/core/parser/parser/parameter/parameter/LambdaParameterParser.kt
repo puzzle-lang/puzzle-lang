@@ -48,7 +48,7 @@ private fun parseLambdaParameter(): LambdaParameter {
 			cursor.advance()
 		}
 	} else null
-	val type = parseTypeReference(allowLambdaType = true)
+	val type = parseTypeReference(allowLambda = true)
 	if (cursor.match(ASSIGN)) {
 		syntaxError("lambda 型参不支持默认值", cursor.previous)
 	}

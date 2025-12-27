@@ -45,3 +45,7 @@ fun parseTraitDeclaration(header: DeclarationHeader, start: SourceLocation): Tra
 		location = start span end
 	)
 }
+
+class context(t: String) {
+
+}
