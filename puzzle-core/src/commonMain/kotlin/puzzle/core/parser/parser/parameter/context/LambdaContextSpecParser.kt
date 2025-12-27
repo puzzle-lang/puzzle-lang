@@ -7,6 +7,7 @@ import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.parameter.LambdaContextReceiver
 import puzzle.core.parser.ast.parameter.LambdaContextSpec
 import puzzle.core.parser.parser.expression.checkIdentifier
+import puzzle.core.parser.parser.parameter.parseTypeExpansion
 import puzzle.core.parser.parser.type.parseTypeReference
 import puzzle.core.token.kinds.BracketKind.End.RPAREN
 import puzzle.core.token.kinds.BracketKind.Start.LPAREN
@@ -39,5 +40,7 @@ fun parseLambdaContextSpec(): LambdaContextSpec? {
 context(_: PzlContext, cursor: PzlTokenCursor)
 private fun parseLambdaContextReceiver(): LambdaContextReceiver {
 	val type = parseTypeReference(allowLambda = true)
-	return LambdaContextReceiver(type)
+	val typeExpansion = parseTypeExpansion()
+	val end = cursor.previous.location
+	return LambdaContextReceiver(type, typeExpansion, type.location span end)
 }

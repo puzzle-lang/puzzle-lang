@@ -1,0 +1,49 @@
+@file:Suppress("ClassName")
+
+package puzzle.core.parser.ast.parameter
+
+import kotlinx.serialization.Serializable
+import puzzle.core.model.SourceLocation
+import puzzle.core.parser.ast.AstNode
+
+@Serializable
+class Quantifier(
+	val kind: QuantifierKind,
+	override val location: SourceLocation,
+) : AstNode
+
+@Serializable
+class TypeExpansion(
+	val kind: TypeExpansionKind,
+	override val location: SourceLocation,
+) : AstNode
+
+@Serializable
+sealed interface QuantifierKind {
+	
+	val allowEmpty: Boolean
+}
+
+@Serializable
+sealed class VarargKind(
+	override val allowEmpty: Boolean,
+) : QuantifierKind {
+	
+	@Serializable
+	object ALLOW_EMPTY : VarargKind(true)
+	
+	@Serializable
+	object NOT_EMPTY : VarargKind(false)
+}
+
+@Serializable
+sealed class TypeExpansionKind(
+	override val allowEmpty: Boolean,
+) : QuantifierKind {
+	
+	@Serializable
+	object ALLOW_EMPTY : TypeExpansionKind(true)
+	
+	@Serializable
+	object NOT_EMPTY : TypeExpansionKind(false)
+}

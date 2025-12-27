@@ -45,5 +45,6 @@ class LambdaContextSpec(
 @Serializable
 class LambdaContextReceiver(
 	override val type: TypeReference,
-	override val location: SourceLocation = type.location,
+	val typeExpansion: TypeExpansion?,
+	override val location: SourceLocation,
 ) : ContextReceiver

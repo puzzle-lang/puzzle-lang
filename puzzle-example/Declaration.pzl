@@ -273,9 +273,19 @@ trait sealed
 
 fun init(import: ((type.import) -> final?)?) {}
 
-type<T>
-fun type(type: type) {
+type<T, R>
+fun transform(value: T, transform: (T) -> R): R {
+    return transform(value)
+}
 
+type<T..., R>
+fun context(ts: T..., context: context(T...) () -> R): R {
+    return context(ts)
+}
+
+type<T..., R>
+fun callback(ts: T..., callback: context(T) () -> R): R {
+    return context(ts)
 }
 
 context(_: Type)

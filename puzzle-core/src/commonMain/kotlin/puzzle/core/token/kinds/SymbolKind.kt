@@ -22,7 +22,8 @@ sealed class SymbolKind(
 				COLON, QUESTION, ELVIS,
 				AT,
 				ARROW,
-				HASH
+				HASH,
+				TRIPLE_DOT
 			)
 		)
 	}
@@ -38,6 +39,8 @@ sealed class SymbolKind(
 	object ARROW : SymbolKind("->")
 	
 	object HASH : SymbolKind("#")
+	
+	object TRIPLE_DOT : SymbolKind("...")
 }
 
 sealed class OperatorKind(

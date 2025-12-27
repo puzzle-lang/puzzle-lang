@@ -15,19 +15,7 @@ class Parameter(
 	val modifiers: List<Modifier>,
 	val type: TypeReference,
 	val annotationCalls: List<AnnotationCall>,
-	val vararg: Vararg?,
+	val quantifier: Quantifier?,
 	val defaultExpression: Expression?,
 	override val location: SourceLocation,
 ) : AstNode
-
-@Serializable
-class Vararg(
-	val kind: VarargKind,
-	override val location: SourceLocation,
-) : AstNode
-
-@Serializable
-enum class VarargKind {
-	STAR,
-	PLUS
-}

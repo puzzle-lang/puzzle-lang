@@ -5,20 +5,17 @@ import puzzle.core.model.PzlContext
 import puzzle.core.model.span
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.parameter.Parameter
-import puzzle.core.parser.ast.parameter.Vararg
-import puzzle.core.parser.ast.parameter.VarargKind
 import puzzle.core.parser.parser.check
 import puzzle.core.parser.parser.expression.IdentifierTarget
 import puzzle.core.parser.parser.expression.parseExpressionChain
 import puzzle.core.parser.parser.expression.parseIdentifier
+import puzzle.core.parser.parser.parameter.parseQuantifier
 import puzzle.core.parser.parser.parseAnnotationCalls
 import puzzle.core.parser.parser.parseModifiers
 import puzzle.core.parser.parser.type.parseTypeReference
 import puzzle.core.token.kinds.AssignmentKind.ASSIGN
 import puzzle.core.token.kinds.BracketKind.End.RPAREN
 import puzzle.core.token.kinds.BracketKind.Start.LPAREN
-import puzzle.core.token.kinds.OperatorKind.PLUS
-import puzzle.core.token.kinds.OperatorKind.STAR
 import puzzle.core.token.kinds.SeparatorKind.COMMA
 import puzzle.core.token.kinds.SymbolKind.COLON
 
@@ -43,11 +40,13 @@ fun parseParameters(target: ParameterTarget): List<Parameter> {
 
 context(_: PzlContext)
 private fun List<Parameter>.check() {
-	this.forEachIndexed { index, parameter ->
-		val vararg = parameter.vararg ?: return@forEachIndexed
-		if (index < this.lastIndex) {
-			syntaxError("只允许在最后一个参数使用可变量词", vararg)
+	var existsTypeQuantifier: Boolean = false
+	this.forEach {
+		if (it.quantifier == null) return@forEach
+		if (existsTypeQuantifier) {
+			syntaxError("只允许使用一个包含数量修饰符的参数", it.quantifier)
 		}
+		existsTypeQuantifier = true
 	}
 }
 
@@ -60,16 +59,12 @@ private fun parseParameter(target: ParameterTarget): Parameter {
 	val name = parseIdentifier(IdentifierTarget.PARAMETER)
 	cursor.expect(COLON, "型参缺少 ':'")
 	val type = parseTypeReference(allowLambda = target.allowLambda)
-	val vararg = when {
-		cursor.match(STAR) -> Vararg(VarargKind.STAR, cursor.previous.location)
-		cursor.match(PLUS) -> Vararg(VarargKind.PLUS, cursor.previous.location)
-		else -> null
-	}
-	if (vararg != null && !target.allowVarargQuantifier) {
+	val quantifier = parseQuantifier()
+	if (quantifier != null && !target.allowVarargQuantifier) {
 		syntaxError("${target.label} 参数不支持可变量词", cursor.previous)
 	}
 	val defaultExpression = if (cursor.match(ASSIGN)) {
-		if (vararg != null) {
+		if (quantifier != null) {
 			syntaxError("${target.label} 可变参数不允许设置默认值", cursor.previous)
 		}
 		parseExpressionChain()
@@ -80,7 +75,7 @@ private fun parseParameter(target: ParameterTarget): Parameter {
 		modifiers = modifiers,
 		type = type,
 		annotationCalls = annotationCalls,
-		vararg = vararg,
+		quantifier = quantifier,
 		defaultExpression = defaultExpression,
 		location = start span end
 	)
