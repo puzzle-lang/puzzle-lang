@@ -14,7 +14,7 @@ context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseLambdaParameterReferences(): List<LambdaParameterReference> {
 	return buildList {
 		while (!cursor.match(ARROW)) {
-			val name = tryParseIdentifier(IdentifierTarget.LAMBDA_IDENTIFIER) ?: break
+			val name = tryParseIdentifier(IdentifierTarget.LAMBDA_PARAMETER_REFERENCE) ?: break
 			when {
 				cursor.match(COLON) -> {
 					val type = parseTypeReference(allowLambda = true)

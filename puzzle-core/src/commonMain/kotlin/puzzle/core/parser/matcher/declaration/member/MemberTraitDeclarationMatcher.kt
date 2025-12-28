@@ -7,6 +7,7 @@ import puzzle.core.parser.ast.declaration.TraitDeclaration
 import puzzle.core.parser.matcher.declaration.DeclarationHeader
 import puzzle.core.parser.parser.ModifierTarget
 import puzzle.core.parser.parser.declaration.parseTraitDeclaration
+import puzzle.core.parser.parser.parameter.context.ContextTarget
 import puzzle.core.parser.parser.parameter.type.TypeTarget
 import puzzle.core.token.kinds.DeclarationKind.TRAIT
 
@@ -15,6 +16,8 @@ object MemberTraitDeclarationMatcher : MemberDeclarationMatcher<TraitDeclaration
 	override val typeTarget = TypeTarget.TRAIT
 	
 	override val modifierTarget = ModifierTarget.MEMBER_TRAIT
+	
+	override val contextTarget = ContextTarget.TRAIT
 	
 	context(cursor: PzlTokenCursor)
 	override fun match(): Boolean {

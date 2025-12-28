@@ -55,6 +55,11 @@ enum class TypeTarget(
 		allowsType = true,
 		allowsVariance = true
 	),
+	TYPEALIAS(
+		label = "类型别名",
+		allowsType = true,
+		allowsVariance = false
+	),
 	CTOR(
 		label = "次构造函数",
 		allowsType = false,

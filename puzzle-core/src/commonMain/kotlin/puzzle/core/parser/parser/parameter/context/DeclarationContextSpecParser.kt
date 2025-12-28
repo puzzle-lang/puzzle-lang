@@ -1,5 +1,6 @@
 package puzzle.core.parser.parser.parameter.context
 
+import puzzle.core.exception.syntaxError
 import puzzle.core.model.PzlContext
 import puzzle.core.model.span
 import puzzle.core.parser.PzlTokenCursor
@@ -39,4 +40,11 @@ private fun parseDeclarationContextReceiver(): DeclarationContextReceiver {
 	cursor.expect(COLON, "context 参数缺少 ':'")
 	val type = parseTypeReference()
 	return DeclarationContextReceiver(name, type)
+}
+
+context(_: PzlContext)
+fun DeclarationContextSpec.check(target: ContextTarget) {
+	if (!target.allowContext) {
+		syntaxError("${target.label}不支持 context 上下文参数", this)
+	}
 }

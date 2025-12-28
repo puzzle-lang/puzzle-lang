@@ -7,6 +7,7 @@ import puzzle.core.parser.ast.declaration.AnnotationDeclaration
 import puzzle.core.parser.matcher.declaration.DeclarationHeader
 import puzzle.core.parser.parser.ModifierTarget
 import puzzle.core.parser.parser.declaration.parseAnnotationDeclaration
+import puzzle.core.parser.parser.parameter.context.ContextTarget
 import puzzle.core.parser.parser.parameter.type.TypeTarget
 import puzzle.core.token.kinds.DeclarationKind.ANNOTATION
 
@@ -15,6 +16,8 @@ object AnnotationDeclarationMatcher : DeclarationMatcher<AnnotationDeclaration> 
 	override val typeTarget = TypeTarget.ANNOTATION
 	
 	override val modifierTarget = ModifierTarget.ANNOTATION
+	
+	override val contextTarget = ContextTarget.ANNOTATION
 	
 	context(cursor: PzlTokenCursor)
 	override fun match(): Boolean {

@@ -7,6 +7,7 @@ import puzzle.core.parser.ast.declaration.InitDeclaration
 import puzzle.core.parser.matcher.declaration.DeclarationHeader
 import puzzle.core.parser.parser.ModifierTarget
 import puzzle.core.parser.parser.declaration.parseInitDeclaration
+import puzzle.core.parser.parser.parameter.context.ContextTarget
 import puzzle.core.parser.parser.parameter.type.TypeTarget
 import puzzle.core.token.kinds.ContextualKind.INIT
 
@@ -15,6 +16,8 @@ object MemberInitDeclarationMatcher : MemberDeclarationMatcher<InitDeclaration> 
 	override val typeTarget: TypeTarget = TypeTarget.INIT
 	
 	override val modifierTarget: ModifierTarget = ModifierTarget.INIT
+	
+	override val contextTarget = ContextTarget.INIT
 	
 	context(cursor: PzlTokenCursor)
 	override fun match(): Boolean {

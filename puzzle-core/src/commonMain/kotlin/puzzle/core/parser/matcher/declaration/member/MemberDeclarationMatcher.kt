@@ -6,6 +6,7 @@ import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.declaration.Declaration
 import puzzle.core.parser.matcher.declaration.DeclarationHeader
 import puzzle.core.parser.parser.ModifierTarget
+import puzzle.core.parser.parser.parameter.context.ContextTarget
 import puzzle.core.parser.parser.parameter.type.TypeTarget
 
 sealed interface MemberDeclarationMatcher<out D : Declaration> {
@@ -23,6 +24,7 @@ sealed interface MemberDeclarationMatcher<out D : Declaration> {
 			MemberEnumDeclarationMatcher,
 			MemberAnnotationDeclarationMatcher,
 			MemberExtensionDeclarationMatcher,
+			TypealiasMemberDeclarationMatcher,
 			MemberCtorDeclarationMatcher,
 			MemberInitDeclarationMatcher
 		)
@@ -31,6 +33,8 @@ sealed interface MemberDeclarationMatcher<out D : Declaration> {
 	val typeTarget: TypeTarget
 	
 	val modifierTarget: ModifierTarget
+	
+	val contextTarget: ContextTarget
 	
 	context(cursor: PzlTokenCursor)
 	fun match(): Boolean

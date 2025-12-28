@@ -121,6 +121,10 @@ enum class ModifierTarget(
 		label = "扩展",
 		supportedModifiers = TopLevelAccessModifiers
 	),
+	TYPEALIAS(
+		label = "类型别名",
+		supportedModifiers = TopLevelAccessModifiers
+	),
 	MEMBER_FUN(
 		label = "成员函数",
 		supportedModifiers = MemberAccessModifiers + setOf(FINAL, OVERRIDE, OPEN, ABSTRACT)
@@ -159,6 +163,10 @@ enum class ModifierTarget(
 	),
 	MEMBER_EXTENSION(
 		label = "成员扩展",
+		supportedModifiers = MemberAccessModifiers
+	),
+	MEMBER_TYPEALIAS(
+		label = "成员类型别名",
 		supportedModifiers = MemberAccessModifiers
 	),
 	CTOR(

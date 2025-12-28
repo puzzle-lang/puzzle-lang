@@ -7,6 +7,7 @@ import puzzle.core.parser.ast.declaration.StructDeclaration
 import puzzle.core.parser.matcher.declaration.DeclarationHeader
 import puzzle.core.parser.parser.ModifierTarget
 import puzzle.core.parser.parser.declaration.parseStructDeclaration
+import puzzle.core.parser.parser.parameter.context.ContextTarget
 import puzzle.core.parser.parser.parameter.type.TypeTarget
 import puzzle.core.token.kinds.DeclarationKind.STRUCT
 
@@ -15,6 +16,8 @@ object StructDeclarationMatcher : DeclarationMatcher<StructDeclaration> {
 	override val typeTarget = TypeTarget.STRUCT
 	
 	override val modifierTarget = ModifierTarget.STRUCT
+	
+	override val contextTarget = ContextTarget.STRUCT
 	
 	context(cursor: PzlTokenCursor)
 	override fun match(): Boolean {

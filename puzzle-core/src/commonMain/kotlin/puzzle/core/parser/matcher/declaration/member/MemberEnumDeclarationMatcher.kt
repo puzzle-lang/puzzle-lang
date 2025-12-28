@@ -7,6 +7,7 @@ import puzzle.core.parser.ast.declaration.EnumDeclaration
 import puzzle.core.parser.matcher.declaration.DeclarationHeader
 import puzzle.core.parser.parser.ModifierTarget
 import puzzle.core.parser.parser.declaration.parseEnumDeclaration
+import puzzle.core.parser.parser.parameter.context.ContextTarget
 import puzzle.core.parser.parser.parameter.type.TypeTarget
 import puzzle.core.token.kinds.DeclarationKind.ENUM
 
@@ -15,6 +16,8 @@ object MemberEnumDeclarationMatcher : MemberDeclarationMatcher<EnumDeclaration> 
 	override val typeTarget = TypeTarget.ENUM
 	
 	override val modifierTarget = ModifierTarget.MEMBER_ENUM
+	
+	override val contextTarget = ContextTarget.ENUM
 	
 	context(cursor: PzlTokenCursor)
 	override fun match(): Boolean {

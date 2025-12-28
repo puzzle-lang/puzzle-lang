@@ -112,6 +112,10 @@ enum class IdentifierTarget(
 		label = "注解声明",
 		allowAnonymousBinding = false
 	),
+	TYPEALIAS(
+		label = "类型别名",
+		allowAnonymousBinding = false
+	),
 	ENUM(
 		label = "枚举声明",
 		allowAnonymousBinding = false
@@ -138,9 +142,9 @@ enum class IdentifierTarget(
 	),
 	LAMBDA_PARAMETER(
 		label = "lambda 型参",
-		allowAnonymousBinding = true,
+		allowAnonymousBinding = false,
 	),
-	LAMBDA_IDENTIFIER(
+	LAMBDA_PARAMETER_REFERENCE(
 		label = "lambda 参数",
 		allowAnonymousBinding = true,
 	),

@@ -26,7 +26,7 @@ fun TypeSpec.check(target: TypeTarget) {
 	if (!target.allowsVariance) {
 		this.parameters.forEach {
 			if (it.variance != null) {
-				syntaxError("${target.label}声明不支持使用 '${it.variance!!.kind.value}'", cursor[it.location.start])
+				syntaxError("${target.label}声明不支持使用 '${it.variance.kind.value}'", cursor[it.location.start])
 			}
 		}
 	}

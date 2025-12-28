@@ -12,6 +12,7 @@ import puzzle.core.parser.matcher.declaration.DeclarationHeader
 import puzzle.core.parser.matcher.declaration.member.MemberDeclarationMatcher
 import puzzle.core.parser.matcher.declaration.toplevel.DeclarationMatcher
 import puzzle.core.parser.parser.check
+import puzzle.core.parser.parser.parameter.context.check
 import puzzle.core.parser.parser.parameter.context.parseDeclarationContextSpec
 import puzzle.core.parser.parser.parameter.type.check
 import puzzle.core.parser.parser.parameter.type.parseTypeSpec
@@ -41,6 +42,7 @@ private fun parseDeclaration(): Declaration {
 		token = cursor.current
 	)
 	typeSpec?.check(matcher.typeTarget)
+	contextSpec?.check(matcher.contextTarget)
 	modifiers.check(matcher.modifierTarget)
 	val header = DeclarationHeader(docComment, annotationCalls, typeSpec, contextSpec, modifiers)
 	val start = header.start
@@ -87,6 +89,7 @@ private fun parseMemberDeclaration(): Declaration {
 		token = cursor.current
 	)
 	typeSpec?.check(matcher.typeTarget)
+	contextSpec?.check(matcher.contextTarget)
 	modifiers.check(matcher.modifierTarget)
 	val header = DeclarationHeader(docComment, annotationCalls, typeSpec, contextSpec, modifiers)
 	val start = header.start

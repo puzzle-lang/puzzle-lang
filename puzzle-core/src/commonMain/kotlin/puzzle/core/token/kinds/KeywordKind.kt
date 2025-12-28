@@ -28,7 +28,7 @@ sealed class ModifierKind(
 	
 	companion object {
 		
-		val kinds = fastSetOf<ModifierKind>(
+		val kinds = fastSetOf(
 			PRIVATE, PROTECTED, FILE, INTERNAL, MODULE, PUBLIC,
 			FINAL,
 			OPEN, ABSTRACT, SEALED, OVERRIDE,
@@ -80,7 +80,7 @@ sealed class NamespaceKind(
 	
 	companion object {
 		
-		val kinds = fastSetOf<NamespaceKind>(PACKAGE, IMPORT)
+		val kinds = fastSetOf(PACKAGE, IMPORT)
 	}
 	
 	object PACKAGE : NamespaceKind("package")
@@ -94,7 +94,10 @@ sealed class DeclarationKind(
 	
 	companion object {
 		
-		val kinds = fastSetOf<DeclarationKind>(FUN, CLASS, OBJECT, TRAIT, STRUCT, ENUM, EXTENSION, MIXIN, ANNOTATION, CTOR)
+		val kinds = fastSetOf(
+			FUN, CLASS, OBJECT, TRAIT, STRUCT, ENUM, ANNOTATION,
+			EXTENSION, MIXIN, TYPEALIAS, CTOR
+		)
 	}
 	
 	object FUN : DeclarationKind("fun")
@@ -109,11 +112,13 @@ sealed class DeclarationKind(
 	
 	object ENUM : DeclarationKind("enum")
 	
+	object ANNOTATION : DeclarationKind("annotation")
+	
 	object EXTENSION : DeclarationKind("extension")
 	
 	object MIXIN : DeclarationKind("mixin")
 	
-	object ANNOTATION : DeclarationKind("annotation")
+	object TYPEALIAS : DeclarationKind("typealias")
 	
 	object CTOR : DeclarationKind("ctor")
 }
@@ -124,7 +129,7 @@ sealed class AccessorKind(
 	
 	companion object {
 		
-		val kinds = fastSetOf<AccessorKind>(GET, SET)
+		val kinds = fastSetOf(GET, SET)
 	}
 	
 	object GET : AccessorKind("get")
@@ -138,7 +143,7 @@ sealed class ControlFlowKind(
 	
 	companion object {
 		
-		val kinds = fastSetOf<ControlFlowKind>(IF, ELSE, MATCH, FOR, WHILE, DO, LOOP)
+		val kinds = fastSetOf(IF, ELSE, MATCH, FOR, WHILE, DO, LOOP)
 	}
 	
 	object IF : ControlFlowKind("if")
@@ -162,7 +167,7 @@ sealed class JumpKind(
 	
 	companion object {
 		
-		val kinds = fastSetOf<JumpKind>(BREAK, CONTINUE, RETURN)
+		val kinds = fastSetOf(BREAK, CONTINUE, RETURN)
 	}
 	
 	object BREAK : JumpKind("break")
@@ -178,7 +183,7 @@ sealed class ContextualKind(
 	
 	companion object {
 		
-		val kinds = fastSetOf<ContextualKind>(TYPE, REIFIED, CONTEXT, INIT, ON, WITH, THIS, SUPER)
+		val kinds = fastSetOf(TYPE, REIFIED, CONTEXT, INIT, ON, WITH, THIS, SUPER)
 	}
 	
 	object TYPE : ContextualKind("type")
@@ -204,7 +209,7 @@ sealed class VarianceKind(
 	
 	companion object {
 		
-		val kinds = fastSetOf<VarianceKind>(IN, OUT)
+		val kinds = fastSetOf(IN, OUT)
 	}
 	
 	object IN : VarianceKind("in")

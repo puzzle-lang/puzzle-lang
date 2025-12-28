@@ -7,6 +7,7 @@ import puzzle.core.parser.ast.declaration.ClassDeclaration
 import puzzle.core.parser.matcher.declaration.DeclarationHeader
 import puzzle.core.parser.parser.ModifierTarget
 import puzzle.core.parser.parser.declaration.parseClassDeclaration
+import puzzle.core.parser.parser.parameter.context.ContextTarget
 import puzzle.core.parser.parser.parameter.type.TypeTarget
 import puzzle.core.token.kinds.DeclarationKind.CLASS
 
@@ -15,6 +16,8 @@ object MemberClassDeclarationMatcher : MemberDeclarationMatcher<ClassDeclaration
 	override val typeTarget = TypeTarget.CLASS
 	
 	override val modifierTarget = ModifierTarget.MEMBER_CLASS
+	
+	override val contextTarget = ContextTarget.CLASS
 	
 	context(cursor: PzlTokenCursor)
 	override fun match(): Boolean {

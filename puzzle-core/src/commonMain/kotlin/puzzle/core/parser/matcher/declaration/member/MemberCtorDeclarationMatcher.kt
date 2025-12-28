@@ -7,6 +7,7 @@ import puzzle.core.parser.ast.declaration.CtorDeclaration
 import puzzle.core.parser.matcher.declaration.DeclarationHeader
 import puzzle.core.parser.parser.ModifierTarget
 import puzzle.core.parser.parser.declaration.parseCtorDeclaration
+import puzzle.core.parser.parser.parameter.context.ContextTarget
 import puzzle.core.parser.parser.parameter.type.TypeTarget
 import puzzle.core.token.kinds.DeclarationKind
 
@@ -15,6 +16,8 @@ object MemberCtorDeclarationMatcher : MemberDeclarationMatcher<CtorDeclaration> 
 	override val typeTarget = TypeTarget.CTOR
 	
 	override val modifierTarget = ModifierTarget.CTOR
+	
+	override val contextTarget = ContextTarget.CTOR
 	
 	context(cursor: PzlTokenCursor)
 	override fun match(): Boolean {

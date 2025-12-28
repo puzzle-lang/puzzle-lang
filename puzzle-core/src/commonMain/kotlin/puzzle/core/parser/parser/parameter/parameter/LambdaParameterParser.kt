@@ -44,7 +44,7 @@ private fun parseLambdaParameter(): LambdaParameter {
 		syntaxError("lambda 型参不支持修饰符", modifiers.first())
 	}
 	val name = if (cursor.offsetOrNull(1)?.kind == COLON) {
-		parseIdentifier(IdentifierTarget.PARAMETER).also {
+		parseIdentifier(IdentifierTarget.LAMBDA_PARAMETER).also {
 			cursor.advance()
 		}
 	} else null

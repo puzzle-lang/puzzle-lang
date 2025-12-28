@@ -406,3 +406,9 @@ var property7: Int
     set(newValue) {
         property6 = newValue
     }
+
+type<T>
+typealias MyList = List<T>
+
+type<T : Any, R : Any>
+typealias Callback = (T) -> R
