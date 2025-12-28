@@ -303,7 +303,7 @@ class DoubleList : List<T = Int> {
 
 var name: String? = ""
 
-val User.age = ""
+val User.age { 1 }
 
 private val name = 1 + 2 - 3 +
     4 * 5
@@ -412,3 +412,7 @@ typealias MyList = List<T>
 
 type<T : Any, R : Any>
 typealias Callback = (T) -> R
+
+val User.info: String {
+    "$name : $age"
+}

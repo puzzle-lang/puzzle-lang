@@ -102,35 +102,64 @@ fun parsePropertyDeclaration(header: DeclarationHeader, start: SourceLocation): 
 		if (!isLate && initializer == null) {
 			syntaxError("属性缺少初始化值", type!!.location.end)
 		}
+		if (header.contextSpec != null) {
+			syntaxError("普通属性不支持 context 上下文参数", header.contextSpec)
+		}
 	}
 	
 	if (isVal) {
 		if (setter != null) {
 			syntaxError("不可变属性不允许使用 set 属性赋值器", setter)
 		}
-		if (initializer != null && getter != null) {
-			syntaxError("不可变属性不允许同时使用初始化值和 get 属性访问器", initializer)
+		if (initializer != null) {
+			if (extension != null) {
+				syntaxError("扩展属性不允许设置初始化值", initializer)
+			}
+			if (getter != null) {
+				syntaxError("不可变属性不允许同时设置初始化值和 get 属性访问器", initializer)
+			}
 		}
 		if (getter?.oldValue != null) {
-			syntaxError("不可变属性不允许在 get 属性访问器中使用 oldValue 参数", getter.oldValue)
+			syntaxError("不可变属性不允许在 get 属性访问器中使用 oldValue 值", getter.oldValue)
 		}
 	} else {
 		if (initializer == null) {
-			if (getter != null && setter == null) {
-				syntaxError("属性缺少初始化值", type ?: name)
+			if (extension != null) {
+				if (getter == null) {
+					syntaxError("扩展属性缺少 get 属性访问器", type ?: name)
+				}
+				if (setter == null) {
+					syntaxError("扩展属性缺少 set 属性赋值器", type ?: name)
+				}
+				if (getter.oldValue != null) {
+					syntaxError("扩展属性不允许在 get 属性访问器中使用 oldValue 值", getter.oldValue)
+				}
+				if (setter.oldValue != null) {
+					syntaxError("扩展属性不允许在 set 属性赋值器中使用 oldValue 值", setter.oldValue)
+				}
 			}
-			if (setter != null && getter == null) {
-				syntaxError("属性缺少初始化值", type ?: name)
+			if (getter != null) {
+				if (setter == null) {
+					syntaxError("属性缺少初始化值", type ?: name)
+				}
+				if (getter.oldValue != null) {
+					syntaxError("属性缺少初始化值，你在 get 属性访问器中使用了 oldValue 值", type ?: name)
+				}
 			}
-			if (getter != null && getter.oldValue != null) {
-				syntaxError("属性缺少初始化值，你在 get 属性访问器中使用了 oldValue 参数", type ?: name)
-			}
-			if (setter != null && setter.oldValue != null) {
-				syntaxError("属性缺少初始化值，你在 set 属性赋值器中使用了 oldValue 参数", type ?: name)
+			if (setter != null) {
+				if (getter == null) {
+					syntaxError("属性缺少初始化值", type ?: name)
+				}
+				if (setter.oldValue != null) {
+					syntaxError("属性缺少初始化值，你在 set 属性赋值器中使用了 oldValue 值", type ?: name)
+				}
 			}
 		} else {
+			if (extension != null) {
+				syntaxError("扩展属性不允许设置初始化值", initializer)
+			}
 			if (setter != null && getter != null && (setter.oldValue == null || getter.oldValue == null)) {
-				syntaxError("在 get 属性访问器和 set 属性赋值器中未使用到 oldValue 参数，不允许有初始化值", initializer)
+				syntaxError("在 get 属性访问器和 set 属性赋值器中未使用到 oldValue 值，不允许有初始化值", initializer)
 			}
 		}
 	}

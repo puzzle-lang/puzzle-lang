@@ -18,12 +18,12 @@ fun compile(paths: List<String>): PzlProgram = runBlocking {
 		async(Dispatchers.Default) {
 			val source = measureTimedValue { readFileChars(path) }
 			val path = resolveAbsolutePath(path)
-			println("$path -> 文件读取: ${source.duration} 字符数: ${source.value.size}")
+			println("$path -> 文件读取: ${source.duration} (${source.value.size})")
 			val lineStarts = source.value.getLineStarts()
 			val context = PzlContext(path, lineStarts)
 			context(context) {
 				val tokens = measureTimedValue { PzlLexer.default(source.value).scan() }
-				println("$path -> 词法分析: ${tokens.duration} TOKEN 数: ${tokens.value.size}")
+				println("$path -> 词法分析: ${tokens.duration} (${tokens.value.size})")
 				val cursor = PzlTokenCursor(tokens.value)
 				context(cursor) {
 					val node = measureTimedValue { parseSourceFileNode() }

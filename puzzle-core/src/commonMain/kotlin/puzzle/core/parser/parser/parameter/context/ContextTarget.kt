@@ -18,7 +18,7 @@ enum class ContextTarget(
 	),
 	OBJECT(
 		label = "单例对象",
-		allowContext = false
+		allowContext = true
 	),
 	TRAIT(
 		label = "特征",
