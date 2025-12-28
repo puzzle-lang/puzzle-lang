@@ -105,6 +105,9 @@ fun parsePropertyDeclaration(header: DeclarationHeader, start: SourceLocation): 
 		if (header.contextSpec != null) {
 			syntaxError("普通属性不支持 context 上下文参数", header.contextSpec)
 		}
+		if (header.typeSpec != null) {
+			syntaxError("普通属性不支持定义泛型", header.typeSpec)
+		}
 	}
 	
 	if (isVal) {
