@@ -5,6 +5,8 @@ import puzzle.core.model.PzlContext
 import puzzle.core.model.SourceLocation
 import puzzle.core.model.span
 import puzzle.core.parser.PzlTokenCursor
+import puzzle.core.parser.ast.declaration.MultiReturnSpec
+import puzzle.core.parser.ast.declaration.SingleReturnSpec
 import puzzle.core.parser.ast.parameter.LambdaContextSpec
 import puzzle.core.parser.ast.parameter.LambdaParameter
 import puzzle.core.parser.ast.type.LambdaType
@@ -96,23 +98,32 @@ private fun parseLambdaType(
 	extension: TypeReference?,
 	parameters: List<LambdaParameter>,
 ): LambdaType {
-	val returnTypes = if (cursor.match(LBRACKET)) {
-		buildList {
-			do {
+	val returnSpec = if (cursor.match(LBRACKET)) {
+		val start = cursor.previous.location
+		val types = buildList {
+			while (!cursor.match(RBRACKET)) {
 				this += parseTypeReference(true)
 				if (!cursor.check(RBRACKET)) {
 					cursor.expect(SeparatorKind.COMMA, "lambda 表达式返回值缺少 ','")
 				}
-			} while (!cursor.match(RBRACKET))
-			if (cursor.match(QUESTION)) {
-				syntaxError("请为 lambda 加上 '(' 和 ')'", cursor.previous)
 			}
 		}
+		if (types.isEmpty()) {
+			syntaxError("多返回值缺少类型", cursor.previous)
+		}
+		if (types.size == 1) {
+			syntaxError("多返回值至少需要2个类型", cursor.previous)
+		}
+		if (cursor.match(QUESTION)) {
+			syntaxError("请为 lambda 加上 '(' 和 ')'", cursor.previous)
+		}
+		val end = cursor.previous.location
+		MultiReturnSpec(types, start span end)
 	} else {
-		listOf(parseTypeReference(true))
+		SingleReturnSpec(parseTypeReference(allowLambda = true))
 	}
 	val end = cursor.previous.location
-	return LambdaType(extension, contextSpec, parameters, returnTypes, start span end)
+	return LambdaType(extension, contextSpec, parameters, returnSpec, start span end)
 }
 
 context(_: PzlContext, cursor: PzlTokenCursor)

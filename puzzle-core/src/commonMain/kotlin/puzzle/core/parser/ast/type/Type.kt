@@ -4,6 +4,7 @@ import kotlinx.serialization.Serializable
 import puzzle.core.model.SourceLocation
 import puzzle.core.parser.ast.AstNode
 import puzzle.core.parser.ast.argument.TypeArgument
+import puzzle.core.parser.ast.declaration.ReturnSpec
 import puzzle.core.parser.ast.parameter.LambdaContextSpec
 import puzzle.core.parser.ast.parameter.LambdaParameter
 import puzzle.core.util.DotStringListSerializer
@@ -24,6 +25,6 @@ class LambdaType(
 	val extension: TypeReference?,
 	val contextSpec: LambdaContextSpec?,
 	val parameters: List<LambdaParameter>,
-	val returnTypes: List<TypeReference>,
+	val returnSpec: ReturnSpec,
 	override val location: SourceLocation,
 ) : Type

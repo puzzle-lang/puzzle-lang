@@ -32,7 +32,7 @@ sealed class ModifierKind(
 			PRIVATE, PROTECTED, FILE, INTERNAL, MODULE, PUBLIC,
 			FINAL,
 			OPEN, ABSTRACT, SEALED, OVERRIDE,
-			CONST, INNER, IGNORE, LATE, LAZY,
+			CONST, INNER, IGNORE, LATE, LAZY, PREFIX, SUFFIX,
 			VAR, VAL
 		)
 	}
@@ -68,6 +68,10 @@ sealed class ModifierKind(
 	object LATE : ModifierKind("late", 3)
 	
 	object LAZY : ModifierKind("lazy", 3)
+	
+	object PREFIX : ModifierKind("prefix", 3)
+	
+	object SUFFIX : ModifierKind("suffix", 3)
 	
 	object VAR : ModifierKind("var", 4)
 	

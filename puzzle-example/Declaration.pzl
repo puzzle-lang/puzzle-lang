@@ -82,7 +82,7 @@ private fun callback(callback: ((Int) -> [String, Int])?) {
 
 }
 
-private fun callback2(): Int, String {
+private fun callback2(): [Int, String] {
 
 }
 
@@ -90,7 +90,7 @@ private fun returns1(): ((fun1: () -> String) -> Unit)? {
 
 }
 
-private fun returns2(): (String, age: Int, String) -> [Int?, String?], String {
+private fun returns2(): [(String, age: Int, String) -> [Int?, String?], String] {
 
 }
 
@@ -98,7 +98,7 @@ private fun returns2(): (String, age: Int, String) -> [Int?, String?], String {
  * ((String)) 与 String 等价
  * 多行注释测试
  */
-private fun returns3(): ((String)) {
+private fun returns3(): [Int, String] {
 
 }
 
@@ -125,7 +125,7 @@ private class Hello(
         println("Init Hello")
     }*/
 
-    file fun test(): Int, String?, pzl.example.Hello {
+    file fun test(): [Int, String?, pzl.example.Hello] {
 
     }
 

@@ -2,10 +2,7 @@ package puzzle.core.parser.ast.declaration
 
 import kotlinx.serialization.Serializable
 import puzzle.core.model.SourceLocation
-import puzzle.core.parser.ast.AnnotationCall
-import puzzle.core.parser.ast.DocComment
-import puzzle.core.parser.ast.Modifier
-import puzzle.core.parser.ast.Symbol
+import puzzle.core.parser.ast.*
 import puzzle.core.parser.ast.expression.Identifier
 import puzzle.core.parser.ast.parameter.DeclarationContextSpec
 import puzzle.core.parser.ast.parameter.Parameter
@@ -19,7 +16,7 @@ class FunDeclaration(
 	val docComment: DocComment?,
 	val parameters: List<Parameter>,
 	val modifiers: List<Modifier>,
-	val returnTypes: List<TypeReference>,
+	val returnSpec: ReturnSpec?,
 	val extension: TypeReference?,
 	val typeSpec: TypeSpec?,
 	val contextSpec: DeclarationContextSpec?,
@@ -27,6 +24,21 @@ class FunDeclaration(
 	val body: List<Statement>,
 	override val location: SourceLocation,
 ) : TopLevelAllowedDeclaration
+
+@Serializable
+sealed interface ReturnSpec : AstNode
+
+@Serializable
+class SingleReturnSpec(
+	val type: TypeReference,
+	override val location: SourceLocation = type.location,
+) : ReturnSpec
+
+@Serializable
+class MultiReturnSpec(
+	val types: List<TypeReference>,
+	override val location: SourceLocation,
+) : ReturnSpec
 
 @Serializable
 sealed interface FunName
@@ -40,3 +52,20 @@ class IdentifierFunName(
 class SymbolFunName(
 	val symbol: Symbol,
 ) : FunName
+
+@Serializable
+class IndexAccessFunName(
+	val indexAccess: IndexAccess,
+) : FunName
+
+@Serializable
+class IndexAccess(
+	val kind: IndexAccessKind,
+	override val location: SourceLocation,
+) : AstNode
+
+@Serializable
+enum class IndexAccessKind {
+	GETTER,
+	SETTER
+}

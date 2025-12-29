@@ -17,7 +17,6 @@ sealed class SymbolKind(
 			AccessKind.kinds,
 			BracketKind.kinds,
 			SeparatorKind.kinds,
-			IndexKind.kinds,
 			fastSetOf(
 				COLON, QUESTION, ELVIS,
 				AT,
@@ -220,16 +219,4 @@ sealed class SeparatorKind(value: String) : SymbolKind(value) {
 	object COMMA : SeparatorKind(",")
 	
 	object SEMICOLON : SeparatorKind(";")
-}
-
-sealed class IndexKind(value: String) : SymbolKind(value) {
-	
-	companion object {
-		
-		val kinds = fastSetOf(INDEX_GET, INDEX_SET)
-	}
-	
-	object INDEX_GET : SymbolKind("[]")
-	
-	object INDEX_SET : SymbolKind("[]=")
 }

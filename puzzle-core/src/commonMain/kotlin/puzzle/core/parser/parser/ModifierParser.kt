@@ -83,7 +83,7 @@ enum class ModifierTarget(
 ) {
 	FUN(
 		label = "函数",
-		supportedModifiers = TopLevelAccessModifiers + setOf(CONST)
+		supportedModifiers = TopLevelAccessModifiers + setOf(CONST, PREFIX, SUFFIX)
 	),
 	PROPERTY(
 		label = "属性",
@@ -127,7 +127,7 @@ enum class ModifierTarget(
 	),
 	MEMBER_FUN(
 		label = "成员函数",
-		supportedModifiers = MemberAccessModifiers + setOf(FINAL, OVERRIDE, OPEN, ABSTRACT)
+		supportedModifiers = MemberAccessModifiers + setOf(FINAL, OVERRIDE, OPEN, ABSTRACT, PREFIX, SUFFIX)
 	),
 	MEMBER_PROPERTY(
 		label = "属性",
