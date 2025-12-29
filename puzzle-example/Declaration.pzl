@@ -44,6 +44,8 @@ fun accessTest() {
         .test1()
         .test2()
         .test3()
+    name ?= "LJW"
+    list[0] = 2
 }
 
 /**

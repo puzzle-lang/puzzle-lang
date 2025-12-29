@@ -11,6 +11,7 @@ import puzzle.core.parser.matcher.expression.RequirePrefixExpressionParser
 import puzzle.core.token.kinds.AccessKind
 import puzzle.core.token.kinds.AccessorKind.GET
 import puzzle.core.token.kinds.AccessorKind.SET
+import puzzle.core.token.kinds.AssignmentKind
 import puzzle.core.token.kinds.BracketKind.End.*
 import puzzle.core.token.kinds.ControlFlowKind.*
 import puzzle.core.token.kinds.MetaKind.EOF
@@ -77,6 +78,7 @@ context(_: PzlContext, cursor: PzlTokenCursor)
 private fun isAtExpressionEnd(): Boolean {
 	val current = cursor.current
 	if (current.kind in endKinds) return true
+	if (current.kind is AssignmentKind) return true
 	if (current == SEMICOLON) {
 		cursor.advance()
 		return true

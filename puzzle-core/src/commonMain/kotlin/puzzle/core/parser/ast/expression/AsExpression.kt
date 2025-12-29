@@ -1,9 +1,9 @@
 package puzzle.core.parser.ast.expression
 
 import kotlinx.serialization.Serializable
-import puzzle.core.parser.ast.type.TypeReference
 import puzzle.core.model.SourceLocation
 import puzzle.core.model.span
+import puzzle.core.parser.ast.type.TypeReference
 
 @Serializable
 class AsExpression(
@@ -11,4 +11,4 @@ class AsExpression(
 	val type: TypeReference,
 	val isSafe: Boolean,
 	override val location: SourceLocation = expression.location span type.location,
-) : Expression
+) : Expression, CompoundAssignable

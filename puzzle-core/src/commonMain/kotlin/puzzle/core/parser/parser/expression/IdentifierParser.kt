@@ -44,7 +44,8 @@ fun parseIdentifierString(target: IdentifierTarget): String {
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun tryParseIdentifierString(target: IdentifierTarget): String? {
-	if (cursor.matchIsInstance<IdentifierKind>()) {
+	if (cursor.current.kind is IdentifierKind) {
+		cursor.advance()
 		val value = cursor.previous.value
 		if (value == "_" && !target.allowAnonymousBinding) {
 			syntaxError("${target.label}不支持匿名绑定", cursor.previous)

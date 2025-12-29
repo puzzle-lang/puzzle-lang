@@ -136,7 +136,6 @@ private val notOverloadableSymbols = setOf(
 	AND, OR
 )
 
-
 context(_: PzlContext, cursor: PzlTokenCursor)
 private fun tryParseSymbolOrIndexAccessFunName(): FunName? {
 	if (cursor.match { it in overloadableSymbols }) {

@@ -10,4 +10,4 @@ class TernaryExpression(
 	val thenExpression: Expression,
 	val elseExpression: Expression,
 	override val location: SourceLocation = condition.location span elseExpression.location,
-) : Expression
+) : Expression, CompoundAssignable

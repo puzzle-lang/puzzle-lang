@@ -74,23 +74,6 @@ object ModifierKindSerializer : KSerializer<ModifierKind> {
 	}
 }
 
-object AccessKindSerializer : KSerializer<AccessKind> {
-	
-	override val descriptor = PrimitiveSerialDescriptor(
-		AccessKindSerializer::class.qualifiedName!!,
-		PrimitiveKind.STRING
-	)
-	
-	override fun serialize(encoder: Encoder, value: AccessKind) {
-		encoder.encodeString(value.value)
-	}
-	
-	override fun deserialize(decoder: Decoder): AccessKind {
-		val symbol = decoder.decodeString()
-		return AccessKind.kinds.first { it.value == symbol }
-	}
-}
-
 object VarianceKindSerializer : KSerializer<VarianceKind> {
 	
 	override val descriptor = PrimitiveSerialDescriptor(

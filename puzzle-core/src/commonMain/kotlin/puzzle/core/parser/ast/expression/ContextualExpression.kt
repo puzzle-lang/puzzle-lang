@@ -14,4 +14,4 @@ class SuperExpression(
 @Serializable
 class ThisExpression(
 	override val location: SourceLocation,
-) : ContextualExpression
+) : ContextualExpression, CompoundAssignable

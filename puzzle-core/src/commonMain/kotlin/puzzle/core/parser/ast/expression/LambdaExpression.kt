@@ -11,4 +11,4 @@ class LambdaExpression(
 	val references: List<LambdaParameterReference>,
 	val body: List<Statement>,
 	override val location: SourceLocation,
-) : Expression
+) : Expression, CompoundAssignable

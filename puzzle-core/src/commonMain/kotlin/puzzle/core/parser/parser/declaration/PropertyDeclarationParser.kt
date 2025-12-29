@@ -146,7 +146,7 @@ fun parsePropertyDeclaration(header: DeclarationHeader, start: SourceLocation): 
 					syntaxError("属性缺少初始化值", type ?: name)
 				}
 				if (getter.oldValue != null) {
-					syntaxError("属性缺少初始化值，你在 get 属性访问器中使用了 oldValue 值", type ?: name)
+					syntaxError("属性缺少初始化值, 你在 get 属性访问器中使用了 oldValue 值", type ?: name)
 				}
 			}
 			if (setter != null) {
@@ -154,7 +154,7 @@ fun parsePropertyDeclaration(header: DeclarationHeader, start: SourceLocation): 
 					syntaxError("属性缺少初始化值", type ?: name)
 				}
 				if (setter.oldValue != null) {
-					syntaxError("属性缺少初始化值，你在 set 属性赋值器中使用了 oldValue 值", type ?: name)
+					syntaxError("属性缺少初始化值, 你在 set 属性赋值器中使用了 oldValue 值", type ?: name)
 				}
 			}
 		} else {
@@ -162,7 +162,7 @@ fun parsePropertyDeclaration(header: DeclarationHeader, start: SourceLocation): 
 				syntaxError("扩展属性不允许设置初始化值", initializer)
 			}
 			if (setter != null && getter != null && (setter.oldValue == null || getter.oldValue == null)) {
-				syntaxError("在 get 属性访问器和 set 属性赋值器中未使用到 oldValue 值，不允许有初始化值", initializer)
+				syntaxError("在 get 属性访问器和 set 属性赋值器中未使用到 oldValue 值, 不允许有初始化值", initializer)
 			}
 		}
 	}

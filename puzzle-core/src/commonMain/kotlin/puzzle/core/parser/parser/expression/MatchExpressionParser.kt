@@ -55,11 +55,6 @@ private fun parseMatchPatternExpression(): MatchPatternExpression {
 						this += ExpressionMatchPattern(expression)
 					}
 				}
-				when ("") {
-					" " + if (true) "" else "" -> {
-						
-					}
-				}
 				if (cursor.match(IF)) {
 					guard = parseExpressionChain()
 					cursor.expect(ARROW, "match 匹配分支缺少 '->'")

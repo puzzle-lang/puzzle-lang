@@ -9,4 +9,4 @@ class ElvisExpression(
 	val left: Expression,
 	val right: Expression,
 	override val location: SourceLocation = left.location span right.location,
-) : Expression
+) : Expression, CompoundAssignable

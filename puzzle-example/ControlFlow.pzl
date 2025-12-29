@@ -27,7 +27,7 @@ fun main() {
         else -> "else"
     }
     val result2 = match {
-        value2 is String && valu2 == "1" -> {
+        value2 is String && value2 == "1" -> {
             "1 is String"
         }
 

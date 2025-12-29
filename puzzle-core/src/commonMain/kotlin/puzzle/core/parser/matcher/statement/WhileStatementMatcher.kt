@@ -10,8 +10,6 @@ import puzzle.core.token.kinds.ControlFlowKind.WHILE
 
 object WhileStatementMatcher : StatementMatcher<WhileStatement> {
 	
-	private val kinds = arrayOf(DO, WHILE)
-	
 	context(cursor: PzlTokenCursor)
 	override fun match(): Boolean {
 		return cursor.match { it == DO || it == WHILE } || cursor.matchLabel(DO) || cursor.matchLabel(WHILE)

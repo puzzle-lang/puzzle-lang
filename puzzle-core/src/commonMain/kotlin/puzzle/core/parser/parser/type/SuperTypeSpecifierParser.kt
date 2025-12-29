@@ -5,8 +5,8 @@ import puzzle.core.model.PzlContext
 import puzzle.core.model.span
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.type.SuperConstructorCall
-import puzzle.core.parser.ast.type.SuperTypeReference
 import puzzle.core.parser.ast.type.SuperType
+import puzzle.core.parser.ast.type.SuperTypeReference
 import puzzle.core.parser.parser.expression.parseArguments
 import puzzle.core.token.kinds.BracketKind.Start.LPAREN
 import puzzle.core.token.kinds.SeparatorKind.COMMA
@@ -47,7 +47,7 @@ private fun parseSuperType(target: SuperTypeTarget): SuperType {
 context(_: PzlContext)
 private fun List<SuperType>.check() {
 	var isUsedConstructorCall = false
-	this.forEach { it ->
+	this.forEach {
 		if (it is SuperConstructorCall) {
 			if (isUsedConstructorCall) {
 				syntaxError("只允许继承单个类", it)

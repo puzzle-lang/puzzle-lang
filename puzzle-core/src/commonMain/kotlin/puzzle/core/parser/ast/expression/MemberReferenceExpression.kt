@@ -8,4 +8,4 @@ class MemberReferenceExpression(
 	val receiver: Expression?,
 	val name: Expression,
 	override val location: SourceLocation,
-) : Expression
+) : Expression, CompoundAssignable

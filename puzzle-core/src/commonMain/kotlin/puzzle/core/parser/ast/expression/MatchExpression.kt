@@ -7,7 +7,7 @@ import puzzle.core.parser.ast.type.TypeReference
 import puzzle.core.parser.ast.statement.Statement
 
 @Serializable
-sealed interface MatchExpression : Expression
+sealed interface MatchExpression : Expression, CompoundAssignable
 
 @Serializable
 class MatchConditionExpression(

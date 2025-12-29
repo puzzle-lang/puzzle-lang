@@ -7,4 +7,4 @@ import puzzle.core.model.SourceLocation
 class Identifier(
 	val name: String,
 	override val location: SourceLocation,
-) : Expression
+) : Expression, DirectAssignable, CompoundAssignable

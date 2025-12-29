@@ -11,7 +11,7 @@ fun main(args: Array<out String>) {
 			"-c", "--compile" -> {
 				val paths = args.drop(1)
 				if (paths.isEmpty()) {
-					return println("请至少指定一个 Puzzle 程序文件，使用 puzzle -h 查看使用手册")
+					return println("请至少指定一个 Puzzle 程序文件, 使用 puzzle -h 查看使用手册")
 				}
 				compile(paths)
 			}
@@ -44,5 +44,5 @@ private fun version() {
 }
 
 private fun unknown() {
-	println("未知命令，请使用: puzzle -h 或 puzzle --help 查看使用帮助")
+	println("未知命令, 请使用: puzzle -h 或 puzzle --help 查看使用帮助")
 }

@@ -4,6 +4,7 @@ import kotlinx.serialization.Serializable
 import puzzle.core.model.SourceLocation
 import puzzle.core.parser.ast.AstNode
 
+@Serializable
 sealed interface InvokeExpression : Expression {
 	
 	val callee: Expression
@@ -16,14 +17,14 @@ class CallExpression(
 	override val callee: Expression,
 	override val arguments: List<Argument>,
 	override val location: SourceLocation,
-) : InvokeExpression
+) : InvokeExpression, CompoundAssignable
 
 @Serializable
 class IndexAccessExpression(
 	override val callee: Expression,
 	override val arguments: List<Argument>,
 	override val location: SourceLocation,
-) : InvokeExpression
+) : InvokeExpression, DirectAssignable, CompoundAssignable
 
 @Serializable
 class Argument(

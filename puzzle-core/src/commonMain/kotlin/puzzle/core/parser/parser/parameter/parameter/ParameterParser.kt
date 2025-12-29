@@ -40,7 +40,7 @@ fun parseParameters(target: ParameterTarget): List<Parameter> {
 
 context(_: PzlContext)
 private fun List<Parameter>.check() {
-	var existsTypeQuantifier: Boolean = false
+	var existsTypeQuantifier = false
 	this.forEach {
 		if (it.quantifier == null) return@forEach
 		if (existsTypeQuantifier) {

@@ -46,7 +46,7 @@ private fun checkModifierOrder(modifiers: List<Modifier>) {
 			}
 			
 			current.kind.order < lastOrder -> syntaxError(
-				message = "不规范的修饰符顺序，'${current.kind.value}' 需要在 '${last!!.kind.value}' 前面",
+				message = "不规范的修饰符顺序, '${current.kind.value}' 需要在 '${last!!.kind.value}' 前面",
 				token = cursor.offset(offset = -modifiers.size + index)
 			)
 			

@@ -10,4 +10,4 @@ class MemberAccessExpression(
 	val name: Expression,
 	val isSafe: Boolean,
 	override val location: SourceLocation = receiver.location span name.location,
-) : Expression
+) : Expression, DirectAssignable, CompoundAssignable

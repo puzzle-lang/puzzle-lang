@@ -54,12 +54,6 @@ class PzlTokenCursor(
 		}
 	}
 	
-	inline fun <reified K : PzlTokenKind> matchIsInstance(): Boolean {
-		if (current.kind !is K) return false
-		advance()
-		return true
-	}
-	
 	fun match(kind: PzlTokenKind): Boolean {
 		if (current.kind != kind) return false
 		position++

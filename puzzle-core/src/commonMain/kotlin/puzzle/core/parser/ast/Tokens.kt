@@ -36,5 +36,5 @@ class Operator(
 class Assignment(
 	@Serializable(with = AssignmentKindSerializer::class)
 	val kind: AssignmentKind,
-	override val location: SourceLocation,
+	override val location: SourceLocation
 ) : AstNode

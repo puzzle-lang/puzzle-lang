@@ -134,7 +134,10 @@ enum class Assoc {
 	RIGHT
 }
 
-sealed class AssignmentKind(value: String) : SymbolKind(value) {
+sealed class AssignmentKind(
+	value: String,
+	val isCompound: Boolean,
+) : SymbolKind(value) {
 	
 	companion object {
 		
@@ -144,19 +147,19 @@ sealed class AssignmentKind(value: String) : SymbolKind(value) {
 		)
 	}
 	
-	object ASSIGN : AssignmentKind("=")
+	object ASSIGN : AssignmentKind("=", false)
 	
-	object QUESTION_ASSIGN : AssignmentKind("?=")
+	object QUESTION_ASSIGN : AssignmentKind("?=", false)
 	
-	object PLUS_ASSIGN : AssignmentKind("+=")
+	object PLUS_ASSIGN : AssignmentKind("+=", true)
 	
-	object MINUS_ASSIGN : AssignmentKind("-=")
+	object MINUS_ASSIGN : AssignmentKind("-=", true)
 	
-	object STAR_ASSIGN : AssignmentKind("*=")
+	object STAR_ASSIGN : AssignmentKind("*=", true)
 	
-	object SLASH_ASSIGN : AssignmentKind("/=")
+	object SLASH_ASSIGN : AssignmentKind("/=", true)
 	
-	object PERCENT_ASSIGN : AssignmentKind("%=")
+	object PERCENT_ASSIGN : AssignmentKind("%=", true)
 }
 
 sealed class AccessKind(value: String) : SymbolKind(value) {

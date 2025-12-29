@@ -25,8 +25,4 @@ object IdentifierRecognition : TokenRecognition {
 		val kind = IdentifierKind(identifier)
 		return PzlToken(kind, start span position)
 	}
-	
-	private fun Char.isEnglishLetter(): Boolean {
-		return this in 'a'..'z' || this in 'A'..'Z'
-	}
 }
