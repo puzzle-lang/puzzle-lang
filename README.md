@@ -82,6 +82,24 @@ Puzzle 提供统一、强表达力的声明系统，**所有声明均支持在�
 
 ---
 
+## 👋 变量系统（Variable System）
+
+* **普通赋值**
+
+```puzzle
+val name = getName()    // 不可变变量
+var age = getAge()      // 可变变量
+age++
+```
+
+* **支持解构变量**
+
+```puzzle
+val [name, age] = getInfo()
+val [_, age: Int] = getInfo()               // 解构变量支持匿名绑定
+[var name, _, val height: Int] = getInfo()  // 支持无默认可变性修饰符，但需要指定全部非匿名变量
+```
+
 ## 🧩 属性系统（Property System）
 
 Puzzle 将属性视为一等语言结构，而非语法糖。
@@ -190,7 +208,7 @@ Context 是 Puzzle 的核心抽象之一，用于表达**隐式依赖、作用�
 
 * ✅ 词法分析器（Lexer）
 * ✅ 语法分析器（Parser）
-  * ⏳ 语义分析、类型系统、IR 设计中...
+    * ⏳ 语义分析、类型系统、IR 设计中...
 
 ---
 

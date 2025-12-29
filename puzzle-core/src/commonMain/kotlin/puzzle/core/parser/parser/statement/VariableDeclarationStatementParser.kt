@@ -107,6 +107,9 @@ private fun parseMultiVariableSpec(defaultMutable: Boolean? = null): MultiVariab
 	if (patterns.isEmpty()) {
 		syntaxError("解构列表缺少变量", cursor.previous)
 	}
+	if (patterns.all { it.name.isAnonymousBinding }) {
+		syntaxError("解构列表不允许全部匿名绑定", patterns.first().name)
+	}
 	val end = cursor.previous.location
 	return MultiVariableSpec(patterns, start span end)
 }

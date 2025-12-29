@@ -50,7 +50,8 @@ fun accessTest() {
     val [var name: String, val _: String] = xxx()
     var [name2] = xxx()
     [val name3, var age3] = xxx()
-    [val a] = xxx()
+    [val age4] = xxx()
+    [_, val age5] = xxx()
 }
 
 /**
