@@ -46,6 +46,11 @@ fun accessTest() {
         .test3()
     name ?= "LJW"
     list[0] = 2
+    val _ = notNeedReturnValue()
+    val [var name: String, val _: String] = xxx()
+    var [name2] = xxx()
+    [val name3, var age3] = xxx()
+    [val a] = xxx()
 }
 
 /**

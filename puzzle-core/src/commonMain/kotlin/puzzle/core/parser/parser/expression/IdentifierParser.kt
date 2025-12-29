@@ -153,6 +153,10 @@ enum class IdentifierTarget(
 		label = "变量",
 		allowAnonymousBinding = true
 	),
+	VARIABLE_DESTRUCTURE(
+		label = "解构变量",
+		allowAnonymousBinding = true,
+	),
 	TYPE_REFERENCE(
 		label = "类型",
 		allowAnonymousBinding = false
