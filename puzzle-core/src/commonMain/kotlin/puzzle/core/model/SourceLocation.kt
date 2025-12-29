@@ -2,6 +2,7 @@ package puzzle.core.model
 
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
+import puzzle.core.token.PzlToken
 
 @Serializable
 class SourceLocation(
@@ -22,6 +23,16 @@ class SourceLocation(
 	context(_: PzlContext)
 	val endPosition: SourcePosition
 		get() = _endPosition ?: calcPosition(end).also { _endPosition = it }
+}
+
+context(_: PzlContext)
+fun PzlToken.equalsLine(token: PzlToken): Boolean {
+	return this.location.startPosition.line == token.location.startPosition.line
+}
+
+context(_: PzlContext)
+fun PzlToken.notEqualsLine(token: PzlToken): Boolean {
+	return this.location.startPosition.line != token.location.startPosition.line
 }
 
 @Suppress("NOTHING_TO_INLINE")

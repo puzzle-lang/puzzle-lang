@@ -84,8 +84,8 @@ private fun callback(callback: ((Int) -> [String, Int])?) {
 
 }
 
-private fun callback2(): [Int, String] {
-
+private fun returns(): [Int, String] {
+    return [1, "Name"]
 }
 
 private fun returns1(): ((fun1: () -> String) -> Unit)? {

@@ -2,6 +2,7 @@ package puzzle.core.parser.parser.expression
 
 import puzzle.core.exception.syntaxError
 import puzzle.core.model.PzlContext
+import puzzle.core.model.notEqualsLine
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.expression.Expression
 import puzzle.core.parser.matcher.expression.ExpressionMatcher
@@ -84,7 +85,6 @@ private fun isAtExpressionEnd(): Boolean {
 		return true
 	}
 	if (current.kind is AccessKind || current.kind == AND || current.kind == OR) return false
-	val previousLine = cursor.previousOrNull?.location?.startPosition?.line ?: return false
-	val currentLine = current.location.startPosition.line
-	return previousLine < currentLine
+	val previous = cursor.previousOrNull ?: return false
+	return current.notEqualsLine(previous)
 }
