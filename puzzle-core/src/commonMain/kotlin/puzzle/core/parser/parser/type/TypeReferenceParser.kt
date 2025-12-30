@@ -50,7 +50,7 @@ fun parseTypeReference(
 				}
 				val parameter = parameters.single()
 				val type = parameter.type.type
-				if (!cursor.match { it == DOT || it == QUESTION_DOT }) {
+				if (!cursor.match { it.kind == DOT || it.kind == QUESTION_DOT }) {
 					val isNullable = parseNullable(allowNullable) || parameter.type.isNullable
 					val end = cursor.previous.location
 					return TypeReference(type, isNullable, start span end)
@@ -68,7 +68,7 @@ fun parseTypeReference(
 	extension = when (extension) {
 		is TypeReference -> extension
 		is Type -> {
-			if (!cursor.match { it == DOT || it == QUESTION_DOT }) {
+			if (!cursor.match { it.kind == DOT || it.kind == QUESTION_DOT }) {
 				if (extension is NamedType && contextSpec != null) {
 					syntaxError("不能为类型指定 context 上下文参数", extension)
 				}

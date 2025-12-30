@@ -11,9 +11,9 @@ import puzzle.core.token.kinds.SymbolKind.HASH
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseLoopExpression(): LoopExpression {
-	val containLabel = cursor.offset(-2).kind == HASH
-	val start = if (containLabel) cursor.offset(-3).location else cursor.previous.location
-	val label = if (containLabel) cursor.offset(-3).toIdentifier() else null
+	val containsLabel = cursor.offset(-2).kind == HASH
+	val start = if (containsLabel) cursor.offset(-3).location else cursor.previous.location
+	val label = if (containsLabel) cursor.offset(-3).toIdentifier() else null
 	val body = if (cursor.match(LBRACE)) {
 		parseStatements()
 	} else {

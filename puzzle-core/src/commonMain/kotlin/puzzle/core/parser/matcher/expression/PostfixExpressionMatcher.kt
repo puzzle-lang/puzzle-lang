@@ -20,7 +20,7 @@ object PostfixExpressionMatcher : ExpressionMatcher, NoPrefixExpressionParser<Ex
 				true
 			}
 			
-			cursor.match { it == THIS || it == SUPER } -> true
+			cursor.match { it.kind == THIS || it.kind == SUPER } -> true
 			
 			else -> false
 		}

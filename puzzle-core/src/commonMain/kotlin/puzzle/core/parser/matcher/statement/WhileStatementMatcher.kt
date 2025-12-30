@@ -12,7 +12,9 @@ object WhileStatementMatcher : StatementMatcher<WhileStatement> {
 	
 	context(cursor: PzlTokenCursor)
 	override fun match(): Boolean {
-		return cursor.match { it == DO || it == WHILE } || cursor.matchLabel(DO) || cursor.matchLabel(WHILE)
+		return cursor.match { it.kind == DO || it.kind == WHILE }
+				|| cursor.matchLabel(DO)
+				|| cursor.matchLabel(WHILE)
 	}
 	
 	context(_: PzlContext, cursor: PzlTokenCursor)

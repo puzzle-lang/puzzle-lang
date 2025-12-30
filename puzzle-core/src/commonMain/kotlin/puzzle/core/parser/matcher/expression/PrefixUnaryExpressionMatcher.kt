@@ -22,7 +22,7 @@ object PrefixUnaryExpressionMatcher : ExpressionMatcher, NoPrefixExpressionParse
 	context(cursor: PzlTokenCursor)
 	override fun match(left: Expression?): Boolean {
 		return cursor.match {
-			it in kinds && (left == null || (it != PLUS && it != MINUS))
+			it.kind in kinds && (left == null || (it.kind != PLUS && it.kind != MINUS))
 		}
 	}
 	

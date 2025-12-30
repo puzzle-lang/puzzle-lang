@@ -79,6 +79,10 @@ private fun controlFlowTest(): Long? {
         2000
     } else { 2 } * 20 - 1000
     true && false && false
+
+    callback3 { name: String ->
+
+    }
 }
 
 private const fun add(num1: Int, num2: Int?): Int {

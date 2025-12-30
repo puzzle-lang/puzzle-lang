@@ -27,7 +27,7 @@ object BinaryExpressionMatcher : ExpressionMatcher, RequirePrefixExpressionParse
 	
 	context(cursor: PzlTokenCursor)
 	override fun match(left: Expression?): Boolean {
-		return cursor.match { it in operators }
+		return cursor.match { it.kind in operators }
 	}
 	
 	context(_: PzlContext, cursor: PzlTokenCursor)

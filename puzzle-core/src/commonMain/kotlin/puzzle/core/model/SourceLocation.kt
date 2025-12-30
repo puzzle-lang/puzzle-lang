@@ -27,12 +27,12 @@ class SourceLocation(
 
 context(_: PzlContext)
 fun PzlToken.equalsLine(token: PzlToken): Boolean {
-	return this.location.startPosition.line == token.location.startPosition.line
+	return this.location.endPosition.line == token.location.startPosition.line
 }
 
 context(_: PzlContext)
 fun PzlToken.notEqualsLine(token: PzlToken): Boolean {
-	return this.location.startPosition.line != token.location.startPosition.line
+	return this.location.endPosition.line != token.location.startPosition.line
 }
 
 @Suppress("NOTHING_TO_INLINE")

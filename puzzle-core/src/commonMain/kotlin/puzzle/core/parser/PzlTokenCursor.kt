@@ -72,8 +72,8 @@ class PzlTokenCursor(
 		return true
 	}
 	
-	fun match(predicate: (PzlTokenKind) -> Boolean): Boolean {
-		if (!predicate(current.kind)) return false
+	fun match(predicate: (PzlToken) -> Boolean): Boolean {
+		if (!predicate(current)) return false
 		position++
 		return true
 	}
@@ -82,8 +82,8 @@ class PzlTokenCursor(
 		return current.kind == kind
 	}
 	
-	fun check(check: (PzlTokenKind) -> Boolean): Boolean {
-		return check(current.kind)
+	fun check(check: (PzlToken) -> Boolean): Boolean {
+		return check(current)
 	}
 	
 	context(_: PzlContext)

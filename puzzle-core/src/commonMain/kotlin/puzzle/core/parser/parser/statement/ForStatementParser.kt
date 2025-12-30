@@ -23,9 +23,9 @@ import puzzle.core.token.kinds.SymbolKind.HASH
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseForStatement(): ForStatement {
-	val containLabel = cursor.offset(-2).kind == HASH
-	val start = if (containLabel) cursor.offset(-3).location else cursor.previous.location
-	val label = if (containLabel) cursor.offset(-3).toIdentifier() else null
+	val containsLabel = cursor.offset(-2).kind == HASH
+	val start = if (containsLabel) cursor.offset(-3).location else cursor.previous.location
+	val label = if (containsLabel) cursor.offset(-3).toIdentifier() else null
 	cursor.expect(LPAREN, "for 语句缺少 '('")
 	val pattern = if (cursor.match(BracketKind.Start.LBRACKET)) {
 		val start = cursor.previous.location

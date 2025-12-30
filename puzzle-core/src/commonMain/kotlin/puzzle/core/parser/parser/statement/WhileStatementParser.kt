@@ -17,9 +17,9 @@ import puzzle.core.token.kinds.SymbolKind.HASH
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseWhileStatement(): WhileStatement {
-	val containKind = cursor.offset(-2).kind == HASH
-	val start = if (containKind) cursor.offset(-3).location else cursor.previous.location
-	val label = if (containKind) cursor.offset(-3).toIdentifier() else null
+	val containsLabel = cursor.offset(-2).kind == HASH
+	val start = if (containsLabel) cursor.offset(-3).location else cursor.previous.location
+	val label = if (containsLabel) cursor.offset(-3).toIdentifier() else null
 	val kind = if (cursor.previous.kind == DO) WhileKind.DO_WHILE else WhileKind.WHILE
 	var condition: Expression? = null
 	if (kind == WhileKind.WHILE) {

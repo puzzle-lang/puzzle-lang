@@ -12,7 +12,7 @@ object VariableDeclarationStatementMatcher : StatementMatcher<VariableDeclaratio
 	
 	context(cursor: PzlTokenCursor)
 	override fun match(): Boolean {
-		return cursor.match { it == VAR || it == VAL || it == LBRACKET }
+		return cursor.match { it.kind == VAR || it.kind == VAL || it.kind == LBRACKET }
 	}
 	
 	context(_: PzlContext, cursor: PzlTokenCursor)

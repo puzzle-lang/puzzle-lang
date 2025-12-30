@@ -137,7 +137,7 @@ private val notOverloadableSymbols = setOf(
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 private fun tryParseSymbolOrIndexAccessFunName(): FunName? {
-	if (cursor.match { it in overloadableSymbols }) {
+	if (cursor.match { it.kind in overloadableSymbols }) {
 		val token = cursor.previous
 		return SymbolFunName(Symbol(token.kind as SymbolKind, token.location))
 	}
@@ -151,7 +151,7 @@ private fun tryParseSymbolOrIndexAccessFunName(): FunName? {
 		}
 		return IndexAccessFunName(indexAccess)
 	}
-	if (cursor.match { it in notOverloadableSymbols }) {
+	if (cursor.match { it.kind in notOverloadableSymbols }) {
 		val token = cursor.previous
 		syntaxError("'${token.value}' 运算符不支持被重载", cursor.previous)
 	}

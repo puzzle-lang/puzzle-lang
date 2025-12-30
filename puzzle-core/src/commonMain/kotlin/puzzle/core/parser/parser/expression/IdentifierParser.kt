@@ -44,14 +44,14 @@ fun parseIdentifierString(target: IdentifierTarget): String {
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun tryParseIdentifierString(target: IdentifierTarget): String? {
-	if (cursor.match { it is IdentifierKind }) {
+	if (cursor.match { it.kind is IdentifierKind }) {
 		val value = cursor.previous.value
 		if (value == "_" && !target.allowAnonymousBinding) {
 			syntaxError("${target.label}不支持匿名绑定", cursor.previous)
 		}
 		return value
 	}
-	if (cursor.match { it in softKeywords }) {
+	if (cursor.match { it.kind in softKeywords }) {
 		return cursor.previous.value
 	}
 	return null
@@ -65,14 +65,14 @@ fun PzlToken.toIdentifier(allowAnonymousBinding: Boolean = false): Identifier {
 }
 
 fun PzlTokenCursor.checkIdentifier(allowAnonymousBinding: Boolean = false): Boolean {
-	return this.check { kind ->
-		kind is IdentifierKind || kind in softKeywords || (kind.value == "_" && allowAnonymousBinding)
+	return this.check {
+		it.kind is IdentifierKind || it.kind in softKeywords || (it.kind.value == "_" && allowAnonymousBinding)
 	}
 }
 
 fun PzlTokenCursor.matchIdentifier(allowAnonymousBinding: Boolean = false): Boolean {
-	return this.match { kind ->
-		kind is IdentifierKind || kind in softKeywords || (kind.value == "_" && allowAnonymousBinding)
+	return this.match {
+		it.kind is IdentifierKind || it.kind in softKeywords || (it.kind.value == "_" && allowAnonymousBinding)
 	}
 }
 
