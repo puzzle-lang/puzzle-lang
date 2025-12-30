@@ -292,7 +292,12 @@ fun context(ts: T..., context: context(T...) () -> R): R {
 }
 
 type<T..., R>
-fun callback(ts: T..., callback: context(T) () -> R): R {
+fun callback(ts: T..., callback: context(T...) () -> R): R {
+    return context(ts)
+}
+
+type<T+.., R>
+fun callback2(ts: T+.., callback: context(T+..) () -> R): R {
     return context(ts)
 }
 

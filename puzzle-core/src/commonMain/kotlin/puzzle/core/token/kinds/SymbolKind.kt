@@ -22,7 +22,8 @@ sealed class SymbolKind(
 				AT,
 				ARROW,
 				HASH,
-				TRIPLE_DOT
+				TRIPLE_DOT,
+				PLUS_DOUBLE_DOT
 			)
 		)
 	}
@@ -40,6 +41,8 @@ sealed class SymbolKind(
 	object HASH : SymbolKind("#")
 	
 	object TRIPLE_DOT : SymbolKind("...")
+	
+	object PLUS_DOUBLE_DOT : SymbolKind("+..")
 }
 
 sealed class OperatorKind(
