@@ -13,21 +13,28 @@ import puzzle.core.parser.ast.PzlProgram
 import puzzle.core.parser.parser.parseSourceFileNode
 import kotlin.time.measureTimedValue
 
-fun compile(paths: List<String>): PzlProgram = runBlocking {
+fun compile(
+	paths: List<String>,
+	statistics: MutableMap<String, PzlStatistic>,
+): PzlProgram = runBlocking {
 	val jobs = paths.map { path ->
 		async(Dispatchers.Default) {
 			val source = measureTimedValue { readFileChars(path) }
 			val path = resolveAbsolutePath(path)
-			println("$path -> 文件读取: ${source.duration} (${source.value.size})")
 			val lineStarts = source.value.getLineStarts()
 			val context = PzlContext(path, lineStarts)
 			context(context) {
 				val tokens = measureTimedValue { PzlLexer.default(source.value).scan() }
-				println("$path -> 词法分析: ${tokens.duration} (${tokens.value.size})")
 				val cursor = PzlTokenCursor(tokens.value)
 				context(cursor) {
 					val node = measureTimedValue { parseSourceFileNode() }
-					println("$path -> 语法分析: ${node.duration}")
+					statistics[path] = PzlStatistic(
+						charSize = source.value.size,
+						tokenSize = tokens.value.size,
+						readDuration = source.duration,
+						lexerDuration = tokens.duration,
+						parserDuration = node.duration
+					)
 					node.value
 				}
 			}

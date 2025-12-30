@@ -9,6 +9,8 @@ import puzzle.core.parser.ast.expression.MemberAccessExpression
 import puzzle.core.parser.ast.expression.PrefixUnaryExpression
 import puzzle.core.parser.ast.expression.SuffixUnaryExpression
 import puzzle.core.token.kinds.OperatorKind
+import puzzle.core.token.kinds.OperatorKind.DOUBLE_MINUS
+import puzzle.core.token.kinds.OperatorKind.DOUBLE_PLUS
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parsePrefixUnaryExpression(): PrefixUnaryExpression {
@@ -17,7 +19,10 @@ fun parsePrefixUnaryExpression(): PrefixUnaryExpression {
 	if (expression is SuffixUnaryExpression) {
 		syntaxError("不能在这里使用后缀操作符 '${expression.operator.kind.value}'", expression.location.end)
 	}
-	if (expression !is Identifier && expression !is MemberAccessExpression) {
+	if (
+		expression !is Identifier && expression !is MemberAccessExpression &&
+		(token.kind == DOUBLE_PLUS || token.kind == DOUBLE_MINUS)
+	) {
 		syntaxError("不能在这里使用前缀操作符 '${token.value}'", token)
 	}
 	val operator = Operator(token.kind as OperatorKind, token.location)
