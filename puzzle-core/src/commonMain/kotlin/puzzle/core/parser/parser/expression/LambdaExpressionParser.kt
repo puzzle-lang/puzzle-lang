@@ -1,12 +1,14 @@
 package puzzle.core.parser.parser.expression
 
 import puzzle.core.model.PzlContext
+import puzzle.core.model.equalsLine
 import puzzle.core.model.span
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.expression.LambdaExpression
 import puzzle.core.parser.ast.parameter.ParameterReference
 import puzzle.core.parser.parser.statement.parseStatements
 import puzzle.core.parser.parser.type.parseTypeReference
+import puzzle.core.token.kinds.BracketKind.Start.LBRACE
 import puzzle.core.token.kinds.SeparatorKind.COMMA
 import puzzle.core.token.kinds.SymbolKind.*
 
@@ -52,4 +54,10 @@ private fun parseLambdaParameterReferences(): List<ParameterReference> {
 			}
 		}
 	}
+}
+
+context(_: PzlContext)
+fun PzlTokenCursor.matchLambda(): Boolean {
+	return this.match { it.kind == LBRACE && it.equalsLine(this.previous) } ||
+			this.matchLabel { it.kind == LBRACE && it.equalsLine(this.previous) }
 }

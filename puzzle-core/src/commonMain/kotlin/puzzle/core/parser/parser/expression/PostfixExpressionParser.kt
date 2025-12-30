@@ -7,7 +7,8 @@ import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.Operator
 import puzzle.core.parser.ast.expression.*
 import puzzle.core.token.kinds.AccessKind.*
-import puzzle.core.token.kinds.BracketKind.Start.*
+import puzzle.core.token.kinds.BracketKind.Start.LBRACKET
+import puzzle.core.token.kinds.BracketKind.Start.LPAREN
 import puzzle.core.token.kinds.ContextualKind.SUPER
 import puzzle.core.token.kinds.ContextualKind.THIS
 import puzzle.core.token.kinds.OperatorKind
@@ -24,8 +25,7 @@ fun parsePostfixExpression(
 			cursor.match(QUESTION_DOT) -> parseMemberAccessExpression(expression, isSafe = true)
 			cursor.match { it.kind == DOUBLE_COLON && it.equalsLine(cursor.previous) } -> parseMemberReferenceExpression(expression)
 			cursor.match { it.kind == LPAREN && it.equalsLine(cursor.previous) } -> parseCallExpression(expression)
-			cursor.match { it.kind == LBRACE && it.equalsLine(cursor.previous) } -> parseTrailingClosureCallExpression(expression)
-			cursor.matchLabel { it.kind == LBRACE && it.equalsLine(cursor.previous) } -> parseTrailingClosureCallExpression(expression)
+			cursor.matchLambda() -> parseTrailingClosureCallExpression(expression)
 			cursor.match { it.kind == LBRACKET && it.equalsLine(cursor.previous) } -> parseIndexAccessExpression(expression)
 			cursor.match { it.kind == NOT && it.equalsLine(cursor.previous) } -> parseNonNullAssertionExpression(expression)
 			cursor.match { (it.kind == DOUBLE_PLUS || it.kind == DOUBLE_MINUS) && it.equalsLine(cursor.previous) } -> parseSuffixUnaryExpression(expression)
@@ -62,7 +62,7 @@ fun parseMemberReferenceExpression(receiver: Expression?): MemberReferenceExpres
 context(_: PzlContext, cursor: PzlTokenCursor)
 private fun parseCallExpression(callee: Expression): CallExpression {
 	val start = callee.location
-	val arguments = parseArguments()
+	val arguments = parseArguments(ArgumentTarget.CALL)
 	val end = cursor.previous.location
 	return CallExpression(callee, arguments, start span end)
 }
@@ -71,7 +71,7 @@ context(_: PzlContext, cursor: PzlTokenCursor)
 private fun parseTrailingClosureCallExpression(callee: Expression): CallExpression {
 	val expression = parseLambdaExpression()
 	val start = expression.location
-	val arguments = listOf(Argument(null, expression, expression.location))
+	val arguments = listOf(Argument(null, expression))
 	val end = cursor.previous.location
 	return CallExpression(callee, arguments, start span end)
 }
@@ -79,7 +79,7 @@ private fun parseTrailingClosureCallExpression(callee: Expression): CallExpressi
 context(_: PzlContext, cursor: PzlTokenCursor)
 private fun parseIndexAccessExpression(callee: Expression): IndexAccessExpression {
 	val start = callee.location
-	val arguments = parseArguments(isParen = false)
+	val arguments = parseArguments(ArgumentTarget.INDEX_ACCESS)
 	val end = cursor.previous.location
 	return IndexAccessExpression(callee, arguments, start span end)
 }

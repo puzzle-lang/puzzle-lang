@@ -7,6 +7,7 @@ import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.type.SuperConstructorCall
 import puzzle.core.parser.ast.type.SuperType
 import puzzle.core.parser.ast.type.SuperTypeReference
+import puzzle.core.parser.parser.expression.ArgumentTarget
 import puzzle.core.parser.parser.expression.parseArguments
 import puzzle.core.token.kinds.BracketKind.Start.LPAREN
 import puzzle.core.token.kinds.SeparatorKind.COMMA
@@ -39,7 +40,7 @@ private fun parseSuperType(target: SuperTypeTarget): SuperType {
 	if (!target.allowConstructorCall) {
 		syntaxError("${target.label} 不允许使用构造函数调用", type)
 	}
-	val arguments = parseArguments()
+	val arguments = parseArguments(ArgumentTarget.SUPER_CONSTRUCTOR_CALL)
 	val end = cursor.previous.location
 	return SuperConstructorCall(type, arguments, type.location span end)
 }

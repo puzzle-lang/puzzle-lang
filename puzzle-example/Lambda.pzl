@@ -28,3 +28,25 @@ fun lambdaContextTest() {
     val lambdaContext02: (context(String.() -> Unit, String) () -> Unit)
     val lambdaContext03: context(Int)! ((Int)).() -> Unit
 }
+
+fun trailingClosureTest() {
+    callback1 {
+
+    }
+
+    callback2 { _: String, age: Int ->
+
+    }
+
+    callback3(name) {
+
+    }
+
+    callback4(name, age) {
+
+    }
+
+    callback5(name) { age, _ ->
+
+    }
+}

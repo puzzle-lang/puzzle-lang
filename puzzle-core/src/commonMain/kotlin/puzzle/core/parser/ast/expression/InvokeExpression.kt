@@ -2,6 +2,7 @@ package puzzle.core.parser.ast.expression
 
 import kotlinx.serialization.Serializable
 import puzzle.core.model.SourceLocation
+import puzzle.core.model.span
 import puzzle.core.parser.ast.AstNode
 
 @Serializable
@@ -30,5 +31,5 @@ class IndexAccessExpression(
 class Argument(
 	val name: Identifier?,
 	val expression: Expression,
-	override val location: SourceLocation,
+	override val location: SourceLocation = if (name != null) name.location span expression.location else expression.location,
 ) : AstNode
