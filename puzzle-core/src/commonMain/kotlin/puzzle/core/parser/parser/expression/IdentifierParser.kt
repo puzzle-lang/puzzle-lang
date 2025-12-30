@@ -58,22 +58,22 @@ fun tryParseIdentifierString(target: IdentifierTarget): String? {
 }
 
 fun PzlToken.toIdentifier(allowAnonymousBinding: Boolean = false): Identifier {
-	if (kind is IdentifierKind || kind in softKeywords || (kind.value == "_" && allowAnonymousBinding)) {
+	if (this.isIdentifier(allowAnonymousBinding)) {
 		return Identifier(kind.value, this.location)
 	}
 	error("不支持转换为标识符")
 }
 
+fun PzlToken.isIdentifier(allowAnonymousBinding: Boolean = false): Boolean {
+	return this.kind is IdentifierKind || this.kind in softKeywords || (this.kind.value == "_" && allowAnonymousBinding)
+}
+
 fun PzlTokenCursor.checkIdentifier(allowAnonymousBinding: Boolean = false): Boolean {
-	return this.check {
-		it.kind is IdentifierKind || it.kind in softKeywords || (it.kind.value == "_" && allowAnonymousBinding)
-	}
+	return this.check { it.isIdentifier(allowAnonymousBinding) }
 }
 
 fun PzlTokenCursor.matchIdentifier(allowAnonymousBinding: Boolean = false): Boolean {
-	return this.match {
-		it.kind is IdentifierKind || it.kind in softKeywords || (it.kind.value == "_" && allowAnonymousBinding)
-	}
+	return this.match { it.isIdentifier(allowAnonymousBinding) }
 }
 
 enum class IdentifierTarget(

@@ -3,17 +3,19 @@ package puzzle.core.parser.parser.declaration
 import puzzle.core.exception.syntaxError
 import puzzle.core.model.PzlContext
 import puzzle.core.model.SourceLocation
+import puzzle.core.model.copy
 import puzzle.core.model.span
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.Symbol
 import puzzle.core.parser.ast.declaration.*
 import puzzle.core.parser.ast.expression.Identifier
+import puzzle.core.parser.ast.type.LambdaType
 import puzzle.core.parser.ast.type.NamedType
 import puzzle.core.parser.ast.type.TypeReference
+import puzzle.core.parser.ast.type.copy
 import puzzle.core.parser.matcher.declaration.DeclarationHeader
 import puzzle.core.parser.parser.expression.IdentifierTarget
 import puzzle.core.parser.parser.expression.tryParseIdentifier
-import puzzle.core.parser.parser.expression.tryParseIdentifierString
 import puzzle.core.parser.parser.parameter.parameter.ParameterTarget
 import puzzle.core.parser.parser.parameter.parameter.parseParameters
 import puzzle.core.parser.parser.statement.parseStatements
@@ -83,42 +85,50 @@ fun parseFunDeclaration(header: DeclarationHeader, start: SourceLocation): FunDe
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 private fun parseExtensionAndFunName(): Pair<TypeReference?, FunName> {
-	val name = tryParseIdentifier(IdentifierTarget.FUN)
-		?: return null to (tryParseSymbolOrIndexAccessFunName() ?: syntaxError("函数缺少名称", cursor.current))
-	val start = name.location
-	if (!cursor.check(DOT)) {
+	val name = tryParseIdentifier(IdentifierTarget.FUN) ?: run {
+		val funName = tryParseOperatorFunName()
+			?: syntaxError("函数缺少名称", cursor.current)
+		return null to funName
+	}
+	if (!cursor.check { it.kind == DOT || it.kind == QUESTION_DOT || it.kind == LT }) {
 		return null to IdentifierFunName(name)
 	}
 	cursor.retreat()
-	val segments = mutableListOf<String>()
-	do {
-		val type = if (cursor.match(QUESTION_DOT)) {
-			TypeReference(
-				type = NamedType(segments, start span cursor.offset(-2).location),
-				location = start span cursor.previous.location,
-				isNullable = true
+	var extension = parseTypeReference(allowLambda = true)
+	val type = extension.type
+	if (type is LambdaType || (type is NamedType && type.typeArguments.isNotEmpty())) {
+		extension = when {
+			cursor.match(DOT) -> extension
+			cursor.match(QUESTION_DOT) -> extension.copy(
+				isNullable = true,
+				location = cursor.previous.location.copy(end = { it - 1 })
 			)
-		} else null
-		val name = tryParseIdentifierString(IdentifierTarget.TYPE_REFERENCE)
-			?: tryParseSymbolOrIndexAccessFunName()
-			?: syntaxError("无法识别标识符", cursor.current)
-		if (type != null) {
-			return type to when (name) {
-				is String -> IdentifierFunName(Identifier(name, cursor.previous.location))
-				else -> name as SymbolFunName
-			}
+			
+			else -> syntaxError("扩展函数缺少 '.'", cursor.current)
 		}
-		if (name is SymbolFunName) {
-			val location = start span cursor.previous.location
-			val type = TypeReference(NamedType(segments, location), false, location)
-			return type to name
-		}
-		segments += name as String
-	} while (cursor.match(DOT))
-	val funName = IdentifierFunName(Identifier(segments.removeLast(), cursor.previous.location))
-	val location = start span cursor.previous.location
-	val type = TypeReference(NamedType(segments, location), false, location)
-	return type to funName
+		val funName = tryParseIdentifier(IdentifierTarget.FUN)?.let { IdentifierFunName(it) }
+			?: tryParseOperatorFunName()
+			?: syntaxError("函数缺少名称", cursor.current)
+		return extension to funName
+	}
+	type as NamedType
+	if (cursor.match { it.kind == DOT || it.kind == QUESTION_DOT }) {
+		extension = extension.copy(
+			isNullable = true,
+			location = cursor.previous.location.copy(end = { it - 1 })
+		)
+		val funName = tryParseIdentifier(IdentifierTarget.FUN)?.let { IdentifierFunName(it) }
+			?: tryParseOperatorFunName()
+			?: syntaxError("函数缺少名称", cursor.current)
+		return extension to funName
+	}
+	val segments = type.segments.toMutableList()
+	val segment = segments.removeLast()
+	extension = extension.copy(
+		type = NamedType(segments, extension.location span cursor.offset(-3).location)
+	)
+	val funName = IdentifierFunName(Identifier(segment, cursor.previous.location))
+	return extension to funName
 }
 
 private val overloadableSymbols = setOf(
@@ -136,20 +146,19 @@ private val notOverloadableSymbols = setOf(
 )
 
 context(_: PzlContext, cursor: PzlTokenCursor)
-private fun tryParseSymbolOrIndexAccessFunName(): FunName? {
+private fun tryParseOperatorFunName(): FunName? {
 	if (cursor.match { it.kind in overloadableSymbols }) {
 		val token = cursor.previous
 		return SymbolFunName(Symbol(token.kind as SymbolKind, token.location))
 	}
 	if (cursor.match(LBRACKET, RBRACKET)) {
-		val indexAccess = if (cursor.match(ASSIGN)) {
+		return if (cursor.match(ASSIGN)) {
 			val location = cursor.offset(-3).location span cursor.previous.location
-			IndexAccess(IndexAccessKind.SETTER, location)
+			IndexAccessFunName(IndexAccessKind.SETTER, location)
 		} else {
 			val location = cursor.offset(-2).location span cursor.previous.location
-			IndexAccess(IndexAccessKind.GETTER, location)
+			IndexAccessFunName(IndexAccessKind.GETTER, location)
 		}
-		return IndexAccessFunName(indexAccess)
 	}
 	if (cursor.match { it.kind in notOverloadableSymbols }) {
 		val token = cursor.previous

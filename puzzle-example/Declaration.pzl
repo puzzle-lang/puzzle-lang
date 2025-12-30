@@ -111,7 +111,7 @@ private fun returns2(): [(String, age: Int, String) -> [Int?, String?], String] 
  * ((String)) 与 String 等价
  * 多行注释测试
  */
-private fun returns3(): [Int, String] {
+private fun returns3(): [Int, () -> String] {
 
 }
 
@@ -331,7 +331,7 @@ class Member {
     private late var private: String
 }
 
-private fun Int.+(other: Int): Int {
+private fun MyInt.+(other: Int): Int {
 
 }
 
@@ -433,4 +433,16 @@ typealias Callback = (T) -> R
 
 val User.info: String {
     "$name : $age"
+}
+
+fun List<String>.size(): Int {
+    return this.length
+}
+
+val List<String>.size: Int {
+    this.length
+}
+
+val List<String?>?.size: Int {
+    this.length
 }

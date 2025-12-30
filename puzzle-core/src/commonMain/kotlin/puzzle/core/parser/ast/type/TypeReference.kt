@@ -10,3 +10,9 @@ class TypeReference(
 	val isNullable: Boolean,
 	override val location: SourceLocation,
 ) : AstNode
+
+fun TypeReference.copy(
+	type: Type = this.type,
+	isNullable: Boolean = this.isNullable,
+	location: SourceLocation = this.location,
+): TypeReference = TypeReference(type, isNullable, location)

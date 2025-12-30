@@ -10,8 +10,10 @@ import puzzle.core.parser.ast.declaration.PropertyDeclaration
 import puzzle.core.parser.ast.declaration.PropertyGetter
 import puzzle.core.parser.ast.declaration.PropertySetter
 import puzzle.core.parser.ast.expression.Identifier
+import puzzle.core.parser.ast.type.LambdaType
 import puzzle.core.parser.ast.type.NamedType
 import puzzle.core.parser.ast.type.TypeReference
+import puzzle.core.parser.ast.type.copy
 import puzzle.core.parser.matcher.declaration.DeclarationHeader
 import puzzle.core.parser.parser.expression.IdentifierTarget
 import puzzle.core.parser.parser.expression.parseExpressionChain
@@ -20,6 +22,7 @@ import puzzle.core.parser.parser.statement.parseStatement
 import puzzle.core.parser.parser.statement.parseStatements
 import puzzle.core.parser.parser.type.parseTypeReference
 import puzzle.core.token.kinds.AccessKind.DOT
+import puzzle.core.token.kinds.AccessKind.QUESTION_DOT
 import puzzle.core.token.kinds.AccessorKind.GET
 import puzzle.core.token.kinds.AccessorKind.SET
 import puzzle.core.token.kinds.AssignmentKind.ASSIGN
@@ -27,6 +30,7 @@ import puzzle.core.token.kinds.BracketKind.End.RPAREN
 import puzzle.core.token.kinds.BracketKind.Start.LBRACE
 import puzzle.core.token.kinds.BracketKind.Start.LPAREN
 import puzzle.core.token.kinds.ModifierKind.*
+import puzzle.core.token.kinds.OperatorKind.LT
 import puzzle.core.token.kinds.SeparatorKind.COMMA
 import puzzle.core.token.kinds.SymbolKind.COLON
 import puzzle.core.util.isIn
@@ -236,25 +240,33 @@ private fun parsePropertySetter(): PropertySetter? {
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 private fun parseExtensionAndPropertyName(): Pair<TypeReference?, Identifier> {
-	val name = parseIdentifier(IdentifierTarget.PROPERTY)
-	return if (cursor.check(DOT)) {
-		cursor.retreat()
-		val type = parseTypeReference()
-		if (type.isNullable) {
-			cursor.expect(DOT, "属性缺少 '.'")
-			val name = parseIdentifier(IdentifierTarget.FUN)
-			type to name
-		} else {
-			val segments = (type.type as NamedType).segments.toMutableList()
-			val name = Identifier(
-				name = segments.removeLast(),
-				location = type.type.location.copy(start = { it.end - 1 })
-			)
-			val location = type.location.copy(end = { it.end - 2 })
-			val type = TypeReference(NamedType(segments, location), false, location)
-			type to name
-		}
-	} else {
-		null to name
+	var name = parseIdentifier(IdentifierTarget.PROPERTY)
+	if (!cursor.check { it.kind == DOT || it.kind == QUESTION_DOT || it.kind == LT }) {
+		return null to name
 	}
+	cursor.retreat()
+	var extension = parseTypeReference()
+	val type = extension.type
+	if (type is LambdaType || (type is NamedType && type.typeArguments.isNotEmpty())) {
+		extension = when {
+			cursor.match(DOT) -> extension
+			cursor.match(QUESTION_DOT) -> extension.copy(
+				isNullable = true,
+				location = cursor.previous.location.copy(end = { it - 1 })
+			)
+			
+			else -> syntaxError("扩展属性缺少 '.'", cursor.current)
+		}
+		
+		name = parseIdentifier(IdentifierTarget.PROPERTY)
+		return extension to name
+	}
+	type as NamedType
+	val segments = type.segments.toMutableList()
+	val segment = segments.removeLast()
+	extension = extension.copy(
+		type = NamedType(segments, extension.location span cursor.offset(-3).location)
+	)
+	name = Identifier(segment, cursor.previous.location)
+	return extension to name
 }

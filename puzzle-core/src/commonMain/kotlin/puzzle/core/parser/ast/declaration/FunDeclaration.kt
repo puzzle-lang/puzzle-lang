@@ -41,28 +41,28 @@ class MultiReturnSpec(
 ) : ReturnSpec
 
 @Serializable
-sealed interface FunName
+sealed interface FunName : AstNode
 
 @Serializable
 class IdentifierFunName(
 	val name: Identifier,
+	override val location: SourceLocation = name.location,
 ) : FunName
+
+@Serializable
+sealed interface OperatorFunName : FunName
 
 @Serializable
 class SymbolFunName(
 	val symbol: Symbol,
-) : FunName
+	override val location: SourceLocation = symbol.location,
+) : OperatorFunName
 
 @Serializable
 class IndexAccessFunName(
-	val indexAccess: IndexAccess,
-) : FunName
-
-@Serializable
-class IndexAccess(
 	val kind: IndexAccessKind,
 	override val location: SourceLocation,
-) : AstNode
+) : OperatorFunName
 
 @Serializable
 enum class IndexAccessKind {

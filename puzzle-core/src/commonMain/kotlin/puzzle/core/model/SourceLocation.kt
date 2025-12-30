@@ -46,11 +46,11 @@ inline infix fun SourceLocation.span(other: SourceLocation): SourceLocation {
 }
 
 fun SourceLocation.copy(
-	start: (SourceLocation) -> Int = { this.start },
-	end: (SourceLocation) -> Int = { this.end },
+	start: (Int) -> Int = { this.start },
+	end: (Int) -> Int = { this.end },
 ): SourceLocation {
-	val start = start(this)
-	val end = end(this)
+	val start = start(this.start)
+	val end = end(this.end)
 	if (start == this.end && end == this.end) {
 		return this
 	}

@@ -8,8 +8,7 @@ import puzzle.core.model.copy
 @Serializable
 class GroupingExpression(
 	val expression: Expression,
-	override val location: SourceLocation =
-		expression.location.copy(start = { it.start - 1 }, end = { it.end + 1 }),
+	override val location: SourceLocation = expression.location.copy(start = { it - 1 }, end = { it + 1 }),
 ) : Expression, CompoundAssignableProxy {
 	
 	@Transient

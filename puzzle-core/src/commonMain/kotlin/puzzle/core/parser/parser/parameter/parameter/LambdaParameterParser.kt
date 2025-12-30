@@ -19,7 +19,7 @@ import puzzle.core.token.kinds.SymbolKind.COLON
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseLambdaParameters(): List<LambdaParameter> {
 	if (!cursor.match(LPAREN)) {
-		syntaxError("lambda 型参缺少 '('", cursor.current)
+		syntaxError("lambda 缺少 '('", cursor.current)
 	}
 	if (cursor.match(RPAREN)) return emptyList()
 	return buildList {
