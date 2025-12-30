@@ -25,7 +25,7 @@ fun parseDeclarationContextSpec(): DeclarationContextSpec? {
 		do {
 			this += parseDeclarationContextReceiver()
 			if (!cursor.check(RPAREN)) {
-				cursor.expect(COMMA, "context 参数缺少 ','")
+				cursor.expect(COMMA, "context 参数列表缺少 ','")
 			}
 		} while (!cursor.match(RPAREN))
 	}

@@ -42,7 +42,7 @@ fun parseFunDeclaration(header: DeclarationHeader, start: SourceLocation): FunDe
 				while (!cursor.match(RBRACKET)) {
 					this += parseTypeReference(allowLambda = true)
 					if (!cursor.check(RBRACKET)) {
-						cursor.expect(COMMA, "多返回值类型缺少 ','")
+						cursor.expect(COMMA, "多返回值类型列表缺少 ','")
 					}
 				}
 			}
@@ -125,7 +125,6 @@ private val overloadableSymbols = setOf(
 	PLUS, MINUS, NOT, BIT_NOT, DOUBLE_PLUS, DOUBLE_MINUS,
 	STAR, SLASH, PERCENT, DOUBLE_STAR,
 	EQUALS, NOT_EQUALS, GT, GT_EQUALS, LT, LT_EQUALS,
-	CONTAINS, NOT_CONTAINS,
 	BIT_AND, BIT_OR, BIT_XOR, SHL, SHR, USHR,
 	PLUS_ASSIGN, MINUS_ASSIGN, STAR_ASSIGN, SLASH_ASSIGN, PERCENT_ASSIGN,
 	RANGE_TO, RANGE_UNTIL

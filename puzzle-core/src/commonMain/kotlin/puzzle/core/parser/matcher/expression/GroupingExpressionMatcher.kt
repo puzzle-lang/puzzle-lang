@@ -4,11 +4,11 @@ import puzzle.core.exception.syntaxError
 import puzzle.core.model.PzlContext
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.expression.Expression
-import puzzle.core.parser.ast.expression.GroupingExpression
 import puzzle.core.parser.parser.expression.parseGroupingExpression
+import puzzle.core.parser.parser.expression.parsePostfixExpression
 import puzzle.core.token.kinds.BracketKind.Start.LPAREN
 
-object GroupingExpressionMatcher : ExpressionMatcher, NoPrefixExpressionParser<GroupingExpression> {
+object GroupingExpressionMatcher : ExpressionMatcher, NoPrefixExpressionParser<Expression> {
 	
 	context(cursor: PzlTokenCursor)
 	override fun match(left: Expression?): Boolean {
@@ -21,7 +21,8 @@ object GroupingExpressionMatcher : ExpressionMatcher, NoPrefixExpressionParser<G
 	}
 	
 	context(_: PzlContext, cursor: PzlTokenCursor)
-	override fun parse(): GroupingExpression {
-		return parseGroupingExpression()
+	override fun parse(): Expression {
+		val expression = parseGroupingExpression()
+		return parsePostfixExpression(expression)
 	}
 }

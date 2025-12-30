@@ -56,15 +56,12 @@ sealed class OperatorKind(
 		val kinds = fastSetOf(
 			DOUBLE_PLUS, DOUBLE_MINUS,
 			NOT, BIT_NOT,
-			DOUBLE_STAR,
-			STAR, SLASH, PERCENT,
-			PLUS, MINUS,
+			PLUS, MINUS, STAR, SLASH, PERCENT, DOUBLE_STAR,
 			RANGE_TO, RANGE_UNTIL,
 			SHL, SHR, USHR,
-			EQUALS, NOT_EQUALS, TRIPLE_EQUALS, TRIPLE_NOT_EQUALS, GT, GT_EQUALS, LT, LT_EQUALS, CONTAINS, NOT_CONTAINS,
-			BIT_AND,
-			BIT_XOR,
-			BIT_OR,
+			EQUALS, NOT_EQUALS, TRIPLE_EQUALS, TRIPLE_NOT_EQUALS, GT, GT_EQUALS, LT, LT_EQUALS,
+			IN, NOT_IN,
+			BIT_AND, BIT_XOR, BIT_OR,
 			AND,
 			OR
 		)
@@ -116,9 +113,9 @@ sealed class OperatorKind(
 	
 	object LT_EQUALS : OperatorKind("<=", 6, Assoc.NONE)
 	
-	object CONTAINS : OperatorKind("~>", 6, Assoc.NONE)
+	object IN : OperatorKind("in", 6, Assoc.NONE)
 	
-	object NOT_CONTAINS : OperatorKind("!~>", 6, Assoc.NONE)
+	object NOT_IN : OperatorKind("!in", 6, Assoc.NONE)
 	
 	object BIT_AND : OperatorKind("&", 5, Assoc.LEFT)
 	

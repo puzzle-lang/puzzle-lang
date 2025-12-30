@@ -26,7 +26,7 @@ fun parseLambdaParameters(): List<LambdaParameter> {
 		do {
 			this += parseLambdaParameter()
 			if (!cursor.check(RPAREN)) {
-				cursor.expect(COMMA, "型参缺少 ','")
+				cursor.expect(COMMA, "型参列表缺少 ','")
 			}
 		} while (!cursor.match(RPAREN))
 	}

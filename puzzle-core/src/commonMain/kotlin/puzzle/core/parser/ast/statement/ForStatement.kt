@@ -2,8 +2,10 @@ package puzzle.core.parser.ast.statement
 
 import kotlinx.serialization.Serializable
 import puzzle.core.model.SourceLocation
+import puzzle.core.parser.ast.AstNode
 import puzzle.core.parser.ast.expression.Expression
 import puzzle.core.parser.ast.expression.Identifier
+import puzzle.core.parser.ast.parameter.ParameterReference
 
 @Serializable
 class ForStatement(
@@ -15,15 +17,16 @@ class ForStatement(
 ) : Statement
 
 @Serializable
-sealed interface ForPattern
+sealed interface ForPattern : AstNode
 
 @Serializable
-class ValuePattern(
-	val value: Identifier,
+class ForValuePattern(
+	val reference: ParameterReference,
+	override val location: SourceLocation = reference.location,
 ) : ForPattern
 
 @Serializable
-class IndexValuePattern(
-	val index: Identifier,
-	val value: Identifier,
+class ForDestructurePattern(
+	val references: List<ParameterReference>,
+	override val location: SourceLocation,
 ) : ForPattern

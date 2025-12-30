@@ -27,7 +27,14 @@ fun main() {
     val b = (((((a)))))                                             // 语法分析阶段去除无效 '(' 和 ')'
     val name = getInfos(age = 18, param = "Hello").first()["name"]
     val a = i++.name()
+    ++i
     // val b = ++i.name()    // 语法错误
     val a = b ? c ?: (d + 1) * 10 : e ?: f
-    val a = b.c ~> d && e.f() !~> g.h[0]
+    val boolean = b.c in d && e.f() !in g.h[0]
+    val str = ""
+    val str2 = str as? String
+    val str3 = str as Int
+    if (str is Custom.String) {}
+    if (str !is String) {}
+    val result2 = a.b && c.d
 }

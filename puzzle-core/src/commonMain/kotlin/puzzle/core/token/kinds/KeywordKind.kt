@@ -187,7 +187,7 @@ sealed class ContextualKind(
 	
 	companion object {
 		
-		val kinds = fastSetOf(TYPE, REIFIED, CONTEXT, INIT, ON, WITH, THIS, SUPER)
+		val kinds = fastSetOf(TYPE, REIFIED, CONTEXT, INIT, ON, WITH, THIS, SUPER, OUT)
 	}
 	
 	object TYPE : ContextualKind("type")
@@ -205,20 +205,8 @@ sealed class ContextualKind(
 	object THIS : ContextualKind("this")
 	
 	object SUPER : ContextualKind("super")
-}
-
-sealed class VarianceKind(
-	override val value: String,
-) : KeywordKind {
 	
-	companion object {
-		
-		val kinds = fastSetOf(IN, OUT)
-	}
-	
-	object IN : VarianceKind("in")
-	
-	object OUT : VarianceKind("out")
+	object OUT : ContextualKind("out")
 }
 
 sealed class TypeOperatorKind(

@@ -104,7 +104,7 @@ private fun parseLambdaType(
 			while (!cursor.match(RBRACKET)) {
 				this += parseTypeReference(true)
 				if (!cursor.check(RBRACKET)) {
-					cursor.expect(SeparatorKind.COMMA, "lambda 表达式返回值缺少 ','")
+					cursor.expect(SeparatorKind.COMMA, "lambda 表达式多返回值列表缺少 ','")
 				}
 			}
 		}

@@ -30,7 +30,7 @@ fun parseParameters(target: ParameterTarget): List<Parameter> {
 		do {
 			this += parseParameter(target)
 			if (!cursor.check(RPAREN)) {
-				cursor.expect(COMMA, "型参缺少 ','")
+				cursor.expect(COMMA, "型参列表缺少 ','")
 			}
 		} while (!cursor.match(RPAREN))
 	}

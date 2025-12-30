@@ -19,7 +19,7 @@ fun parseArguments(isParen: Boolean = true): List<Argument> {
 		do {
 			this += parseCallArgument(isParen)
 			if (!cursor.check(endKind)) {
-				cursor.expect(COMMA, "参数缺少 ','")
+				cursor.expect(COMMA, "参数列表缺少 ','")
 			}
 		} while (!cursor.match(endKind))
 	}

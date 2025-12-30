@@ -44,8 +44,7 @@ fun parseIdentifierString(target: IdentifierTarget): String {
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun tryParseIdentifierString(target: IdentifierTarget): String? {
-	if (cursor.current.kind is IdentifierKind) {
-		cursor.advance()
+	if (cursor.match { it is IdentifierKind }) {
 		val value = cursor.previous.value
 		if (value == "_" && !target.allowAnonymousBinding) {
 			syntaxError("${target.label}不支持匿名绑定", cursor.previous)
@@ -146,7 +145,11 @@ enum class IdentifierTarget(
 		allowAnonymousBinding = false,
 	),
 	LAMBDA_PARAMETER_REFERENCE(
-		label = "lambda 参数",
+		label = "lambda 参数引用",
+		allowAnonymousBinding = true,
+	),
+	FOR_PARAMETER_REFERENCE(
+		label = "for 参数引用",
 		allowAnonymousBinding = true,
 	),
 	VARIABLE(
@@ -160,14 +163,6 @@ enum class IdentifierTarget(
 	TYPE_REFERENCE(
 		label = "类型",
 		allowAnonymousBinding = false
-	),
-	SUFFIX_UNARY(
-		label = "一元运算符前",
-		allowAnonymousBinding = false
-	),
-	PREFIX_UNARY(
-		label = "一元运算符后",
-		allowAnonymousBinding = false,
 	),
 	PACKAGE(
 		label = "包",
@@ -196,10 +191,6 @@ enum class IdentifierTarget(
 	LABEL(
 		label = "标签",
 		allowAnonymousBinding = false
-	),
-	FOR_VARIABLE(
-		label = "for 语句循环变量",
-		allowAnonymousBinding = true,
 	),
 	GETTER_PARAMETER(
 		label = "属性访问器参数",

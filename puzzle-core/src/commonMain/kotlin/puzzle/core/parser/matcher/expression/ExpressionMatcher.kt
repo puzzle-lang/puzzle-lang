@@ -9,15 +9,10 @@ sealed interface ExpressionMatcher {
 	companion object {
 		
 		val matchers = arrayOf(
-			InvokeExpressionMatcher,
 			GroupingExpressionMatcher,
-			NonNullAssertionExpressionMatcher,
-			MemberAccessExpressionMatcher,
 			MemberReferenceExpressionMatcher,
 			PrefixUnaryExpressionMatcher,
-			SuffixUnaryExpressionMatcher,
 			LiteralExpressionMatcher,
-			ContextualExpressionMatcher,
 			BinaryExpressionMatcher,
 			ElvisExpressionMatcher,
 			TernaryExpressionMatcher,
@@ -27,7 +22,7 @@ sealed interface ExpressionMatcher {
 			MatchExpressionMatcher,
 			LoopExpressionMatcher,
 			LambdaExpressionMatcher,
-			IdentifierMatcher,
+			PostfixExpressionMatcher
 		)
 	}
 	

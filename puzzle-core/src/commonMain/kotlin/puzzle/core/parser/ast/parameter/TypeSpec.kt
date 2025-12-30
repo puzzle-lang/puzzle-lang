@@ -5,8 +5,6 @@ import puzzle.core.model.SourceLocation
 import puzzle.core.parser.ast.AstNode
 import puzzle.core.parser.ast.expression.Identifier
 import puzzle.core.parser.ast.type.TypeReference
-import puzzle.core.token.kinds.VarianceKind
-import puzzle.core.util.VarianceKindSerializer
 
 @Serializable
 class TypeSpec(
@@ -27,7 +25,16 @@ class TypeParameter(
 
 @Serializable
 class Variance(
-	@Serializable(with = VarianceKindSerializer::class)
 	val kind: VarianceKind,
 	override val location: SourceLocation,
 ) : AstNode
+
+@Serializable
+enum class VarianceKind(
+	val value: String,
+) {
+	
+	IN("in"),
+	
+	OUT("out")
+}

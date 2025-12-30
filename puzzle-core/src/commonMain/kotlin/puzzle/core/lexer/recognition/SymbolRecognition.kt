@@ -16,10 +16,8 @@ object SymbolRecognition : TokenRecognition {
 	
 	context(_: PzlContext)
 	override fun tryParse(input: CharArray, start: Int): PzlToken? {
-		if (input[start].toString() !in symbols[1]!!) return null
 		for (length in maxLength downTo 1) {
-			if (start + length > input.size) continue
-			val symbol = input.safeString(start, length)
+			val symbol = input.safeString(start, length) ?: continue
 			val kind = symbols[length]!![symbol] ?: continue
 			return PzlToken(kind, start span start + length)
 		}

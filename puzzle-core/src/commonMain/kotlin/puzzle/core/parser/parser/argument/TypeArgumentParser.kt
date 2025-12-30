@@ -20,7 +20,7 @@ fun parseTypeArguments(): List<TypeArgument> {
 	do {
 		arguments += parseTypeArgument()
 		if (!cursor.check(GT)) {
-			cursor.expect(COMMA, "泛型参数缺少 ','")
+			cursor.expect(COMMA, "泛型参数列表缺少 ','")
 		}
 	} while (!cursor.match(GT))
 	return arguments

@@ -6,18 +6,16 @@ import puzzle.core.model.span
 import puzzle.core.parser.PzlTokenCursor
 import puzzle.core.parser.ast.parameter.TypeParameter
 import puzzle.core.parser.ast.parameter.Variance
+import puzzle.core.parser.ast.parameter.VarianceKind
 import puzzle.core.parser.parser.expression.IdentifierTarget
 import puzzle.core.parser.parser.expression.parseIdentifier
 import puzzle.core.parser.parser.parameter.parseTypeExpansion
 import puzzle.core.parser.parser.type.parseTypeReference
 import puzzle.core.token.kinds.AssignmentKind.ASSIGN
-import puzzle.core.token.kinds.OperatorKind.BIT_AND
-import puzzle.core.token.kinds.OperatorKind.GT
+import puzzle.core.token.kinds.ContextualKind.OUT
+import puzzle.core.token.kinds.OperatorKind.*
 import puzzle.core.token.kinds.SeparatorKind.COMMA
 import puzzle.core.token.kinds.SymbolKind.COLON
-import puzzle.core.token.kinds.VarianceKind
-import puzzle.core.token.kinds.VarianceKind.IN
-import puzzle.core.token.kinds.VarianceKind.OUT
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseTypeParameters(): List<TypeParameter> {
@@ -64,7 +62,9 @@ private fun parseTypeParameter(): TypeParameter {
 
 context(cursor: PzlTokenCursor)
 private fun parseVariance(): Variance? {
-	return if (cursor.match { it == IN || it == OUT }) {
-		Variance(cursor.previous.kind as VarianceKind, cursor.previous.location)
-	} else null
+	return when {
+		cursor.match(IN) -> Variance(VarianceKind.IN, cursor.previous.location)
+		cursor.match(OUT) -> Variance(VarianceKind.OUT, cursor.previous.location)
+		else -> null
+	}
 }

@@ -62,17 +62,11 @@ fun tryParseExpressionChain(): Expression? {
 
 private val endKinds = setOf(
 	EOF,
-	RPAREN,
-	RBRACE,
-	RBRACKET,
-	COLON,
-	COMMA,
-	ARROW,
-	IF,
-	ELSE,
+	RPAREN, RBRACE, RBRACKET,
+	COLON, COMMA, ARROW,
+	IF, ELSE,
 	WHILE,
-	GET,
-	SET
+	GET, SET
 )
 
 context(_: PzlContext, cursor: PzlTokenCursor)

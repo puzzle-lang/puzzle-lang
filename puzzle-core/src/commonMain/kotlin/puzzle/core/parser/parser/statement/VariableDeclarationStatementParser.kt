@@ -4,10 +4,10 @@ import puzzle.core.exception.syntaxError
 import puzzle.core.model.PzlContext
 import puzzle.core.model.span
 import puzzle.core.parser.PzlTokenCursor
-import puzzle.core.parser.ast.statement.MultiVariableSpec
+import puzzle.core.parser.ast.statement.DestructureVariableSpec
 import puzzle.core.parser.ast.statement.SingleVariableSpec
+import puzzle.core.parser.ast.statement.Variable
 import puzzle.core.parser.ast.statement.VariableDeclarationStatement
-import puzzle.core.parser.ast.statement.VariablePattern
 import puzzle.core.parser.parser.expression.IdentifierTarget
 import puzzle.core.parser.parser.expression.parseExpressionChain
 import puzzle.core.parser.parser.expression.parseIdentifier
@@ -38,11 +38,11 @@ fun parseVariableDeclarationStatement(): VariableDeclarationStatement {
 		parseExpressionChain()
 	} else {
 		when (variableSpec) {
-			is SingleVariableSpec if variableSpec.type == null -> {
+			is SingleVariableSpec if variableSpec.variable.type == null -> {
 				syntaxError("变量缺少类型", cursor.previous.location.end)
 			}
 			
-			is MultiVariableSpec -> {
+			is DestructureVariableSpec -> {
 				syntaxError("解构参数必须赋值", cursor.previous.location.end)
 			}
 			
@@ -68,13 +68,14 @@ private fun parseSingleVariableSpec(isMutable: Boolean): SingleVariableSpec {
 		parseTypeReference(allowLambda = true)
 	} else null
 	val end = cursor.previous.location
-	return SingleVariableSpec(isMutable, name, type, start span end)
+	val variable = Variable(isMutable, name, type, start span end)
+	return SingleVariableSpec(variable)
 }
 
 context(_: PzlContext, cursor: PzlTokenCursor)
-private fun parseMultiVariableSpec(defaultMutable: Boolean? = null): MultiVariableSpec {
+private fun parseMultiVariableSpec(defaultMutable: Boolean? = null): DestructureVariableSpec {
 	val start = cursor.previous.location
-	val patterns = buildList {
+	val varaibles = buildList {
 		while (!cursor.match(RBRACKET)) {
 			val start = cursor.current.location
 			var isMutable = when {
@@ -98,18 +99,18 @@ private fun parseMultiVariableSpec(defaultMutable: Boolean? = null): MultiVariab
 				parseTypeReference(allowLambda = true)
 			} else null
 			val end = cursor.previous.location
-			this += VariablePattern(isMutable, name, type, start span end)
+			this += Variable(isMutable, name, type, start span end)
 			if (!cursor.check(RBRACKET)) {
-				cursor.expect(COMMA, "解构列表缺少 ','")
+				cursor.expect(COMMA, "解构变量列表缺少 ','")
 			}
 		}
 	}
-	if (patterns.isEmpty()) {
+	if (varaibles.isEmpty()) {
 		syntaxError("解构列表缺少变量", cursor.previous)
 	}
-	if (patterns.all { it.name.isAnonymousBinding }) {
-		syntaxError("解构列表不允许全部匿名绑定", patterns.first().name)
+	if (varaibles.all { it.name.isAnonymousBinding }) {
+		syntaxError("解构列表不允许全部匿名绑定", varaibles.first().name)
 	}
 	val end = cursor.previous.location
-	return MultiVariableSpec(patterns, start span end)
+	return DestructureVariableSpec(varaibles, start span end)
 }

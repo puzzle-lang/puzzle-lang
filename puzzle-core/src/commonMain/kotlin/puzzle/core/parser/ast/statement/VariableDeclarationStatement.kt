@@ -19,20 +19,18 @@ sealed interface VariableSpec : AstNode
 
 @Serializable
 class SingleVariableSpec(
-	val isMutable: Boolean,
-	val name: Identifier,
-	val type: TypeReference?,
+	val variable: Variable,
+	override val location: SourceLocation = variable.location,
+) : VariableSpec
+
+@Serializable
+class DestructureVariableSpec(
+	val variables: List<Variable>,
 	override val location: SourceLocation,
 ) : VariableSpec
 
 @Serializable
-class MultiVariableSpec(
-	val patterns: List<VariablePattern>,
-	override val location: SourceLocation,
-) : VariableSpec
-
-@Serializable
-class VariablePattern(
+class Variable(
 	val isMutable: Boolean,
 	val name: Identifier,
 	val type: TypeReference?,
