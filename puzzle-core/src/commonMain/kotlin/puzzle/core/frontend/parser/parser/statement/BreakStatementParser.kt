@@ -4,7 +4,7 @@ import puzzle.core.frontend.model.PzlContext
 import puzzle.core.frontend.model.equalsLine
 import puzzle.core.frontend.model.span
 import puzzle.core.frontend.parser.PzlTokenCursor
-import puzzle.core.frontend.parser.ast.statement.BreakStatement
+import puzzle.core.frontend.ast.statement.BreakStatement
 import puzzle.core.frontend.parser.parser.expression.IdentifierTarget
 import puzzle.core.frontend.parser.parser.expression.parseExpressionSpec
 import puzzle.core.frontend.parser.parser.expression.parseIdentifier

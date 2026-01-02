@@ -4,8 +4,8 @@ import puzzle.core.exception.syntaxError
 import puzzle.core.frontend.model.PzlContext
 import puzzle.core.frontend.model.span
 import puzzle.core.frontend.parser.PzlTokenCursor
-import puzzle.core.frontend.parser.ast.parameter.LambdaContextReceiver
-import puzzle.core.frontend.parser.ast.parameter.LambdaContextSpec
+import puzzle.core.frontend.ast.parameter.LambdaContextReceiver
+import puzzle.core.frontend.ast.parameter.LambdaContextSpec
 import puzzle.core.frontend.parser.parser.expression.checkIdentifier
 import puzzle.core.frontend.parser.parser.parameter.parseTypeExpansion
 import puzzle.core.frontend.parser.parser.type.parseTypeReference

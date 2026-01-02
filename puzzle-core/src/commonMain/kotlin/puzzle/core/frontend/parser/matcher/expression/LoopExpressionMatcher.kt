@@ -3,8 +3,8 @@ package puzzle.core.frontend.parser.matcher.expression
 import puzzle.core.exception.syntaxError
 import puzzle.core.frontend.model.PzlContext
 import puzzle.core.frontend.parser.PzlTokenCursor
-import puzzle.core.frontend.parser.ast.expression.Expression
-import puzzle.core.frontend.parser.ast.expression.LoopExpression
+import puzzle.core.frontend.ast.expression.Expression
+import puzzle.core.frontend.ast.expression.LoopExpression
 import puzzle.core.frontend.parser.parser.expression.matchLabel
 import puzzle.core.frontend.parser.parser.expression.parseLoopExpression
 import puzzle.core.frontend.token.kinds.ControlFlowKind.LOOP

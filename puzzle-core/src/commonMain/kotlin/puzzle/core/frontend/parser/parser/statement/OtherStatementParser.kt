@@ -4,14 +4,14 @@ import puzzle.core.exception.syntaxError
 import puzzle.core.frontend.model.PzlContext
 import puzzle.core.frontend.model.span
 import puzzle.core.frontend.parser.PzlTokenCursor
-import puzzle.core.frontend.parser.ast.Assignment
-import puzzle.core.frontend.parser.ast.expression.CompoundAssignable
-import puzzle.core.frontend.parser.ast.expression.CompoundAssignableProxy
-import puzzle.core.frontend.parser.ast.expression.DirectAssignable
-import puzzle.core.frontend.parser.ast.statement.CompoundAssignmentStatement
-import puzzle.core.frontend.parser.ast.statement.DirectAssignmentStatement
-import puzzle.core.frontend.parser.ast.statement.ExpressionStatement
-import puzzle.core.frontend.parser.ast.statement.Statement
+import puzzle.core.frontend.ast.Assignment
+import puzzle.core.frontend.ast.expression.CompoundAssignable
+import puzzle.core.frontend.ast.expression.CompoundAssignableProxy
+import puzzle.core.frontend.ast.expression.DirectAssignable
+import puzzle.core.frontend.ast.statement.CompoundAssignmentStatement
+import puzzle.core.frontend.ast.statement.DirectAssignmentStatement
+import puzzle.core.frontend.ast.statement.ExpressionStatement
+import puzzle.core.frontend.ast.statement.Statement
 import puzzle.core.frontend.parser.parser.expression.parseExpressionChain
 import puzzle.core.frontend.token.kinds.AssignmentKind
 

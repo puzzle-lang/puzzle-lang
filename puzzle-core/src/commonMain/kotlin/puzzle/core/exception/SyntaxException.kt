@@ -1,17 +1,19 @@
 package puzzle.core.exception
 
+import kotlinx.io.files.Path
+import puzzle.core.frontend.ast.AstNode
 import puzzle.core.frontend.model.PzlContext
 import puzzle.core.frontend.model.SourcePosition
 import puzzle.core.frontend.model.calcPosition
-import puzzle.core.frontend.parser.ast.AstNode
 import puzzle.core.frontend.token.PzlToken
+import puzzle.core.util.absolutePath
 
 private class SyntaxException(
 	message: String,
-	sourcePath: String,
+	sourcePath: Path,
 	position: SourcePosition,
 	token: PzlToken?,
-) : Exception("错误位置: $sourcePath:$position${getTokenInfo(token)}$message.")
+) : Exception("错误位置: ${sourcePath.absolutePath}:$position${getTokenInfo(token)}$message.")
 
 private fun getTokenInfo(token: PzlToken?): String {
 	if (token == null) return " "

@@ -3,7 +3,7 @@ package puzzle.core.frontend.parser.matcher.declaration.toplevel
 import puzzle.core.frontend.model.PzlContext
 import puzzle.core.frontend.model.SourceLocation
 import puzzle.core.frontend.parser.PzlTokenCursor
-import puzzle.core.frontend.parser.ast.declaration.TraitDeclaration
+import puzzle.core.frontend.ast.declaration.TraitDeclaration
 import puzzle.core.frontend.parser.matcher.declaration.DeclarationHeader
 import puzzle.core.frontend.parser.parser.ModifierTarget
 import puzzle.core.frontend.parser.parser.declaration.parseTraitDeclaration

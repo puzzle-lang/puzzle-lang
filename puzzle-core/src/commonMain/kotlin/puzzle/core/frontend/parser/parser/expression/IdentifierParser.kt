@@ -3,7 +3,7 @@ package puzzle.core.frontend.parser.parser.expression
 import puzzle.core.exception.syntaxError
 import puzzle.core.frontend.model.PzlContext
 import puzzle.core.frontend.parser.PzlTokenCursor
-import puzzle.core.frontend.parser.ast.expression.Identifier
+import puzzle.core.frontend.ast.expression.Identifier
 import puzzle.core.frontend.token.PzlToken
 import puzzle.core.frontend.token.kinds.AccessorKind.GET
 import puzzle.core.frontend.token.kinds.AccessorKind.SET

@@ -4,9 +4,9 @@ import puzzle.core.exception.syntaxError
 import puzzle.core.frontend.model.PzlContext
 import puzzle.core.frontend.model.span
 import puzzle.core.frontend.parser.PzlTokenCursor
-import puzzle.core.frontend.parser.ast.expression.ExpressionSpec
-import puzzle.core.frontend.parser.ast.expression.MultiExpressionSpec
-import puzzle.core.frontend.parser.ast.expression.SingleExpressionSpec
+import puzzle.core.frontend.ast.expression.ExpressionSpec
+import puzzle.core.frontend.ast.expression.MultiExpressionSpec
+import puzzle.core.frontend.ast.expression.SingleExpressionSpec
 import puzzle.core.frontend.token.kinds.BracketKind.End.RBRACKET
 import puzzle.core.frontend.token.kinds.BracketKind.Start.LBRACKET
 import puzzle.core.frontend.token.kinds.SeparatorKind

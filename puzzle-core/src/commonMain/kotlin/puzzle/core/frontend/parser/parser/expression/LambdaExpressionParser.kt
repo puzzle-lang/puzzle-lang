@@ -4,8 +4,8 @@ import puzzle.core.frontend.model.PzlContext
 import puzzle.core.frontend.model.equalsLine
 import puzzle.core.frontend.model.span
 import puzzle.core.frontend.parser.PzlTokenCursor
-import puzzle.core.frontend.parser.ast.expression.LambdaExpression
-import puzzle.core.frontend.parser.ast.parameter.ParameterReference
+import puzzle.core.frontend.ast.expression.LambdaExpression
+import puzzle.core.frontend.ast.parameter.ParameterReference
 import puzzle.core.frontend.parser.parser.statement.parseStatements
 import puzzle.core.frontend.parser.parser.type.parseTypeReference
 import puzzle.core.frontend.token.kinds.BracketKind.Start.LBRACE

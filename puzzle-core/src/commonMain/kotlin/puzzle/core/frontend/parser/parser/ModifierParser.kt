@@ -3,7 +3,7 @@ package puzzle.core.frontend.parser.parser
 import puzzle.core.exception.syntaxError
 import puzzle.core.frontend.model.PzlContext
 import puzzle.core.frontend.parser.PzlTokenCursor
-import puzzle.core.frontend.parser.ast.Modifier
+import puzzle.core.frontend.ast.Modifier
 import puzzle.core.frontend.token.kinds.ModifierKind
 import puzzle.core.frontend.token.kinds.ModifierKind.*
 import puzzle.core.frontend.token.kinds.SymbolKind.COLON

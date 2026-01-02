@@ -5,7 +5,7 @@ import puzzle.core.frontend.model.PzlContext
 import puzzle.core.frontend.model.SourceLocation
 import puzzle.core.frontend.model.span
 import puzzle.core.frontend.parser.PzlTokenCursor
-import puzzle.core.frontend.parser.ast.declaration.AnnotationDeclaration
+import puzzle.core.frontend.ast.declaration.AnnotationDeclaration
 import puzzle.core.frontend.parser.matcher.declaration.DeclarationHeader
 import puzzle.core.frontend.parser.parser.expression.IdentifierTarget
 import puzzle.core.frontend.parser.parser.expression.parseIdentifier

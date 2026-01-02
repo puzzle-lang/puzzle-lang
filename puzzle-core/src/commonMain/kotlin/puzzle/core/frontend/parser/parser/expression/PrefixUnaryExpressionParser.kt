@@ -3,11 +3,11 @@ package puzzle.core.frontend.parser.parser.expression
 import puzzle.core.exception.syntaxError
 import puzzle.core.frontend.model.PzlContext
 import puzzle.core.frontend.parser.PzlTokenCursor
-import puzzle.core.frontend.parser.ast.Operator
-import puzzle.core.frontend.parser.ast.expression.Identifier
-import puzzle.core.frontend.parser.ast.expression.MemberAccessExpression
-import puzzle.core.frontend.parser.ast.expression.PrefixUnaryExpression
-import puzzle.core.frontend.parser.ast.expression.SuffixUnaryExpression
+import puzzle.core.frontend.ast.Operator
+import puzzle.core.frontend.ast.expression.Identifier
+import puzzle.core.frontend.ast.expression.MemberAccessExpression
+import puzzle.core.frontend.ast.expression.PrefixUnaryExpression
+import puzzle.core.frontend.ast.expression.SuffixUnaryExpression
 import puzzle.core.frontend.token.kinds.OperatorKind
 import puzzle.core.frontend.token.kinds.OperatorKind.DOUBLE_MINUS
 import puzzle.core.frontend.token.kinds.OperatorKind.DOUBLE_PLUS

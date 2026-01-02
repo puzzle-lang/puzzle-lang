@@ -4,9 +4,9 @@ import puzzle.core.exception.syntaxError
 import puzzle.core.frontend.model.PzlContext
 import puzzle.core.frontend.model.span
 import puzzle.core.frontend.parser.PzlTokenCursor
-import puzzle.core.frontend.parser.ast.type.SuperConstructorCall
-import puzzle.core.frontend.parser.ast.type.SuperType
-import puzzle.core.frontend.parser.ast.type.SuperTypeReference
+import puzzle.core.frontend.ast.type.SuperConstructorCall
+import puzzle.core.frontend.ast.type.SuperType
+import puzzle.core.frontend.ast.type.SuperTypeReference
 import puzzle.core.frontend.parser.parser.expression.ArgumentTarget
 import puzzle.core.frontend.parser.parser.expression.parseArguments
 import puzzle.core.frontend.token.kinds.BracketKind.Start.LPAREN

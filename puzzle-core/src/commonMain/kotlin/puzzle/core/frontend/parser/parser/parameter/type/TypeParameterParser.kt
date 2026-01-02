@@ -4,9 +4,9 @@ import puzzle.core.exception.syntaxError
 import puzzle.core.frontend.model.PzlContext
 import puzzle.core.frontend.model.span
 import puzzle.core.frontend.parser.PzlTokenCursor
-import puzzle.core.frontend.parser.ast.parameter.TypeParameter
-import puzzle.core.frontend.parser.ast.parameter.Variance
-import puzzle.core.frontend.parser.ast.parameter.VarianceKind
+import puzzle.core.frontend.ast.parameter.TypeParameter
+import puzzle.core.frontend.ast.parameter.Variance
+import puzzle.core.frontend.ast.parameter.VarianceKind
 import puzzle.core.frontend.parser.parser.expression.IdentifierTarget
 import puzzle.core.frontend.parser.parser.expression.parseIdentifier
 import puzzle.core.frontend.parser.parser.parameter.parseTypeExpansion

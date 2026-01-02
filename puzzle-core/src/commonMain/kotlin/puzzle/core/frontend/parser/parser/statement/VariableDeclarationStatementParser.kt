@@ -4,10 +4,10 @@ import puzzle.core.exception.syntaxError
 import puzzle.core.frontend.model.PzlContext
 import puzzle.core.frontend.model.span
 import puzzle.core.frontend.parser.PzlTokenCursor
-import puzzle.core.frontend.parser.ast.statement.DestructureVariableSpec
-import puzzle.core.frontend.parser.ast.statement.SingleVariableSpec
-import puzzle.core.frontend.parser.ast.statement.Variable
-import puzzle.core.frontend.parser.ast.statement.VariableDeclarationStatement
+import puzzle.core.frontend.ast.statement.DestructureVariableSpec
+import puzzle.core.frontend.ast.statement.SingleVariableSpec
+import puzzle.core.frontend.ast.statement.Variable
+import puzzle.core.frontend.ast.statement.VariableDeclarationStatement
 import puzzle.core.frontend.parser.parser.expression.IdentifierTarget
 import puzzle.core.frontend.parser.parser.expression.parseExpressionChain
 import puzzle.core.frontend.parser.parser.expression.parseIdentifier

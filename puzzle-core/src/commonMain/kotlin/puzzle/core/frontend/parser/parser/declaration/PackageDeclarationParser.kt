@@ -3,7 +3,7 @@ package puzzle.core.frontend.parser.parser.declaration
 import puzzle.core.frontend.model.PzlContext
 import puzzle.core.frontend.model.span
 import puzzle.core.frontend.parser.PzlTokenCursor
-import puzzle.core.frontend.parser.ast.declaration.PackageDeclaration
+import puzzle.core.frontend.ast.declaration.PackageDeclaration
 import puzzle.core.frontend.parser.parser.expression.IdentifierTarget
 import puzzle.core.frontend.parser.parser.expression.parseIdentifierString
 import puzzle.core.frontend.token.kinds.AccessKind.DOT

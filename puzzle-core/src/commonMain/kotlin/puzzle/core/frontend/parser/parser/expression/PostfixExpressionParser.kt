@@ -4,8 +4,8 @@ import puzzle.core.frontend.model.PzlContext
 import puzzle.core.frontend.model.equalsLine
 import puzzle.core.frontend.model.span
 import puzzle.core.frontend.parser.PzlTokenCursor
-import puzzle.core.frontend.parser.ast.Operator
-import puzzle.core.frontend.parser.ast.expression.*
+import puzzle.core.frontend.ast.Operator
+import puzzle.core.frontend.ast.expression.*
 import puzzle.core.frontend.token.kinds.AccessKind.*
 import puzzle.core.frontend.token.kinds.BracketKind.Start.LBRACKET
 import puzzle.core.frontend.token.kinds.BracketKind.Start.LPAREN

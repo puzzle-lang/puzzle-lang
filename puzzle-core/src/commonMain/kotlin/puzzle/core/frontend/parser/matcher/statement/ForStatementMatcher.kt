@@ -2,7 +2,7 @@ package puzzle.core.frontend.parser.matcher.statement
 
 import puzzle.core.frontend.model.PzlContext
 import puzzle.core.frontend.parser.PzlTokenCursor
-import puzzle.core.frontend.parser.ast.statement.ForStatement
+import puzzle.core.frontend.ast.statement.ForStatement
 import puzzle.core.frontend.parser.parser.expression.matchLabel
 import puzzle.core.frontend.parser.parser.statement.parseForStatement
 import puzzle.core.frontend.token.kinds.ControlFlowKind.FOR

@@ -3,7 +3,7 @@ package puzzle.core.frontend.parser.parser
 import puzzle.core.frontend.model.PzlContext
 import puzzle.core.frontend.model.span
 import puzzle.core.frontend.parser.PzlTokenCursor
-import puzzle.core.frontend.parser.ast.AnnotationCall
+import puzzle.core.frontend.ast.AnnotationCall
 import puzzle.core.frontend.parser.parser.expression.ArgumentTarget
 import puzzle.core.frontend.parser.parser.expression.parseArguments
 import puzzle.core.frontend.parser.parser.type.parseNamedType

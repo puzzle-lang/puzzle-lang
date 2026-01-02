@@ -3,7 +3,7 @@ package puzzle.core.frontend.parser.parser.expression
 import puzzle.core.exception.syntaxError
 import puzzle.core.frontend.model.PzlContext
 import puzzle.core.frontend.parser.PzlTokenCursor
-import puzzle.core.frontend.parser.ast.expression.Argument
+import puzzle.core.frontend.ast.expression.Argument
 import puzzle.core.frontend.token.kinds.AssignmentKind.ASSIGN
 import puzzle.core.frontend.token.kinds.BracketKind
 import puzzle.core.frontend.token.kinds.BracketKind.End.RBRACKET

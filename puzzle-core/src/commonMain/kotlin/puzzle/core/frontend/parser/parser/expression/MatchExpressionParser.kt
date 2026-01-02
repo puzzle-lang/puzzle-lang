@@ -4,8 +4,8 @@ import puzzle.core.exception.syntaxError
 import puzzle.core.frontend.model.PzlContext
 import puzzle.core.frontend.model.span
 import puzzle.core.frontend.parser.PzlTokenCursor
-import puzzle.core.frontend.parser.ast.expression.*
-import puzzle.core.frontend.parser.ast.statement.Statement
+import puzzle.core.frontend.ast.expression.*
+import puzzle.core.frontend.ast.statement.Statement
 import puzzle.core.frontend.parser.parser.statement.parseStatement
 import puzzle.core.frontend.parser.parser.statement.parseStatements
 import puzzle.core.frontend.parser.parser.type.parseTypeReference

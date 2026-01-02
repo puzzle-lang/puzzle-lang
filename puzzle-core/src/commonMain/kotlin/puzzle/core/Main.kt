@@ -2,12 +2,11 @@ package puzzle.core
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
-import kotlinx.io.buffered
 import kotlinx.io.files.Path
-import kotlinx.io.writeString
-import puzzle.core.frontend.model.Project
+import puzzle.core.frontend.ast.AstJsonWriter
 import puzzle.core.frontend.processProject
-import puzzle.core.util.*
+import puzzle.core.util.getCurrentMemoryUsage
+import kotlin.time.measureTime
 import kotlin.time.measureTimedValue
 
 fun main(args: Array<out String>) {
@@ -31,8 +30,8 @@ private fun build(projectPath: Path) = runBlocking(Dispatchers.Default) {
 	val usage = getCurrentMemoryUsage()
 	println("执行用时: ${value.duration}")
 	println("内存使用: $usage")
-	saveToBuild(projectPath, value.value)
-	println("AST 保存完成")
+	val duration = measureTime { AstJsonWriter.write(projectPath, value.value) }
+	println("AST已保存: $duration")
 }
 
 private fun help() {
@@ -64,25 +63,4 @@ private fun version() {
 
 private fun unknown() {
 	println("未知命令, 请使用: puzzle -h 或 puzzle --help 查看使用帮助")
-}
-
-private fun saveToBuild(projectPath: Path, project: Project) {
-	val projectPath = projectPath.absolutePath
-	val buildPath = Path(projectPath, "build", "ast")
-	if (buildPath.exists()) {
-		buildPath.delete()
-	}
-	project.modules.forEach { module ->
-		module.nodes.forEach { node ->
-			val path = node.path.removePrefix(projectPath).removeSuffix(".pzl")
-			val astPath = Path(buildPath, "$path.json")
-			if (astPath.parent == null) return@forEach
-			if (!astPath.parent!!.exists()) {
-				astPath.parent!!.createDirectories()
-			}
-			astPath.sink().buffered().use {
-				it.writeString(json.encodeToString(node))
-			}
-		}
-	}
 }

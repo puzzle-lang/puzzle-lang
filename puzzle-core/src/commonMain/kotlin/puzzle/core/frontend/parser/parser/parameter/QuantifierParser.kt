@@ -2,10 +2,10 @@ package puzzle.core.frontend.parser.parser.parameter
 
 import puzzle.core.frontend.model.PzlContext
 import puzzle.core.frontend.parser.PzlTokenCursor
-import puzzle.core.frontend.parser.ast.parameter.Quantifier
-import puzzle.core.frontend.parser.ast.parameter.TypeExpansion
-import puzzle.core.frontend.parser.ast.parameter.TypeExpansionKind
-import puzzle.core.frontend.parser.ast.parameter.VarargKind
+import puzzle.core.frontend.ast.parameter.Quantifier
+import puzzle.core.frontend.ast.parameter.TypeExpansion
+import puzzle.core.frontend.ast.parameter.TypeExpansionKind
+import puzzle.core.frontend.ast.parameter.VarargKind
 import puzzle.core.frontend.token.kinds.OperatorKind.PLUS
 import puzzle.core.frontend.token.kinds.OperatorKind.STAR
 import puzzle.core.frontend.token.kinds.SymbolKind.PLUS_DOUBLE_DOT

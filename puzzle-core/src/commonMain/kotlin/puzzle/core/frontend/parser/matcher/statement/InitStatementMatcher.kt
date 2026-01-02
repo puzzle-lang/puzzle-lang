@@ -2,7 +2,7 @@ package puzzle.core.frontend.parser.matcher.statement
 
 import puzzle.core.frontend.model.PzlContext
 import puzzle.core.frontend.parser.PzlTokenCursor
-import puzzle.core.frontend.parser.ast.statement.InitStatement
+import puzzle.core.frontend.ast.statement.InitStatement
 import puzzle.core.frontend.parser.parser.statement.parseInitStatement
 import puzzle.core.frontend.token.kinds.ContextualKind.INIT
 

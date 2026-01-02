@@ -2,7 +2,7 @@ package puzzle.core.frontend.parser.parser.expression
 
 import puzzle.core.frontend.model.PzlContext
 import puzzle.core.frontend.parser.PzlTokenCursor
-import puzzle.core.frontend.parser.ast.expression.*
+import puzzle.core.frontend.ast.expression.*
 import puzzle.core.frontend.token.kinds.BooleanKind.FALSE
 import puzzle.core.frontend.token.kinds.BooleanKind.TRUE
 import puzzle.core.frontend.token.kinds.CharKind

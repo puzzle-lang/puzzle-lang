@@ -3,7 +3,7 @@ package puzzle.core.frontend.parser.parser.statement
 import puzzle.core.frontend.model.PzlContext
 import puzzle.core.frontend.model.span
 import puzzle.core.frontend.parser.PzlTokenCursor
-import puzzle.core.frontend.parser.ast.statement.ContinueStatement
+import puzzle.core.frontend.ast.statement.ContinueStatement
 import puzzle.core.frontend.parser.parser.expression.IdentifierTarget
 import puzzle.core.frontend.parser.parser.expression.parseIdentifier
 import puzzle.core.frontend.token.kinds.SymbolKind.HASH

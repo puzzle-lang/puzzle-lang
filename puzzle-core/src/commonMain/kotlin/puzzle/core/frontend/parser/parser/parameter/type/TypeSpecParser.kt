@@ -4,7 +4,7 @@ import puzzle.core.exception.syntaxError
 import puzzle.core.frontend.model.PzlContext
 import puzzle.core.frontend.model.span
 import puzzle.core.frontend.parser.PzlTokenCursor
-import puzzle.core.frontend.parser.ast.parameter.TypeSpec
+import puzzle.core.frontend.ast.parameter.TypeSpec
 import puzzle.core.frontend.token.kinds.ContextualKind.REIFIED
 import puzzle.core.frontend.token.kinds.ContextualKind.TYPE
 import puzzle.core.frontend.token.kinds.OperatorKind.LT

@@ -4,10 +4,10 @@ import puzzle.core.exception.syntaxError
 import puzzle.core.frontend.model.PzlContext
 import puzzle.core.frontend.model.SourceLocation
 import puzzle.core.frontend.parser.PzlTokenCursor
-import puzzle.core.frontend.parser.ast.declaration.CtorDeclaration
-import puzzle.core.frontend.parser.ast.declaration.Declaration
-import puzzle.core.frontend.parser.ast.declaration.InitDeclaration
-import puzzle.core.frontend.parser.ast.declaration.TopLevelAllowedDeclaration
+import puzzle.core.frontend.ast.declaration.CtorDeclaration
+import puzzle.core.frontend.ast.declaration.Declaration
+import puzzle.core.frontend.ast.declaration.InitDeclaration
+import puzzle.core.frontend.ast.declaration.TopLevelAllowedDeclaration
 import puzzle.core.frontend.parser.matcher.declaration.DeclarationHeader
 import puzzle.core.frontend.parser.matcher.declaration.member.MemberDeclarationMatcher
 import puzzle.core.frontend.parser.matcher.declaration.toplevel.DeclarationMatcher

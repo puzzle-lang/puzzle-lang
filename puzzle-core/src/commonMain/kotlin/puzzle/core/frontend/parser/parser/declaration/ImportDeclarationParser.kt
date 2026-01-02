@@ -3,9 +3,9 @@ package puzzle.core.frontend.parser.parser.declaration
 import puzzle.core.frontend.model.PzlContext
 import puzzle.core.frontend.model.span
 import puzzle.core.frontend.parser.PzlTokenCursor
-import puzzle.core.frontend.parser.ast.declaration.ImportDeclaration
-import puzzle.core.frontend.parser.ast.declaration.ImportScope
-import puzzle.core.frontend.parser.ast.expression.Identifier
+import puzzle.core.frontend.ast.declaration.ImportDeclaration
+import puzzle.core.frontend.ast.declaration.ImportScope
+import puzzle.core.frontend.ast.expression.Identifier
 import puzzle.core.frontend.parser.parser.expression.IdentifierTarget
 import puzzle.core.frontend.parser.parser.expression.matchIdentifier
 import puzzle.core.frontend.parser.parser.expression.parseIdentifier
