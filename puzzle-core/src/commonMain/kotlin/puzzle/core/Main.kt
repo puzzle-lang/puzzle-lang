@@ -3,8 +3,8 @@ package puzzle.core
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.io.files.Path
-import puzzle.core.frontend.ast.AstJsonWriter
-import puzzle.core.frontend.processProject
+import puzzle.core.frontend.ast.AstDebugWriter
+import puzzle.core.frontend.processFrontend
 import puzzle.core.util.getCurrentMemoryUsage
 import kotlin.time.measureTime
 import kotlin.time.measureTimedValue
@@ -13,9 +13,9 @@ fun main(args: Array<out String>) {
 	val command = args.firstOrNull() ?: return help()
 	when (command) {
 		"build" -> {
-			val projectDir = args.drop(1).firstOrNull()
+			val projectPath = args.drop(1).firstOrNull()
+				?.let { Path(it) }
 				?: return println("缺少项目路径, 使用 puzzle help 查看使用手册")
-			val projectPath = Path(projectDir)
 			build(projectPath)
 		}
 		
@@ -26,12 +26,12 @@ fun main(args: Array<out String>) {
 }
 
 private fun build(projectPath: Path) = runBlocking(Dispatchers.Default) {
-	val value = measureTimedValue { processProject(projectPath) }
-	val usage = getCurrentMemoryUsage()
+	val value = measureTimedValue { processFrontend(projectPath) }
 	println("执行用时: ${value.duration}")
+	val usage = getCurrentMemoryUsage()
 	println("内存使用: $usage")
-	val duration = measureTime { AstJsonWriter.write(projectPath, value.value) }
-	println("AST已保存: $duration")
+	val writeDuration = measureTime { AstDebugWriter.write(projectPath, value.value) }
+	println("AST已保存: $writeDuration")
 }
 
 private fun help() {
@@ -50,7 +50,7 @@ private fun help() {
 private fun version() {
 	val message = """
         ╭───────────────────────────┬──────────────╮
-        │ Puzzle CLI                │ v0.1.2-dev   │
+        │ Puzzle CLI                │ v0.1.3-dev   │
         ├───────────────────────────┼──────────────┤
         │ kotlin                    │ v2.3.0       │
         │ kotlinx-coroutines-core   │ v1.10.2      │

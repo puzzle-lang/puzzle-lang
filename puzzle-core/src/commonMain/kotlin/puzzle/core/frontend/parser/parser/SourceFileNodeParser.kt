@@ -1,10 +1,10 @@
 package puzzle.core.frontend.parser.parser
 
+import puzzle.core.frontend.ast.SourceFileNode
+import puzzle.core.frontend.ast.declaration.ImportDeclaration
 import puzzle.core.frontend.model.PzlContext
 import puzzle.core.frontend.model.span
 import puzzle.core.frontend.parser.PzlTokenCursor
-import puzzle.core.frontend.ast.SourceFileNode
-import puzzle.core.frontend.ast.declaration.ImportDeclaration
 import puzzle.core.frontend.parser.parser.declaration.parseDeclarations
 import puzzle.core.frontend.parser.parser.declaration.parseImportDeclaration
 import puzzle.core.frontend.parser.parser.declaration.parsePackageDeclaration

@@ -1,7 +1,7 @@
 package puzzle.core.frontend.lexer.recognition
 
 import puzzle.core.exception.syntaxError
-import puzzle.core.frontend.lexer.PzlLexer
+import puzzle.core.frontend.lexer.TemplateExpressionLexerScanner
 import puzzle.core.frontend.lexer.recognition.StringRecognition.CharType.*
 import puzzle.core.frontend.model.PzlContext
 import puzzle.core.frontend.model.span
@@ -64,7 +64,7 @@ object StringRecognition : TokenRecognition {
 		return PzlToken(kind, start span position + offset)
 	}
 	
-	context(_: PzlContext)
+	context(context: PzlContext)
 	private fun parseTemplate(input: CharArray, start: Int, isMultiLine: Boolean, dollarCount: Int): PzlToken {
 		val offset = if (isMultiLine) 3 else 1
 		var textStart = start + dollarCount + offset
@@ -102,7 +102,7 @@ object StringRecognition : TokenRecognition {
 						
 						EXPRESSION_INTERPOLATION -> {
 							position += dollarCount + 1
-							val tokens = PzlLexer.templateExpression(input, position).scan()
+							val tokens = TemplateExpressionLexerScanner.scan(input, position)
 							if (tokens.isEmpty()) {
 								syntaxError("字符串插值缺少表达式", position)
 							}

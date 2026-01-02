@@ -7,7 +7,7 @@ import kotlinx.serialization.json.Json
 import puzzle.core.frontend.model.Project
 import puzzle.core.util.*
 
-object AstJsonWriter {
+object AstDebugWriter {
 	
 	private val json = Json {
 		prettyPrint = true
