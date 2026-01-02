@@ -1,8 +1,9 @@
 package puzzle.core.frontend
 
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.coroutineScope
 import kotlinx.io.files.Path
 import puzzle.core.frontend.discovery.collectProjectSource
 import puzzle.core.frontend.lexer.PzlLexer
@@ -16,12 +17,12 @@ import puzzle.core.util.absolutePath
 import puzzle.core.util.readText
 import kotlin.time.measureTimedValue
 
-fun processProject(projectPath: Path): Project = runBlocking {
+suspend fun processProject(projectPath: Path): Project = coroutineScope {
 	val projectSource = collectProjectSource(projectPath)
 	val jobs = projectSource.moduleSources.map { moduleSource ->
-		async {
+		async(Dispatchers.Default) {
 			val jobs = moduleSource.paths.map { path ->
-				async {
+				async(Dispatchers.Default) {
 					processSourceFile(path)
 				}
 			}

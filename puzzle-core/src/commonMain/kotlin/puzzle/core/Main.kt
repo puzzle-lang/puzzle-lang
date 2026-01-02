@@ -1,5 +1,7 @@
 package puzzle.core
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 import kotlinx.io.buffered
 import kotlinx.io.files.Path
 import kotlinx.io.writeString
@@ -9,24 +11,23 @@ import puzzle.core.util.*
 import kotlin.time.measureTimedValue
 
 fun main(args: Array<out String>) {
-	var projectPath: Path
-	val value = measureTimedValue {
-		val command = args.firstOrNull() ?: return help()
-		when (command) {
-			"build" -> {
-				projectPath = args.drop(1).firstOrNull()
-					?.let { Path(it) }
-					?: return println("缺少项目路径, 使用 puzzle help 查看使用手册")
-				build(projectPath)
-			}
-			
-			"help" -> return help()
-			
-			"version" -> return version()
-			
-			else -> return unknown()
+	val command = args.firstOrNull() ?: return help()
+	when (command) {
+		"build" -> {
+			val projectDir = args.drop(1).firstOrNull()
+				?: return println("缺少项目路径, 使用 puzzle help 查看使用手册")
+			val projectPath = Path(projectDir)
+			build(projectPath)
 		}
+		
+		"help" -> help()
+		"version" -> version()
+		else -> unknown()
 	}
+}
+
+private fun build(projectPath: Path) = runBlocking(Dispatchers.Default) {
+	val value = measureTimedValue { processProject(projectPath) }
 	val usage = getCurrentMemoryUsage()
 	println("执行用时: ${value.duration}")
 	println("内存使用: $usage")
@@ -34,22 +35,31 @@ fun main(args: Array<out String>) {
 	println("AST 保存完成")
 }
 
-private fun build(projectPath: Path): Project {
-	return processProject(projectPath)
-}
-
 private fun help() {
-	val help = """
-		使用方式:
-            puzzle -c --compile Main.pzl [File1.pzl, File2.pzl, ...]    编译 Puzzle (.pzl) 程序文件
-			puzzle -v --version                                         查看 Puzzle 版本信息
-            puzzle -h --help                                            查看 Puzzle 使用帮助
-	""".trimIndent()
-	println(help)
+	val message = """
+        ╭───────────────────────────────┬───────────────────────────────────╮
+        │ Puzzle CLI                    │ Usage Information                 │
+        ├───────────────────────────────┼───────────────────────────────────┤
+        │ puzzle build <project-path>   │ Build the Puzzle project          │
+        │ puzzle version                │ Show Puzzle version information   │
+        │ puzzle help                   │ Show this help message            │
+        ╰───────────────────────────────┴───────────────────────────────────╯
+    """.trimIndent()
+	println(message)
 }
 
 private fun version() {
-	println("当前 Puzzle 版本: 0.1.1, Kotlin 版本: 2.3.0")
+	val message = """
+        ╭───────────────────────────┬──────────────╮
+        │ Puzzle CLI                │ v0.1.2-dev   │
+        ├───────────────────────────┼──────────────┤
+        │ kotlin                    │ v2.3.0       │
+        │ kotlinx-coroutines-core   │ v1.10.2      │
+        │ kotlinx-serialization     │ v1.10-0-RC   │
+        │ kotlinx-io-core           │ v0.8.2       │
+        ╰───────────────────────────┴──────────────╯
+    """.trimIndent()
+	println(message)
 }
 
 private fun unknown() {
