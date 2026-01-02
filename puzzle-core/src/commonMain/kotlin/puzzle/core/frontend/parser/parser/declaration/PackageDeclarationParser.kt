@@ -1,0 +1,23 @@
+package puzzle.core.frontend.parser.parser.declaration
+
+import puzzle.core.frontend.model.PzlContext
+import puzzle.core.frontend.model.span
+import puzzle.core.frontend.parser.PzlTokenCursor
+import puzzle.core.frontend.parser.ast.declaration.PackageDeclaration
+import puzzle.core.frontend.parser.parser.expression.IdentifierTarget
+import puzzle.core.frontend.parser.parser.expression.parseIdentifierString
+import puzzle.core.frontend.token.kinds.AccessKind.DOT
+import puzzle.core.frontend.token.kinds.NamespaceKind.PACKAGE
+
+context(_: PzlContext, cursor: PzlTokenCursor)
+fun parsePackageDeclaration(): PackageDeclaration? {
+	if (!cursor.match(PACKAGE)) return null
+	val start = cursor.previous.location
+	val packages = mutableListOf<String>()
+	packages += parseIdentifierString(IdentifierTarget.PACKAGE)
+	while (cursor.match(DOT)) {
+		packages += parseIdentifierString(IdentifierTarget.PACKAGE)
+	}
+	val end = cursor.previous.location
+	return PackageDeclaration(packages, start span end)
+}

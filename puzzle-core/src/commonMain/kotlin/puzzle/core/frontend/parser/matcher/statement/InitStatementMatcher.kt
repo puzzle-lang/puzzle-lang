@@ -1,0 +1,20 @@
+package puzzle.core.frontend.parser.matcher.statement
+
+import puzzle.core.frontend.model.PzlContext
+import puzzle.core.frontend.parser.PzlTokenCursor
+import puzzle.core.frontend.parser.ast.statement.InitStatement
+import puzzle.core.frontend.parser.parser.statement.parseInitStatement
+import puzzle.core.frontend.token.kinds.ContextualKind.INIT
+
+object InitStatementMatcher : StatementMatcher<InitStatement> {
+	
+	context(cursor: PzlTokenCursor)
+	override fun match(): Boolean {
+		return cursor.match(INIT)
+	}
+	
+	context(_: PzlContext, cursor: PzlTokenCursor)
+	override fun parse(): InitStatement {
+		return parseInitStatement()
+	}
+}

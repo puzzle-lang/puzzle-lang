@@ -1,0 +1,448 @@
+package puzzle.example
+
+/**
+ * 操作符测试
+ */
+fun operatorTest() {
+    var num = 0
+    val plus = 1 + 2
+    val prefixPlus = ++num
+    val suffixPlus = num++
+    val minus = 1 - 2
+    val prefixMinus = --num
+    val suffixPlus = num--
+    val star = 1 * 2
+    val slash = 1 / 2
+    val percent = 1 % 2
+    val group = (++a * b-- / c % d ** e - f) +
+        (g << h >> i >>> j) +
+        (x + y - z)
+    val and = true && false
+    val or = true || false
+    val third = true ? true ? 1 : 2 : 3
+    var i = 0
+    val result = ++i + i++ - ++i + i++
+    val result2 = xx.yy && xx.zz
+}
+
+/**
+ * 调用访问测试
+ */
+fun accessTest() {
+    val value1 = a.b + c.d?.e! - f!.g
+    val value2 = ::println
+    val value3 = super::println
+    val value4 = (1 + 2) + (a.b.c).d.f
+    val value5 = (d).e
+    val value6 = (((((a)))))                                             // 语法分析阶段去除无效 '(' 和 ')'
+    val value7 = getInfos(age = 18, param = "Hello").first()["name"]
+    val value8 = i++.name()
+    val value9 = (++i).name()    // 语法错误
+    val value10 = b ? c ?: (d + 1) * 10 : e ?: f
+    val value11 = b.c in d && e.f() !in g.h[0]
+    val value12 = getLambda()()
+    value11.toString()
+        .test1()
+        .test2()
+        .test3()
+    name ?= "LJW"
+    list[0] = 2
+    val _ = notNeedReturnValue()
+    val [var name: String, val _: String] = xxx()
+    var [name2] = xxx()
+    [val name3, var age3] = xxx()
+    [val age4] = xxx()
+    [_, val age5] = xxx()
+}
+
+/**
+ * 条件控制测试
+ */
+private fun controlFlowTest(): Long? {
+    println("Hello World, 你好世界")
+    val value1 = "你好"
+    println(value1)
+    2000
+    val value2 = if (1 + 2 == 3) "A" else {
+
+    } + 100
+    (if (true) 333L else null) + 200
+    if (true) 100 + 200 + 300 else 400
+    val value3 = if (boolean1) {
+        value31
+    } else if (b) {
+        value32
+    } else {
+        value33
+    }
+    if (true) {
+        2000
+    } else { 2 } * 20 - 1000
+    true && false && false
+
+    callback3 { name: String ->
+
+    }
+}
+
+private const fun add(num1: Int, num2: Int?): Int {
+
+}
+
+const val PI = 3.1415926
+
+private fun callback(callback: ((Int) -> [String, Int])?) {
+
+}
+
+private fun returns(): [Int, String] {
+    return [1, "Name"]
+}
+
+private fun returns1(): ((fun1: () -> String) -> Unit)? {
+
+}
+
+private fun returns2(): [(String, age: Int, String) -> [Int?, String?], String] {
+
+}
+
+/**
+ * ((String)) 与 String 等价
+ * 多行注释测试
+ */
+private fun returns3(): [Int, () -> String] {
+
+}
+
+fun lambda1(param1: (() -> Unit) -> Unit, param2: () -> (Int) -> [String, () -> Unit?]) {
+
+}
+
+fun lambda2(callback: () -> String?) {
+    val add = { n1: Int, n2: Int ->
+        n1 + n2
+    }
+
+    lambda2(callback = { null })
+}
+
+private class Hello(
+    private val param1: String?,
+    private var param2: Int,
+    val param3: () -> Int,
+    param5: (((Int)?)?)
+) {
+
+    /*init {
+        println("Init Hello")
+    }*/
+
+    file fun test(): [Int, String?, pzl.example.Hello] {
+
+    }
+
+    fun test2(): Double? {
+
+    }
+}
+
+fun log(args: String*) {
+    println(args.joinToString())
+}
+
+trait Logger {
+
+    fun log(args: String?+)
+}
+
+mixin LoggerMixin on Logger {
+
+    override fun log(args: String+) {
+        println($"[LoggerMixin]: ${args.joinToString()}")
+    }
+}
+
+class Player : Logger with LoggerMixin {
+
+    fun start() {
+        println("Start")
+    }
+}
+
+trait Runnable {
+
+    fun run2()
+}
+
+class RunnableImpl : Runnable {
+
+    final override fun run2() {
+
+    }
+}
+
+class Test2 {
+
+    object {            // Test2.xxx
+
+    }
+
+    object Name {       // Test2.Name.xxx
+
+    }
+}
+
+object Object1 {
+
+    object Object2 {
+
+        object Object3
+    }
+}
+
+abstract class AbstractClass {
+
+    fun test1() {
+
+    }
+
+    abstract fun test2()
+}
+
+enum UserType {
+    ADMIN,
+    USER
+}
+
+fun defaultValue(value: Int = 10) {
+
+}
+
+enum Status(
+   code: Int,
+   msg: String
+) {
+    SUCCESS(code: 0, msg: "Success") {
+
+        override fun isSuccess(): Boolean {
+
+        }
+    },
+    FAILURE(code: -1, msg: "Failure") {
+
+        override fun isSuccess(): Boolean {
+
+        }
+    };
+
+    abstract fun isSuccess(): Boolean
+}
+
+struct Data(
+    ignore val param1: String,
+    ignore var param2: Int?,
+    val param3: Double,
+    val param4: Info,
+    val name: String
+)
+
+struct Info(
+    val address: String,
+    val number: Int
+)
+
+type<T>
+annotation Target(val name: T)
+
+trait NameProvider {
+
+    fun name()
+}
+
+sealed trait Animation
+
+class Dog : Animation
+
+class Cat : Animation
+
+extension Dog : NameProvider {
+
+    fun name() {
+
+    }
+
+    inner class Hello {
+
+        class World
+    }
+}
+
+fun Int.times(other: Int): Int {  }
+
+class sealed
+
+trait sealed
+
+fun init(import: ((type.import) -> final?)?) {}
+
+type<T, R>
+fun transform(value: T, transform: (T) -> R): R {
+    return transform(value)
+}
+
+type<T..., R>
+fun context(ts: T..., context: context(T...) () -> R): R {
+    return context(ts)
+}
+
+type<T..., R>
+fun callback(ts: T..., callback: context(T...) () -> R): R {
+    return context(ts)
+}
+
+type<T+.., R>
+fun callback2(ts: T+.., callback: context(T+..) () -> R): R {
+    return context(ts)
+}
+
+context(_: Type)
+fun context2() {
+
+}
+
+class IntList : List<Int> {
+
+}
+
+class DoubleList : List<T = Int> {
+
+}
+
+var name: String? = ""
+
+val User.age { 1 }
+
+private val name = 1 + 2 - 3 +
+    4 * 5
+
+class Member {
+
+    private late var private: String
+}
+
+private fun MyInt.+(other: Int): Int {
+
+}
+
+class Int {
+
+    fun +(other: Int): Int {
+
+    }
+}
+
+@Annotation1
+@Annotation2(name = "Test")
+class List {
+
+    @Test.Annotation2(name = "Hello" + " " + "World")
+    fun []=(key: String, value: String) {
+
+    }
+
+    fun [](key: String): String {
+
+    }
+}
+
+fun param(
+    @Param name: String = ""
+) {
+    test(1, "1", 1.0, true, 1 + 2, name, age)
+}
+
+class User(
+    private val name: String?,
+    private val age: Int?
+) {
+
+    ctor only(
+        name: String? = null,
+        age: Int? = null
+    ) : this(name, age) {
+        println("Created by only")
+    }
+
+    ctor(): this(null, null)
+
+    init {
+        println("这是第一个初始化块")
+    }
+
+    init {
+        println("这是第二个初始化块")
+    }
+}
+
+object LocalContext(
+    private val context: Context
+) {
+
+    init {
+        println("Single 初始化了")
+    }
+
+    fun run() {
+
+    }
+}
+
+fun initLocalContext(context: Context) {
+    // LocalContext.run()           // 不允许在有参单例对象初始化前执行 run 函数
+    init? LocalContext(context)     // 这里执行了初始化，不允许重复初始化，这里允许安全初始化 init?
+    LocalContext.run()              // 这里就可以运行了，因为上方初始化了
+}
+
+val property1 = 10
+
+val property2: Int = 10
+
+val property3: Int {
+
+}
+
+lazy val property4: Int { 1 + 2 }
+
+val property5: Int
+    get() = 1 + 2
+
+var property6 = 0
+
+var property7: Int
+    get() { property6 }
+    set(newValue) {
+        property6 = newValue
+    }
+
+type<T>
+typealias MyList = List<T>
+
+type<T : Any, R : Any>
+typealias Callback = (T) -> R
+
+val User.info: String {
+    "$name : $age"
+}
+
+fun List<String>.size(): Int {
+    return this.length
+}
+
+val List<String>.size: Int {
+    this.length
+}
+
+val List<String?>?.size: Int {
+    this.length
+}

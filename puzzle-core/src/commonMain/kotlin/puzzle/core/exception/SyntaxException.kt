@@ -1,10 +1,10 @@
 package puzzle.core.exception
 
-import puzzle.core.model.PzlContext
-import puzzle.core.model.SourcePosition
-import puzzle.core.model.calcPosition
-import puzzle.core.parser.ast.AstNode
-import puzzle.core.token.PzlToken
+import puzzle.core.frontend.model.PzlContext
+import puzzle.core.frontend.model.SourcePosition
+import puzzle.core.frontend.model.calcPosition
+import puzzle.core.frontend.parser.ast.AstNode
+import puzzle.core.frontend.token.PzlToken
 
 private class SyntaxException(
 	message: String,

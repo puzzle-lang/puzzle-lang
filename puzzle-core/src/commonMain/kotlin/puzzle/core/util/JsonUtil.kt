@@ -20,6 +20,5 @@ inline fun <reified T> T.alsoLog(): T {
 		json.encodeToString(this)
 	}
 	println(value.value)
-	println("序列化耗时: ${value.duration}")
 	return this
 }

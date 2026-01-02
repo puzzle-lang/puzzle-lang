@@ -1,0 +1,28 @@
+package puzzle.core.frontend.parser.parser.declaration
+
+import puzzle.core.frontend.model.PzlContext
+import puzzle.core.frontend.model.SourceLocation
+import puzzle.core.frontend.model.span
+import puzzle.core.frontend.parser.PzlTokenCursor
+import puzzle.core.frontend.parser.ast.declaration.TypealiasDeclaration
+import puzzle.core.frontend.parser.matcher.declaration.DeclarationHeader
+import puzzle.core.frontend.parser.parser.expression.IdentifierTarget
+import puzzle.core.frontend.parser.parser.expression.parseIdentifier
+import puzzle.core.frontend.parser.parser.type.parseTypeReference
+import puzzle.core.frontend.token.kinds.AssignmentKind.ASSIGN
+
+context(_: PzlContext, cursor: PzlTokenCursor)
+fun parseTypealiasDeclaration(header: DeclarationHeader, start: SourceLocation): TypealiasDeclaration {
+	val name = parseIdentifier(IdentifierTarget.TYPEALIAS)
+	cursor.expect(ASSIGN, "类型别名缺少 '='")
+	val targetType = parseTypeReference(allowLambda = true)
+	val end = cursor.previous.location
+	return TypealiasDeclaration(
+		name = name,
+		docComment = header.docComment,
+		modifiers = header.modifiers,
+		typeSpec = header.typeSpec,
+		targetType = targetType,
+		location = start span end
+	)
+}

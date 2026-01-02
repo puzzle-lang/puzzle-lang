@@ -2,10 +2,12 @@
 kotlin = "2.3.0"
 kotlinx-coroutines-core = "1.10.2"
 kotlinx-serialization = "1.10.0-RC"
+kotlinx-io-core = "0.8.2"
 
 [libraries]
 kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinx-coroutines-core" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
+kotlinx-io-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-io-core", version.ref = "kotlinx-io-core" }
 
 [plugins]
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
@@ -14,5 +16,6 @@ kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", versi
 [bundles]
 puzzle-core = [
     'kotlinx-coroutines-core',
-    'kotlinx-serialization-json'
+    'kotlinx-serialization-json',
+    'kotlinx-io-core'
 ]

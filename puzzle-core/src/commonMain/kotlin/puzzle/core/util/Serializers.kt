@@ -5,10 +5,10 @@ import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
-import puzzle.core.token.kinds.AssignmentKind
-import puzzle.core.token.kinds.ModifierKind
-import puzzle.core.token.kinds.OperatorKind
-import puzzle.core.token.kinds.SymbolKind
+import puzzle.core.frontend.token.kinds.AssignmentKind
+import puzzle.core.frontend.token.kinds.ModifierKind
+import puzzle.core.frontend.token.kinds.OperatorKind
+import puzzle.core.frontend.token.kinds.SymbolKind
 
 object DotStringListSerializer : KSerializer<List<String>> {
 	

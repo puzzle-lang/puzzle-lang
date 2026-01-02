@@ -1,0 +1,17 @@
+package puzzle.core.frontend.parser.parser.statement
+
+import puzzle.core.frontend.model.PzlContext
+import puzzle.core.frontend.model.span
+import puzzle.core.frontend.parser.PzlTokenCursor
+import puzzle.core.frontend.parser.ast.statement.ContinueStatement
+import puzzle.core.frontend.parser.parser.expression.IdentifierTarget
+import puzzle.core.frontend.parser.parser.expression.parseIdentifier
+import puzzle.core.frontend.token.kinds.SymbolKind.HASH
+
+context(_: PzlContext, cursor: PzlTokenCursor)
+fun parseContinueStatement(): ContinueStatement {
+	val start = cursor.previous.location
+	val label = if (cursor.match(HASH)) parseIdentifier(IdentifierTarget.LABEL) else null
+	val end = cursor.previous.location
+	return ContinueStatement(label, start span end)
+}

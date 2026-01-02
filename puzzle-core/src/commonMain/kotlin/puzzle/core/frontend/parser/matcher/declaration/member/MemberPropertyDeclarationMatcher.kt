@@ -1,0 +1,33 @@
+package puzzle.core.frontend.parser.matcher.declaration.member
+
+import puzzle.core.frontend.model.PzlContext
+import puzzle.core.frontend.model.SourceLocation
+import puzzle.core.frontend.parser.PzlTokenCursor
+import puzzle.core.frontend.parser.ast.declaration.PropertyDeclaration
+import puzzle.core.frontend.parser.matcher.declaration.DeclarationHeader
+import puzzle.core.frontend.parser.parser.ModifierTarget
+import puzzle.core.frontend.parser.parser.declaration.parsePropertyDeclaration
+import puzzle.core.frontend.parser.parser.parameter.context.ContextTarget
+import puzzle.core.frontend.parser.parser.parameter.type.TypeTarget
+import puzzle.core.frontend.token.kinds.ModifierKind.VAL
+import puzzle.core.frontend.token.kinds.ModifierKind.VAR
+
+object MemberPropertyDeclarationMatcher : MemberDeclarationMatcher<PropertyDeclaration> {
+	
+	override val typeTarget = TypeTarget.PROPERTY
+	
+	override val modifierTarget = ModifierTarget.MEMBER_PROPERTY
+	
+	override val contextTarget = ContextTarget.PROPERTY
+	
+	context(cursor: PzlTokenCursor)
+	override fun match(): Boolean {
+		val kind = cursor.previous.kind
+		return kind == VAR || kind == VAL
+	}
+	
+	context(_: PzlContext, cursor: PzlTokenCursor)
+	override fun parse(header: DeclarationHeader, start: SourceLocation): PropertyDeclaration {
+		return parsePropertyDeclaration(header, start)
+	}
+}
