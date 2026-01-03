@@ -14,12 +14,11 @@ private val recognitions = arrayOf(
 	TabRecognition,
 	NewlineRecognition,
 	CommentRecognition,
-	KeywordRecognition,
 	CharRecognition,
 	StringRecognition,
 	NumberRecognition,
 	SymbolRecognition,
-	IdentifierRecognition,
+	KeywordAndIdentifierRecognition,
 )
 
 class PzlLexer(

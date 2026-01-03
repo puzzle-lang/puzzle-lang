@@ -1,9 +1,10 @@
 package puzzle.core.frontend.model
 
 import kotlinx.serialization.Serializable
+import puzzle.core.frontend.ast.AstFile
 
 @Serializable
-class Project(
+class AstModule(
 	val name: String,
-	val modules: List<Module>,
+	val nodes: List<AstFile>,
 )

@@ -1,15 +1,15 @@
 package puzzle.core.frontend.parser
 
-import puzzle.core.frontend.ast.SourceFileNode
+import puzzle.core.frontend.ast.AstFile
 import puzzle.core.frontend.model.PzlContext
-import puzzle.core.frontend.parser.parser.parseSourceFileNode
+import puzzle.core.frontend.parser.parser.parseFile
 
 object PzlParser {
 	
 	context(_: PzlContext)
-	fun parse(cursor: PzlTokenCursor): SourceFileNode {
+	fun parse(cursor: PzlTokenCursor): AstFile {
 		return context(cursor) {
-			parseSourceFileNode()
+			parseFile()
 		}
 	}
 }

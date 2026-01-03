@@ -31,6 +31,7 @@ kotlin {
 		all {
 			languageSettings {
 				enableLanguageFeature("ContextParameters")
+				enableLanguageFeature("ExplicitBackingFields")
 			}
 		}
 	}

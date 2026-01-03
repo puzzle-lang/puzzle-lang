@@ -95,7 +95,7 @@ object StringRecognition : TokenRecognition {
 					val tokens = when (type) {
 						SIMPLE_INTERPOLATION -> {
 							position += dollarCount
-							val token = IdentifierRecognition.tryParse(input, position)!!
+							val token = KeywordAndIdentifierRecognition.tryParse(input, position)!!
 							position = token.location.end
 							listOf(token, PzlToken(MetaKind.EOF, token.location.end span token.location.end + 1))
 						}

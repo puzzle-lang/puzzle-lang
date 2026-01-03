@@ -1,5 +1,7 @@
 package puzzle.core.util
 
+import puzzle.core.frontend.token.kinds.KeywordKind
+
 private val hexChars = "0123456789ABCDEFabcdef".toSet()
 
 fun String.isHex(): Boolean {
@@ -30,6 +32,16 @@ fun Char.isIdentifierStart(): Boolean {
 
 fun Char.isIdentifierPart(): Boolean {
 	return this in 'a'..'z' || this in 'A'..'Z' || this == '_' || this in '0'..'9'
+}
+
+private val keywords = KeywordKind.kinds.map { it.value }.toSet()
+
+fun String.isIdentifierString(): Boolean {
+	if (this.isEmpty()) return false
+	if (this in keywords) return false
+	val first = first()
+	if (!first.isIdentifierStart()) return false
+	return this.drop(1).all { it.isIdentifierPart() }
 }
 
 fun CharArray.safeString(start: Int, length: Int): String? {

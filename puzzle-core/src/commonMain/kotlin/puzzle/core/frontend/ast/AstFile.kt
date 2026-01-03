@@ -6,14 +6,13 @@ import kotlinx.serialization.Serializable
 import puzzle.core.frontend.ast.declaration.Declaration
 import puzzle.core.frontend.ast.declaration.ImportDeclaration
 import puzzle.core.frontend.ast.declaration.PackageDeclaration
-import puzzle.core.frontend.model.SourceLocation
 
 @Serializable
-class SourceFileNode(
+class AstFile(
 	@Contextual
-	val path: Path,
+	val path: Path?,
+	val isBuiltin: Boolean,
 	val packageDeclaration: PackageDeclaration?,
 	val importDeclarations: List<ImportDeclaration>,
 	val declarations: List<Declaration>,
-	override val location: SourceLocation,
-) : AstNode
+)

@@ -1,10 +1,10 @@
 package puzzle.core.frontend.parser.parser.expression
 
 import puzzle.core.exception.syntaxError
-import puzzle.core.frontend.model.PzlContext
-import puzzle.core.frontend.model.notEqualsLine
-import puzzle.core.frontend.parser.PzlTokenCursor
 import puzzle.core.frontend.ast.expression.Expression
+import puzzle.core.frontend.model.PzlContext
+import puzzle.core.frontend.model.equalsLine
+import puzzle.core.frontend.parser.PzlTokenCursor
 import puzzle.core.frontend.parser.matcher.expression.ExpressionMatcher
 import puzzle.core.frontend.parser.matcher.expression.NoPrefixExpressionParser
 import puzzle.core.frontend.parser.matcher.expression.OptionalPrefixExpressionParser
@@ -80,5 +80,5 @@ private fun isAtExpressionEnd(): Boolean {
 	}
 	if (current.kind is AccessKind || current.kind == AND || current.kind == OR) return false
 	val previous = cursor.previousOrNull ?: return false
-	return current.notEqualsLine(previous)
+	return !current.equalsLine(previous)
 }

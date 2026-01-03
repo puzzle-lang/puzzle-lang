@@ -3,37 +3,49 @@ package puzzle.core.exception
 import kotlinx.io.files.Path
 import puzzle.core.frontend.ast.AstNode
 import puzzle.core.frontend.model.PzlContext
+import puzzle.core.frontend.model.SourceLocation
 import puzzle.core.frontend.model.SourcePosition
 import puzzle.core.frontend.model.calcPosition
 import puzzle.core.frontend.token.PzlToken
 import puzzle.core.util.absolutePath
 
-private class SyntaxException(
-	message: String,
-	sourcePath: Path,
-	position: SourcePosition,
-	token: PzlToken?,
-) : Exception("错误位置: ${sourcePath.absolutePath}:$position${getTokenInfo(token)}$message.")
-
-private fun getTokenInfo(token: PzlToken?): String {
-	if (token == null) return " "
-	return " >> ${token.value} << "
-}
+private class SyntaxException(message: String) : Exception(message)
 
 context(context: PzlContext)
 fun syntaxError(message: String, position: Int): Nothing {
 	val position = calcPosition(position)
-	throw SyntaxException(message, context.sourcePath, position, null)
+	val message = buildSyntaxExceptionMessage(message, context.sourcePath, position, null)
+	throw SyntaxException(message)
 }
 
 context(context: PzlContext)
 fun syntaxError(message: String, token: PzlToken): Nothing {
-	val position = token.location.startPosition
-	throw SyntaxException(message, context.sourcePath, position, token)
+	val position = (token.location as? SourceLocation.File)?.startPosition
+	val message = buildSyntaxExceptionMessage(message, context.sourcePath, position, token)
+	throw SyntaxException(message)
 }
 
 context(context: PzlContext)
 fun syntaxError(message: String, node: AstNode): Nothing {
-	val position = node.location.startPosition
-	throw SyntaxException(message, context.sourcePath, position, null)
+	val position = (node.location as? SourceLocation.File)?.startPosition
+	val message = buildSyntaxExceptionMessage(message, context.sourcePath, position, null)
+	throw SyntaxException(message)
+}
+
+private fun buildSyntaxExceptionMessage(
+	message: String,
+	sourcePath: Path,
+	position: SourcePosition?,
+	token: PzlToken?,
+): String = buildString {
+	append("错误位置: ")
+	append(sourcePath.absolutePath)
+	if (position != null) {
+		this.append(":${position.line}:${position.column}")
+	}
+	append(" ")
+	if (token != null) {
+		append(">> ${token.value} << ")
+	}
+	append(message)
 }
