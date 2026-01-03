@@ -6,6 +6,7 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.io.files.Path
 import puzzle.core.frontend.ast.AstFile
+import puzzle.core.frontend.ast.builtin.generator.BuiltinAstGenerator
 import puzzle.core.frontend.discovery.ProjectSourceCollector
 import puzzle.core.frontend.lexer.FileLexerScanner
 import puzzle.core.frontend.model.AstModule
@@ -31,8 +32,12 @@ suspend fun processFrontend(projectPath: Path): AstProject = coroutineScope {
 			AstModule(module.name, nodes)
 		}
 	}
-	val modules = jobs.awaitAll()
-	val project = AstProject(projectSource.name, modules)
+	val projectModules = jobs.awaitAll()
+	val builtinModule = BuiltinAstGenerator.generate()
+	val project = AstProject(
+		projectSource.name,
+		modules = projectModules + builtinModule
+	)
 	PzlSemantics.analyze(project)
 	project
 }

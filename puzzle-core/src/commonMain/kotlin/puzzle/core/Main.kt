@@ -31,7 +31,7 @@ private fun build(projectPath: Path) = runBlocking(Dispatchers.Default) {
 	val usage = getCurrentMemoryUsage()
 	println("内存使用: $usage")
 	val writeDuration = measureTime { AstDebugWriter.write(projectPath, value.value) }
-	println("AST已保存: $writeDuration")
+	println("AST 已保存: $writeDuration")
 }
 
 private fun help() {

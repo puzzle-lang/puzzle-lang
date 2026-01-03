@@ -9,6 +9,7 @@ import puzzle.core.frontend.ast.declaration.PackageDeclaration
 
 @Serializable
 class AstFile(
+	val name: String,
 	@Contextual
 	val path: Path?,
 	val isBuiltin: Boolean,

@@ -1,7 +1,6 @@
 package puzzle.core.frontend.ast.declaration
 
 import kotlinx.serialization.Serializable
-import puzzle.core.frontend.model.SourceLocation
 import puzzle.core.frontend.ast.*
 import puzzle.core.frontend.ast.expression.Identifier
 import puzzle.core.frontend.ast.parameter.DeclarationContextSpec
@@ -9,6 +8,7 @@ import puzzle.core.frontend.ast.parameter.Parameter
 import puzzle.core.frontend.ast.parameter.TypeSpec
 import puzzle.core.frontend.ast.statement.Statement
 import puzzle.core.frontend.ast.type.TypeReference
+import puzzle.core.frontend.model.SourceLocation
 
 @Serializable
 class FunDeclaration(
@@ -50,22 +50,20 @@ class IdentifierFunName(
 ) : FunName
 
 @Serializable
-sealed interface OperatorFunName : FunName
-
-@Serializable
 class SymbolFunName(
 	val symbol: Symbol,
 	override val location: SourceLocation = symbol.location,
-) : OperatorFunName
+) : FunName
 
 @Serializable
-class IndexAccessFunName(
-	val kind: IndexAccessKind,
+class MagicFunName(
+	val kind: MagicKind,
 	override val location: SourceLocation,
-) : OperatorFunName
+) : FunName
 
 @Serializable
-enum class IndexAccessKind {
+enum class MagicKind {
 	GETTER,
-	SETTER
+	SETTER,
+	COMPARE
 }

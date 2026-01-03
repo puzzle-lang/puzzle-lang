@@ -2,13 +2,19 @@ package puzzle.core.frontend.token.kinds
 
 import puzzle.core.collections.fastSetOf
 import puzzle.core.collections.mergeFastSets
+import puzzle.core.frontend.token.kinds.AccessorKind.GET
+import puzzle.core.frontend.token.kinds.AccessorKind.SET
+import puzzle.core.frontend.token.kinds.ContextualKind.*
+import puzzle.core.frontend.token.kinds.ModifierKind.*
+import puzzle.core.frontend.token.kinds.NamespaceKind.IMPORT
+import puzzle.core.frontend.token.kinds.NamespaceKind.PACKAGE
 
 sealed interface KeywordKind : PzlTokenKind {
 	
 	companion object {
 		
 		val kinds = mergeFastSets(
-			ModifierKind.kinds,
+			ModifierKind.availableKinds,
 			NamespaceKind.kinds,
 			DeclarationKind.kinds,
 			AccessorKind.kinds,
@@ -18,6 +24,18 @@ sealed interface KeywordKind : PzlTokenKind {
 			TypeOperatorKind.kinds,
 			LiteralKind.keywordKinds
 		)
+		
+		val softKeywords = setOf(
+			PRIVATE, PROTECTED, FILE, INTERNAL, MODULE, PUBLIC,
+			FINAL,
+			OPEN, ABSTRACT, SEALED, OVERRIDE,
+			CONST, INNER, IGNORE, LATE, LAZY,
+			GET, SET,
+			TYPE, REIFIED, CONTEXT, INIT, ON, WITH,
+			PACKAGE, IMPORT
+		).map { it.value }.toSet()
+		
+		val hardKeywords = kinds.map { it.value }.toSet() - softKeywords
 	}
 }
 
@@ -28,7 +46,7 @@ sealed class ModifierKind(
 	
 	companion object {
 		
-		val kinds = fastSetOf(
+		val availableKinds = fastSetOf(
 			PRIVATE, PROTECTED, FILE, INTERNAL, MODULE, PUBLIC,
 			FINAL,
 			OPEN, ABSTRACT, SEALED, OVERRIDE,
@@ -76,6 +94,8 @@ sealed class ModifierKind(
 	object VAR : ModifierKind("var", 4)
 	
 	object VAL : ModifierKind("val", 4)
+	
+	object BUILTIN : ModifierKind("builtin", -1)
 }
 
 sealed class NamespaceKind(

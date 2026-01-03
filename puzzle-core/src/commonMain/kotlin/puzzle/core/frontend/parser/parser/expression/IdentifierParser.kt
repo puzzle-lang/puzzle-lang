@@ -1,27 +1,12 @@
 package puzzle.core.frontend.parser.parser.expression
 
 import puzzle.core.exception.syntaxError
+import puzzle.core.frontend.ast.expression.Identifier
 import puzzle.core.frontend.model.PzlContext
 import puzzle.core.frontend.parser.PzlTokenCursor
-import puzzle.core.frontend.ast.expression.Identifier
 import puzzle.core.frontend.token.PzlToken
-import puzzle.core.frontend.token.kinds.AccessorKind.GET
-import puzzle.core.frontend.token.kinds.AccessorKind.SET
-import puzzle.core.frontend.token.kinds.ContextualKind.*
 import puzzle.core.frontend.token.kinds.IdentifierKind
-import puzzle.core.frontend.token.kinds.ModifierKind.*
-import puzzle.core.frontend.token.kinds.NamespaceKind.IMPORT
-import puzzle.core.frontend.token.kinds.NamespaceKind.PACKAGE
-
-private val softKeywords = setOf(
-	PRIVATE, PROTECTED, FILE, INTERNAL, MODULE, PUBLIC,
-	FINAL,
-	OPEN, ABSTRACT, SEALED, OVERRIDE,
-	CONST, INNER, IGNORE, LATE, LAZY,
-	GET, SET,
-	TYPE, REIFIED, CONTEXT, INIT, ON, WITH,
-	PACKAGE, IMPORT
-)
+import puzzle.core.frontend.token.kinds.KeywordKind
 
 context(_: PzlContext, cursor: PzlTokenCursor)
 fun parseIdentifier(target: IdentifierTarget): Identifier {
@@ -51,7 +36,7 @@ fun tryParseIdentifierString(target: IdentifierTarget): String? {
 		}
 		return value
 	}
-	if (cursor.match { it.kind in softKeywords }) {
+	if (cursor.match { it.kind.value in KeywordKind.softKeywords }) {
 		return cursor.previous.value
 	}
 	return null
@@ -65,7 +50,7 @@ fun PzlToken.toIdentifier(allowAnonymousBinding: Boolean = false): Identifier {
 }
 
 fun PzlToken.isIdentifier(allowAnonymousBinding: Boolean = false): Boolean {
-	return this.kind is IdentifierKind || this.kind in softKeywords || (this.kind.value == "_" && allowAnonymousBinding)
+	return this.kind is IdentifierKind || this.kind.value in KeywordKind.softKeywords || (this.kind.value == "_" && allowAnonymousBinding)
 }
 
 fun PzlTokenCursor.checkIdentifier(allowAnonymousBinding: Boolean = false): Boolean {

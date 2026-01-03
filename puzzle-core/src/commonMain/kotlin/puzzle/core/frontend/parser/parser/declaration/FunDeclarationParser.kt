@@ -1,11 +1,6 @@
 package puzzle.core.frontend.parser.parser.declaration
 
 import puzzle.core.exception.syntaxError
-import puzzle.core.frontend.model.PzlContext
-import puzzle.core.frontend.model.SourceLocation
-import puzzle.core.frontend.model.copy
-import puzzle.core.frontend.model.span
-import puzzle.core.frontend.parser.PzlTokenCursor
 import puzzle.core.frontend.ast.Symbol
 import puzzle.core.frontend.ast.declaration.*
 import puzzle.core.frontend.ast.expression.Identifier
@@ -13,6 +8,11 @@ import puzzle.core.frontend.ast.type.LambdaType
 import puzzle.core.frontend.ast.type.NamedType
 import puzzle.core.frontend.ast.type.TypeReference
 import puzzle.core.frontend.ast.type.copy
+import puzzle.core.frontend.model.PzlContext
+import puzzle.core.frontend.model.SourceLocation
+import puzzle.core.frontend.model.copy
+import puzzle.core.frontend.model.span
+import puzzle.core.frontend.parser.PzlTokenCursor
 import puzzle.core.frontend.parser.matcher.declaration.DeclarationHeader
 import puzzle.core.frontend.parser.parser.expression.IdentifierTarget
 import puzzle.core.frontend.parser.parser.expression.tryParseIdentifier
@@ -134,15 +134,18 @@ private fun parseExtensionAndFunName(): Pair<TypeReference?, FunName> {
 private val overloadableSymbols = setOf(
 	PLUS, MINUS, NOT, BIT_NOT, DOUBLE_PLUS, DOUBLE_MINUS,
 	STAR, SLASH, PERCENT, DOUBLE_STAR,
-	EQUALS, NOT_EQUALS, GT, GT_EQUALS, LT, LT_EQUALS,
+	EQUALS,
+	IN,
 	BIT_AND, BIT_OR, BIT_XOR, SHL, SHR, USHR,
 	PLUS_ASSIGN, MINUS_ASSIGN, STAR_ASSIGN, SLASH_ASSIGN, PERCENT_ASSIGN,
-	RANGE_TO, RANGE_UNTIL
+	RANGE_TO, RANGE_UNTIL,
 )
 
 private val notOverloadableSymbols = setOf(
 	TRIPLE_EQUALS, TRIPLE_NOT_EQUALS,
-	AND, OR
+	AND, OR,
+	NOT_EQUALS, GT, GT_EQUALS, LT, LT_EQUALS,
+	NOT_EQUALS
 )
 
 context(_: PzlContext, cursor: PzlTokenCursor)
@@ -151,13 +154,20 @@ private fun tryParseOperatorFunName(): FunName? {
 		val token = cursor.previous
 		return SymbolFunName(Symbol(token.kind as SymbolKind, token.location))
 	}
-	if (cursor.match(LBRACKET, RBRACKET)) {
-		return if (cursor.match(ASSIGN)) {
+	when {
+		cursor.match(LBRACKET, RBRACKET, ASSIGN) -> {
 			val location = cursor.offset(-3).location span cursor.previous.location
-			IndexAccessFunName(IndexAccessKind.SETTER, location)
-		} else {
+			return MagicFunName(MagicKind.SETTER, location)
+		}
+		
+		cursor.match(LBRACKET, RBRACKET) -> {
 			val location = cursor.offset(-2).location span cursor.previous.location
-			IndexAccessFunName(IndexAccessKind.GETTER, location)
+			return MagicFunName(MagicKind.GETTER, location)
+		}
+		
+		cursor.match(LT_EQUALS, GT) -> {
+			val location = cursor.offset(-2).location span cursor.previous.location
+			return MagicFunName(MagicKind.COMPARE, location)
 		}
 	}
 	if (cursor.match { it.kind in notOverloadableSymbols }) {

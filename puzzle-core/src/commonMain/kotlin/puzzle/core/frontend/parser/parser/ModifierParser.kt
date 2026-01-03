@@ -24,7 +24,7 @@ fun parseModifiers(): List<Modifier> {
 
 context(cursor: PzlTokenCursor)
 private fun parseModifier(): Modifier? {
-	ModifierKind.kinds.fastForEach { kind ->
+	ModifierKind.availableKinds.fastForEach { kind ->
 		if (cursor.current.kind == kind && cursor.nextOrNull?.kind != COLON) {
 			cursor.advance()
 			return Modifier(kind, cursor.previous.location)

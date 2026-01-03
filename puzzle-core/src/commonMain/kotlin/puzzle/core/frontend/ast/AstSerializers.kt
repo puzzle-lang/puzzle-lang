@@ -14,7 +14,7 @@ import puzzle.core.frontend.token.kinds.OperatorKind
 import puzzle.core.frontend.token.kinds.SymbolKind
 import puzzle.core.util.absolutePath
 
-val astSerializersModule = SerializersModule {
+val AstSerializersModule = SerializersModule {
 	contextual(DotStringListSerializer)
 	contextual(SymbolKindSerializer)
 	contextual(OperatorKindSerializer)
@@ -86,7 +86,7 @@ private object ModifierKindSerializer : KSerializer<ModifierKind> {
 	
 	override fun deserialize(decoder: Decoder): ModifierKind {
 		val symbol = decoder.decodeString()
-		return ModifierKind.kinds.first { it.value == symbol }
+		return ModifierKind.availableKinds.first { it.value == symbol }
 	}
 }
 

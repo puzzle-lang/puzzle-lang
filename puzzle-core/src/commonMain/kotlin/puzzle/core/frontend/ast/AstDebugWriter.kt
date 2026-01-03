@@ -14,7 +14,7 @@ object AstDebugWriter {
 		encodeDefaults = true
 		classDiscriminator = "class"
 		ignoreUnknownKeys = true
-		serializersModule = astSerializersModule
+		serializersModule = AstSerializersModule
 	}
 	
 	fun write(projectPath: Path, project: AstProject) {
@@ -24,8 +24,12 @@ object AstDebugWriter {
 		}
 		project.modules.forEach { module ->
 			module.nodes.forEach { node ->
-				if (node.isBuiltin || node.path == null) return@forEach
-				val astPath = getAstPath(projectPath, buildPath, node.path)
+				if (node.path == null && !node.isBuiltin) return@forEach
+				val astPath = if (node.isBuiltin) {
+					getBuiltinPath(buildPath, module.name, node.name)
+				} else {
+					getAstPath(projectPath, buildPath, node.path!!)
+				}
 				if (astPath.parent == null) return@forEach
 				if (!astPath.parent!!.exists()) {
 					astPath.parent!!.createDirectories()
@@ -35,6 +39,11 @@ object AstDebugWriter {
 				}
 			}
 		}
+	}
+	
+	private fun getBuiltinPath(buildPath: Path, moduleName: String, nodeName: String): Path {
+		val nodeName = nodeName.removeSuffix(".pzl")
+		return Path(buildPath, moduleName, "src", "main", "puzzle", "$nodeName.json")
 	}
 	
 	private fun getAstPath(projectPath: Path, buildPath: Path, sourcePath: Path): Path {

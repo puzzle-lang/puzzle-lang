@@ -18,6 +18,7 @@ fun parseFile(): AstFile {
 	}
 	val declarations = parseDeclarations()
 	return AstFile(
+		name = context.sourcePath.name,
 		path = context.sourcePath,
 		isBuiltin = false,
 		packageDeclaration = packageDeclaration,
